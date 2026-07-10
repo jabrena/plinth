@@ -1,10 +1,10 @@
 ---
 name: 415-frameworks-quarkus-mongodb
-description: Use when you need MongoDB persistence in Quarkus — including Panache Mongo entities/repositories, document design, indexes, transactions where applicable, and error handling. This should trigger for requests such as Add MongoDB in Quarkus; Review Quarkus Mongo Panache design; Improve Mongo error handling in Quarkus services. Part of cursor-rules-java project
+description: Use when you need MongoDB persistence in Quarkus — including Panache Mongo entities/repositories, document design, indexes, transactions where applicable, and error handling. This should trigger for requests such as Add MongoDB in Quarkus; Review Quarkus Mongo Panache design; Improve Mongo error handling in Quarkus services; Model MongoDB documents for a Quarkus service; Configure Quarkus MongoDB clients codecs or transactions. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus — MongoDB
 
@@ -24,6 +24,8 @@ Compile before MongoDB refactors; verify after changes.
 - Add MongoDB in Quarkus
 - Review Quarkus Mongo Panache entities/repositories
 - Improve duplicate key handling, retry policy, or optimistic locking in Quarkus Mongo
+- Model MongoDB documents for a Quarkus service
+- Configure Quarkus MongoDB clients codecs or transactions
 
 ## Workflow
 

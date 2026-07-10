@@ -1,10 +1,10 @@
 ---
 name: 313-frameworks-spring-db-migrations-flyway
-description: Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout. Part of cursor-rules-java project
+description: Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout; Add versioned Flyway SQL migrations for Spring Boot; Review Spring Boot database migration ordering; Fix repeatable Flyway migrations in a Spring project. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring — Database migrations (Flyway)
 
@@ -17,6 +17,7 @@ Apply Flyway migration guidelines for Spring Boot.
 - `spring.flyway.*` properties: locations, baseline-on-migrate, validate-on-migrate
 - Optional Java migrations (`BaseJavaMigration`) for data backfills
 - Forward-only discipline: do not rewrite applied migrations in shared environments
+- Parallel Change as the safe expand, migrate, contract workflow for breaking or data-sensitive schema changes
 - Coordination with `@311-frameworks-spring-jdbc` and `@312-frameworks-spring-data-jdbc`
 
 **Scope:** Apply recommendations based on the reference rules and good/bad examples.
@@ -29,6 +30,7 @@ Before applying Flyway or SQL changes, ensure the project compiles. After improv
 - **SAFETY**: If compilation fails, stop immediately
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
+- **BREAKING CHANGE REVIEW**: Before recommending or applying a migration, assess whether it can break deployed application versions, dependent services, reports, jobs, or production data interpretation; if yes, require explicit human review before proceeding
 - **EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands
 - **EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance
 - **EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off
@@ -37,12 +39,15 @@ Before applying Flyway or SQL changes, ensure the project compiles. After improv
 
 - Add or review Flyway migrations in a Spring Boot project
 - Configure spring.flyway or db/migration layout
+- Add versioned Flyway SQL migrations for Spring Boot
+- Review Spring Boot database migration ordering
+- Fix repeatable Flyway migrations in a Spring project
 
 ## Workflow
 
-1. **Read reference and assess project context**
+1. **Read references and assess project context**
 
-Read `references/313-frameworks-spring-db-migrations-flyway.md` and inspect the current project setup before proposing changes.
+Read `references/313-frameworks-spring-db-migrations-flyway.md`, `references/313-frameworks-spring-db-migrations-flyway-antipatterns.md`, and `references/313-frameworks-spring-db-migrations-flyway-parallel-change.md`, then inspect the current project setup before proposing changes.
 
 2. **Gather scope and decide target improvements**
 
@@ -50,7 +55,7 @@ Identify requested outcomes, constraints, and the minimum safe set of changes to
 
 3. **Apply framework-aligned changes**
 
-Implement or refactor configuration/code following the reference patterns and project conventions.
+Implement or refactor configuration/code following the reference patterns and project conventions. Use Parallel Change (expand, migrate, contract) as the safe default for breaking or data-sensitive schema changes.
 
 4. **Run verification and report results**
 
@@ -58,4 +63,8 @@ Execute appropriate build/tests and summarize what changed, what was verified, a
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/313-frameworks-spring-db-migrations-flyway.md](references/313-frameworks-spring-db-migrations-flyway.md).
+For detailed guidance, examples, and constraints, see:
+
+- [references/313-frameworks-spring-db-migrations-flyway.md](references/313-frameworks-spring-db-migrations-flyway.md)
+- [references/313-frameworks-spring-db-migrations-flyway-antipatterns.md](references/313-frameworks-spring-db-migrations-flyway-antipatterns.md)
+- [references/313-frameworks-spring-db-migrations-flyway-parallel-change.md](references/313-frameworks-spring-db-migrations-flyway-parallel-change.md)

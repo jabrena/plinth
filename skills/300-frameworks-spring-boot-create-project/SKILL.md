@@ -1,10 +1,10 @@
 ---
 name: 300-frameworks-spring-boot-create-project
-description: Use when you need to create a new Maven-based Spring Boot 4.0.x project using SDKMAN-managed Java and Spring Boot CLI tooling. This should trigger for requests such as Create a Spring Boot Maven project; Bootstrap Spring Boot project with SDKMAN; Generate a new Spring Boot service. Part of cursor-rules-java project
+description: Use when you need to create a new Maven-based Spring Boot 4.0.x project using SDKMAN-managed Java and Spring Boot CLI tooling. This should trigger for requests such as Create a Spring Boot Maven project; Bootstrap Spring Boot project with SDKMAN; Generate a new Spring Boot service; Create Spring Boot 4 Maven project; Scaffold Spring Boot service with Java 25. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Spring Boot Maven Project
 
@@ -36,6 +36,8 @@ Project creation must be explicit, reproducible, and Maven-based.
 - Create a Spring Boot Maven project
 - Bootstrap Spring Boot project with SDKMAN
 - Generate a new Spring Boot service
+- Create Spring Boot 4 Maven project
+- Scaffold Spring Boot service with Java 25
 
 ## Workflow
 

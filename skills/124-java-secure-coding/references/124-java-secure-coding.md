@@ -4,7 +4,7 @@ description: Use when you need to apply Java secure coding best practices — in
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Secure coding guidelines
 
@@ -150,7 +150,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SecureDataAccess {
-    private static final String DB_URL = "jdbc:h2:mem:testdb";
+    private static final String DB_URL = "jdbc:vendor://db-host:5432/appdb";
     private static final String USER = "sa";
     private static final String PASS = "";
 
@@ -204,7 +204,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class VulnerableDataAccess {
-    private static final String DB_URL = "jdbc:h2:mem:testdb";
+    private static final String DB_URL = "jdbc:vendor://db-host:5432/appdb";
     private static final String USER = "sa";
     private static final String PASS = "";
 

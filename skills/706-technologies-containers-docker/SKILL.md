@@ -1,10 +1,10 @@
 ---
 name: 706-technologies-containers-docker
-description: Use when you need framework-agnostic Docker and container image guidance for Java projects - Dockerfile design, multi-stage Maven builds, jlink custom runtimes, micro runtime distributions such as Alpaquita, JVM container ergonomics, non-root execution, image metadata, .dockerignore, reproducible builds, vulnerability scanning, SBOM awareness, and production-safe container defaults. This should trigger for requests such as Review Java Dockerfile; Improve Docker image security; Add jlink runtime to a Java container; Add containerization to a Java project; Optimize Java container image size; Review Docker build reproducibility. Part of cursor-rules-java project
+description: Use when you need framework-agnostic Docker and container image guidance for Java projects - Dockerfile design, multi-stage Maven builds, jlink custom runtimes, micro runtime distributions such as Alpaquita, JVM container ergonomics, non-root execution, image metadata, .dockerignore, reproducible builds, vulnerability scanning, SBOM awareness, and production-safe container defaults. This should trigger for requests such as Review Java Dockerfile; Improve Docker image security; Add jlink runtime to a Java container; Add containerization to a Java project; Optimize Java container image size; Review Docker build reproducibility. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java container image best practices with Docker
 

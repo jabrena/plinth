@@ -1,10 +1,10 @@
 ---
 name: 402-frameworks-quarkus-rest
-description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI, content negotiation, pagination, sorting and filtering, API versioning, idempotency (Idempotency-Key), optimistic concurrency (ETag / If-Match), HTTP caching (Cache-Control), API deprecation (Sunset / Deprecation headers), RFC 7807 Problem Details, ISO-8601 for time in contracts, and security-aware boundaries. This should trigger for requests such as Review or improve JAX-RS resources in a Quarkus project; Design HTTP APIs with validation and error handling on Quarkus; Add API versioning, idempotency, ETag concurrency, or deprecation headers; Implement pagination, sorting, or RFC 7807 Problem Details error responses. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI, content negotiation, pagination, sorting and filtering, API versioning, idempotency (Idempotency-Key), optimistic concurrency (ETag / If-Match), HTTP caching (Cache-Control), API deprecation (Sunset / Deprecation headers), RFC 7807 Problem Details, ISO-8601 for time in contracts, and security-aware boundaries. This should trigger for requests such as Review or improve JAX-RS resources in a Quarkus project; Design HTTP APIs with validation and error handling on Quarkus; Add API versioning, idempotency, ETag concurrency, or deprecation headers; Implement pagination, sorting, or RFC 7807 Problem Details error responses; Improve Quarkus REST resources and exception mappers. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus REST API Guidelines
 
@@ -45,6 +45,7 @@ Before applying REST changes, ensure the project compiles. After applying improv
 - Design HTTP APIs with validation and error handling on Quarkus
 - Add API versioning, idempotency, ETag concurrency, or deprecation headers
 - Implement pagination, sorting, or RFC 7807 Problem Details error responses
+- Improve Quarkus REST resources and exception mappers
 
 ## Workflow
 

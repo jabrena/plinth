@@ -1,10 +1,10 @@
 ---
 name: 504-frameworks-micronaut-security
-description: Use when you need to design, review, or improve security in Micronaut applications — including micronaut-security authentication, @Secured and intercept-url-map rules, JWT/session strategies, SecurityService checks, CORS, CSRF awareness for browser apps, rejection handlers, and sensitive-data-safe logging. This should trigger for requests such as Add Micronaut security support; Review Micronaut security configuration; Improve API authorization in Micronaut; Add JWT security in Micronaut; Harden Micronaut route authorization rules. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve security in Micronaut applications — including micronaut-security authentication, @Secured and intercept-url-map rules, JWT/session strategies, SecurityService checks, CORS, CSRF awareness for browser apps, rejection handlers, and sensitive-data-safe logging. This should trigger for requests such as Add Micronaut security support; Review Micronaut security configuration; Improve API authorization in Micronaut; Add JWT security in Micronaut; Harden Micronaut route authorization rules. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut Security Guidelines
 

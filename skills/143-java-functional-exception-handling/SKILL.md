@@ -1,10 +1,10 @@
 ---
 name: 143-java-functional-exception-handling
-description: Use when you need to apply functional exception handling best practices in Java — including replacing exception overuse with Optional and VAVR Either types, designing error type hierarchies using sealed classes and enums, implementing monadic error composition pipelines, establishing functional control flow patterns, and reserving exceptions only for truly exceptional system-level failures. This should trigger for requests such as Improve the code with Functional Exception Handling; Apply Functional Exception Handling; Refactor the code with Functional Exception Handling. Part of cursor-rules-java project
+description: Use when you need to apply functional exception handling best practices in Java — including replacing exception overuse with Optional and VAVR Either types, designing error type hierarchies using sealed classes and enums, implementing monadic error composition pipelines, establishing functional control flow patterns, and reserving exceptions only for truly exceptional system-level failures. This should trigger for requests such as Improve the code with Functional Exception Handling; Apply Functional Exception Handling; Refactor the code with Functional Exception Handling; Model Java errors with Result or Either types; Replace exception-heavy flows with functional error handling. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Functional Exception handling Best Practices
 
@@ -39,6 +39,8 @@ Before applying any functional exception handling changes, ensure the project va
 - Improve the code with Functional Exception Handling
 - Apply Functional Exception Handling
 - Refactor the code with Functional Exception Handling
+- Model Java errors with Result or Either types
+- Replace exception-heavy flows with functional error handling
 
 ## Workflow
 

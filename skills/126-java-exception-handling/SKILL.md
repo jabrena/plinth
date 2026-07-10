@@ -1,10 +1,10 @@
 ---
 name: 126-java-exception-handling
-description: Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code. This should trigger for requests such as Exception handling; Use try-with-resources in Java code; Create exception chaining in Java code; Apply fail-fast validation in Java code. Part of cursor-rules-java project
+description: Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code. This should trigger for requests such as Exception handling; Use try-with-resources in Java code; Create exception chaining in Java code; Apply fail-fast validation in Java code; Review Java exception taxonomy and propagation. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Exception Handling Guidelines
 
@@ -45,6 +45,7 @@ Before applying any exception handling changes, ensure the project compiles. If 
 - Use try-with-resources in Java code
 - Create exception chaining in Java code
 - Apply fail-fast validation in Java code
+- Review Java exception taxonomy and propagation
 
 ## Workflow
 

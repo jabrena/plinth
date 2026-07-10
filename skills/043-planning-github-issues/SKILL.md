@@ -1,10 +1,10 @@
 ---
 name: 043-planning-github-issues
-description: Use when you need GitHub CLI (`gh`) installation/authentication guidance and a sanitized GitHub issue inventory workflow. The agent does not ingest GitHub issue or milestone output directly; it asks the user for sanitized issue summaries before analysis or @014-agile-user-story handoff. This should trigger for requests such as GitHub issue summary workflow; GitHub CLI setup for issues; Prepare sanitized GitHub issue inventory. Part of cursor-rules-java project
+description: Use when you need GitHub CLI (`gh`) installation/authentication guidance and a sanitized GitHub issue inventory workflow. The agent does not ingest GitHub issue or milestone output directly; it asks the user for sanitized issue summaries before analysis or @014-agile-user-story handoff. This should trigger for requests such as GitHub issue summary workflow; GitHub CLI setup for issues; Prepare sanitized GitHub issue inventory; Analyze GitHub issues with gh CLI; Summarize milestones and issue discussions safely. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # GitHub CLI — issues, milestones, and discussion for analysis
 
@@ -33,6 +33,8 @@ Do not fabricate issue data; use only sanitized user-provided summaries for issu
 - GitHub issue summary workflow
 - GitHub CLI setup for issues
 - Prepare sanitized GitHub issue inventory
+- Analyze GitHub issues with gh CLI
+- Summarize milestones and issue discussions safely
 
 ## Workflow
 

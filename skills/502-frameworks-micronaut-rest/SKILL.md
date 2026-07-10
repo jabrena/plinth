@@ -1,10 +1,10 @@
 ---
 name: 502-frameworks-micronaut-rest
-description: Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, contract-first OpenAPI (OpenAPI Generator), optional runtime OpenAPI via micronaut-openapi, and security annotations. This should trigger for requests such as Review or improve Micronaut @Controller REST APIs; Add validation, error handling, or align controllers with the OpenAPI contract on Micronaut HTTP layer. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, contract-first OpenAPI (OpenAPI Generator), optional runtime OpenAPI via micronaut-openapi, and security annotations. This should trigger for requests such as Review or improve Micronaut @Controller REST APIs; Add validation, error handling, or align controllers with the OpenAPI contract on Micronaut HTTP layer; Design Micronaut controllers and DTO validation; Add Micronaut exception handlers and Problem Details responses; Improve pagination filtering or OpenAPI alignment in Micronaut APIs. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut REST API Guidelines
 
@@ -42,6 +42,9 @@ Compile before REST refactors; verify after.
 
 - Review or improve Micronaut @Controller REST APIs
 - Add validation, error handling, or align controllers with the OpenAPI contract on Micronaut HTTP layer
+- Design Micronaut controllers and DTO validation
+- Add Micronaut exception handlers and Problem Details responses
+- Improve pagination filtering or OpenAPI alignment in Micronaut APIs
 
 ## Workflow
 

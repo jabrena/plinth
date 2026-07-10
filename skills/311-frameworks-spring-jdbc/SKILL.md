@@ -1,10 +1,10 @@
 ---
 name: 311-frameworks-spring-jdbc
-description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 7+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. This should trigger for requests such as Review Java code for Spring JDBC (JdbcTemplate, JdbcClient, NamedParameterJdbcTemplate); Apply best practices for Spring JDBC data access in Java code; Detect and fix SQL injection risks in JDBC code; Improve transaction boundaries or exception handling for JDBC operations. Part of cursor-rules-java project
+description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 7+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. This should trigger for requests such as Review Java code for Spring JDBC (JdbcTemplate, JdbcClient, NamedParameterJdbcTemplate); Apply best practices for Spring JDBC data access in Java code; Detect and fix SQL injection risks in JDBC code; Improve transaction boundaries or exception handling for JDBC operations; Review JdbcClient usage in Spring Framework 7. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring JDBC — JdbcClient (Spring Framework 7+)
 
@@ -43,6 +43,7 @@ Before applying any Spring JDBC changes, ensure the project compiles. If compila
 - Apply best practices for Spring JDBC data access in Java code
 - Detect and fix SQL injection risks in JDBC code
 - Improve transaction boundaries or exception handling for JDBC operations
+- Review JdbcClient usage in Spring Framework 7
 
 ## Workflow
 

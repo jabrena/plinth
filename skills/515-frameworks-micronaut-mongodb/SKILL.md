@@ -1,10 +1,10 @@
 ---
 name: 515-frameworks-micronaut-mongodb
-description: Use when you need MongoDB persistence in Micronaut — including @MongoRepository design, document modeling, indexes, query patterns, and error handling. This should trigger for requests such as Add MongoDB in Micronaut; Review Micronaut Data Mongo design; Improve error handling for Micronaut Mongo operations. Part of cursor-rules-java project
+description: Use when you need MongoDB persistence in Micronaut — including @MongoRepository design, document modeling, indexes, query patterns, and error handling. This should trigger for requests such as Add MongoDB in Micronaut; Review Micronaut Data Mongo design; Improve error handling for Micronaut Mongo operations; Model MongoDB documents for a Micronaut service; Configure Micronaut MongoDB codecs indexes or transactions. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut — MongoDB
 
@@ -24,6 +24,8 @@ Compile before MongoDB refactors; verify after changes.
 - Add MongoDB in Micronaut
 - Review Micronaut Mongo entities/repositories
 - Improve duplicate key handling, retries, or optimistic locking in Micronaut Mongo
+- Model MongoDB documents for a Micronaut service
+- Configure Micronaut MongoDB codecs indexes or transactions
 
 ## Workflow
 

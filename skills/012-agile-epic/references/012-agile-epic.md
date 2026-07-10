@@ -4,7 +4,7 @@ description: Use when the user wants to create an agile epic, define large bodie
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Agile Epics
 

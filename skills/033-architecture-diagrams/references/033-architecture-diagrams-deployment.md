@@ -4,7 +4,7 @@ description: Focused UML Deployment Diagram PlantUML guidance for the interactiv
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Diagrams Generator with modular step-based configuration
 
@@ -123,5 +123,5 @@ Before final delivery:
 3. Confirm the diagram is runtime deployment topology and does not drift into C4 Container, Component, UML class, or sequence modeling.
 4. Confirm the diagram hides internal runtime complexity at the selected abstraction level and does not expand post-GitOps runtime internals unless explicitly requested.
 5. Confirm file names, links, and documentation references match the selected organization.
-6. Use the existing Docker-based PlantUML validation workflow from the main skill when Docker is available.
+6. Use the trusted local PlantUML validation workflow from the main skill when PlantUML is available.
 7. Summarize generated deployment diagrams, source material inspected, any hidden internal detail, and any topology details that could not be verified.

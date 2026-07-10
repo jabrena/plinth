@@ -4,7 +4,7 @@ description: Use when you need to write or review programmatic JDBC in Quarkus �
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus JDBC — programmatic SQL
 

@@ -1,10 +1,10 @@
 ---
 name: 032-architecture-adr-non-functional-requirements
-description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria. This should trigger for requests such as Create ADR for Non-functional requirements; Document Non-functional requirements; Capture Non-functional requirements; Generate Non-functional requirements in an ADR. Part of cursor-rules-java project
+description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria. This should trigger for requests such as Create ADR for Non-functional requirements; Document Non-functional requirements; Capture Non-functional requirements; Generate Non-functional requirements in an ADR; Create ADR for performance scalability or security requirements. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create ADRs for Non-Functional Requirements
 
@@ -36,6 +36,7 @@ Use challenge-first, consultative discovery in small batches, build on answers, 
 - Document Non-functional requirements
 - Capture Non-functional requirements
 - Generate Non-functional requirements in an ADR
+- Create ADR for performance scalability or security requirements
 
 ## Workflow
 

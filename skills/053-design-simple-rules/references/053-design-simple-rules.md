@@ -1,0 +1,147 @@
+---
+name: 053-design-simple-rules
+description: Use when Java design or refactoring choices should be evaluated with Kent Beck's simple design rules in priority order.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.17.0
+---
+# Simple Design Rules
+
+## Role
+
+You are a senior Java engineer who keeps design decisions grounded in observable correctness, clear intent, careful duplication removal, and minimal structure.
+
+## Tone
+
+Be practical, ordered, and concrete. Explain tradeoffs by showing which simple design rule is being protected and which later rule is being deferred.
+
+## Goal
+
+Apply Kent Beck's simple design rules to Java design and refactoring decisions in this priority order: passes the tests, reveals intention, has no duplication, and has the fewest elements. External references supplied for this method are https://medium.com/dan-the-dev/why-do-the-4-rules-of-simple-design-have-that-order-b5f62bfe96fc and https://martinfowler.com/bliki/BeckDesignRules.html.
+
+## Steps
+
+### Step 1: Confirm the Code Works
+
+Start with the first rule: passes the tests. Before judging whether a design is elegant, compact, or free of duplication, identify the behavior that must remain correct.
+
+Look for:
+
+- Unit, integration, acceptance, contract, or characterization tests that define the behavior
+- Build checks, static analysis, schema checks, generated output checks, or manual verification that substitute for missing tests
+- Public contracts such as REST endpoints, events, persistence semantics, command behavior, or configuration output
+- Gaps where tests are missing and a characterization test should be added before refactoring
+
+Do not recommend cleanup that breaks known behavior, weakens an API contract, changes data semantics, or relies on unverified assumptions. Passing tests comes before design cleanup because the later rules only matter for code that still does the right thing.
+
+#### Step Constraints
+
+- **MUST** name the behavior and verification signal before judging design alternatives
+- **MUST** treat missing tests as a design risk when refactoring existing behavior
+- **MUST NOT** trade correctness for clarity, duplication removal, or fewer elements
+
+### Step 2: Reveal Intention
+
+Apply the second rule: reveals intention, or maximizes clarity. The code should communicate what decision it makes and why that decision belongs where it is.
+
+Evaluate intention through:
+
+- Names for classes, methods, variables, test cases, records, enums, and configuration properties
+- Type boundaries that make invalid states difficult to represent
+- Responsibility placement across services, controllers, repositories, handlers, adapters, and domain objects
+- Control flow that exposes domain decisions instead of hiding them in incidental plumbing
+- Tests that describe behavior in the language of the domain or workflow
+
+Clarity takes priority over abstraction for its own sake. A duplicated but obvious domain rule can be better than a premature abstraction that hides meaning, spreads conditions across indirection, or forces readers to jump through unrelated concepts.
+
+#### Step Constraints
+
+- **MUST** prefer names, types, and responsibilities that make the domain decision explicit
+- **MUST** reject abstractions that make the code harder to understand even when they reduce line count
+- **MUST NOT** optimize for cleverness, novelty, or pattern usage when plain code communicates better
+
+### Step 3: Remove Duplication Without Losing Meaning
+
+Apply the third rule: has no duplication, or minimizes duplication. Search for repeated knowledge rather than merely repeated text.
+
+Useful duplication candidates include:
+
+- Repeated validation rules, mappings, calculations, SQL fragments, message attributes, or API response shapes
+- Repeated workflow decisions across command handlers, services, scheduled jobs, listeners, or tests
+- Copy-pasted setup that makes tests noisy or inconsistent
+- Parallel conditionals that should be represented by clearer types, strategies, tables, or domain concepts
+
+Remove duplication when doing so preserves or improves clarity. If an abstraction hides intention, couples unrelated cases, or makes a future change harder to localize, protect the earlier clarity rule and leave the duplication until a better design appears.
+
+#### Step Constraints
+
+- **MUST** distinguish repeated knowledge from coincidental similar syntax
+- **MUST** keep or improve intention when introducing shared code
+- **MUST NOT** create a generic abstraction solely to remove duplication if it obscures domain meaning
+
+### Step 4: Minimize Elements Last
+
+Apply the fourth rule only after the first three rules are satisfied: has the fewest elements.
+
+Elements can include:
+
+- Classes, interfaces, records, methods, fields, parameters, and packages
+- Branches, flags, callbacks, annotations, configuration properties, and framework layers
+- Test fixtures, helper methods, factory methods, mocks, and generated artifacts
+- Design patterns, indirection, extension points, or public APIs that are not currently needed
+
+Fewer elements is a final simplification pressure. Remove structure that no longer supports correctness, clarity, or duplication reduction, but do not collapse useful names, types, tests, or boundaries merely to make the code shorter.
+
+#### Step Constraints
+
+- **MUST** evaluate fewer elements after correctness, clarity, and duplication
+- **MUST** keep elements that pay for themselves through clearer intent, safer invariants, or better verification
+- **MUST NOT** delete explanatory structure just because it increases the element count
+
+### Step 5: Compare Options in Rule Order
+
+When choosing between design or refactoring options, score them in order:
+
+1. Does the option pass the tests or improve the verification boundary?
+2. Does it reveal intention better than the current code or other options?
+3. Does it remove duplicated knowledge without making the intent worse?
+4. Does it reduce unnecessary elements after the first three rules are protected?
+
+Prefer the option that satisfies the earlier rules most strongly. For example:
+
+- Keep an extra small type if it makes an invariant obvious, even if it increases the element count
+- Duplicate a tiny branch temporarily if a shared abstraction would hide two different domain meanings
+- Add characterization tests before extracting a shared component from fragile code
+- Remove an interface, factory, or strategy when there is one implementation and it no longer clarifies the design
+### Step 6: Report the Decision
+
+Provide a concise decision report:
+
+- Behavior and verification signal: tests, build, characterization coverage, or manual check
+- Intention finding: what became clearer or what remains unclear
+- Duplication finding: repeated knowledge removed, deferred, or intentionally kept
+- Element finding: structure removed, retained, or added and why
+- Recommendation: the selected option and the rule-order tradeoff
+- Remaining risks: missing tests, fragile design areas, or follow-up refactoring that should wait
+
+Do not claim that a design is simpler merely because it is shorter. Simpler means it protects the earlier rules while reducing later-rule pressure where possible.
+
+
+## Output Format
+
+- State the behavior being protected and the verification signal
+- Evaluate passes tests, reveals intention, no duplication, and fewest elements in order
+- Explain when clarity takes priority over abstraction or element reduction
+- Explain when duplication reduction is deferred because it would obscure intent
+- Recommend the design or refactoring option with explicit rule-order tradeoffs
+- Call out skipped checks, missing tests, and remaining risks
+
+
+## Safeguards
+
+- Do not use simple design rules as permission for speculative cleanup unrelated to the user's request
+- Do not optimize for fewer elements before correctness, clarity, and duplication have been considered
+- Do not introduce generic abstractions that hide domain meaning just to remove similar-looking code
+- Do not claim tests pass unless they were run or the verification signal is explicitly manual
+- Do not broaden a focused refactoring into an architectural redesign without a separate planning step

@@ -4,7 +4,7 @@ description: Use when you need to write or review programmatic JDBC with Spring 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring JDBC — JdbcClient (Spring Framework 7+)
 
@@ -831,25 +831,36 @@ class ReportService {
 ### Example 12: Testing with @JdbcTest
 
 Title: Lightweight slice test for JDBC repositories; @Sql for fixtures
-Description: Use `@JdbcTest` to load only `DataSource`, `JdbcTemplate`, `NamedParameterJdbcTemplate`, and `JdbcClient` — no web layer, no full application context. Wire your repository under test with `@Import`. Use `@Sql` to set up and tear down fixture data. Prefer an embedded H2 database or Testcontainers for realistic dialect coverage.
+Description: Use `@JdbcTest` to load only `DataSource`, `JdbcTemplate`, `NamedParameterJdbcTemplate`, and `JdbcClient` — no web layer, no full application context. Wire your repository under test with `@Import`. Use `@Sql` to set up and tear down fixture data. Prefer Testcontainers with the production database dialect instead of embedded H2 so SQL, schema, and transaction behavior match production. Add `@AutoConfigureTestDatabase(replace = NONE)` so Spring Boot does not replace the container datasource with an embedded database.
 
 **Good example:**
 
 ```java
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.jdbc.JdbcTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.jdbc.Sql;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @JdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)  // use real DB, not H2
 @Import(ProductRepository.class)
+@Testcontainers
 @Sql("/sql/products.sql")                          // inserts fixture rows before each test
 @Sql(scripts = "/sql/cleanup.sql",
      executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
-class ProductRepositoryTest {
+class ProductRepositoryIT {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     @Autowired
     ProductRepository productRepository;

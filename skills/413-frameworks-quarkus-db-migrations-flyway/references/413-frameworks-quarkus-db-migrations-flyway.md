@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus — Database migrations (Flyway)
 
@@ -33,6 +33,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 2: SQL migrations
 - Example 3: application.properties
 - Example 4: Multiple datasources (optional)
+- Example 5: First Flyway migration in a Quarkus project
 
 ### Example 1: Extension and JDBC driver
 
@@ -134,13 +135,52 @@ quarkus.flyway.locations=classpath:db/migration
 ```
 
 
+### Example 5: First Flyway migration in a Quarkus project
+
+Title: Bootstrap the datasource, Flyway extension, migration folder, and production-dialect verification together
+Description: When a Quarkus project has no datasource, no JDBC or Panache persistence layer, and no Flyway setup yet, treat the request as a bootstrap plus migration change. Add `quarkus-flyway` together with the matching `quarkus-jdbc-*` driver, configure `quarkus.flyway.migrate-at-start=true` and `classpath:db/migration`, then create a versioned migration under `src/main/resources/db/migration`. For data-sensitive changes such as `status` to `status_v2`, keep the first migration in the expand phase: add the new nullable column, backfill from the old value, keep the old column available, and defer `NOT NULL` plus dropping the old column to later deployable contract migrations. Verify the migration with the production database dialect when feasible. In Quarkus tests, Dev Services or Testcontainers can start PostgreSQL, MySQL, or another matching database without hardcoded datasource URLs. For semantic changes, add or recommend a previous-release fixture test that loads representative old rows, runs Flyway, and asserts the business meaning is preserved after migration.
+
+**Good example:**
+
+```sql
+-- src/main/resources/db/migration/V1__expand_order_status_v2.sql
+ALTER TABLE orders ADD COLUMN status_v2 VARCHAR(40);
+
+UPDATE orders
+SET status_v2 = CASE status
+    WHEN 'P' THEN 'PENDING'
+    WHEN 'S' THEN 'SHIPPED'
+    WHEN 'C' THEN 'CANCELLED'
+    ELSE 'UNKNOWN'
+END
+WHERE status_v2 IS NULL;
+
+-- Later deployable steps:
+-- 1. Release code that writes both status and status_v2 and reads status_v2 with fallback.
+-- 2. Verify previous-release data snapshots keep the same business meaning.
+-- 3. Contract only after rollout: SET NOT NULL on status_v2, then DROP status.
+```
+
+**Bad example:**
+
+```sql
+-- Bad: combines expand, semantic rewrite, and contract in one migration
+UPDATE orders SET status = 'PENDING' WHERE status = 'P';
+ALTER TABLE orders ADD COLUMN status_v2 VARCHAR(40) NOT NULL DEFAULT 'PENDING';
+ALTER TABLE orders DROP COLUMN status;
+```
+
+
 ## Output Format
 
 - **ANALYZE** Quarkus Flyway setup: extensions, datasource config, migration locations, migrate-at-start, and test profile behavior
 - **CATEGORIZE** issues (EXTENSION, CONFIG, SCRIPT, ENTITY MISMATCH) by impact
+- **BOOTSTRAP** first-time Flyway projects by adding `quarkus-flyway`, the matching `quarkus-jdbc-*` driver, `quarkus.flyway.*` configuration, and `src/main/resources/db/migration` together
 - **APPLY** Quarkus-aligned fixes: correct `pom.xml`, `application.properties`, and forward-only SQL
 - **ALIGN** with `@412-frameworks-quarkus-panache` entities or `@411-frameworks-quarkus-jdbc` SQL
-- **TEST** with `@QuarkusTest` and a real database (Dev Services or Testcontainers) after migration changes
+- **SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks
+- **TEST** with `@QuarkusTest` and a real production-dialect database using Dev Services or Testcontainers after migration changes; for semantic changes, include previous-release fixture data that proves business meaning is preserved
+- **CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 
@@ -149,4 +189,7 @@ quarkus.flyway.locations=classpath:db/migration
 - **FORWARD ONLY**: Never rewrite migrations that already applied in shared environments
 - **PANACHE SYNC**: Adding `@Version` or columns requires matching DDL in Flyway before rollout
 - **DEV SERVICES**: Dev databases are ephemeral — do not treat them as migration history sources of truth
+- **PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, relationship-table changes, and enum/status meaning changes
+- **FIRST SETUP**: If no datasource or migration chain exists, add Flyway, the JDBC driver, configuration, and versioned migration layout as one coherent bootstrap; avoid hardcoded test datasource URLs when Dev Services or Testcontainers can provide the production dialect
+- **BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes

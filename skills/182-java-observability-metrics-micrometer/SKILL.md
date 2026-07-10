@@ -1,10 +1,10 @@
 ---
 name: 182-java-observability-metrics-micrometer
-description: Use when you need to implement or improve Java metrics observability with Micrometer — including meter design, naming/tag conventions, cardinality control, timers/counters/gauges/distribution summaries, percentiles/histograms, Actuator/Prometheus integration, and metrics validation through tests. This should trigger for requests such as Improve metrics; Apply Micrometer; Add metrics observability; Refactor Micrometer instrumentation. Part of cursor-rules-java project
+description: Use when you need to implement or improve Java metrics observability with Micrometer — including meter design, naming/tag conventions, cardinality control, timers/counters/gauges/distribution summaries, percentiles/histograms, Actuator/Prometheus integration, and metrics validation through tests. This should trigger for requests such as Improve metrics; Apply Micrometer; Add metrics observability; Refactor Micrometer instrumentation; Add Micrometer timers counters or gauges to Java services. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Metrics Observability with Micrometer
 
@@ -37,6 +37,7 @@ Metrics instrumentation must be operationally safe, low-cardinality, and validat
 - Apply Micrometer
 - Add metrics observability
 - Refactor Micrometer instrumentation
+- Add Micrometer timers counters or gauges to Java services
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 183-java-observability-tracing-opentelemetry
-description: Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors. This should trigger for requests such as Improve tracing; Apply OpenTelemetry tracing; Add distributed tracing; Refactor tracing instrumentation. Part of cursor-rules-java project
+description: Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors. This should trigger for requests such as Improve tracing; Apply OpenTelemetry tracing; Add distributed tracing; Refactor tracing instrumentation; Instrument Java services with OpenTelemetry spans. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Distributed Tracing with OpenTelemetry
 
@@ -38,6 +38,7 @@ Tracing instrumentation must preserve context correctly and avoid leaking sensit
 - Apply OpenTelemetry tracing
 - Add distributed tracing
 - Refactor tracing instrumentation
+- Instrument Java services with OpenTelemetry spans
 
 ## Workflow
 

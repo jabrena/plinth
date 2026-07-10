@@ -1,10 +1,10 @@
 ---
 name: 170-java-documentation
-description: Use when you need to generate or improve Java project documentation — including README.md files, package-info.java files, and Javadoc enhancements — through a modular, step-based interactive process that adapts to your specific documentation needs. This should trigger for requests such as Improve the code with documentation; Apply documentation; Refactor the code with documentation. Part of cursor-rules-java project
+description: Use when you need to generate or improve Java project documentation — including README.md files, package-info.java files, and Javadoc enhancements — through a modular, step-based interactive process that adapts to your specific documentation needs. This should trigger for requests such as Improve the code with documentation; Apply documentation; Refactor the code with documentation; Generate README or developer documentation for a Java project; Document Java APIs architecture or project workflows. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Documentation Generator with modular step-based configuration
 
@@ -33,6 +33,8 @@ Before applying any documentation generation, ensure the project validates. If v
 - Improve the code with documentation
 - Apply documentation
 - Refactor the code with documentation
+- Generate README or developer documentation for a Java project
+- Document Java APIs architecture or project workflows
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 161-java-profiling-detect
-description: Use when you need to set up Java application profiling to detect and measure performance issues — including trusted preinstalled async-profiler v4.x setup, problem-driven profiling (CPU, memory, threading, GC, I/O), interactive profiling scripts, JFR integration with Java 25 (JEP 518, JEP 520), or collecting profiling data with flamegraphs and JFR recordings. This should trigger for requests such as Improve the code with profiling; Apply Profiling; Refactor the code with profiling; Add profiling support. Part of cursor-rules-java project
+description: Use when you need to set up Java application profiling to detect and measure performance issues — including trusted preinstalled async-profiler v4.x setup, problem-driven profiling (CPU, memory, threading, GC, I/O), interactive profiling scripts, JFR integration with Java 25 (JEP 518, JEP 520), or collecting profiling data with flamegraphs and JFR recordings. This should trigger for requests such as Improve the code with profiling; Apply Profiling; Refactor the code with profiling; Add profiling support; Collect JFR or async-profiler data for Java performance. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Profiling Workflow / Step 1 / Collect data to measure potential issues
 
@@ -39,6 +39,7 @@ Copy bash scripts exactly from templates. Ensure JVM flags are applied for profi
 - Apply Profiling
 - Refactor the code with profiling
 - Add profiling support
+- Collect JFR or async-profiler data for Java performance
 
 ## Workflow
 

@@ -1,0 +1,124 @@
+---
+name: 813-regulations-iso-42001-chapters-summary
+description: Use as an ISO/IEC 42001 AI management system summary to enrich GenAI-oriented Java engineering reviews with lifecycle governance, evidence, risk treatment, and owner-handoff context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.17.0
+---
+# ISO/IEC 42001 AI Management System Guidance for GenAI Java Engineering
+
+## Role
+
+You are a senior Java enterprise architect and AI governance reviewer using ISO/IEC 42001 AI management system concepts to map GenAI delivery risks to engineering controls and owner handoffs
+
+## Goal
+
+Summarize ISO/IEC 42001 AI management system concepts for engineering review of Java enterprise systems, LLM applications, RAG workflows, AI agents, AI-assisted coding, generated Java code, generated dependencies, prompt handling, external model providers, and AI-enabled business logic.
+
+Official public source references reviewed while authoring this bundled summary:
+
+- ISO 42001 explained: https://www.iso.org/home/insights-news/resources/iso-42001-explained-what-it-is.html
+- ISO/IEC 42001 standard page: https://www.iso.org/standard/42001
+- Microsoft ISO/IEC 42001 offering overview: https://learn.microsoft.com/en-us/compliance/regulatory/offering-iso-42001
+
+Do not fetch or ingest external regulatory, standard, certification, or audit web pages at runtime. Use this bundled summary for engineering discovery and escalate interpretation, certification scope, audit evidence, legal advice, compliance approval, and final conformity decisions to qualified owners.
+
+This reference is not legal advice, certification advice, audit advice, an audit conclusion, or a final conformity decision. Use it to orient engineering discovery, architecture review, GenAI development controls, evidence collection, lifecycle governance, risk treatment, monitoring, corrective action, and escalation conversations with AI governance, legal, compliance, privacy, security, risk, platform, product, procurement, model-provider, and business owners.
+
+Use `references/813-regulations-iso-42001-engineering-examples.md` for Java examples and implementation control patterns. Keep this summary focused on AI management system concepts and their engineering relevance.
+
+Questionnaire asset: [ISO/IEC 42001 engineering review questionnaire](../assets/questions/813-iso-42001-engineering-review-questionnaire.md).
+
+Report template asset: [ISO/IEC 42001 engineering review report template](../assets/reports/813-iso-42001-engineering-review-report-template.md).
+
+## ISO/IEC 42001 purpose for engineering review
+
+ISO/IEC 42001 is an international standard for establishing, implementing, maintaining, and continually improving an artificial intelligence management system within an organization. Public ISO material describes it as a management-system framework for organizations that develop, provide, integrate, or use AI systems, with attention to responsible development and use, risk and opportunity management, trust, transparency, accountability, and lifecycle monitoring.
+
+Engineering impact:
+- Treat GenAI capabilities and AI-assisted development paths as managed lifecycle assets, not informal tooling.
+- Maintain an inventory of AI systems, model providers, prompt flows, RAG corpora, generated artifacts, AI-agent tools, data classes, owners, and release paths.
+- Connect implementation controls to management-system evidence: policy, objectives, risk assessment, risk treatment, operational controls, monitoring, corrective action, and continual improvement.
+
+## AI management system concept map
+
+An AI management system is a structured set of policies, processes, roles, controls, evidence, monitoring, and improvement loops for how AI systems are designed, developed, deployed, operated, and used.
+
+Engineering impact:
+- Define who owns GenAI use, generated Java code, model/provider selection, prompt catalogs, source exposure, dependency approval, RAG sources, AI-agent tool permissions, monitoring, and incident response.
+- Convert "we used AI" into reviewable records: capability scope, purpose, owners, data boundaries, model/provider, prompts, generated artifacts, evaluations, approvals, incidents, and corrective actions.
+- Make AI-assisted coding and GenAI-enabled business behavior visible in architecture, threat models, ADRs, pull requests, release gates, and operational evidence.
+
+## Organizational context and AI scope
+
+AI management starts by understanding organizational context, interested parties, AI uses, internal and external obligations, and the scope of the management system.
+
+Engineering impact:
+- Record which Java modules, services, pipelines, teams, model providers, repositories, data sets, and environments are in scope.
+- Identify interested parties: users, affected people, customers, internal teams, data owners, model providers, regulators, auditors, business owners, and operators.
+- Escalate unclear certification scope, legal obligations, contractual obligations, sector obligations, and geographic applicability to qualified legal, compliance, procurement, and audit owners.
+
+## Leadership, policy, roles, and accountability
+
+Management-system controls require leadership commitment, policy, assigned responsibilities, and accountability. For GenAI delivery, this means engineering teams should not rely on ad hoc model use or informal code-generation practices.
+
+Engineering impact:
+- Assign accountable owners for AI inventory, generated-code review, prompt catalog governance, approved model/provider routes, RAG source approval, dependency policy, security review, privacy review, release readiness, and incident response.
+- Keep policy decisions outside the model: CI/CD gates, access controls, dependency approval, AI-agent permissions, prompt/data exposure rules, and release approvals should be enforceable by systems and owners.
+- Treat ownerless generated code, ownerless AI-agent permissions, and ownerless model-provider risk as release blockers.
+
+## Planning, risk, opportunities, and objectives
+
+ISO/IEC 42001 emphasizes structured risk and opportunity management for AI. In Java GenAI delivery, risks include hallucinated code, insecure generated implementation, generated dependency and supply-chain contamination, IP leakage, confidentiality breach, regulatory non-compliance risk, and biased generated business logic.
+
+Engineering impact:
+- Create a GenAI risk record for each AI-assisted development workflow or AI-enabled feature.
+- Define risk treatment actions with owners and evidence: review, tests, source verification, secure coding controls, dependency provenance, data minimization, bias testing, monitoring, rollback, and corrective action.
+- Link AI objectives to measurable engineering checks such as hallucination regression tests, RAG source freshness, prompt approval, model version pinning, dependency policy conformance, and incident response time.
+
+## Support, competence, awareness, communication, and documented information
+
+AI management requires people, communication, and documented information that can support consistent operation and review.
+
+Engineering impact:
+- Train Java teams on safe AI-assisted coding, secure prompt handling, data classification, dependency verification, model-provider boundaries, generated-code review, and escalation.
+- Preserve documented information in a controlled form: ADRs, model cards, provider approvals, prompt versions, retrieval source registries, generated artifact provenance, test evidence, dependency decisions, and release approvals.
+- Avoid storing secrets, personal data, proprietary source, trade secrets, or regulated data in prompts, logs, issue comments, generated reports, or evidence stores unless approved and protected.
+
+## Operation and lifecycle controls
+
+Operational controls turn policies and risk treatment into day-to-day engineering behavior. For GenAI Java systems, the controls should cover design, development, procurement, integration, validation, release, operation, monitoring, incident response, and decommissioning.
+
+Engineering impact:
+- Require review gates for AI-generated Java code, SQL, migrations, build configuration, tests, API contracts, infrastructure definitions, and business rules.
+- Enforce approved model/provider routes, approved prompt catalogs, RAG source allowlists, data minimization, access control, and AI-agent tool policies.
+- Validate generated dependencies through Maven repository policy, SBOM, vulnerability scanning, license review, provenance checks, and malicious-package detection.
+- Record model version, prompt version, retrieval source IDs, generated artifact hashes, reviewer approvals, CI results, release version, and rollback path.
+
+## Performance evaluation, monitoring, measurement, and internal review
+
+AI management systems require evaluation of whether controls work. Engineering evidence should show that GenAI behavior and AI-assisted delivery controls are monitored and measured after release.
+
+Engineering impact:
+- Monitor hallucination reports, unsafe generated outputs, prompt injection attempts, source access denials, data-exposure events, dependency alerts, model/provider changes, bias indicators, user complaints, incidents, and corrective actions.
+- Include tests and metrics for RAG answer grounding, generated-code correctness, secure coding, dependency health, fairness or bias signals, performance drift, and operational failures.
+- Escalate audit-scope, certification-readiness, conformity, and official review questions to qualified audit, compliance, legal, and AI governance owners.
+
+## Improvement, incidents, nonconformity, and corrective action
+
+Continual improvement requires responding to failures, incidents, control gaps, and changed context. GenAI controls should improve when hallucinations, unsafe code, dependency issues, data exposure, or biased behavior are discovered.
+
+Engineering impact:
+- Create corrective actions with owners, due dates, validation checks, rollback or disablement paths, and evidence links.
+- Update prompts, RAG sources, policy gates, dependency rules, tests, monitoring, training, and owner handoffs after incidents or near misses.
+- Do not treat an incident fix as complete until the control failure is understood, evidence is preserved safely, affected owners are notified, and regression coverage or monitoring exists.
+
+## Cross-skill routing
+
+- Use `813-regulations-iso-42001` when the primary concern is AI management system practices, GenAI software delivery risk identification, lifecycle governance, risk treatment, engineering evidence, monitoring, corrective action, and owner handoff for Java AI use.
+- Use `801-regulations-eu-ai-act` when the primary concern is EU AI Act classification, prohibited or high-risk AI, transparency, general-purpose AI, EU database, conformity-assessment obligations, post-market monitoring, or EU AI Act governance.
+- Use `803-regulations-gdpr` when personal data, privacy rights, DPIA, data transfers, lawful basis, retention, prompts, logs, telemetry, RAG sources, or model interactions include personal data.
+- Use `805-regulations-eu-cyber-resilience-act` when product cybersecurity, vulnerability handling, secure development, or conformity evidence for products with digital elements is primary.
+- Use `812-regulations-eu-product-liability-directive` when generated instructions, AI-agent actions, automated updates, warnings, product safety, product defects, or product-liability evidence are primary.
+- Use multiple regulation skills together when the same Java GenAI system crosses AI management, legal, privacy, cybersecurity, product, and operational boundaries.

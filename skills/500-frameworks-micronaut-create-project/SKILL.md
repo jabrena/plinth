@@ -1,10 +1,10 @@
 ---
 name: 500-frameworks-micronaut-create-project
-description: Use when you need to create a new Maven-based Micronaut 4.x project using SDKMAN-managed Java and Micronaut CLI tooling. This should trigger for requests such as Create a Micronaut Maven project; Bootstrap Micronaut project with SDKMAN; Generate a new Micronaut service. Part of cursor-rules-java project
+description: Use when you need to create a new Maven-based Micronaut 4.x project using SDKMAN-managed Java and Micronaut CLI tooling. This should trigger for requests such as Create a Micronaut Maven project; Bootstrap Micronaut project with SDKMAN; Generate a new Micronaut service; Create Micronaut 4 Maven project; Scaffold Micronaut service with Java 25. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Micronaut Maven Project
 
@@ -36,6 +36,8 @@ Project creation must be explicit, reproducible, and Maven-based.
 - Create a Micronaut Maven project
 - Bootstrap Micronaut project with SDKMAN
 - Generate a new Micronaut service
+- Create Micronaut 4 Maven project
+- Scaffold Micronaut service with Java 25
 
 ## Workflow
 

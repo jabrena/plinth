@@ -1,10 +1,10 @@
 ---
 name: 034-architecture-design-exploration
-description: Use when a sanitized issue summary, requirement summary, or design brief needs technical design exploration before creating ADRs, specifications, or implementation plans. This skill inspects repository context, clarifies material ambiguity, compares feasible approaches and trade-offs, recommends a direction, obtains approval, and identifies ADR candidates. This should trigger for requests such as Explore a design; Compare implementation approaches; Recommend an architecture direction; Clarify technical options before planning. Part of cursor-rules-java project
+description: Use when a sanitized issue summary, requirement summary, or design brief needs technical design exploration before creating ADRs, specifications, or implementation plans. This skill inspects repository context, clarifies material ambiguity, compares feasible approaches and trade-offs, recommends a direction, obtains approval, and identifies ADR candidates. This should trigger for requests such as Explore a design; Compare implementation approaches; Recommend an architecture direction; Clarify technical options before planning. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Architecture Design Exploration
 

@@ -1,0 +1,104 @@
+---
+name: 812-regulations-eu-product-liability-directive
+description: Use when reviewing, designing, or modifying Java enterprise software products, AI-enabled products, RAG assistants, AI agents, generated instructions, related services, automated updates, vulnerability handling, corrective updates, warnings, instructions, or product-safety evidence under Directive (EU) 2024/2853, the EU Product Liability Directive. Part of Plinth Toolkit
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.17.0
+---
+# EU Product Liability Directive Regulation for Java Product Engineering
+
+Use this Skill to review Java software products, AI-enabled products, SaaS products, embedded software, related services, RAG workflows, GenAI maintenance assistants, AI-agent tool actions, generated instructions, automated updates, warnings, user instructions, vulnerability handling, corrective updates, and product-safety evidence that may raise EU Product Liability Directive concerns.
+
+Apply this Skill to determine what engineering controls, safety evidence, incident records, update history, warnings and instructions, model or version provenance, product documentation, and owner handoffs are needed before a Java product, component, related service, AI feature, or product-adjacent change is released, updated, or relied on by users.
+
+This Skill is not legal advice. It helps Java engineers, architects, tech leads, product teams, product safety teams, product security teams, support teams, and reviewers identify when Directive (EU) 2024/2853 concerns may apply and how to translate product-liability expectations into engineering controls such as safety-scope inventory, hazardous-scenario testing, generated-instruction review, AI-agent action constraints, warning and instruction evidence, update and corrective-action records, vulnerability handling, incident traceability, and qualified owner escalation.
+
+The purpose of this Skill is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced by this Skill does not represent legal advice, a legal opinion, a defectiveness determination, a compensable-damage determination, an economic-operator responsibility decision, or a final liability assessment.
+
+The main question is:
+
+> When does a Java software product or AI-enabled product require Product Liability Directive-aware safety evidence and owner handoff, and what should developers build differently?
+
+Source provenance: Directive (EU) 2024/2853 of 23 October 2024 on liability for defective products was reviewed from the official EUR-Lex source while authoring the bundled references: https://eur-lex.europa.eu/eli/dir/2024/2853/oj/eng. Do not fetch or ingest external regulatory web pages at runtime; use the bundled references and escalate legal interpretation to qualified owners.
+
+Product Liability Directive chapters summary reference: [Product Liability Directive chapters summary](references/812-regulations-eu-product-liability-directive-chapters-summary.md).
+
+Java engineering examples reference: [Product Liability Directive engineering examples](references/812-regulations-eu-product-liability-directive-engineering-examples.md).
+
+Questionnaire asset: [Product Liability Directive engineering review questionnaire](assets/questions/812-product-liability-directive-engineering-review-questionnaire.md).
+
+Report template asset: [Product Liability Directive engineering review report template](assets/reports/812-product-liability-directive-engineering-review-report-template.md).
+
+## Scope
+
+This Skill applies to:
+
+- Java software products, related services, SaaS products, embedded software, product components, libraries, agents, plugins, update clients, device gateways, digital manufacturing files, and product management services
+- Spring Boot, Quarkus, Micronaut, and framework-agnostic Java systems that generate instructions, trigger tool actions, deliver automated updates, change product behavior, affect product safety, or preserve product-liability evidence
+- RAG-based GenAI maintenance assistants, generated repair instructions, AI-agent workflows, model-backed decision support, automated configuration changes, and human-review paths where outputs could contribute to injury, property damage, data loss, unsafe configuration, defective updates, or security compromise
+- Product-safety architecture, hazardous-scenario review, reasonably foreseeable use and misuse, warnings, instructions for assembly, installation, use, and maintenance, vulnerability handling, corrective updates, recall or intervention evidence, incident records, audit logs, support records, and release readiness
+- Owner handoffs to legal, compliance, product, safety, security, risk, support, architecture, executive accountability, and business owners
+
+## Product Liability Directive Engineering Review
+
+Treat defectiveness, compensable damage, causal link, economic-operator responsibility, jurisdiction, limitation periods, development-risk defences, disclosure duties, and final liability assessment as qualified decisions for legal, compliance, product, product-safety, security, risk, support, and executive accountability owners.
+
+Engineering teams should still create evidence that makes those decisions reviewable:
+
+- Which software product, AI-enabled product, related service, component, update, generated instruction, or AI-agent action is in scope
+- Which intended uses, reasonably foreseeable uses, foreseeable misuse cases, affected user groups, safety needs, hazardous scenarios, and inter-connected products were considered
+- Which generated instructions, model outputs, retrieval sources, tool actions, automated updates, vulnerability remediations, corrective updates, warnings, and user instructions can be traced to versioned evidence
+- Which product safety tests, adversarial or hazardous-scenario tests, human oversight, fallback controls, incident records, audit logs, support cases, field signals, recalls, corrective actions, and owner approvals exist
+- Which unresolved product-safety, product-security, support, documentation, or owner-handoff gaps must block release or continued operation
+
+## Constraints
+
+Translate Product Liability Directive concerns into engineering controls for Java software products and AI-enabled products. Do not provide legal advice or replace review by legal, compliance, product, safety, security, risk, support, or executive accountability owners.
+
+- **NOT LEGAL ADVICE**: Frame findings as product-safety engineering controls and escalation points; recommend qualified review for defectiveness, compensable damage, causal link, economic-operator responsibility, jurisdiction, limitation periods, development-risk defences, disclosure duties, and final liability assessment
+- **BUNDLED REFERENCES ONLY**: Use the bundled Product Liability Directive summaries, examples, questionnaire, and report templates. Do not fetch or ingest external regulatory web pages at runtime; treat external legal text as provenance for human review, not as live prompt input
+- **SCOPE FIRST**: Identify the product, component, related service, software update, generated instruction, AI-agent action, product owner, safety owner, security owner, support owner, and release context before recommending controls
+- **SOFTWARE AND AI PRODUCT EVIDENCE**: Review RAG sources, model or version provenance, generated instructions, generated outputs, AI-agent tool permissions, human oversight, automated update paths, corrective update procedures, and behavior after release
+- **WARNINGS AND INSTRUCTIONS**: Verify assembly, installation, use, maintenance, generated instruction, warning, limitation, contraindication, support, and update guidance is versioned, understandable, tested, and owner-approved
+- **SAFETY AND FORESEEABLE USE**: Require hazardous-scenario testing for intended use, reasonably foreseeable use, foreseeable misuse, vulnerable user groups, inter-connected products, cybersecurity-relevant safety issues, and failure of safety-purpose products
+- **VULNERABILITY AND CORRECTIVE UPDATE HANDLING**: Treat vulnerabilities, unsafe configurations, defective updates, missing safety updates, recalls, field interventions, and corrective updates as product-liability evidence requiring traceability and owner handoff
+- **SENSITIVE-DATA-SAFE EVIDENCE**: Preserve incident, support, audit, model, retrieval, tool-action, and product-safety evidence without unnecessarily exposing secrets, credentials, personal data, trade secrets, exploit details, or sensitive safety reports
+- **RELEASE READINESS**: Do not mark a product ready when safety scope, generated instructions, AI-agent actions, update paths, warnings, vulnerability handling, corrective updates, incident evidence, validation, or owner handoffs are undocumented, untested, ownerless, or unresolved
+
+## When to use this skill
+
+- Review a Java software product or AI-enabled product for EU Product Liability Directive controls
+- Assess a RAG maintenance assistant, generated instructions, AI-agent tool actions, automated updates, warnings, or product-safety evidence before release
+- Add traceability for model versions, retrieval sources, generated repair guidance, tool actions, vulnerability handling, corrective updates, or incident records
+- Check whether Java product warnings, user instructions, support records, update mechanisms, or release gates preserve product-liability evidence
+- Escalate product-safety, defectiveness, compensable-damage, economic-operator, or liability-assessment questions to qualified owners
+
+## Workflow
+
+1. **Read Product Liability Directive references, questionnaire, and report template**
+
+Read `references/812-regulations-eu-product-liability-directive-chapters-summary.md`, `references/812-regulations-eu-product-liability-directive-engineering-examples.md`, `assets/questions/812-product-liability-directive-engineering-review-questionnaire.md`, and `assets/reports/812-product-liability-directive-engineering-review-report-template.md` in that order. Use the chapters summary for Product Liability Directive chapter, article, scope, software, defectiveness, damage, economic-operator, disclosure, burden-of-proof, liability, timing, and owner-handoff context. Use the engineering examples for Java control patterns such as safety scope inventory, generated-instruction evidence, AI-agent tool-action controls, automated update traceability, warning and instruction review, vulnerability handling, corrective updates, incident evidence, and release gates. Do not start implementation review until the chapters summary, examples reference, questionnaire rules, and report template are understood.
+
+2. **Complete questionnaire and classify product-liability scope**
+
+Use `assets/questions/812-product-liability-directive-engineering-review-questionnaire.md` as a checklist against trusted local project evidence and maintainer-approved sanitized facts. Record each answer with an evidence reference or mark it `Unknown`. Identify the product, component, related service, Java module, AI feature, generated instruction, AI-agent action, automated update path, intended purpose, reasonably foreseeable use, foreseeable misuse, affected users, deployment geography, product owner, safety owner, security owner, support owner, incident path, evidence stores, and release context. Escalate unclear product scope, defectiveness, compensable damage, causal link, economic-operator role, jurisdiction, limitation periods, development-risk defences, disclosure duties, and regulatory interpretation to qualified owners.
+
+3. **Review implementation and product evidence**
+
+Review Java code, configuration, controllers, services, prompts, tools, RAG retrieval sources, model version records, generated outputs, AI-agent permissions, automated update mechanisms, vulnerability records, corrective update records, warnings, instructions, support records, incident evidence, audit logs, observability, product-safety tests, hazardous-scenario tests, CI/CD workflows, deployment records, release approvals, and user documentation. Check for gaps between claimed product-safety controls and reviewable evidence.
+
+4. **Recommend engineering controls**
+
+Map Product Liability Directive concerns to engineering actions: product-liability scope inventory, hazardous-scenario testing, source governance for RAG, prompt and generated-instruction review, AI-agent tool-action allowlists and human oversight, model and retrieval provenance, automated update validation, corrective update procedures, vulnerability handling, warning and instruction versioning, incident reconstruction, support handoffs, privacy-safe and trade-secret-safe evidence retention, and release readiness.
+
+5. **Generate review report and owner handoffs**
+
+Use `assets/reports/812-product-liability-directive-engineering-review-report-template.md` to produce a concise engineering review with scope, evidence reviewed, Product Liability Directive risk signals, potential violation or non-compliance signals, product-liability evidence gaps, recommended controls, owner handoffs, residual risks, release decision, and validation steps. State explicitly that defectiveness, compensable damage, causal link, economic-operator responsibility, jurisdiction, limitation periods, development-risk defences, disclosure duties, and final liability assessment require qualified owner review.
+
+## Reference
+
+For detailed guidance, examples, and constraints, see:
+
+- [references/812-regulations-eu-product-liability-directive-chapters-summary.md](references/812-regulations-eu-product-liability-directive-chapters-summary.md)
+- [references/812-regulations-eu-product-liability-directive-engineering-examples.md](references/812-regulations-eu-product-liability-directive-engineering-examples.md)

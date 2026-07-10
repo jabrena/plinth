@@ -1,10 +1,10 @@
 ---
 name: 305-frameworks-spring-boot-modulith
-description: Use when you need to design, review, or improve modular monoliths with Spring Modulith in Spring Boot applications - including application module package structure, ApplicationModules verification, named interfaces, allowed dependencies, domain events, @ApplicationModuleTest, Scenario-based module tests, generated documentation, actuator exposure, observability, and event publication registry choices. This should trigger for requests such as Add Spring Modulith to a Spring Boot application; Review Spring Modulith module boundaries; Improve modular monolith architecture in Spring Boot; Add @ApplicationModuleTest tests; Generate Spring Modulith documentation. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve modular monoliths with Spring Modulith in Spring Boot applications - including application module package structure, ApplicationModules verification, named interfaces, allowed dependencies, domain events, @ApplicationModuleTest, Scenario-based module tests, generated documentation, actuator exposure, observability, and event publication registry choices. This should trigger for requests such as Add Spring Modulith to a Spring Boot application; Review Spring Modulith module boundaries; Improve modular monolith architecture in Spring Boot; Add @ApplicationModuleTest tests; Generate Spring Modulith documentation. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot - Spring Modulith
 

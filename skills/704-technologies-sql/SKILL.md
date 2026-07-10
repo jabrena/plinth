@@ -1,10 +1,10 @@
 ---
 name: 704-technologies-sql
-description: Use when you need framework-agnostic SQL guidance — schema naming, relational table design, query readability, indexes, transactions, database security, migrations, testing, and monitoring — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Review SQL schema or migrations; Improve SQL query performance and readability; Design relational tables and indexes; Review database transaction, security, or monitoring practices. Part of cursor-rules-java project
+description: Use when you need framework-agnostic SQL guidance — schema naming, relational table design, query readability, indexes, transactions, database security, migrations, testing, and monitoring — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Review SQL schema or migrations; Improve SQL query performance and readability; Design relational tables and indexes; Review database transaction, security, or monitoring practices. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # SQL best practices
 

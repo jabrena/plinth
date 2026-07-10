@@ -1,10 +1,10 @@
 ---
 name: 801-regulations-eu-ai-act
-description: Use when reviewing, designing, or modifying Java enterprise systems that use AI, LLMs, AI agents, RAG, tool calling, workflow automation, or model-based decision support and need EU AI Act regulatory awareness. This should trigger for requests such as Review a Java AI system for EU AI Act controls; Design governance for an AI agent with enterprise tools; Add human oversight and auditability to LLM workflows; Assess RAG or model-driven decision support before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that use AI, LLMs, AI agents, RAG, tool calling, workflow automation, or model-based decision support and need EU AI Act regulatory awareness. This should trigger for requests such as Review a Java AI system for EU AI Act controls; Design governance for an AI agent with enterprise tools; Add human oversight and auditability to LLM workflows; Assess RAG or model-driven decision support before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # EU AI Act Regulation for Java Enterprise Development with AI Systems and AI Agents
 

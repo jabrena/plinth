@@ -1,10 +1,10 @@
 ---
 name: 807-regulations-eu-digital-services-act
-description: Use when reviewing, designing, or modifying Java enterprise systems that may support intermediary services, hosting services, online platforms, marketplaces, content moderation, recommender systems, advertising delivery, complaint workflows, transparency reporting, or systemic-risk evidence under the EU Digital Services Act. This should trigger for requests such as Review a Java online platform for DSA controls; Design notice-and-action or appeal workflows; Add recommender, ad transparency, moderation, audit, researcher access, or privacy-safe observability evidence; Assess online-platform transparency controls before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that may support intermediary services, hosting services, online platforms, marketplaces, content moderation, recommender systems, advertising delivery, complaint workflows, transparency reporting, or systemic-risk evidence under the EU Digital Services Act. This should trigger for requests such as Review a Java online platform for DSA controls; Design notice-and-action or appeal workflows; Add recommender, ad transparency, moderation, audit, researcher access, or privacy-safe observability evidence; Assess online-platform transparency controls before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # EU Digital Services Act Regulation for Java Online Platform Engineering
 

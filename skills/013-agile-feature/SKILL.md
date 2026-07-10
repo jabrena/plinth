@@ -1,10 +1,10 @@
 ---
 name: 013-agile-feature
-description: Guides the creation of detailed agile feature documentation from an existing epic. Use when the user wants to split an epic into feature files, derive features with scope and acceptance criteria, or plan feature documentation for stakeholders or engineering. This should trigger for requests such as Create features from an epic; Split epic into features; Feature files from epic; Derive features from epic. Part of cursor-rules-java project
+description: Guides the creation of detailed agile feature documentation from an existing epic. Use when the user wants to split an epic into feature files, derive features with scope and acceptance criteria, or plan feature documentation for stakeholders or engineering. This should trigger for requests such as Create features from an epic; Split epic into features; Feature files from epic; Derive features from epic; Break down an agile epic into deliverable features. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Agile Features from an Epic
 
@@ -36,6 +36,7 @@ Read the epic before summarizing. Ask questions in order; repeat questions 9–1
 - Split epic into features
 - Feature files from epic
 - Derive features from epic
+- Break down an agile epic into deliverable features
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 304-frameworks-spring-boot-security
-description: Use when you need to design, review, or improve security in Spring Boot applications — including SecurityFilterChain, OAuth2/JWT resource server patterns, form login basics, method security (@PreAuthorize), CSRF and CORS for APIs, session fixation, security headers, exception handling, password encoding, and sensitive-data-safe logging. This should trigger for requests such as Add Spring Boot security support; Review Spring Boot security configuration; Improve API authorization in Spring Boot; Add JWT resource server security in Spring Boot; Harden Spring Boot security headers and CSRF settings. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve security in Spring Boot applications — including SecurityFilterChain, OAuth2/JWT resource server patterns, form login basics, method security (@PreAuthorize), CSRF and CORS for APIs, session fixation, security headers, exception handling, password encoding, and sensitive-data-safe logging. This should trigger for requests such as Add Spring Boot security support; Review Spring Boot security configuration; Improve API authorization in Spring Boot; Add JWT resource server security in Spring Boot; Harden Spring Boot security headers and CSRF settings. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot Security Guidelines
 

@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring — Database migrations (Flyway)
 
@@ -33,18 +33,23 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 2: Versioned SQL scripts
 - Example 3: Spring Boot configuration
 - Example 4: Optional Java migrations
+- Example 5: Migration smoke test
 
 ### Example 1: Maven coordinates
 
-Title: Add Flyway on the classpath; use database-specific Flyway modules when required by your Flyway major version
-Description: Spring Boot manages Flyway versions via its BOM. Declare `flyway-core` (often transitively via `spring-boot-starter-jdbc` + explicit Flyway, or a dedicated starter pattern used in your project). For PostgreSQL and recent Flyway releases, add the matching `flyway-database-postgresql` artifact so Flyway can talk to the dialect. Keep JDBC driver and Flyway versions compatible with your Spring Boot BOM.
+Title: Use Spring Boot Flyway support; add database-specific Flyway modules when required by your dialect
+Description: Spring Boot manages Flyway versions via its BOM. For Spring Boot 4.x, prefer `spring-boot-starter-flyway` so Boot contributes Flyway auto-configuration and creates the `Flyway` bean. Pair it with JDBC/DataSource support as needed. For PostgreSQL and recent Flyway releases, add the matching `flyway-database-postgresql` artifact so Flyway can talk to the dialect. Keep JDBC driver and Flyway versions compatible with your Spring Boot BOM.
 
 **Good example:**
 
 ```xml
 <dependency>
-    <groupId>org.flywaydb</groupId>
-    <artifactId>flyway-core</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-flyway</artifactId>
 </dependency>
 <dependency>
     <groupId>org.flywaydb</groupId>
@@ -155,13 +160,63 @@ public class V3__LoadProdData extends BaseJavaMigration {
 ```
 
 
+### Example 5: Migration smoke test
+
+Title: Verify Spring Boot wires Flyway and applies the migration chain
+Description: Add or update a Spring Boot test that proves Flyway auto-configuration is active. The test should load the application context, inject `Flyway`, assert that expected migrations are applied, and verify the migrated schema through JDBC. Prefer Testcontainers with the production database dialect when production does not use an embedded database.
+
+**Good example:**
+
+```java
+@SpringBootTest
+class FlywayMigrationTest {
+
+    @Autowired
+    Flyway flyway;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    void appliesCustomerMigration() {
+        assertThat(flyway.info().applied()).hasSize(1);
+
+        Integer customerTableCount = jdbcTemplate.queryForObject(
+            """
+            SELECT COUNT(*)
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = 'CUSTOMERS'
+            """,
+            Integer.class);
+
+        assertThat(customerTableCount).isEqualTo(1);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: only checks that the web context starts; it never proves Flyway ran.
+@SpringBootTest
+class ApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+}
+```
+
+
 ## Output Format
 
 - **ANALYZE** current Flyway setup: dependencies, locations, Spring properties, migration history strategy, and alignment with JDBC/Data JDBC code
 - **CATEGORIZE** gaps (MISSING MODULE, NAMING, CONFIG, OPERATIONS) and risk (data loss, downtime, checksum mismatch)
 - **APPLY** Spring Boot–aligned fixes: correct artifacts, script layout, `spring.flyway.*` tuning, and forward-only migration discipline
 - **COORDINATE** with `@311-frameworks-spring-jdbc` / `@312-frameworks-spring-data-jdbc` so entities and SQL match applied migrations
-- **TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes
+- **SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks
+- **TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes; include a Spring Boot migration smoke test that injects `Flyway` and asserts applied migrations
+- **CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 
@@ -171,5 +226,7 @@ public class V3__LoadProdData extends BaseJavaMigration {
 - **CHECKSUMS**: Changing a applied file breaks `validate-on-migrate` — use repair only with operational awareness
 - **ROLLBACK**: Flyway does not auto-rollback; plan forward migrations (or manual runbooks) for reversibility
 - **LOCKS**: Long DDL can block traffic — schedule risky changes and prefer online migration patterns for large tables
+- **PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes
+- **BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice
 - **SECRETS**: Never put secrets inside migration sources committed to Git
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes

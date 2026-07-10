@@ -1,14 +1,14 @@
 ---
 name: 111-java-maven-dependencies
-description: Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need. This should trigger for requests such as Add Maven dependencies; Add JSpecify nullness dependencies; Add Error Prone NullAway dependencies; Add VAVR functional dependencies; Add ArchUnit architecture testing dependencies. Part of cursor-rules-java project
+description: Use when you need to add or evaluate Maven dependencies that improve code quality or domain modeling — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), architecture testing (ArchUnit), or money and currency support (JavaMoney) — and want a consultative, question-driven approach that adds only what you actually need. This should trigger for requests such as Add Maven dependencies; Add JSpecify nullness dependencies; Add Error Prone NullAway dependencies; Add VAVR functional dependencies; Add ArchUnit architecture testing dependencies; Add JavaMoney dependencies. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Add Maven dependencies for improved code quality
 
-Add essential Maven dependencies that enhance code quality and safety through a consultative, question-driven approach. **This is an interactive SKILL**.
+Add essential Maven dependencies that enhance code quality, safety, and domain modeling through a consultative, question-driven approach. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
@@ -16,6 +16,7 @@ Add essential Maven dependencies that enhance code quality and safety through a 
 - Error Prone + NullAway: (enhanced static analysis with compile-time null checking)
 - VAVR: (functional programming with Try/Either and immutable collections)
 - ArchUnit: (architecture rule enforcement, `test` scope)
+- JavaMoney: (Money and Currency API support with JSR 354 and Moneta)
 
 ## Constraints
 
@@ -32,6 +33,7 @@ Before adding Maven dependencies, ensure the project is in a valid state. Use a 
 - Add Error Prone NullAway dependencies
 - Add VAVR functional dependencies
 - Add ArchUnit architecture testing dependencies
+- Add JavaMoney dependencies
 
 ## Workflow
 
@@ -52,10 +54,11 @@ Options:
 - Error Prone + NullAway (enhanced compiler analysis and compile-time nullness checking; requires JSpecify)
 - VAVR (functional programming support with Try/Either and immutable collections)
 - ArchUnit (architecture testing with JUnit 5, `test` scope)
+- JavaMoney (Money and Currency API support with JSR 354 and Moneta)
 - None
 - Other (specify)
 
-**Recommendation**: Select JSpecify for better null-safety annotations. Add Error Prone + NullAway when you want stronger compile-time analysis. Add VAVR only when functional programming patterns are useful for the project. Add ArchUnit when you want automated architecture governance.
+**Recommendation**: Select JSpecify for better null-safety annotations. Add Error Prone + NullAway when you want stronger compile-time analysis. Add VAVR only when functional programming patterns are useful for the project. Add ArchUnit when you want automated architecture governance. Add JavaMoney when the domain needs explicit monetary amounts, currencies, formatting, conversion, or precision-safe money calculations.
 
 **Selection notes**:
 - If Error Prone + NullAway is selected, also select JSpecify unless the project already has equivalent nullness annotations configured.
@@ -80,6 +83,7 @@ After all applicable questions are answered, confirm the selections and map them
 - If enhanced compiler analysis is selected, use the Error Prone + NullAway section from `references/111-java-maven-dependencies-jspecify.md`.
 - If VAVR is selected, read `references/111-java-maven-dependencies-vavr.md`.
 - If ArchUnit is selected, read `references/111-java-maven-dependencies-archunit.md`.
+- If JavaMoney is selected, read `references/111-java-maven-dependencies-javamoney.md`.
 - Do not read or apply unselected dependency-family references.
 
 
@@ -98,3 +102,4 @@ For detailed guidance, examples, and constraints, see:
 - [references/111-java-maven-dependencies-jspecify.md](references/111-java-maven-dependencies-jspecify.md)
 - [references/111-java-maven-dependencies-vavr.md](references/111-java-maven-dependencies-vavr.md)
 - [references/111-java-maven-dependencies-archunit.md](references/111-java-maven-dependencies-archunit.md)
+- [references/111-java-maven-dependencies-javamoney.md](references/111-java-maven-dependencies-javamoney.md)

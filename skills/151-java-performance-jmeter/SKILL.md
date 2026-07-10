@@ -1,10 +1,10 @@
 ---
 name: 151-java-performance-jmeter
-description: Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings. This should trigger for requests such as Improve the code with JMeter performance testing; Apply JMeter performance testing; Refactor the code with JMeter performance testing; Add JMeter support. Part of cursor-rules-java project
+description: Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings. This should trigger for requests such as Improve the code with JMeter performance testing; Apply JMeter performance testing; Refactor the code with JMeter performance testing; Add JMeter support; Create a JMeter test plan for a Java service. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Run performance tests based on JMeter
 
@@ -37,6 +37,7 @@ JMeter must be installed and available in PATH. If not available, show a message
 - Apply JMeter performance testing
 - Refactor the code with JMeter performance testing
 - Add JMeter support
+- Create a JMeter test plan for a Java service
 
 ## Workflow
 

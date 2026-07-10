@@ -1,10 +1,10 @@
 ---
 name: 400-frameworks-quarkus-create-project
-description: Use when you need to create a new Maven-based Quarkus 3.x project using SDKMAN-managed Java and Quarkus CLI tooling. This should trigger for requests such as Create a Quarkus Maven project; Bootstrap Quarkus project with SDKMAN; Generate a new Quarkus service. Part of cursor-rules-java project
+description: Use when you need to create a new Maven-based Quarkus 3.x project using SDKMAN-managed Java and Quarkus CLI tooling. This should trigger for requests such as Create a Quarkus Maven project; Bootstrap Quarkus project with SDKMAN; Generate a new Quarkus service; Create Quarkus 3 Maven project; Scaffold Quarkus service with Java 25. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Quarkus Maven Project
 
@@ -36,6 +36,8 @@ Project creation must be explicit, reproducible, and Maven-based.
 - Create a Quarkus Maven project
 - Bootstrap Quarkus project with SDKMAN
 - Generate a new Quarkus service
+- Create Quarkus 3 Maven project
+- Scaffold Quarkus service with Java 25
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 145-java-refactoring-high-performance
-description: Use when you need to refactor Java code for high performance — including memory/allocation reduction, CPU hot-path optimization, and syntax/API/control-flow improvements. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput. Part of cursor-rules-java project
+description: Use when you need to refactor Java code for high performance — including memory/allocation reduction, CPU hot-path optimization, and syntax/API/control-flow improvements. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java rules for High Performance
 

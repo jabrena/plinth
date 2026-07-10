@@ -1,10 +1,10 @@
 ---
 name: 805-regulations-eu-cyber-resilience-act
-description: Use when reviewing, designing, or modifying Java enterprise products, services, libraries, agents, plugins, connected components, or platform modules that may qualify as products with digital elements and need EU Cyber Resilience Act secure-by-design, vulnerability handling, security update, SBOM, product documentation, or release-readiness controls. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise products, services, libraries, agents, plugins, connected components, or platform modules that may qualify as products with digital elements and need EU Cyber Resilience Act secure-by-design, vulnerability handling, security update, SBOM, product documentation, or release-readiness controls. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # EU Cyber Resilience Act Regulation for Java Product Security Engineering
 

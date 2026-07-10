@@ -1,10 +1,10 @@
 ---
 name: 802-regulations-dora
-description: Use when reviewing, designing, or modifying Java enterprise systems that may support financial entities, critical ICT services, third-party ICT provider integrations, or operational resilience obligations under DORA. This should trigger for requests such as Review a Java platform for DORA ICT risk controls; Design operational resilience evidence for a financial service; Add incident, continuity, backup, recovery, or third-party ICT controls; Assess resilience testing and monitoring before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that may support financial entities, critical ICT services, third-party ICT provider integrations, or operational resilience obligations under DORA. This should trigger for requests such as Review a Java platform for DORA ICT risk controls; Design operational resilience evidence for a financial service; Add incident, continuity, backup, recovery, or third-party ICT controls; Assess resilience testing and monitoring before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # DORA Regulation for Java Enterprise Digital Operational Resilience
 

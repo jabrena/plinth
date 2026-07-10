@@ -1,10 +1,10 @@
 ---
 name: 128-java-generics
-description: Use when you need to review, improve, or refactor Java code for generics quality — including avoiding raw types, applying the PECS (Producer Extends Consumer Super) principle for wildcards, using bounded type parameters, designing effective generic methods, leveraging the diamond operator, understanding type erasure implications, handling generic inheritance correctly, preventing heap pollution with @SafeVarargs, and integrating generics with modern Java features like Records, sealed types, and pattern matching. This should trigger for requests such as Improve the code with Generics; Apply Generics; Refactor the code with Generics. Part of cursor-rules-java project
+description: Use when you need to review, improve, or refactor Java code for generics quality — including avoiding raw types, applying the PECS (Producer Extends Consumer Super) principle for wildcards, using bounded type parameters, designing effective generic methods, leveraging the diamond operator, understanding type erasure implications, handling generic inheritance correctly, preventing heap pollution with @SafeVarargs, and integrating generics with modern Java features like Records, sealed types, and pattern matching. This should trigger for requests such as Improve the code with Generics; Apply Generics; Refactor the code with Generics; Improve generic type safety in Java APIs; Fix raw types and unchecked casts in Java code. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Generics Best Practices
 
@@ -43,6 +43,8 @@ Before applying any generics changes, ensure the project compiles. If compilatio
 - Improve the code with Generics
 - Apply Generics
 - Refactor the code with Generics
+- Improve generic type safety in Java APIs
+- Fix raw types and unchecked casts in Java code
 
 ## Workflow
 

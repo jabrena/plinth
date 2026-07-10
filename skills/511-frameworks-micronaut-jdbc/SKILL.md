@@ -1,10 +1,10 @@
 ---
 name: 511-frameworks-micronaut-jdbc
-description: Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. This should trigger for requests such as Review JDBC or SQL data access in a Micronaut project; Improve transactions and parameter binding for Micronaut JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix self-invocation bypassing @Transactional in Micronaut. Part of cursor-rules-java project
+description: Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. This should trigger for requests such as Review JDBC or SQL data access in a Micronaut project; Improve transactions and parameter binding for Micronaut JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix self-invocation bypassing @Transactional in Micronaut; Review Hikari or pooled datasource usage in Micronaut JDBC. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut JDBC — programmatic SQL
 
@@ -43,6 +43,7 @@ Compile before JDBC refactors; verify after changes.
 - Improve transactions and parameter binding for Micronaut JDBC
 - Translate SQLException to domain exceptions or stream large result sets
 - Fix self-invocation bypassing @Transactional in Micronaut
+- Review Hikari or pooled datasource usage in Micronaut JDBC
 
 ## Workflow
 

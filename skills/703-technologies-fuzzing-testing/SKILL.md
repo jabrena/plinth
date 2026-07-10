@@ -1,10 +1,10 @@
 ---
 name: 703-technologies-fuzzing-testing
-description: Use when you need to add or review fuzz testing for Java APIs with CATS — including contract-driven negative testing, malformed payload validation, boundary input exploration, CI integration, reproducible failures, and local execution guidance. This should trigger for requests such as Add fuzz testing to a Java project; Use CATS for API negative testing; Review CI quality gates for API contract robustness; Improve boundary and malformed input test coverage. Part of cursor-rules-java project
+description: Use when you need to add or review fuzz testing for Java APIs with CATS — including contract-driven negative testing, malformed payload validation, boundary input exploration, CI integration, reproducible failures, and local execution guidance. This should trigger for requests such as Add fuzz testing to a Java project; Use CATS for API negative testing; Review CI quality gates for API contract robustness; Improve boundary and malformed input test coverage; Run CATS fuzz tests against an OpenAPI contract. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java fuzz testing with CATS
 
@@ -40,6 +40,7 @@ Before applying any fuzz testing changes, ensure the project compiles. If compil
 - Use CATS for API negative testing
 - Review CI quality gates for API contract robustness
 - Improve boundary and malformed input test coverage
+- Run CATS fuzz tests against an OpenAPI contract
 
 ## Workflow
 
