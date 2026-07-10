@@ -36,7 +36,8 @@ Now that the repository name change has been explained, let's continue by review
 - [Modeling the domain with stronger Java types](#adding-more-types-possibilities)
 - [Extending EU regulations and ISO engineering review skills](#extending-eu-regulations-and-iso-engineering-review-skills)
 - [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
-- [Recommended Books and Talks](#recommended-books-talks)
+- [Expanding acceptance-test prompt inventories with Gherkin](#expanding-acceptance-test-prompt-inventories-with-gherkin)
+- [Recommended Books and Talks for this summer](#recommended-books-talks-for-this-summer)
 - [Next steps](#next-steps)
 - [Do you still have questions about the project?](#doubts)
 
@@ -490,13 +491,27 @@ The pipeline now includes `VirusTotal` checks before generated artifacts are pro
 
 The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
 
-<a id="recommended-books-talks"></a>
+<a id="expanding-acceptance-test-prompt-inventories-with-gherkin"></a>
 
-## Recommended Books and Talks
+## Expanding acceptance-test prompt inventories with Gherkin
+
+This release also expands the validation model for the whole project. `Plinth` now includes `Gherkin` files for agents, commands, and a much broader set of generated skills. These files describe the behavior that each generated asset should support, using examples that are easier to review than ad hoc manual checks.
+
+The goal is to make validation more explicit and repeatable. When a skill, command, or agent changes, the corresponding acceptance prompt can be traced back to a `.feature` file and used to verify that the generated guidance still behaves as intended. That gives maintainers a clearer review path before promoting generated content.
+
+In the future, these acceptance tests should run automatically in the pipeline using an agent tool such as `Codex`. The agent would execute the relevant prompt inventory for the changed asset, collect the result, and provide review evidence before the release is published.
+
+<a id="recommended-books-talks-for-this-summer"></a>
+
+## Recommended Books and Talks for this summer
 
 **Specifications:**
 
 [Specification by Example](https://www.manning.com/books/specification-by-example), by [Gojko Adzic](https://gojko.net/), is a fantastic book for learning how to turn real examples into clear, testable specifications that business and engineering teams can share.
+
+For a software engineer, the value of this book is very practical. It teaches how to move from vague requirements to concrete examples that expose ambiguity before code is written. That habit improves conversations with product owners, helps developers discover edge cases earlier, and gives testers a stronger basis for acceptance criteria.
+
+It is also a useful book for teams adopting AI coding tools. Agents work better when the expected behavior is described with precise examples instead of broad intentions. A good example can become a shared requirement, a test case, a review checklist, and a prompt input. That makes the delivery workflow more explicit and reduces the risk of generating code that looks correct but solves the wrong problem.
 
 [![](/plinth/images/2026/7/specification-by-example-new.png)](https://www.manning.com/books/specification-by-example)
 
@@ -504,9 +519,23 @@ The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`
 
 I recommend watching one of the recent [talks](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about Spec-Driven Development. I appreciate the common sense in his ideas.
 
+The useful message for engineers is that a specification is not paperwork created after the real work is done. A good spec describes the use cases, business rules, examples, constraints, and acceptance expectations that should guide implementation. When the use cases are explicit, developers can reason about behavior before choosing frameworks, persistence details, or API shapes.
+
+**Empirical Software Design:**
+
+For daily design discipline, I recommend [`Tidy First?`](https://www.oreilly.com/library/view/tidy-first/9781098151232/) by [Kent Beck](https://www.kentbeck.com/). The book is short, practical, and focused on small structural improvements that make the next behavior change easier.
+
+Its value for software engineers is the distinction between tidying and changing behavior. Before adding a feature, fixing a bug, or asking an agent to modify code, sometimes the best first move is a tiny design improvement: clarify a name, separate a responsibility, remove a little duplication, or make a dependency direction easier to see. Those small moves reduce risk without turning every change into a refactoring project.
+
+[![](/plinth/images/2026/7/tidy-first-new.jpg)](https://www.oreilly.com/library/view/tidy-first/9781098151232/)
+
 **LEAN Development:**
 
 If you are interested in improving your LEAN skills, [Eduardo Ferro](https://www.eferro.net/) has published an excellent book:
+
+[`Menos software, más impacto`](https://menos-software.eferro.net/) is especially useful for engineers who feel their team is running faster but delivering less real value. The book frames software as something that must be cultivated, not merely built once and forgotten. Every feature, integration, dependency, and line of code creates a permanent maintenance cost, even when nobody is actively changing it.
+
+The practical lesson is close to the spirit of this release: good engineering is not only about generating more code. It is also about protecting team capacity through active simplicity, reducing work in progress, removing unused functionality, building quality from the beginning, and choosing what not to build. That mindset is healthy for human teams and even more important when agents can produce large amounts of code very quickly.
 
 [![](/plinth/images/2026/7/menos-software-mas-impacto-new.jpg)](https://menos-software.eferro.net/)
 
@@ -514,7 +543,13 @@ If you are interested in improving your LEAN skills, [Eduardo Ferro](https://www
 
 If you are interested in Hexagonal Architecture, I recommend [Alistair Cockburn's book](https://alistair.cockburn.us/hexagonal-architecture):
 
+Hexagonal Architecture, also known as `Ports and Adapters`, is valuable because it protects the application core from accidental dependency on external technologies. The business behavior should not be trapped inside a web controller, a database repository, a message broker consumer, or a framework callback. Instead, the application exposes ports that describe purposeful conversations, and adapters translate between those ports and the outside world.
+
+That separation gives engineers several practical benefits: use cases can be tested without a real UI or database, adapters can be replaced when technology changes, and architecture reviews can focus on whether business logic is leaking across the boundary. For teams using AI agents, this is especially important. A clear inside/outside boundary gives the agent a better map of where domain behavior belongs and where framework-specific code should stay.
+
 [![](/plinth/images/2026/7/hexagonal-architecture-explained-new.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
+
+If you use the project and have nice books to share that fit this engineering direction, share your recommendations in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
 <a id="next-steps"></a>
 
