@@ -27,6 +27,7 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 - https://github.com/forrestchang/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md
 - https://github.com/KentBeck/TCRSkill/tree/main
 - https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me
+- https://tarai.dev/en/skill/141-java-refactoring-with-modern-features/
 
 ## Agents
 

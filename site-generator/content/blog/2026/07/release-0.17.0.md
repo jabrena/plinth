@@ -67,7 +67,7 @@ The `Category rank` column shows the skill's position inside that Skills.sh sear
 <table>
   <thead>
     <tr>
-      <th>Plinth Movement</th>
+      <th>Plinth rank&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
       <th>Skills.sh Search</th>
       <th>Skills.sh Search rank</th>
       <th>Skill</th>
@@ -269,7 +269,9 @@ This comparison is useful because it shows how `Plinth` maps to initiatives like
 
 [![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
 
-If you are interested in this direction, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
+Continue running the [`Three Amigos sessions`](https://agilealliance.org/glossary/three-amigos/) is healthy.
+
+If you are interested in this new set of design Skills, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
@@ -297,13 +299,28 @@ This release improves the migration guidance for:
 
 The new guidance emphasizes migration safety, antipatterns, and `Parallel Change`.
 
-```text
-Phase     Goal
---------- ------------------------------------------------------------
-Expand    Add the new schema or document shape without removing the old one
-Migrate   Backfill, dual-write, compare, and observe
-Contract  Remove the old shape only after rollout evidence exists
-```
+<table>
+  <thead>
+    <tr>
+      <th>Phase</th>
+      <th>Goal</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Expand</td>
+      <td>Add the new schema or document shape without removing the old one.</td>
+    </tr>
+    <tr>
+      <td>Migrate</td>
+      <td>Backfill, dual-write, compare, and observe.</td>
+    </tr>
+    <tr>
+      <td>Contract</td>
+      <td>Remove the old shape only after rollout evidence exists.</td>
+    </tr>
+  </tbody>
+</table>
 
 This is why `@055-design-parallel-change` belongs in the design workflow before framework-specific Flyway or Mongock implementation guidance. The agent should understand the transition before it writes the migration.
 
@@ -318,9 +335,13 @@ If you want to go deeper into this topic, I recommend reading: [Why Do I Need to
 
 ## Making architecture boundaries visible with Hexagonal Architecture
 
-This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), a framework-agnostic skill for reviewing Java application boundaries.
+This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), framework-agnostic skill to implement Hexagonal architecture in your applications.
+
+As [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture) defines in the original article about it:
 
 > The hexagonal architecture, or ports and adapters architecture, is an architectural style used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters.
+
+![](/plinth/images/2026/7/hexagonal-architecture-new.png)
 
 The skill helps engineers and agents inspect whether dependency direction and responsibility placement are consistent with Hexagonal Architecture:
 
