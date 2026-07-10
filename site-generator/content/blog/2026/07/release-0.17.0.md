@@ -52,7 +52,7 @@ As `Plinth` grows from a technical repository into an OSS product for software e
 
 [![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
-Now, it is possible to receive from Business, `What` is temptative to be built from issues registered in [`Azure Devops`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops) with the new Skill `@045-planning-azure-devops` which join forces to other similar skills like `@043-planning-github-issues` & `@044-planning-jira`.
+Now it is possible to capture what the business tentatively wants to build from issues registered in [`Azure DevOps`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops), using the new `@045-planning-azure-devops` skill. It joins similar planning skills such as `@043-planning-github-issues` and `@044-planning-jira`.
 
 If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or by sharing your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
@@ -60,7 +60,7 @@ If you use the project, you can participate as an [individual contributor](https
 
 ## What are the Top 10 Skills from this project in Skills.sh?
 
-The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `118 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by users there:
+The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `118 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by Skills.sh users:
 
 The `Category rank` column shows the skill's position inside that Skills.sh search category when results are sorted by install count.
 
@@ -137,7 +137,7 @@ The `Category rank` column shows the skill's position inside that Skills.sh sear
   </tbody>
 </table>
 
-**Note:** Currently the project is in the process to consolidate the data in `Skills.sh` from `cursor-rules-java` to `plinth`: https://www.skills.sh/jabrena and exist an open ticket for this: https://github.com/jabrena/plinth/issues/975
+**Note:** The project is currently consolidating the `Skills.sh` data from `cursor-rules-java` to `plinth`: https://www.skills.sh/jabrena. There is an open ticket for this work: https://github.com/jabrena/plinth/issues/975
 
 <a id="enhancing-openspec-operations"></a>
 
@@ -269,9 +269,9 @@ This comparison is useful because it shows how `Plinth` maps to initiatives like
 
 [![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
 
-Continue running the [`Three Amigos sessions`](https://agilealliance.org/glossary/three-amigos/) is healthy.
+Continuing to run [`Three Amigos sessions`](https://agilealliance.org/glossary/three-amigos/) is healthy.
 
-If you are interested in this new set of design Skills, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
+If you are interested in this new set of design skills, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
@@ -327,7 +327,7 @@ This is why `@055-design-parallel-change` belongs in the design workflow before 
 > **⚠️ AVOID RUNNING DATABASE MIGRATION TASKS WITHOUT HITL.**
 Human-in-the-loop review is necessary because migrations can destroy or reinterpret production data, block critical tables, break rollback paths, and affect systems that are not visible in the local codebase. An agent can draft the plan, checks, and scripts, but a qualified human owner should review the migration intent, data impact, rollback strategy, monitoring evidence, and execution window before it reaches production.
 
-**Note:** If your domain or subdomain has microservices associated with databases and you are adopting GenAI tools, you should review the current architecture to mitigate potential database production issues.
+**Note:** If your domain or subdomain owns microservices with associated databases and you are adopting GenAI tools, you should review the current architecture to mitigate potential production database issues.
 
 If you want to go deeper into this topic, I recommend reading: [Why Do I Need to Use the Parallel Change Pattern?](/cursor-rules-java/blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html)
 
@@ -335,9 +335,9 @@ If you want to go deeper into this topic, I recommend reading: [Why Do I Need to
 
 ## Making architecture boundaries visible with Hexagonal Architecture
 
-This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), framework-agnostic skill to implement Hexagonal architecture in your applications.
+This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), a framework-agnostic skill for implementing Hexagonal Architecture in your applications.
 
-As [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture) defines in the original article about it:
+As [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture) defines it in the original article:
 
 > The hexagonal architecture, or ports and adapters architecture, is an architectural style used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters.
 
@@ -388,7 +388,7 @@ static final ArchRule should_keep_driven_adapters_independent_from_driving_adapt
         .resideInAPackage("info.jab.mv.adapter.in..");
 ```
 
-For curious users, take a look the `ArchUnit` documentation here: https://www.archunit.org/userguide/html/000_Index.html
+For curious users, take a look at the `ArchUnit` documentation here: https://www.archunit.org/userguide/html/000_Index.html
 
 For framework agents, the skill is useful before making changes in `Spring Boot`, `Quarkus`, or `Micronaut` applications. It gives the agent a boundary review language before it starts moving packages, introducing adapters, or changing service responsibilities.
 
@@ -490,10 +490,6 @@ The pipeline now includes `VirusTotal` checks before generated artifacts are pro
 
 The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
 
----
-
-[Secur0](https://secur0.com/en) is a security platform that helps organizations find vulnerabilities through ethical hackers, bug bounty programs, and pentesting conducted by verified experts. Recently, `Plinth` drew attention from `Secur0`, which plans to review the project for potential vulnerabilities in the coming months. This adds another external security signal to the release process.
-
 <a id="recommended-books-talks"></a>
 
 ## Recommended Books and Talks
@@ -504,9 +500,9 @@ The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`
 
 [![](/plinth/images/2026/7/specification-by-example-new.png)](https://www.manning.com/books/specification-by-example)
 
-**Spec Driven Development:**
+**Spec-Driven Development:**
 
-I recommend watching one of the latest [talks](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about Spec Driven Development. I like the common sense in his ideas.
+I recommend watching one of the recent [talks](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about Spec-Driven Development. I appreciate the common sense in his ideas.
 
 **LEAN Development:**
 
@@ -526,12 +522,13 @@ If you are interested in Hexagonal Architecture, I recommend [Alistair Cockburn'
 
 For the next release, we plan to work on a few topics:
 
-- Add `Katas` to improve your knowledge about `Plinth` in an incremental way.
-- Improve the different behaviors to improve the `Design phase`.
-- Add support for `Spec Kit`.
+- Add `Katas` that help users learn `Plinth` incrementally.
+- Improve behavior across the `Design phase`.
+- Decouple agents for design and implementation.
+- Make the project more modular so it is easier to integrate in organizations.
 - Update the `Spring Boot` support for `4.1.0`.
 - Add a skill about `JVM Flags`.
-- Going down the rabbit hole about EU regulation ecosystem for `GenAI`.
+- Go deeper into the EU regulation ecosystem for `GenAI`.
 
 <a id="doubts"></a>
 
