@@ -6,15 +6,15 @@ author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 
-`Plinth` is an AI-native engineering toolkit for modern Java enterprise development, powered by `Commands`, `Agents`, `Skills`, and `MCP Servers`.
+`Plinth` is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable `Commands`, `Agents`, `Skills`, and `MCP Servers`.
 
 This release brings several improvements to the development workflow, but the most visible change is the new project identity: the repository moves from `cursor-rules-java` to `plinth`.
 
-Thanks to our community members in [`Urumqi`](https://www.google.com/maps/search/?api=1&query=Urumqi), [`Singapore`](https://www.google.com/maps/search/?api=1&query=Singapore), [`Des Moines`](https://www.google.com/maps/search/?api=1&query=Des+Moines), [`Bengaluru`](https://www.google.com/maps/search/?api=1&query=Bengaluru), and [`Flint Hill`](https://www.google.com/maps/search/?api=1&query=Flint+Hill+Virginia). 👋👋👋
+Thanks to our community members in [`Urumqi`](https://www.google.com/maps/search/?api=1&query=Urumqi), [`Singapore`](https://www.google.com/maps/search/?api=1&query=Singapore), [`Des Moines`](https://www.google.com/maps/search/?api=1&query=Des+Moines), [`Bengaluru`](https://www.google.com/maps/search/?api=1&query=Bengaluru), and [`San Jose`](https://www.google.com/maps/place/San+Jose,+CA,+USA). 👋👋👋
 
 ## Why Plinth?
 
-In civil architecture, a `plinth` is the base that supports what people actually see. It is not the column, the arch, the road, or the aqueduct, but without a good plinth, the visible structure loses alignment, load-bearing capacity, and long-term stability. That image fits the project better than the original name.
+In civil architecture, a `Plinth` is the base that supports what people actually see. It is not the column, the arch, the road, or the aqueduct, but without a good plinth, the visible structure loses alignment, load-bearing capacity, and long-term stability. That image fits the project better than the original name.
 
 The project is no longer only a collection of `Cursor rules for Java`. Today, it includes `Commands`, `Agents`, `Skills`, generated inventories, OpenSpec workflows, validation pipelines, regulation review aids, framework-specific guidance, and release assets. The new name, `Plinth`, gives the project a broader identity without losing its Java roots.
 
@@ -26,11 +26,10 @@ That is a useful analogy for modern software engineering with AI.
 
 An AI agent can generate code quickly, but speed is not enough. A team still needs a stable base: requirements, design constraints, compatibility strategy, tests, security checks, architecture boundaries, operational evidence, and human review. Without that base, the generated work may look impressive while resting on weak assumptions.
 
----
-
 Now that the repository name change has been explained, let's continue by reviewing the new features included in this release:
 
 - [Community first!](#community-first)
+- [What are the Top 10 Skills from this project in Skills.sh?](#what-are-the-top-10-skills-from-this-project-in-skillssh)
 - [Enhancing OpenSpec operations](#enhancing-openspec-operations)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
 - [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
@@ -53,9 +52,92 @@ As `Plinth` grows from a technical repository into an OSS product for software e
 
 [![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
-Now, it is possible to receive from Business roles, `What` is temptative to be built from [`Azure Devops`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops) with the new Skill `@045-planning-azure-devops`.
+Now, it is possible to receive from Business, `What` is temptative to be built from issues registered in [`Azure Devops`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops) with the new Skill `@045-planning-azure-devops` which join forces to other similar skills like `@043-planning-github-issues` & `@044-planning-jira`.
 
 If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or by sharing your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
+
+<a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a>
+
+## What are the Top 10 Skills from this project in Skills.sh?
+
+The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `118 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by users there:
+
+The `Category rank` column shows the skill's position inside that Skills.sh search category when results are sorted by install count.
+
+<table>
+  <thead>
+    <tr>
+      <th>Plinth Movement</th>
+      <th>Skills.sh Search</th>
+      <th>Skills.sh Search rank</th>
+      <th>Skill</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>#1</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=maven">Maven</a></td>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices"><code>110-java-maven-best-practices</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#2</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20object%20oriented">Java object oriented</a></td>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design"><code>121-java-object-oriented-design</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#3</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20security">Java security</a></td>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/124-java-secure-coding"><code>124-java-secure-coding</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#4</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20unit%20testing">Java unit testing</a></td>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/131-java-testing-unit-testing"><code>131-java-testing-unit-testing</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#5</code> ↗️ <code>+3</code></td>
+      <td><a href="https://www.skills.sh/?q=java+refactoring">Java refactoring</a></td>
+      <td><code>#8</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/141-java-refactoring-with-modern-features"><code>141-java-refactoring-with-modern-features</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#6</code> ↗️ <code>+1</code></td>
+      <td><a href="https://www.skills.sh/search?q=maven">Maven</a></td>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies"><code>111-java-maven-dependencies</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#7</code> ↘️ <code>-2</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20functional%20programming">Java functional programming</a></td>
+      <td><code>#4</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/142-java-functional-programming"><code>142-java-functional-programming</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#8</code> ↗️ <code>+1</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20concurrency">Java concurrency</a></td>
+      <td><code>#7</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/125-java-concurrency"><code>125-java-concurrency</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#9</code> ↘️ <code>-3</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20generics">Java generics</a></td>
+      <td><code>#6</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/128-java-generics"><code>128-java-generics</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#10</code> 🆕</td>
+      <td><a href="https://www.skills.sh/?q=java+type+design">Java type design</a></td>
+      <td><code>#9</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/122-java-type-design"><code>122-java-type-design</code></a></td>
+    </tr>
+  </tbody>
+</table>
+
+**Note:** Currently the project is in the process to consolidate the data in `Skills.sh` from `cursor-rules-java` to `plinth`: https://www.skills.sh/jabrena and exist an open ticket for this: https://github.com/jabrena/plinth/issues/975
 
 <a id="enhancing-openspec-operations"></a>
 
@@ -82,7 +164,7 @@ That is why the `Plinth commands` are designed around the same delivery phases u
 <table>
   <thead>
     <tr>
-      <th>Plinth Commands</th>
+      <th>Plinth Command</th>
       <th>OpenSpec phase</th>
       <th>Spec Kit phase</th>
     </tr>
@@ -121,14 +203,71 @@ That is why the `Plinth commands` are designed around the same delivery phases u
   </tbody>
 </table>
 
-This mapping is useful because it makes the change path explicit. The agent is not only asked to generate the final patch; it is guided through issue intake, proposal, specification, planning, implementation, and closure. 
+This comparison is useful because it shows how `Plinth` maps to initiatives like `OpenSpec` and `Spec Kit`. `Plinth` commands use agents to handle specs under the hood:
 
-[![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
-
-Remember to invest quality time to gather and refine requirements to be included in your Spec. This Design phase need to go in `1x` and later, when the Spec is clear you can increase your Speed in implementation phase once, everything is clear.
+<table>
+  <thead>
+    <tr>
+      <th>Plinth command</th>
+      <th>Owning agent</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/update-issue</code></td>
+      <td><code>@robot-business-analyst</code></td>
+      <td>Refines issue content across GitHub, Jira, or Azure DevOps inputs.</td>
+    </tr>
+    <tr>
+      <td><code>/review-alignment</code></td>
+      <td><code>@robot-business-analyst</code></td>
+      <td>Reviews traceability, consistency, gaps, and implementation readiness.</td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code></td>
+      <td><code>@robot-tech-lead</code></td>
+      <td>Applies planning, design, compatibility, and testing skills before tasking.</td>
+    </tr>
+    <tr>
+      <td><code>/explore-design</code></td>
+      <td><code>@robot-architect</code></td>
+      <td>Compares design options and recommends an approved technical direction.</td>
+    </tr>
+    <tr>
+      <td><code>/create-adr</code></td>
+      <td><code>@robot-architect</code></td>
+      <td>Records architecture decisions, alternatives, and consequences.</td>
+    </tr>
+    <tr>
+      <td><code>/create-diagram</code></td>
+      <td><code>@robot-architect</code></td>
+      <td>Creates architecture or design diagrams from trusted source artifacts.</td>
+    </tr>
+    <tr>
+      <td><code>/implement-spec</code></td>
+      <td><code>@robot-tech-lead</code></td>
+      <td>Delegates implementation to <code>@robot-java-coder</code>, <code>@robot-java-spring-boot-coder</code>, <code>@robot-java-quarkus-coder</code>, <code>@robot-java-micronaut-coder</code>, or <code>@robot-no-java</code>.</td>
+    </tr>
+    <tr>
+      <td><code>/profile</code></td>
+      <td><code>@robot-java-performance</code></td>
+      <td>Coordinates profiling evidence and delegates application-code changes to the appropriate Java or framework coder.</td>
+    </tr>
+    <tr>
+      <td><code>/benchmark</code></td>
+      <td><code>@robot-java-performance</code></td>
+      <td>Coordinates JMeter, Gatling, or JMH performance work with reproducible thresholds and artifacts.</td>
+    </tr>
+  </tbody>
+</table>
 
 > "There is no favorable wind for the sailor who doesn’t know where to go”
 > ― Seneca
+
+**Invest quality time in gathering and refining the requirements that belong in the spec.** The design phase should move deliberately at `1x`; once the spec is clear, implementation can safely accelerate toward `10x` because the intent, constraints, and verification path are already understood.
+
+[![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
 
 If you are interested in this direction, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
 
@@ -192,6 +331,8 @@ The skill helps engineers and agents inspect whether dependency direction and re
 
 The skill also includes `ArchUnit`-aware verification guidance without forcing every project to add a new dependency automatically. That is important because architecture tests should support the existing project context, not become cargo-cult configuration.
 
+**Example:**
+
 ```java
 @ArchTest
 static final ArchRule should_keep_application_core_independent_from_adapters = noClasses()
@@ -226,7 +367,7 @@ static final ArchRule should_keep_driven_adapters_independent_from_driving_adapt
         .resideInAPackage("info.jab.mv.adapter.in..");
 ```
 
-https://www.archunit.org/userguide/html/000_Index.html
+For curious users, take a look the `ArchUnit` documentation here: https://www.archunit.org/userguide/html/000_Index.html
 
 For framework agents, the skill is useful before making changes in `Spring Boot`, `Quarkus`, or `Micronaut` applications. It gives the agent a boundary review language before it starts moving packages, introducing adapters, or changing service responsibilities.
 
