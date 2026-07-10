@@ -32,6 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Skills**:
   - Hardened Maven and Mongock skill guidance for Snyk Agent Scan by requiring allowlisted XML query output for POM analysis and gating MongoDB container verification behind explicit approval and pinned/project-approved images (#938)
+  - Hardened architecture diagram, profiling refactor, and Spring Boot acceptance-test skills for Snyk Agent Scan by replacing runtime PlantUML container execution with trusted local tooling and adding explicit trust gates for profiling and Gherkin prose inputs (`@033-architecture-diagrams`, `@163-java-profiling-refactor`, `@323-frameworks-spring-boot-testing-acceptance-tests`)
   - Expanded Flyway and Mongock migration guidance for Spring Boot, Quarkus, and Micronaut with migration safety, antipattern, and parallel-change coverage (#901, #908, #909)
   - Improved design pattern, Java testing strategy, acceptance testing, OpenAPI, and WireMock guidance with richer examples and reference structure (#943)
   - Split Maven search guidance into Maven Central lookup and project version update workflows (`@114-java-maven-search`) (#948)
