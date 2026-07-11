@@ -54,6 +54,10 @@
 ### Skill 门户
 
 - [skills.sh cursor-rules-java](https://skills.sh/jabrena/plinth)
+- [Agent Skills Hub plinth 页面](https://agentskillshub.top/skill/jabrena/plinth/)
+- [MCP App Store Mongock skills 搜索](https://mcpapp-store.com/skills?q=Mongock+)
+- [JVM Skills](https://jvmskills.com/)
+- [Tarai Java 现代特性重构 skill](https://tarai.dev/en/skill/141-java-refactoring-with-modern-features/)
 - [Vercel Labs skills issues](https://github.com/vercel-labs/skills/issues)
 - [Tessl skill registry](https://tessl.io/registry/skills/github/jabrena/plinth)
 - [ClaudSkills 作者页](https://claudskills.com/author/jabrena/)

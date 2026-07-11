@@ -54,6 +54,10 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 ### Portales de Skills
 
 - [skills.sh cursor-rules-java](https://skills.sh/jabrena/plinth)
+- [Plinth en Agent Skills Hub](https://agentskillshub.top/skill/jabrena/plinth/)
+- [Búsqueda de skills de Mongock en MCP App Store](https://mcpapp-store.com/skills?q=Mongock+)
+- [JVM Skills](https://jvmskills.com/)
+- [Skill de Tarai sobre refactorización Java con características modernas](https://tarai.dev/en/skill/141-java-refactoring-with-modern-features/)
 - [Issues de Vercel Labs skills](https://github.com/vercel-labs/skills/issues)
 - [Registro de skills de Tessl](https://tessl.io/registry/skills/github/jabrena/plinth)
 - [Página de autor en ClaudSkills](https://claudskills.com/author/jabrena/)
