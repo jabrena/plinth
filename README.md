@@ -51,9 +51,11 @@ npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 Ask your agent:
 
 ```text
-Use @110-java-maven-best-practices to review this Maven project.
+Use @110-java-maven-best-practices to review this Maven project located in examples/@maven/maven-demo
 Explain the findings, apply the approved improvements, and validate the build.
 ```
+
+![](documentation/images/herdr-example.png)
 
 The skill guides the agent through a structured Maven review while keeping you in control of proposed changes.
 

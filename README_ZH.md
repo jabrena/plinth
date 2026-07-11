@@ -51,9 +51,11 @@ npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 向你的智能体提出：
 
 ```text
-使用 @110-java-maven-best-practices 审查此 Maven 项目。
+使用 @110-java-maven-best-practices 审查位于 examples/@maven/maven-demo 的 Maven 项目。
 解释发现的问题，应用已批准的改进，并验证构建。
 ```
+
+![](documentation/images/herdr-example.png)
 
 该 skill 会引导智能体完成结构化的 Maven 审查，同时由你决定是否接受建议的变更。
 
