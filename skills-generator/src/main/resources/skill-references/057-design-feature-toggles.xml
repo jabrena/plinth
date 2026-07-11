@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt>
     <metadata>
-        <author>Sangwon Park</author>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+            <author>Sangwon Park</author>
+        </authors>
         <version>0.17.0</version>
         <license>Apache-2.0</license>
         <title>Feature Toggles Design</title>
@@ -267,18 +270,18 @@ void newCheckoutWorks() {
             </example-header>
             <example-description>
                 <![CDATA[
-                Cleanup is not only deleting one if statement. Remove the old branch, decision method, provider key, stale tests, dashboards, alerts, and documentation that existed only for the temporary rollout.
+                Cleanup is broader than one conditional branch. Retire the old behavior path, decision method, provider key, stale tests, dashboards, alerts, and documentation that existed only for the temporary rollout.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="markdown"><![CDATA[Cleanup checklist for checkoutRiskScoringEnabled:
 - Confirm 100 percent rollout was stable for 14 days
-- Remove legacyReviewService branch from CheckoutService
-- Delete CheckoutFeatureDecisions#useRiskScoring when no other rollout uses it
-- Remove checkout.features.risk-scoring-enabled from configuration templates
-- Delete disabled-path tests and keep released behavior tests
-- Remove rollout dashboard panels and provider entry
+- Retire legacyReviewService branch from CheckoutService
+- Retire CheckoutFeatureDecisions#useRiskScoring when no other rollout uses it
+- Retire checkout.features.risk-scoring-enabled from configuration templates
+- Retire disabled-path tests and keep released behavior tests
+- Retire rollout dashboard panels and provider entry
 - Close cleanup task with release note reference]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
