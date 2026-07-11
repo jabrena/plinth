@@ -4,17 +4,12 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 
 ## Skills
 
-- https://agentskillshub.top/skill/jabrena/plinth/
-- https://mcpapp-store.com/skills?q=Mongock+
-- https://jvmskills.com/
-- https://skills.sh/teachingai/agent-skills/maven-search
 - https://github.com/making/claude-skills
 - https://github.com/levnikolaevich/claude-code-skills/tree/master/skills-catalog
 - https://github.com/TheBushidoCollective/han/tree/main/plugins/patterns/bdd/skills/bdd-scenarios
 - https://skills.sh/thebushidocollective/han/playwright-bdd-gherkin-syntax
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/code-simplifier/SKILL.md
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/story-splitting/SKILL.md
-- https://github.com/eferro/skill-factory/blob/main/output_skills/practices/hamburger-method/SKILL.md
 - https://github.com/Envy-7z/mobile-agent-skillpack/blob/main/skills/thinkies/SKILL.md
 - https://skills.sh/giuseppe-trisciuoglio/developer-kit/spring-boot-resilience4j
 - https://skills.sh/giuseppe-trisciuoglio/developer-kit/spring-boot-actuator
@@ -27,7 +22,6 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 - https://github.com/forrestchang/andrej-karpathy-skills/blob/main/skills/karpathy-guidelines/SKILL.md
 - https://github.com/KentBeck/TCRSkill/tree/main
 - https://github.com/mattpocock/skills/tree/main/skills/productivity/grill-me
-- https://tarai.dev/en/skill/141-java-refactoring-with-modern-features/
 
 ## Agents
 
@@ -37,6 +31,5 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 ## MCP Servers
 
 - https://github.com/quarkiverse/quarkus-mcp-servers
-- arvindand/maven-tools-mcp:latest
 - https://www.javadocs.dev/mcp
 - https://github.com/rtk-ai/rtk
