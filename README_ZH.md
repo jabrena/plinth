@@ -22,7 +22,7 @@
 
 - 11 Commands
 - 9 Agents
-- 118 Skills
+- 119 Skills
 
 ## 最新动态
 

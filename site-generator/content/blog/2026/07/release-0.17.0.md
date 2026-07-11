@@ -37,7 +37,6 @@ Now that the repository name change has been explained, let's continue by review
 - [Modeling the domain with stronger Java types](#adding-more-types-possibilities)
 - [Extending EU regulations and ISO engineering review skills](#extending-eu-regulations-and-iso-engineering-review-skills)
 - [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
-- [Expanding acceptance-test prompt inventories with Gherkin](#expanding-acceptance-test-prompt-inventories-with-gherkin)
 - [Recommended Books and Talks for this summer](#recommended-books-talks-for-this-summer)
 - [Next steps](#next-steps)
 - [Do you still have questions about the project?](#doubts)
@@ -635,16 +634,6 @@ This release also strengthens the validation path around generated content, rele
 The pipeline now includes `VirusTotal` checks before generated artifacts are promoted. In the latest scan, `VirusTotal` evaluated the artifact with `75` security applications and engines. This is not a replacement for the build, tests, or human review, but it gives maintainers one more piece of evidence when deciding whether a generated artifact is ready to publish.
 
 The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
-
-<a id="expanding-acceptance-test-prompt-inventories-with-gherkin"></a>
-
-## Expanding acceptance-test prompt inventories with Gherkin
-
-This release also expands the validation model for the whole project. `Plinth` now includes `Gherkin` files for agents, commands, and a much broader set of generated skills. These files describe the behavior that each generated asset should support, using examples that are easier to review than ad hoc manual checks.
-
-The goal is to make validation more explicit and repeatable. When a skill, command, or agent changes, the corresponding acceptance prompt can be traced back to a `.feature` file and used to verify that the generated guidance still behaves as intended. That gives maintainers a clearer review path before promoting generated content.
-
-In the future, these acceptance tests should run automatically in the pipeline using an agent tool such as `Codex`. The agent would execute the relevant prompt inventory for the changed asset, collect the result, and provide review evidence before the release is published.
 
 <a id="recommended-books-talks-for-this-summer"></a>
 

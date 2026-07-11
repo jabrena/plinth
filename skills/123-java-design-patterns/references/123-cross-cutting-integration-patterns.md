@@ -29,9 +29,9 @@ Design integration boundaries that isolate external complexity, fail predictably
 | Design pressure | Candidate pattern | Use when | Avoid when | Validation signal |
 |---|---|---|---|---|
 | External model pollutes domain | Anti-corruption layer | Provider naming, lifecycle, or errors differ from domain language | The external contract already is the owned domain contract | Translator tests cover mappings and provider errors |
-| Remote dependency fails or slows | Timeout, retry, circuit breaker | Calls cross network or ownership boundaries | Local in-memory calls or non-idempotent commands without safeguards | Failure-injection tests prove bounded latency and open/close behavior |
+| Remote dependency fails or slows | Timeout, retry, circuit breaker | Calls cross network or ownership boundaries | Local in-memory calls or non-idempotent commands that lack idempotency protection | Failure-injection tests prove bounded latency and open/close behavior |
 | Flow is hard to trace | Correlation or trace propagation | Requests cross services, queues, jobs, or async boundaries | A single-process operation is fully observable already | Logs/traces share correlation id across boundaries |
-| One dependency can exhaust callers | Bulkhead or fallback | A slow dependency must not consume all threads/connections | The call is rare, cheap, and failure should be loud | Load tests show isolated pools and fallback metrics |
+| One dependency can exhaust callers | Bulkhead or fallback | A slow dependency must not consume all threads/connections | The call is rare, cheap, and failure should be explicit | Load tests show isolated pools and fallback metrics |
 | Legacy replacement must be incremental | Strangler fig | Routes or adapters can move behavior slice by slice | A full replacement is small, safe, and cheaper | Route metrics and rollback tests prove traffic control |
 | Cross-system side effects must be reliable | Outbox or inbox | Local transaction and external side effect must reconcile | Side effect is best-effort and loss is acceptable | Replay procedure and duplicate handling are tested |
 
@@ -149,7 +149,7 @@ No shared id connects the same business operation.
 ### Example 4: Use Bulkhead and Fallback for Dependency Isolation
 
 Title: Prevent one slow dependency from consuming all caller capacity
-Description: Use bulkheads when a dependency can exhaust shared threads, connections, or queue capacity, and use fallback only when degraded data is acceptable. Benefit: unrelated traffic remains healthy. Cost: capacity limits and fallback freshness must be operated. Avoid fallback for correctness-critical decisions that should fail loudly. Validate isolation under load, fallback metrics, and stale-data warnings.
+Description: Use bulkheads when a dependency can exhaust shared threads, connections, or queue capacity, and use fallback only when degraded data is acceptable. Benefit: unrelated traffic remains healthy. Cost: capacity limits and fallback freshness must be operated. Avoid fallback for correctness-critical decisions that should fail explicitly. Validate isolation under load, fallback metrics, and stale-data warnings.
 
 **Good example:**
 
