@@ -63,7 +63,7 @@ If you use the project, you can participate as an [individual contributor](https
 
 ## What are the Top 10 Skills from this project in Skills.sh?
 
-The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `118 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by Skills.sh users:
+The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `119 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by Skills.sh users:
 
 The `Category rank` column shows the skill's position inside that Skills.sh search category when results are sorted by install count.
 
@@ -279,7 +279,8 @@ The same view for framework-specific skills shows the top 5 project skills for `
 
 **Note:** The project is currently consolidating the `Skills.sh` data from `cursor-rules-java` to `plinth`: https://www.skills.sh/jabrena. There is an open ticket for this work: https://github.com/jabrena/plinth/issues/975
 
-<a id="enhancing-openspec-operations"></a>
+If you use the project but you have doubts about any Skill, you could share your feedback in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
+
 <a id="design-skills-for-safer-delivery"></a>
 
 ## Design skills for safer delivery
