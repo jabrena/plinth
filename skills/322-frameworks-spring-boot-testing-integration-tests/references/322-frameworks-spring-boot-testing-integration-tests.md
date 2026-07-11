@@ -419,7 +419,7 @@ class MyServiceWithPerMethodContainerIT {
     @BeforeEach
     void startEach() {
         redis = new GenericContainer<>(DockerImageName.parse("redis:6-alpine")).withExposedPorts(6379);
-        redis.start();  // Docker pull + startup on every test method — very slow
+        redis.start();  // image download and startup on every test method is very slow
     }
 
     @Test

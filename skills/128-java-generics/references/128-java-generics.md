@@ -1492,7 +1492,6 @@ import java.util.List;
 public class RawSerialization {
     private static final ObjectMapper MAPPER = new ObjectMapper();
 
-    @SuppressWarnings("unchecked")
     public static List<Foo> fromJson(String json) throws Exception {
         List list = MAPPER.readValue(json, List.class); // Raw type loses T
         return (List<Foo>) list; // Unsafe cast, may fail at runtime
@@ -1515,7 +1514,7 @@ import java.util.ArrayList;
 
 public class NoWarningsExample {
 
-    // No warnings - proper generics usage
+    // Proper generics usage
     public static <T> List<T> createList(T item) {
         List<T> list = new ArrayList<>();
         list.add(item);

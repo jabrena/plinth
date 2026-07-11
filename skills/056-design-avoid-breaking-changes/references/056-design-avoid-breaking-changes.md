@@ -54,13 +54,13 @@ Check command and skill compatibility:
 - Migration: whether users have clear replacement guidance when a command or skill is removed or renamed
 ### Step 3: Review generated-output ownership
 
-Confirm that implementation plans edit the source of truth and refresh generated outputs through documented workflows:
+Confirm that implementation plans name the source of truth and the documented refresh workflow for generated outputs:
 
-- Edit skill XML under `skills-generator/src/main/resources/skill-indexes/` and `skills-generator/src/main/resources/skill-references/`
-- Edit command assets under `skills-generator/src/main/resources/skill-references/assets/commands/`
-- Regenerate local `.agents/skills` with `./mvnw clean install -pl skills-generator`
-- Refresh public `skills/` only with `./mvnw clean install -pl skills-generator -P release` when release output is intentionally in scope
-- Refresh `docs/` only through the site update profile when website sources change
+- Skill XML source: `skills-generator/src/main/resources/skill-indexes/` and `skills-generator/src/main/resources/skill-references/`
+- Command asset source: `skills-generator/src/main/resources/skill-references/assets/commands/`
+- Local `.agents/skills` refresh command: `./mvnw clean install -pl skills-generator`
+- Public `skills/` release refresh command: `./mvnw clean install -pl skills-generator -P release` when release output is intentionally in scope
+- `docs/` refresh command: use the site update profile when website sources change
 - Avoid direct `.cursor/rules/` edits
 
 Flag any plan that edits generated output directly without the corresponding source change and generator command.

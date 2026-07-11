@@ -1070,20 +1070,20 @@ execute_profiling() {
                                 if [[ "$CONVERT_JFR" =~ ^[Yy]$ ]]; then
                                     FLAME_FILE="${SELECTED_FILE%.jfr}.html"
                                     echo -e "${BLUE}Converting JFR to flame graph...${NC}"
-                                    if [ -f "$PROFILER_DIR/current/bin/jfrconv" ]; then
-                                        bash "$PROFILER_DIR/current/bin/jfrconv" -o html "$SELECTED_FILE" "$FLAME_FILE" 2>/dev/null
-                                        if [ $? -eq 0 ]; then
-                                            echo -e "${GREEN}Flame graph created: $(basename "$FLAME_FILE")${NC}"
-                                            if [[ "$OSTYPE" == "darwin"* ]]; then
-                                                echo -e "${BLUE}Opening flame graph in browser...${NC}"
-                                                open "$FLAME_FILE"
-                                            fi
-                                        else
-                                            echo -e "${RED}Failed to convert JFR file${NC}"
-                                        fi
-                                    else
-                                        echo -e "${YELLOW}jfrconv not found. JFR file location: $SELECTED_FILE${NC}"
-                                    fi
+				if [ -f "$PROFILER_DIR/current/bin/jfrconv" ]; then
+					bash "$PROFILER_DIR/current/bin/jfrconv" -o html "$SELECTED_FILE" "$FLAME_FILE" 2>/dev/null
+					if [ $? -eq 0 ]; then
+						echo -e "${GREEN}JFR HTML report created: $(basename "$FLAME_FILE")${NC}"
+						if [[ "$OSTYPE" == "darwin"* ]]; then
+							echo -e "${BLUE}Opening JFR HTML report in browser...${NC}"
+							open "$FLAME_FILE"
+						fi
+					else
+						echo -e "${RED}JFR conversion did not complete${NC}"
+					fi
+				else
+					echo -e "${YELLOW}jfrconv not found. JFR file location: $SELECTED_FILE${NC}"
+				fi
                                 else
                                     echo -e "${YELLOW}JFR file location: $SELECTED_FILE${NC}"
                                 fi
