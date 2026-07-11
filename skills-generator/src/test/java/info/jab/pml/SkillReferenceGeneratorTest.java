@@ -91,7 +91,10 @@ class SkillReferenceGeneratorTest {
             saveGeneratedContentToTarget(generatedContent, baseFileName + ".md");
 
             // Then - Validate the generated content structure
-            String[] lines = generatedContent.split("\\n");
+            String[] lines = generatedContent
+                .replace("\r\n", "\n")
+                .replace('\r', '\n')
+                .split("\\n");
 
             validateHasMainTitle(lines, baseFileName);
             validateRequiredSections(lines, baseFileName);

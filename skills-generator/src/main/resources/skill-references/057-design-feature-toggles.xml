@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Sangwon Park</author>
+        <version>0.17.0</version>
+        <license>Apache-2.0</license>
+        <title>Feature Toggles Design</title>
+        <description>Examples for designing, implementing, testing, operating, and cleaning up feature toggles in Java enterprise systems without creating avoidable release, rollback, security, or maintenance risk.</description>
+    </metadata>
+
+    <role>You are a senior Java Enterprise engineer who provides concrete examples for safe runtime behavior controls.</role>
+
+    <tone>Be practical and example-driven. Prefer small Java, configuration, test, and cleanup examples that make toggle ownership, defaults, rollback, and removal visible.</tone>
+
+    <goal>
+        Provide concrete examples that support the Feature Toggles skill workflow. Use these examples to show how Java teams can keep feature toggles typed, owned, observable, reversible, and removable.
+    </goal>
+
+    <constraints>
+        <constraints-description>Use these examples as implementation references, not as a second workflow.</constraints-description>
+        <constraint-list>
+            <constraint>**EXAMPLES FIRST**: Prefer concrete Java, configuration, testing, operations, and cleanup examples over another sequence of process steps</constraint>
+            <constraint>**TYPED BOUNDARY**: Keep provider-specific flag keys behind a typed decision API</constraint>
+            <constraint>**SAFE DEFAULTS**: Show the default and failure behavior explicitly in code or configuration</constraint>
+            <constraint>**ROLLBACK PATH**: Keep the disabled path testable until cleanup removes the temporary toggle</constraint>
+            <constraint>**NO SENSITIVE RULES**: Do not put secrets, personal data, internal cohort logic, or authorization bypasses in toggle names, rules, logs, or metrics</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="toggle-contract-record">
+            <example-header>
+                <example-title>Toggle contract record</example-title>
+                <example-subtitle>Document the owner, default, rollback, and cleanup trigger before coding</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                A release toggle should have enough metadata for reviewers and operators to understand the runtime contract. The contract can live in an issue, OpenSpec task, ADR, release checklist, or code-adjacent documentation.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Toggle: checkoutRiskScoringEnabled
+Type: release toggle
+Owner: Checkout Platform
+Default: false
+Disabled behavior: legacy manual review remains the production path
+Enabled behavior: risk scoring service evaluates eligible checkout orders
+Rollback: set false in the feature service; propagation expected under 60 seconds
+Observability: checkout.risk_scoring.decision and checkout.risk_scoring.errors
+Cleanup trigger: 100 percent rollout stable for 14 days with no rollback incidents
+Cleanup task: remove legacyReviewService branch, old config key, and disabled-path tests]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Toggle: newCheckout
+Owner: TBD
+Default: probably off
+Rollback: turn it off
+Cleanup: later]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="spring-boot-configuration-backed-decision">
+            <example-header>
+                <example-title>Spring Boot configuration-backed decision</example-title>
+                <example-subtitle>Bind configuration once and expose a typed decision method</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Configuration binding keeps the default visible and provider-independent. Business code depends on a domain decision instead of reading raw property names.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@ConfigurationProperties(prefix = "checkout.features")
+public record CheckoutFeatureProperties(boolean riskScoringEnabled) {
+
+    public CheckoutFeatureProperties {
+        // Default remains false when configuration is absent.
+    }
+}
+
+@Component
+public final class CheckoutFeatureDecisions {
+
+    private final CheckoutFeatureProperties properties;
+
+    public CheckoutFeatureDecisions(CheckoutFeatureProperties properties) {
+        this.properties = properties;
+    }
+
+    public boolean useRiskScoring(CheckoutContext context) {
+        return properties.riskScoringEnabled() && context.isEligibleForRiskScoring();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[if (environment.getProperty("new.impl", Boolean.class, false)) {
+    riskScoringService.score(order);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="strategy-selector-boundary">
+            <example-header>
+                <example-title>Strategy selector boundary</example-title>
+                <example-subtitle>Choose one implementation path near the application boundary</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When the behavior is substantial, selecting a strategy keeps branch logic out of domain objects and makes both paths easier to test.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public final class CheckoutService {
+
+    private final CheckoutFeatureDecisions featureDecisions;
+    private final CheckoutRiskScoring riskScoring;
+    private final LegacyCheckoutReview legacyReview;
+
+    public Receipt submit(CheckoutCommand command) {
+        CheckoutContext context = CheckoutContext.from(command);
+        if (featureDecisions.useRiskScoring(context)) {
+            return riskScoring.submit(command);
+        }
+        return legacyReview.submit(command);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public final class Order {
+
+    public void submit(Environment environment) {
+        if (environment.getProperty("checkout.features.risk-scoring-enabled", Boolean.class)) {
+            // new path
+        }
+        // repeated checks in domain code
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="request-consistency">
+            <example-header>
+                <example-title>Request consistency</example-title>
+                <example-subtitle>Evaluate once when mid-flow changes would be unsafe</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For transactions, messages, batch items, billing, authorization-adjacent behavior, or external calls, carry the decision value through the flow so one request cannot mix old and new behavior.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public Receipt submit(CheckoutCommand command) {
+    CheckoutContext context = CheckoutContext.from(command);
+    boolean useRiskScoring = featureDecisions.useRiskScoring(context);
+
+    CheckoutDecision decision = new CheckoutDecision(command, useRiskScoring);
+    return checkoutProcessor.process(decision);
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public Receipt submit(CheckoutCommand command) {
+    fraudGateway.reserve(command);
+    if (featureClient.isEnabled("checkoutRiskScoringEnabled")) {
+        riskScoringService.score(command);
+    }
+    if (featureClient.isEnabled("checkoutRiskScoringEnabled")) {
+        receiptPublisher.publishNewReceipt(command);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="unit-tests-for-both-paths">
+            <example-header>
+                <example-title>Unit tests for both paths</example-title>
+                <example-subtitle>Keep disabled, enabled, and fallback behavior covered</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                The disabled path is the rollback path. Keep it tested until the cleanup change removes the old behavior.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@Test
+void usesLegacyReviewWhenRiskScoringIsDisabled() {
+    CheckoutFeatureDecisions decisions = decisions(false);
+
+    checkoutService.submit(command, decisions);
+
+    verify(legacyReview).submit(command);
+    verifyNoInteractions(riskScoring);
+}
+
+@Test
+void usesRiskScoringWhenRiskScoringIsEnabledAndContextIsEligible() {
+    CheckoutFeatureDecisions decisions = decisions(true);
+
+    checkoutService.submit(command, decisions);
+
+    verify(riskScoring).submit(command);
+    verifyNoInteractions(legacyReview);
+}
+
+@Test
+void fallsBackToDisabledBehaviorWhenProviderValueIsMissing() {
+    CheckoutFeatureDecisions decisions = decisionsWithMissingValue();
+
+    assertThat(decisions.useRiskScoring(context)).isFalse();
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[@Test
+void newCheckoutWorks() {
+    enable("new.impl");
+    checkoutService.submit(command);
+    verify(riskScoring).submit(command);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="operational-kill-switch">
+            <example-header>
+                <example-title>Operational kill switch</example-title>
+                <example-subtitle>Make emergency disablement observable and reversible</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                A kill switch can be long-lived, but it still needs an owner, safe default, metric, and runbook entry. It should disable risky optional work without breaking the core contract.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public void publishRecommendationEvents(List<RecommendationEvent> events) {
+    if (featureDecisions.disableRecommendationPublishing()) {
+        meterRegistry.counter("recommendations.publisher.skipped", "reason", "kill_switch").increment(events.size());
+        logger.warn("Recommendation publishing skipped by operational kill switch");
+        return;
+    }
+
+    recommendationPublisher.publish(events);
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[if (featureClient.isEnabled("disableEverything")) {
+    return;
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="cleanup-after-rollout">
+            <example-header>
+                <example-title>Cleanup after rollout</example-title>
+                <example-subtitle>Remove temporary toggle artifacts after stability evidence is complete</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Cleanup is not only deleting one if statement. Remove the old branch, decision method, provider key, stale tests, dashboards, alerts, and documentation that existed only for the temporary rollout.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Cleanup checklist for checkoutRiskScoringEnabled:
+- Confirm 100 percent rollout was stable for 14 days
+- Remove legacyReviewService branch from CheckoutService
+- Delete CheckoutFeatureDecisions#useRiskScoring when no other rollout uses it
+- Remove checkout.features.risk-scoring-enabled from configuration templates
+- Delete disabled-path tests and keep released behavior tests
+- Remove rollout dashboard panels and provider entry
+- Close cleanup task with release note reference]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Cleanup:
+- Leave the flag in case we need it later
+- Keep both branches because they still compile
+- Remove only the dashboard]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>Use examples that name the toggle, owner, default, disabled behavior, enabled behavior, rollback mechanism, observability, and cleanup trigger</output-format-item>
+            <output-format-item>Prefer Java snippets with typed decision APIs over raw provider string lookups</output-format-item>
+            <output-format-item>Include tests for disabled, enabled, fallback, rollback, and cleanup behavior when the example touches code</output-format-item>
+            <output-format-item>Show operational examples with metrics, logs, alerts, or runbook signals when the toggle controls production risk</output-format-item>
+            <output-format-item>Call out anti-examples that hide ownership, use vague names, scatter checks, skip rollback validation, or defer cleanup indefinitely</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not duplicate the Feature Toggles skill workflow inside this reference; keep this file focused on examples</safeguards-item>
+            <safeguards-item>Do not recommend raw feature-provider lookups throughout controllers, domain objects, repositories, jobs, or clients</safeguards-item>
+            <safeguards-item>Do not show toggle examples that bypass authentication, authorization, audit, compliance, rate limiting, or data retention controls</safeguards-item>
+            <safeguards-item>Do not present rollback as safe unless the disabled path and provider failure behavior are tested</safeguards-item>
+            <safeguards-item>Do not leave temporary release toggles without owner, expiry condition, cleanup task, and validation evidence</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
