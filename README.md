@@ -69,7 +69,7 @@ Current `System prompts/rules` are deprecated and will be removed in `v0.17.0`. 
 
 Commands compose the workflow by routing work to the right agent and skill set:
 
-### Plan
+### Analysis & Design
 
 Turn an idea into an actionable change with user stories, GitHub Issues or Jira, ADRs, diagrams, AI plan mode, and OpenSpec.
 
@@ -88,6 +88,7 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
 /create-diagram
 @robot-architect
     @033-architecture-diagrams
+
 /create-spec
 @robot-tech-lead
     @042-planning-openspec
@@ -101,11 +102,11 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
     @122-java-type-design
     @123-java-design-patterns
     @130-java-testing-strategies
+/review-alignment
+@robot-business-analyst
 /explore-design
 @robot-architect
     @034-architecture-design-exploration
-/review-alignment
-@robot-business-analyst
 
 MCP Servers
     Jbang-Quarkus-JDBC
@@ -129,6 +130,7 @@ Implement and improve Java applications with Maven, design, coding, testing, sec
     @robot-java-quarkus-coder
     @robot-java-micronaut-coder
     @robot-no-java
+
 MCP Servers
     Jbang-Quarkus-JDBC
     MongoDB

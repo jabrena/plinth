@@ -30,7 +30,8 @@ Now that the repository name change has been explained, let's continue by review
 
 - [Community first!](#community-first)
 - [What are the Top 10 Skills from this project in Skills.sh?](#what-are-the-top-10-skills-from-this-project-in-skillssh)
-- [Enhancing OpenSpec operations](#enhancing-openspec-operations)
+- [Design skills for safer delivery](#design-skills-for-safer-delivery)
+- [Comparing Plinth commands with OpenSpec and Spec Kit](#comparing-plinth-commands-with-openspec-and-spec-kit)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
 - [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
 - [Modeling the domain with stronger Java types](#adding-more-types-possibilities)
@@ -138,11 +139,149 @@ The `Category rank` column shows the skill's position inside that Skills.sh sear
   </tbody>
 </table>
 
+The same view for framework-specific skills shows the top 5 project skills for `Spring Boot`, `Quarkus`, and `Micronaut` searches:
+
+**Spring Boot**
+
+<table>
+  <thead>
+    <tr>
+      <th>Plinth rank</th>
+      <th>Skills.sh Search</th>
+      <th>Skills.sh Search rank</th>
+      <th>Skill</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#42</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/301-frameworks-spring-boot-core"><code>301-frameworks-spring-boot-core</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#43</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/302-frameworks-spring-boot-rest"><code>302-frameworks-spring-boot-rest</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#44</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/321-frameworks-spring-boot-testing-unit-tests"><code>321-frameworks-spring-boot-testing-unit-tests</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#4</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#45</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/322-frameworks-spring-boot-testing-integration-tests"><code>322-frameworks-spring-boot-testing-integration-tests</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#46</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/323-frameworks-spring-boot-testing-acceptance-tests"><code>323-frameworks-spring-boot-testing-acceptance-tests</code></a></td>
+    </tr>
+  </tbody>
+</table>
+
+**Quarkus**
+
+<table>
+  <thead>
+    <tr>
+      <th>Plinth rank</th>
+      <th>Skills.sh Search</th>
+      <th>Skills.sh Search rank</th>
+      <th>Skill</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/search?q=quarkus">Quarkus</a></td>
+      <td><code>#12</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/412-frameworks-quarkus-panache"><code>412-frameworks-quarkus-panache</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/search?q=quarkus">Quarkus</a></td>
+      <td><code>#13</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/402-frameworks-quarkus-rest"><code>402-frameworks-quarkus-rest</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/search?q=quarkus">Quarkus</a></td>
+      <td><code>#14</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/401-frameworks-quarkus-core"><code>401-frameworks-quarkus-core</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#4</code></td>
+      <td><a href="https://www.skills.sh/search?q=quarkus">Quarkus</a></td>
+      <td><code>#15</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/411-frameworks-quarkus-jdbc"><code>411-frameworks-quarkus-jdbc</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/search?q=quarkus">Quarkus</a></td>
+      <td><code>#16</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/421-frameworks-quarkus-testing-unit-tests"><code>421-frameworks-quarkus-testing-unit-tests</code></a></td>
+    </tr>
+  </tbody>
+</table>
+
+**Micronaut**
+
+<table>
+  <thead>
+    <tr>
+      <th>Plinth rank</th>
+      <th>Skills.sh Search</th>
+      <th>Skills.sh Search rank</th>
+      <th>Skill</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/search?q=micronaut">Micronaut</a></td>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/521-frameworks-micronaut-testing-unit-tests"><code>521-frameworks-micronaut-testing-unit-tests</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/search?q=micronaut">Micronaut</a></td>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/512-frameworks-micronaut-data"><code>512-frameworks-micronaut-data</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/search?q=micronaut">Micronaut</a></td>
+      <td><code>#4</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/522-frameworks-micronaut-testing-integration-tests"><code>522-frameworks-micronaut-testing-integration-tests</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#4</code></td>
+      <td><a href="https://www.skills.sh/search?q=micronaut">Micronaut</a></td>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/502-frameworks-micronaut-rest"><code>502-frameworks-micronaut-rest</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#5</code></td>
+      <td><a href="https://www.skills.sh/search?q=micronaut">Micronaut</a></td>
+      <td><code>#6</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/523-frameworks-micronaut-testing-acceptance-tests"><code>523-frameworks-micronaut-testing-acceptance-tests</code></a></td>
+    </tr>
+  </tbody>
+</table>
+
 **Note:** The project is currently consolidating the `Skills.sh` data from `cursor-rules-java` to `plinth`: https://www.skills.sh/jabrena. There is an open ticket for this work: https://github.com/jabrena/plinth/issues/975
 
 <a id="enhancing-openspec-operations"></a>
+<a id="design-skills-for-safer-delivery"></a>
 
-## Enhancing OpenSpec operations
+## Design skills for safer delivery
 
 AI coding tools are very good at producing code quickly. That is useful, but speed alone is not the same as engineering discipline. Real delivery work also needs design sequencing, compatibility analysis, test strategy, small slices, and reviewable evidence.
 
@@ -160,7 +299,22 @@ This release adds a new family of design skills to be used in the workflow:
 
 Once the OpenSpec change is created, the next step is to refine it with design skills before implementation begins. The spec describes the intent, but the design skills help shape the change into a safer engineering path: smaller slices, clearer compatibility decisions, stronger test strategy, and explicit review points.
 
-That is why the `Plinth commands` are designed around the same delivery phases used by `OpenSpec` and `Spec Kit`. The commands are not isolated shortcuts; they map to a workflow that moves from intake to specification, design refinement, task planning, implementation, and closure:
+> "There is no favorable wind for the sailor who doesn’t know where to go”
+> ― Seneca
+
+**Invest quality time in gathering and refining the requirements that belong in the spec.** The design phase should move deliberately at `1x`; once the spec is clear, implementation can safely accelerate toward `10x` because the intent, constraints, and verification path are already understood.
+
+[![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
+
+Continue running [`Three Amigos sessions`](https://agilealliance.org/glossary/three-amigos/) to combine business, technology, and quality perspectives before implementation starts.
+
+If you are interested in this new set of design skills, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
+
+<a id="comparing-plinth-commands-with-openspec-and-spec-kit"></a>
+
+## Comparing Plinth commands with OpenSpec and Spec Kit
+
+`Plinth commands` make software engineers' lives easier by hiding the tool-specific details of the SDD workflow. The comparison below shows how those commands map to `OpenSpec` and `Spec Kit` phases, from intake to specification, design refinement, task planning, and implementation.
 
 <table>
   <thead>
@@ -204,7 +358,7 @@ That is why the `Plinth commands` are designed around the same delivery phases u
   </tbody>
 </table>
 
-This comparison is useful because it shows how `Plinth` maps to initiatives like `OpenSpec` and `Spec Kit`. `Plinth` commands use agents to handle specs under the hood:
+Looking deeper into the command execution details, we can see the relationship between `Plinth commands` and `Plinth agents`:
 
 <table>
   <thead>
@@ -221,21 +375,6 @@ This comparison is useful because it shows how `Plinth` maps to initiatives like
       <td>Refines issue content across GitHub, Jira, or Azure DevOps inputs.</td>
     </tr>
     <tr>
-      <td><code>/review-alignment</code></td>
-      <td><code>@robot-business-analyst</code></td>
-      <td>Reviews traceability, consistency, gaps, and implementation readiness.</td>
-    </tr>
-    <tr>
-      <td><code>/create-spec</code></td>
-      <td><code>@robot-tech-lead</code></td>
-      <td>Applies planning, design, compatibility, and testing skills before tasking.</td>
-    </tr>
-    <tr>
-      <td><code>/explore-design</code></td>
-      <td><code>@robot-architect</code></td>
-      <td>Compares design options and recommends an approved technical direction.</td>
-    </tr>
-    <tr>
       <td><code>/create-adr</code></td>
       <td><code>@robot-architect</code></td>
       <td>Records architecture decisions, alternatives, and consequences.</td>
@@ -244,6 +383,21 @@ This comparison is useful because it shows how `Plinth` maps to initiatives like
       <td><code>/create-diagram</code></td>
       <td><code>@robot-architect</code></td>
       <td>Creates architecture or design diagrams from trusted source artifacts.</td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code></td>
+      <td><code>@robot-tech-lead</code></td>
+      <td>Applies planning, design, compatibility, and testing skills before tasking.</td>
+    </tr>
+    <tr>
+      <td><code>/review-alignment</code></td>
+      <td><code>@robot-business-analyst</code></td>
+      <td>Reviews traceability, consistency, gaps, and implementation readiness.</td>
+    </tr>
+    <tr>
+      <td><code>/explore-design</code></td>
+      <td><code>@robot-architect</code></td>
+      <td>Compares design options and recommends an approved technical direction.</td>
     </tr>
     <tr>
       <td><code>/implement-spec</code></td>
@@ -263,16 +417,7 @@ This comparison is useful because it shows how `Plinth` maps to initiatives like
   </tbody>
 </table>
 
-> "There is no favorable wind for the sailor who doesn’t know where to go”
-> ― Seneca
-
-**Invest quality time in gathering and refining the requirements that belong in the spec.** The design phase should move deliberately at `1x`; once the spec is clear, implementation can safely accelerate toward `10x` because the intent, constraints, and verification path are already understood.
-
-[![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
-
-Continuing to run [`Three Amigos sessions`](https://agilealliance.org/glossary/three-amigos/) is healthy.
-
-If you are interested in this new set of design skills, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
+In future releases, the agents related to `Analysis & Design` will become more independent to increase decoupling between phases. For example, `/create-spec` currently maps to `@robot-tech-lead`. Starting in release `0.18.0`, `@robot-tech-lead` will participate only in implementation phases. This change will make the project more modular and easier to customize for your organization.
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
@@ -560,7 +705,7 @@ For the next release, we plan to work on a few topics:
 - Add `Katas` that help users learn `Plinth` incrementally.
 - Improve behavior across the `Design phase`.
 - Decouple agents for design and implementation.
-- Make the project more modular so it is easier to integrate in organizations.
+- Make the project more modular so it is easier to integrate into organizations.
 - Update the `Spring Boot` support for `4.1.0`.
 - Add a skill about `JVM Flags`.
 - Go deeper into the EU regulation ecosystem for `GenAI`.
