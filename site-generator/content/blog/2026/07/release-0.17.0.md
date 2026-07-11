@@ -49,11 +49,13 @@ If you have questions about the project, how to customize it for your team, how 
 
 ## Community first!
 
-As `Plinth` grows from a technical repository into an OSS product for software engineers, the community becomes part of the product itself. Feedback, issue reports, pull requests, and real project stories help keep the guidance practical, reviewable, and useful beyond my own context. This release is a good reminder of that. Many thanks to [Leandro Loureiro](https://github.com/lealoureiro) for your contribution, for taking the time to understand the project, and for helping improve it from the perspective of someone using it outside the maintainer's day-to-day work.
+As `Plinth` grows from a technical repository into an OSS product that helps make everyday engineering work easier, the community becomes part of the product itself. Feedback, issue reports, pull requests, and real project stories help keep the guidance practical, reviewable, and useful beyond my own context. This release is a good reminder of that. Many thanks to [Leandro Loureiro](https://github.com/lealoureiro) and [Sangwon Park](https://github.com/wipheg) for your contributions.
 
 [![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
-Now it is possible to capture what the business tentatively wants to build from issues registered in [`Azure DevOps`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops), using the new `@045-planning-azure-devops` skill. It joins similar planning skills such as `@043-planning-github-issues` and `@044-planning-jira`.
+[Leandro](https://github.com/lealoureiro) expanded the planning workflow with the new `@045-planning-azure-devops` skill, making it possible to capture what the business tentatively wants to build from issues registered in [`Azure DevOps`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops). This brings Azure DevOps into the same planning family as `@043-planning-github-issues` and `@044-planning-jira`, helping teams start from the tools where their work is already tracked.
+
+[Sangwon](https://github.com/wipheg) strengthened the design toolset with the new `@057-design-feature-toggles` skill. This contribution helps teams introduce feature toggles with clearer design guidance, so they can evolve systems incrementally, reduce release risk, and keep unfinished work under control.
 
 If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or by sharing your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
