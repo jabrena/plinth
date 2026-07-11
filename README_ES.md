@@ -63,7 +63,7 @@ Aprende a usar este proyecto siguiendo la guía rápida [Primeros pasos en 5 min
 
 ### Migración desde las reglas heredadas
 
-Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.17.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html).
+Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.18.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html).
 
 ## Elige tu camino
 
