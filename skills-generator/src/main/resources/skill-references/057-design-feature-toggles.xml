@@ -66,7 +66,52 @@ Cleanup: later]]></code-block>
             </code-examples>
         </example>
 
-        <example number="2" id="spring-boot-configuration-backed-decision">
+        <example number="2" id="pure-java-configuration-backed-decision">
+            <example-header>
+                <example-title>Pure Java configuration-backed decision</example-title>
+                <example-subtitle>Parse configuration at the edge and expose a typed decision method</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Framework-free Java can still keep toggle evaluation centralized. Parse raw properties once near startup or an adapter boundary, keep the safe default visible, and let business code depend on a named decision method.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.Properties;
+
+public record CheckoutFeatureProperties(boolean riskScoringEnabled) {
+
+    public static CheckoutFeatureProperties from(Properties properties) {
+        boolean enabled = Boolean.parseBoolean(
+            properties.getProperty("checkout.features.risk-scoring-enabled", "false")
+        );
+        return new CheckoutFeatureProperties(enabled);
+    }
+}
+
+public final class CheckoutFeatureDecisions {
+
+    private final CheckoutFeatureProperties properties;
+
+    public CheckoutFeatureDecisions(CheckoutFeatureProperties properties) {
+        this.properties = properties;
+    }
+
+    public boolean useRiskScoring(CheckoutContext context) {
+        return properties.riskScoringEnabled() && context.isEligibleForRiskScoring();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[if (Boolean.getBoolean("new.impl")) {
+    riskScoringService.score(order);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="spring-boot-configuration-backed-decision">
             <example-header>
                 <example-title>Spring Boot configuration-backed decision</example-title>
                 <example-subtitle>Bind configuration once and expose a typed decision method</example-subtitle>
@@ -108,7 +153,110 @@ public final class CheckoutFeatureDecisions {
             </code-examples>
         </example>
 
-        <example number="3" id="strategy-selector-boundary">
+        <example number="4" id="quarkus-configuration-backed-decision">
+            <example-header>
+                <example-title>Quarkus configuration-backed decision</example-title>
+                <example-subtitle>Bind SmallRye Config once and expose a typed decision method</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Quarkus applications can use `@ConfigMapping` to keep feature keys grouped, typed, and defaulted. Business code still depends on a checkout decision instead of provider-specific property names.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ConfigMapping(prefix = "checkout.features")
+public interface CheckoutFeatureProperties {
+
+    @WithDefault("false")
+    boolean riskScoringEnabled();
+}
+
+@ApplicationScoped
+public final class CheckoutFeatureDecisions {
+
+    private final CheckoutFeatureProperties properties;
+
+    public CheckoutFeatureDecisions(CheckoutFeatureProperties properties) {
+        this.properties = properties;
+    }
+
+    public boolean useRiskScoring(CheckoutContext context) {
+        return properties.riskScoringEnabled() && context.isEligibleForRiskScoring();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[boolean enabled = ConfigProvider.getConfig()
+    .getOptionalValue("new.impl", Boolean.class)
+    .orElse(false);
+
+if (enabled) {
+    riskScoringService.score(order);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="micronaut-configuration-backed-decision">
+            <example-header>
+                <example-title>Micronaut configuration-backed decision</example-title>
+                <example-subtitle>Bind Micronaut configuration once and expose a typed decision method</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Micronaut applications can use `@ConfigurationProperties` to group feature settings with explicit defaults. Application services receive a typed decision object instead of reading raw `@Value` keys.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.ConfigurationProperties;
+import jakarta.inject.Singleton;
+
+@ConfigurationProperties("checkout.features")
+public class CheckoutFeatureProperties {
+
+    private boolean riskScoringEnabled = false;
+
+    public boolean isRiskScoringEnabled() {
+        return riskScoringEnabled;
+    }
+
+    public void setRiskScoringEnabled(boolean riskScoringEnabled) {
+        this.riskScoringEnabled = riskScoringEnabled;
+    }
+}
+
+@Singleton
+public final class CheckoutFeatureDecisions {
+
+    private final CheckoutFeatureProperties properties;
+
+    public CheckoutFeatureDecisions(CheckoutFeatureProperties properties) {
+        this.properties = properties;
+    }
+
+    public boolean useRiskScoring(CheckoutContext context) {
+        return properties.isRiskScoringEnabled() && context.isEligibleForRiskScoring();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[@Value("${new.impl:false}")
+boolean enabled;
+
+if (enabled) {
+    riskScoringService.score(order);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="strategy-selector-boundary">
             <example-header>
                 <example-title>Strategy selector boundary</example-title>
                 <example-subtitle>Choose one implementation path near the application boundary</example-subtitle>
@@ -149,7 +297,7 @@ public final class CheckoutFeatureDecisions {
             </code-examples>
         </example>
 
-        <example number="4" id="request-consistency">
+        <example number="7" id="request-consistency">
             <example-header>
                 <example-title>Request consistency</example-title>
                 <example-subtitle>Evaluate once when mid-flow changes would be unsafe</example-subtitle>
@@ -183,7 +331,7 @@ public final class CheckoutFeatureDecisions {
             </code-examples>
         </example>
 
-        <example number="5" id="unit-tests-for-both-paths">
+        <example number="8" id="unit-tests-for-both-paths">
             <example-header>
                 <example-title>Unit tests for both paths</example-title>
                 <example-subtitle>Keep disabled, enabled, and fallback behavior covered</example-subtitle>
@@ -233,7 +381,7 @@ void newCheckoutWorks() {
             </code-examples>
         </example>
 
-        <example number="6" id="operational-kill-switch">
+        <example number="9" id="operational-kill-switch">
             <example-header>
                 <example-title>Operational kill switch</example-title>
                 <example-subtitle>Make emergency disablement observable and reversible</example-subtitle>
@@ -263,7 +411,7 @@ void newCheckoutWorks() {
             </code-examples>
         </example>
 
-        <example number="7" id="cleanup-after-rollout">
+        <example number="10" id="cleanup-after-rollout">
             <example-header>
                 <example-title>Cleanup after rollout</example-title>
                 <example-subtitle>Remove temporary toggle artifacts after stability evidence is complete</example-subtitle>
