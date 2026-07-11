@@ -63,7 +63,7 @@ npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 
 ### 从旧版规则迁移
 
-当前的 `System prompts/rules` 已弃用，并将在 `v0.17.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html)。
+当前的 `System prompts/rules` 已弃用，并将在 `v0.18.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html)。
 
 ## 选择你的路径
 
