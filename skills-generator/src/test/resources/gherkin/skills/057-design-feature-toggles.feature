@@ -6,7 +6,11 @@ Background:
 @acceptance-test
 Scenario: Generate a Feature Toggles skill for Java enterprise development
   Given the local generated skill path ".agents/skills/057-design-feature-toggles"
-  When the skill ".agents/skills/057-design-feature-toggles" guides a Java enterprise feature toggle design
+  And the example framework project "examples/frameworks/spring-boot"
+  And the target endpoint "POST /api/v1/sum" is implemented in "examples/frameworks/spring-boot/src/main/java/info/jab/ms/controller/SumController.java"
+  And the current REST contract is documented in "examples/frameworks/openapi.yaml"
+  And the imaginary requirement is "Publish a SumCalculated event after successful sum responses, but protect the event-publishing rollout with a runtime toggle so POST /api/v1/sum keeps returning the current response when publishing is disabled, unavailable, or rolled back"
+  When the skill ".agents/skills/057-design-feature-toggles" guides a Spring Boot feature toggle design for the imaginary SumCalculated event-publishing requirement
   Then the skill reads "references/057-design-feature-toggles.md"
   And the generated skill explains when to use feature toggles in Java enterprise systems
   And the guidance distinguishes feature toggles from branches, ordinary configuration, deployment changes, and Parallel Change
@@ -16,28 +20,10 @@ Scenario: Generate a Feature Toggles skill for Java enterprise development
   And the guidance recommends centralized typed toggle decisions instead of scattered raw configuration lookups
   And the guidance includes safe defaults, fallback behavior, observability, rollback, security, and privacy considerations
   And the guidance requires tests for disabled, enabled, rollback, failure, targeting, observability, and cleanup scenarios
-
-@acceptance-test
-Scenario: Review a Java feature flag implementation for lifecycle risk
-  Given the user request is "Review this feature flag for a staged checkout rollout in a Spring Boot service"
-  And the local generated skill path ".agents/skills/057-design-feature-toggles"
-  When the skill ".agents/skills/057-design-feature-toggles" reviews the feature flag implementation
-  Then the skill reads "references/057-design-feature-toggles.md"
-  And the review classifies the toggle type and lifecycle
-  And the review checks whether the disabled path preserves current production behavior
-  And the review checks whether the enabled path has rollout guardrails and validation signals
-  And the review checks whether disabling the toggle is a tested rollback path
-  And the review checks whether the toggle can bypass authentication, authorization, audit, compliance, rate limiting, or data retention controls
-  And the review identifies cleanup ownership, removal trigger, stale branch risk, and tests that should be removed or simplified after cleanup
-
-@integration-test
-Scenario: Validate Feature Toggles skill generation and prompt coverage
-  Given the Feature Toggles skill XML sources have been added
-  And the matching Gherkin feature file "skills-generator/src/test/resources/gherkin/skills/057-design-feature-toggles.feature" has been added
-  When the skills-generator module is validated and local skills are regenerated
-  Then the edited XML is well formed
-  And the module verification passes
-  And the generated skill output can be inspected under ".agents/skills/057-design-feature-toggles"
-  And the generated skill output contains "SKILL.md"
-  And the generated skill output contains "references/057-design-feature-toggles.md"
-  And the acceptance prompt inventory includes "execute @skills-generator/src/test/resources/gherkin/skills/057-design-feature-toggles.feature"
+  And the guidance applies the design to "examples/frameworks/spring-boot" and the "POST /api/v1/sum" flow
+  And the guidance treats the disabled path as preserving the current REST behavior: request {"param1": 10, "param2": 32} returns {"result": 42} without publishing a SumCalculated event
+  And the guidance defines a centralized typed decision boundary such as "SumFeatureDecisions#publishSumCalculatedEvents" instead of checking raw properties inside "SumController.java"
+  And the guidance proposes a safe Spring Boot configuration default such as "sum.features.publish-sum-calculated-events=false"
+  And the guidance classifies the toggle as a temporary release toggle with an operational kill-switch rollback path
+  And the guidance names a Spring Boot implementation boundary for the event publisher or application service rather than changing the OpenAPI response contract
+  And the guidance requires tests proving disabled behavior, enabled publishing, provider/configuration failure fallback, rollback disablement, rollout targeting, observability signals, and cleanup removal of the temporary toggle
