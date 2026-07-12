@@ -145,16 +145,32 @@ class CommandIndexesTest {
     }
 
     @Test
-    @DisplayName("Create spec command must route OpenSpec creation through the architect skill set")
-    void should_includeBreakingChangeAvoidance_when_createSpecCommandIsInstalled() {
+    @DisplayName("Create spec command must route OpenSpec creation through architect with planning skill only")
+    void should_routeOpenSpecCreation_when_createSpecCommandIsInstalled() {
         String command = loadClasspathResource("skill-references/assets/commands/create-spec.md");
 
         assertThat(command)
             .contains("/create-spec <issue|design|adr|plan|existing-change>")
             .contains("`@robot-architect`")
+            .contains("`042-planning-openspec`")
+            .contains("Runs first to create the initial OpenSpec proposal")
+            .contains("Use `/explore-design` afterward")
+            .doesNotContain("`056-design-avoid-breaking-changes`");
+    }
+
+    @Test
+    @DisplayName("Explore design command must route refinement through architect design skills")
+    void should_includeDesignSkills_when_exploreDesignCommandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/explore-design.md");
+
+        assertThat(command)
+            .contains("/explore-design <issue|openspec-change>")
+            .contains("`@robot-architect`")
             .contains("`056-design-avoid-breaking-changes`")
-            .contains("Apply breaking-change avoidance guidance")
-            .contains("compatibility-review assumptions");
+            .contains("`057-design-feature-toggles`")
+            .contains("Runs after `/create-spec`")
+            .contains("Do not apply `042-planning-openspec`")
+            .doesNotContain("`034-architecture-design-exploration`");
     }
 
     @Test

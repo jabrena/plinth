@@ -7,13 +7,19 @@ Background:
   And the folder "examples/openspec/god-analysis-api/openspec" has no git changes
 
 @acceptance-test
-Scenario: Refine technical approach by calling design skills during elaboration
-  Remark: Acceptance execution verifies `/explore-design` calls the associated design skills while improving an existing OpenSpec change after `/create-spec`.
-  Given the user request is "/explore-design examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api"
-  And the OpenSpec change "examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api" contains "proposal.md", "design.md", "tasks.md", and capability specification deltas under "specs/"
+Scenario: Refine a newly created OpenSpec change by calling design skills during elaboration
+  Remark: Acceptance execution first creates the initial OpenSpec change through `/create-spec` with `042-planning-openspec` only, then refines it through `/explore-design`.
+  Given the functional requirements folder "examples/openspec/god-analysis-api/requirements/problem1" contains ADRs, a user story, Gherkin acceptance criteria, and OpenAPI files
+  And the command prompt source ".cursor/commands/create-spec.md" is read before execution
   And the command prompt source ".cursor/commands/explore-design.md" is read before execution
+  And the requested OpenSpec change path is "examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api"
+  And any existing OpenSpec change at the requested change path is removed before execution
   And application code implementation is explicitly out of scope
-  When the explore-design command is applied to the request
+  When the create-spec command is applied to the request "/create-spec examples/openspec/god-analysis-api/requirements/problem1"
+  Then the command creates the OpenSpec change "add-god-analysis-api" containing "proposal.md", "design.md", "tasks.md", and capability specification deltas under "specs/"
+  And the command applies only "042-planning-openspec" when creating the initial OpenSpec change
+  And "openspec validate --all" is run from "examples/openspec/god-analysis-api" after the initial change is created
+  When the explore-design command is applied to the request "/explore-design examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api"
   Then the command routes design refinement through "@robot-architect"
   And the command identifies the design source, problem, constraints, stakeholders, options, trade-offs, and recommendation criteria
   And the command calls "051-design-two-steps-methods" to separate behavior-preserving preparation from behavior-changing refinement in the improved approach
@@ -27,12 +33,12 @@ Scenario: Refine technical approach by calling design skills during elaboration
   And the command calls "122-java-type-design" when domain types, invariants, or invalid-state modeling affect the refined approach
   And the command calls "123-java-design-patterns" only when a demonstrated collaboration or integration problem requires pattern selection
   And the command calls "130-java-testing-strategies" when testing strategy, boundary coverage, or verification quality affect the refined approach
-  And the command does not call "042-planning-openspec" or "034-architecture-design-exploration"
+  And the command does not call "042-planning-openspec" or "034-architecture-design-exploration" during design refinement
   And the command keeps analysis separate from implementation unless the user explicitly requests edits
   And the command records assumptions, rejected options, risks, ADR candidates, and validation needed before implementation
   And the command reports the recommended design direction and any generated analysis artifact
   And the command refines the existing OpenSpec change without replacing initial OpenSpec authoring owned by "/create-spec"
   And the command does not modify ADRs, user stories, Gherkin files, or OpenAPI files under "examples/openspec/god-analysis-api/requirements/problem1"
   And the folder "examples/openspec/god-analysis-api/requirements/problem1" has no git changes
-  And "openspec validate --all" is run from "examples/openspec/god-analysis-api" after approved artifact changes
+  And "openspec validate --all" is run from "examples/openspec/god-analysis-api" after approved refinement changes
   And any git changes produced under "examples/openspec/god-analysis-api/openspec" during command execution and verification are reset
