@@ -23,6 +23,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 - 11 Commands
 - 9 Agents
 - 119 Skills
+- ~226 development hours
 
 ## Latest Updates
 

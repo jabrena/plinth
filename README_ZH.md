@@ -23,6 +23,7 @@
 - 11 Commands
 - 9 Agents
 - 119 Skills
+- ~226 开发小时
 
 ## 最新动态
 

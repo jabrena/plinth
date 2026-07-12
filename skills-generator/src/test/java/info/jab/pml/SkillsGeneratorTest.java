@@ -10,7 +10,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -278,22 +277,19 @@ class SkillsGeneratorTest {
     class ComposablePlanningSkillContractTests {
 
         @Test
-        @DisplayName("Should register design exploration and independent plan and OpenSpec workflows")
+        @DisplayName("Should register independent plan and OpenSpec workflows")
         void should_registerComposablePlanningSkills_when_loadingInventory() {
             Map<String, SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors()
                 .collect(Collectors.toMap(SkillIndexes.SkillDescriptor::skillId, descriptor -> descriptor));
 
             assertThat(descriptors)
                 .containsKeys(
-                    "034-architecture-design-exploration",
                     "041-planning-plan-mode",
-                    "042-planning-openspec"
+                    "042-planning-openspec",
+                    "051-design-two-steps-methods",
+                    "057-design-feature-toggles"
                 );
-            SkillIndexes.SkillDescriptor descriptor = Objects.requireNonNull(
-                descriptors.get("034-architecture-design-exploration")
-            );
-            assertThat(descriptor.references())
-                .containsExactly("034-architecture-design-exploration");
+            assertThat(descriptors).doesNotContainKey("034-architecture-design-exploration");
         }
 
         @Test
@@ -301,18 +297,17 @@ class SkillsGeneratorTest {
         void should_generateControlledDerivation_when_planningSkillsGenerated() {
             SkillsGenerator generator = new SkillsGenerator();
 
-            SkillsGenerator.SkillOutput exploration = generator.generateSkill(
-                "034-architecture-design-exploration",
+            SkillsGenerator.SkillOutput twoSteps = generator.generateSkill(
+                "051-design-two-steps-methods",
                 true,
                 true
             );
             SkillsGenerator.SkillOutput plan = generator.generateSkill("041-planning-plan-mode", true, true);
             SkillsGenerator.SkillOutput openspec = generator.generateSkill("042-planning-openspec", true, true);
 
-            assertThat(exploration.skillMd())
-                .contains("Compare two or three feasible approaches")
-                .contains("Obtain approval")
-                .contains("ADR candidates");
+            assertThat(twoSteps.skillMd())
+                .contains("behavior-preserving preparatory refactoring")
+                .contains("intended behavior change");
             assertThat(plan.skillMd())
                 .contains("OpenSpec is an optional input or downstream artifact")
                 .contains("Record source artifacts and derivation direction")

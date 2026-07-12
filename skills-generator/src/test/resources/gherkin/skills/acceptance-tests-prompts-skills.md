@@ -99,13 +99,6 @@ execute @skills-generator/src/test/resources/gherkin/skills/033-architecture-dia
 and verify that acceptance-tests passes.
 ```
 
-## 034-architecture-design-exploration
-
-```bash
-execute @skills-generator/src/test/resources/gherkin/skills/034-architecture-design-exploration.feature
-and verify that acceptance-tests passes.
-```
-
 ## 041-planning-plan-mode
 
 ```bash
