@@ -16,7 +16,7 @@ Create or update one or more OpenSpec changes from the available issue, design, 
 - Any valid combination of these artifacts
 
 ## Owning Agent
-`@robot-tech-lead`
+`@robot-architect`
 
 ## Associated Skills
 - `042-planning-openspec`

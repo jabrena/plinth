@@ -145,13 +145,13 @@ class CommandIndexesTest {
     }
 
     @Test
-    @DisplayName("Create spec command must route compatibility review through the tech lead skill set")
+    @DisplayName("Create spec command must route OpenSpec creation through the architect skill set")
     void should_includeBreakingChangeAvoidance_when_createSpecCommandIsInstalled() {
         String command = loadClasspathResource("skill-references/assets/commands/create-spec.md");
 
         assertThat(command)
             .contains("/create-spec <issue|design|adr|plan|existing-change>")
-            .contains("`@robot-tech-lead`")
+            .contains("`@robot-architect`")
             .contains("`056-design-avoid-breaking-changes`")
             .contains("Apply breaking-change avoidance guidance")
             .contains("compatibility-review assumptions");
