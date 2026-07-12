@@ -37,7 +37,7 @@ When invoked for review, use explicit paths or pasted content for some or all of
 - Do not implement application code.
 - Do not silently edit technical artifacts to make them agree.
 - Report contradictions and recommended corrections for the responsible owner.
-- Ask `@robot-architect` to resolve design or ADR conflicts and `@robot-tech-lead` to resolve plan, OpenSpec, or delivery conflicts.
+- Ask `@robot-architect` to resolve design, ADR, plan, or OpenSpec conflicts and `@robot-tech-lead` to resolve delivery conflicts.
 
 ## Output format
 

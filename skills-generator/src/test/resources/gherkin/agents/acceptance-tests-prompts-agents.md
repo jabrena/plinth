@@ -1,5 +1,12 @@
 # Acceptance Test Prompts for Agents
 
+## robot-business-analyst
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/agents/robot-business-analyst.feature
+and verify that acceptance-tests passes.
+```
+
 ## robot-architect
 
 ```bash
@@ -7,10 +14,10 @@ execute @skills-generator/src/test/resources/gherkin/agents/robot-architect.feat
 and verify that acceptance-tests passes.
 ```
 
-## robot-business-analyst
+## robot-tech-lead
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/agents/robot-business-analyst.feature
+execute @skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -21,17 +28,10 @@ execute @skills-generator/src/test/resources/gherkin/agents/robot-java-coder.fea
 and verify that acceptance-tests passes.
 ```
 
-## robot-java-micronaut-coder
+## robot-java-spring-boot-coder
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/agents/robot-java-micronaut-coder.feature
-and verify that acceptance-tests passes.
-```
-
-## robot-java-performance
-
-```bash
-execute @skills-generator/src/test/resources/gherkin/agents/robot-java-performance.feature
+execute @skills-generator/src/test/resources/gherkin/agents/robot-java-spring-boot-coder.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -42,10 +42,10 @@ execute @skills-generator/src/test/resources/gherkin/agents/robot-java-quarkus-c
 and verify that acceptance-tests passes.
 ```
 
-## robot-java-spring-boot-coder
+## robot-java-micronaut-coder
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/agents/robot-java-spring-boot-coder.feature
+execute @skills-generator/src/test/resources/gherkin/agents/robot-java-micronaut-coder.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -56,9 +56,9 @@ execute @skills-generator/src/test/resources/gherkin/agents/robot-no-java.featur
 and verify that acceptance-tests passes.
 ```
 
-## robot-tech-lead
+## robot-java-performance
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature
+execute @skills-generator/src/test/resources/gherkin/agents/robot-java-performance.feature
 and verify that acceptance-tests passes.
 ```
