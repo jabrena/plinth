@@ -8,11 +8,14 @@ Some **User prompts** designed to help in the maintenance of this repository.
 
 ```bash
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.16.0
+./mvnw versions:set -DnewVersion=0.18.0-SNAPSHOT
 ./mvnw versions:commit
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
+@skill-resources/src/main/resources/ update version to 0.18.0-SNAPSHOT finally regenerate local skills with ./mvnw clean install -pl skills-generator
+
+#Update the XML Schema to latest version
+@skill-resources/src/main/resources/ update all XML Schema with XSD Configuration pointing to PML 0.8.0 and regenerate local skills with ./mvnw clean install -pl skills-generator
 ```
 
 ## Finish a release

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd">
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.17.0</version>
+        <version>0.18.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Micronaut - MongoDB migrations (Mongock)</title>
         <description>Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application - including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, `@ChangeUnit` classes, lock and transaction behavior, and Testcontainers validation. For general Micronaut MongoDB persistence use `@515-frameworks-micronaut-mongodb`.</description>
