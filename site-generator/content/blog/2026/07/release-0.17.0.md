@@ -65,7 +65,7 @@ If you use the project, you can participate as an [individual contributor](https
 
 The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `119 skills` and `14.5K` installs in total. Compared with the [`0.16.0` release article](https://jabrena.github.io/plinth/blog/2026/06/release-0.16.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh), these are the latest top 10 skills used by Skills.sh users:
 
-The `Category rank` column shows the skill's position inside that Skills.sh search category when results are sorted by install count.
+The `Search rank` column shows the skill's position inside that `Skills.sh` search category when results are sorted by install count.
 
 <table>
   <thead>
