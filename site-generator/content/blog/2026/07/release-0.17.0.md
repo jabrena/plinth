@@ -57,7 +57,7 @@ As `Plinth` grows from a technical repository into an OSS product that helps mak
 
 [Sangwon](https://github.com/wipheg) strengthened the design toolset with the new `@057-design-feature-toggles` skill. This contribution helps teams introduce feature toggles with clearer design guidance, so they can evolve systems incrementally, reduce release risk, and keep unfinished work under control.
 
-If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or by sharing your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
+If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22): the [`0.18.0` backlog](https://github.com/jabrena/plinth/milestone/12) already includes new issues labeled with `good first issue`. You can also share your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
 <a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a>
 
