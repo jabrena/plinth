@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>info.jab</groupId>
-        <artifactId>cursor-rules-java</artifactId>
+        <artifactId>plinth</artifactId>
         <version>0.18.0-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
