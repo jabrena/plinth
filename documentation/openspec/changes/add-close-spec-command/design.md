@@ -19,6 +19,10 @@ OpenSpec already provides `openspec archive <change-name>` to archive completed 
 
 ## Decisions
 
+### Ownership
+
+The command is owned by `@robot-architect` because it is part of the OpenSpec lifecycle (creating, refining, and closing/archiving changes) rather than implementation delivery orchestration.
+
 ### Execution workflow (happy path)
 
 `/close-spec <change-name>` behaves as a thin wrapper around the OpenSpec CLI:
