@@ -1,0 +1,18 @@
+## 1. Command Contract
+
+- [x] 1.1 Add the canonical command asset for `/close-spec` with required argument `<change-name>` and expected outputs.
+- [x] 1.2 Ensure the command executes `openspec archive <change-name>` in the `documentation/` working directory.
+- [x] 1.3 Provide explicit error handling for: missing argument, unknown change, and missing OpenSpec CLI.
+- [x] 1.4 Add pre-flight checks: OpenSpec CLI availability and change existence (before archiving).
+
+## 2. Bundle, Inventory, and Tests
+
+- [x] 2.1 Update the embedded command installer/bundle so `/close-spec` is installed.
+- [x] 2.2 Update the command inventory so `/close-spec` is discoverable.
+- [x] 2.3 Add or update focused generator tests to assert the command contract and installation.
+
+## 3. Validation
+
+- [x] 3.1 Validate OpenSpec artifacts and ensure this change passes `openspec validate --all`.
+- [x] 3.2 Run the relevant generator module verification for command changes.
+

@@ -9,6 +9,7 @@
     <command file="create-spec.md"/>
     <command file="review-alignment.md"/>
     <command file="implement-spec.md"/>
+    <command file="close-spec.md"/>
     <command file="profile.md"/>
     <command file="benchmark.md"/>
 </command-inventory>

@@ -29,6 +29,7 @@ Scenario: Generate embedded commands inventory with every command asset
     | create-spec.md           | /create-spec             |
     | review-alignment.md      | /review-alignment        |
     | implement-spec.md       | /implement-spec         |
+    | close-spec.md           | /close-spec             |
     | profile.md               | /profile                 |
     | benchmark.md             | /benchmark               |
   And every command row in the generated file corresponds to a same-named source file in "assets/commands"

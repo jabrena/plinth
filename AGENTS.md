@@ -121,6 +121,7 @@ Record any skipped prompt with the reason, and fix the XML source or generator b
 
 ## Git workflow
 
+- **On-demand commits only**: Never create commits, push branches, or open pull requests automatically. Only do so when the maintainer explicitly asks (e.g. “commit”, “push”, “open a PR”, “commit and pr”).
 - **Conventional Commits**: Use conventional commit format for all commit messages
 - Format: `type(scope): description`
 

@@ -91,6 +91,7 @@ Use `openspec list`, `openspec status --change <change-id>`, and `openspec show 
             <step-content><![CDATA[
 For each approved change:
 
+- Use a stable change ID that is descriptive kebab-case (do not add a date prefix or suffix when creating a new change)
 - Create or update `proposal.md` for why and scope
 - Create or update `design.md` for technical decisions
 - Create or update capability specification deltas for requirements and scenarios
@@ -128,6 +129,11 @@ Report failures and fix approved issues. Archive a completed change only after s
 ```bash
 openspec archive <change-id>
 ```
+
+Naming rule for this repository:
+
+- New (open) changes: use the stable `<change-id>` without dates (no prefix/suffix).
+- Archived changes: the archive folder uses a date prefix `YYYY-MM-DD-<change-id>` when the change is archived.
             ]]></step-content>
         </step>
     </steps>

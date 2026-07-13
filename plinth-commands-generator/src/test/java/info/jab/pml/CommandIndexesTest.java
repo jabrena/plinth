@@ -128,6 +128,26 @@ class CommandIndexesTest {
     }
 
     @Test
+    @DisplayName("Close spec command must archive OpenSpec changes with safeguards")
+    void should_documentCloseSpecWorkflow_when_closeSpecCommandIsInstalled() {
+        String command = loadClasspathResource("commands/close-spec.md");
+
+        assertThat(command)
+            .contains("/close-spec <change-name>")
+            .contains("openspec --version")
+            .contains("openspec list")
+            .contains("openspec show <change-name>")
+            .contains("From the `documentation/` working directory")
+            .contains("openspec archive <change-name>")
+            .contains("If missing, print usage")
+            .contains("If the change is unknown")
+            .contains("suggest running `openspec list`")
+            .contains("If OpenSpec cannot be executed")
+            .contains("If the archive command fails")
+            .contains("do not claim success");
+    }
+
+    @Test
     @DisplayName("Create spec command must route OpenSpec creation through architect with planning skill only")
     void should_routeOpenSpecCreation_when_createSpecCommandIsInstalled() {
         String command = loadClasspathResource("commands/create-spec.md");
