@@ -3,7 +3,8 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/1.0.0
                            https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent.xsd"
-       id="robot-business-analyst">
+       id="robot-business-analyst"
+       kind="analyst">
 
     <frontmatter>
         <name>robot-business-analyst</name>

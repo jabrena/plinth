@@ -9,6 +9,7 @@
         <description>Installation-order manifest for slash commands</description>
     </metadata>
     <command id="update-issue"
+             kind="standard"
              file="update-issue.xml"
              slash="/update-issue">
         <summary>Update an existing project issue with structured, evidence-backed content</summary>

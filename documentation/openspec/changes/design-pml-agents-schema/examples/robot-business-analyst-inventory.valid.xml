@@ -9,6 +9,7 @@
         <description>Installation-order manifest for embedded robot agents</description>
     </metadata>
     <agent id="robot-business-analyst"
+           kind="analyst"
            file="robot-business-analyst.xml"
            readonly="true">
         <summary>Business analyst for issue quality, alignment review, and delivery readiness gates</summary>

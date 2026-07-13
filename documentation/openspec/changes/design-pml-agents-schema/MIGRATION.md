@@ -29,50 +29,102 @@ This document accompanies OpenSpec change `design-pml-agents-schema` ([issue #99
 | `description` | `<frontmatter><description>` |
 | `readonly` | `<frontmatter><readonly>` or inventory `@readonly` |
 
-## Section mapping (illustrative)
+## Agent kind taxonomy
 
-| Common Markdown heading | XML element |
-|-------------------------|-------------|
-| Opening persona paragraph | `<identity><paragraph>` |
+| `@kind` | Agents |
+|---------|--------|
+| `analyst` | `robot-business-analyst` |
+| `architect` | `robot-architect` |
+| `coordinator` | `robot-tech-lead` |
+| `performance` | `robot-java-performance` |
+| `coder` | `robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, `robot-no-java` |
+
+Inventory and body documents declare `@kind` to select Schematron profiles and XSLT templates.
+
+## Section mapping by kind
+
+### `analyst`
+
+| Markdown heading | XML element |
+|------------------|-------------|
+| Opening paragraph | `<identity><paragraph>` |
 | `## Missions` | `<missions><mission>` |
-| `## Read-only boundary` / `### Core role` | `<role-boundaries><section>` |
-| `### Collaboration partners` / routing tables | `<routing>`, `<collaboration>` |
+| `## Read-only boundary` | `<role-boundaries><section>` |
 | `## Output format` | `<output-format>` |
-| `## Constraints` / safeguard bullets | `<safeguards>`, `<constraints>` |
-| `## Workflow` | `<workflow>` |
 
-Heading text MAY differ across agents during migration; XSLT normalizes to the current Markdown conventions per agent.
+### `architect`
+
+| Markdown heading | XML element |
+|------------------|-------------|
+| `## Core role` | `<identity>` or `<core-role>` |
+| `## Workflow order` | `<workflow-order>` |
+| `## Missions` | `<missions>` |
+| `## Workflow` | `<workflow>` |
+| `## Constraints` | `<constraints>` |
+| `## Output format` | `<output-format>` |
+
+### `coordinator`
+
+| Markdown heading | XML element |
+|------------------|-------------|
+| `### Core role (non-negotiable)` | `<core-role>` |
+| `### Collaboration partners` | `<collaboration>` |
+| `### Framework identification` | `<framework-identification>` |
+| Routing table | `<routing-table>` |
+| Parallel delegation sections | `<parallel-delegation>` |
+| `### Final output format` | `<output-format>` |
+
+### `performance`
+
+| Markdown heading | XML element |
+|------------------|-------------|
+| `## Core role` | `<identity>` |
+| `## Missions` | `<missions>` |
+| `## Output format` | `<output-format>` |
+| `## Safeguards` | `<safeguards>` |
+
+### `coder`
+
+| Markdown heading | XML element |
+|------------------|-------------|
+| `### Core Responsibilities` | `<responsibilities>` |
+| `### Skill selection rules` | `<skill-rules>` |
+| `### Reference Rules` | `<reference-rules>` |
+| `### Workflow` | `<workflow>` |
+| `### Constraints` | `<constraints>` |
+
+Coder agents do **not** use `<missions>` in the target XML model.
+
+## Validation layers
+
+1. **XSD** — structural superset for all kinds.
+2. **Schematron (`pml-agent.sch`)** — `@kind` profiles, id/name parity, non-empty required sections.
+3. **Java parity tests** — `AgentIndexesTest` substrings until XSLT parity replaces them.
 
 ## Phased migration
 
-### Phase 0 — Schema design (this change)
+### Step 1 — Schema contract (this OpenSpec change)
 
-- Publish XSD drafts and examples.
-- No changes to runtime installer input.
+- Publish XSD + Schematron + examples.
+- No installer behavior change.
 
-### Phase 1 — Optional validation
+### Step 2 — Generator migration (follow-up), slice order
 
-- Add parallel XML sources under a staging path (e.g. `agents-xml/`).
-- Run `xmllint --schema` in `plinth-agents-generator` tests.
-- Markdown remains authoritative.
+| Slice | Agent(s) |
+|-------|----------|
+| 1 | `robot-business-analyst` |
+| 2 | `robot-architect` |
+| 3 | `robot-java-performance` |
+| 4 | All framework coders (shared XSLT template) |
+| 5 | `robot-no-java` |
+| 6 | `robot-tech-lead` |
 
-### Phase 2 — Dual authoring with parity
+Within each slice:
 
-- Author XML alongside Markdown for each agent.
-- Introduce XSLT to generate Markdown from XML ([ADR-001](../../adr/ADR-001-generate-cursor-rules-from-xml-files.md) pattern).
-- Parity tests assert generated Markdown matches substrings currently checked in `AgentIndexesTest`.
-
-### Phase 3 — XML source of truth
-
-- Remove hand-edited Markdown from `src/main/resources/agents/`.
-- Generate Markdown during `generate-resources`.
-- Update contributor docs and `005-agents-installation` copy paths if needed.
-
-### Phase 4 — Enriched inventory
-
-- Extend `agents.xml` with `@id`, `@readonly`, and `<summary>`.
-- Generate `java-agents-inventory-template.md` from inventory XML.
-- Validate installation order against `005-agents-installation.xml` XIncludes.
+1. **Phase 1:** Parallel XML staging; XSD + Schematron in tests; Markdown authoritative.
+2. **Phase 2:** Dual authoring; kind-specific XSLT; parity vs `AgentIndexesTest`.
+3. **Phase 3:** XML source of truth; generate Markdown at `generate-resources`.
+4. **Phase 4:** Enriched inventory; generate `java-agents-inventory-template.md` from XML.
 
 ## Out of scope for migration notes
 

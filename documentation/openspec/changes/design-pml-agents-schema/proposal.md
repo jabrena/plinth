@@ -41,9 +41,13 @@ This is a design-only change for milestone v0.18.0. It does not implement XSLT g
 
 | Question | Recommendation | Status |
 |----------|----------------|--------|
-| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish in PML project under a versioned path (e.g. `pml-agents.xsd` alongside `pml.xsd`) | Open — confirm with PML maintainer during design |
-| Single combined XSD vs split inventory and agent-body schemas? | Split: `pml-agent-inventory.xsd` and `pml-agent.xsd` with shared types | Proposed in design |
-| Require inline agent bodies in inventory vs file references during migration? | Keep `file` references for Step 1; allow optional inline `<agent>` bodies for future single-file bundles | Proposed in design |
+| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish in PML project under `/pml/schemas/agent/1.0.0/` | **Recommended — pending approval** |
+| Single combined XSD vs split inventory and agent-body schemas? | Split: `pml-agent-inventory.xsd`, `pml-agent.xsd`, `pml-agent-types.xsd` | **Resolved** |
+| Require inline agent bodies in inventory vs file references during migration? | Keep `@file` `.md` references through Phase 2; allow `.xml` from Phase 2 | **Resolved** |
+| Single `<missions>` element for all agents? | No — use `@kind` profiles with Schematron | **Resolved — pending approval** |
+| XSD-only vs Schematron companion rules? | XSD superset + `pml-agent.sch` for kind profiles and id/name equality | **Resolved — pending approval** |
+
+See [`design.md`](design.md) for the full refinement analysis and approval checkpoint.
 
 ## Handoff
 

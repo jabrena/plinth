@@ -16,14 +16,39 @@ The PML agent schema family SHALL define an XSD for the agent inventory manifest
 
 The PML agent schema family SHALL define an XSD for individual agent contracts with structured elements aligned to OpenSpec `analysis-design-agents` behavioral fields.
 
-#### Scenario: Validate required agent contract sections
+#### Scenario: Validate required agent contract sections by kind
 
-- **GIVEN** an agent definition document for an embedded Plinth agent
-- **WHEN** the PML agent body XSD is applied
-- **THEN** the schema requires `<frontmatter>` with `name`, `model`, and `description`
-- **AND** the schema requires `<identity>`, `<missions>`, `<role-boundaries>`, and `<output-format>` sections
-- **AND** coordinator agents such as `robot-tech-lead` additionally require structured `<routing>` delegation elements
-- **AND** documents missing required sections fail validation
+- **GIVEN** an agent definition document for an embedded Plinth agent with `@kind` set to `analyst`, `architect`, `coordinator`, `performance`, or `coder`
+- **WHEN** the PML agent body XSD and companion Schematron rules are applied
+- **THEN** the schema requires `<frontmatter>` with `name`, `model`, and `description` for all kinds
+- **AND** `analyst` agents require `<missions>`, `<role-boundaries>`, and `<output-format>`
+- **AND** `coordinator` agents require `<framework-identification>`, `<routing-table>`, and `<parallel-delegation>` instead of a single global `<missions>` element
+- **AND** `coder` agents require `<responsibilities>`, `<skill-rules>`, `<reference-rules>`, `<workflow>`, and `<constraints>` rather than `<missions>`
+- **AND** documents missing kind-specific required sections fail validation
+
+### Requirement: Agent kind taxonomy
+
+The agent schema design SHALL define an `@kind` attribute that selects validation profiles aligned with the nine current Plinth agent contracts.
+
+#### Scenario: Classify embedded agents by kind
+
+- **GIVEN** the nine agents under `plinth-agents-generator/src/main/resources/agents/`
+- **WHEN** the schema design is published
+- **THEN** it defines `@kind` values `analyst`, `architect`, `coordinator`, `performance`, and `coder`
+- **AND** it maps each embedded agent id to exactly one kind
+- **AND** inventory entries declare `@kind` alongside `@id`
+
+### Requirement: Companion Schematron validation
+
+The agent schema family SHALL document companion Schematron rules for semantic constraints that XSD alone cannot express.
+
+#### Scenario: Enforce kind profiles and identity parity
+
+- **GIVEN** a valid XSD agent document
+- **WHEN** Schematron rules are applied
+- **THEN** `frontmatter/name` MUST equal root `@id`
+- **AND** kind-specific required sections are enforced per the taxonomy
+- **AND** violations produce documented rule identifiers for CI reporting
 
 #### Scenario: Map frontmatter fields to XML
 
@@ -32,7 +57,12 @@ The PML agent schema family SHALL define an XSD for individual agent contracts w
 - **THEN** each frontmatter field maps to an explicit XML element under `<frontmatter>`
 - **AND** inventory `@id` and frontmatter `name` MUST refer to the same agent identifier
 
-### Requirement: PML schema relationship documentation
+#### Scenario: Coordinator example coverage
+
+- **GIVEN** `robot-tech-lead` uses a distinct coordinator Markdown shape with routing tables and parallel-delegation rules
+- **WHEN** examples are extended during implementation
+- **THEN** a valid XML example for `kind="coordinator"` is added alongside the analyst examples
+- **AND** the design documents kind-specific XSLT templates for Markdown generation
 
 The schema design SHALL document how agent XSDs relate to existing PML `pml.xsd` and `pml-workflow.xsd` artifacts.
 

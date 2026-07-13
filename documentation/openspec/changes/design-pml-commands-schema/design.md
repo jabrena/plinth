@@ -1,9 +1,24 @@
+## Design Refinement Summary
+
+`/explore-design` review of the twelve shipped command contracts reveals **four Markdown shapes**, not one uniform planning template. `implement-spec` adds orchestration sections (`Mandatory execution contract`, `Branch/worktree gate`) beyond standard workflow commands. `profile` and `benchmark` combine owner and skills in one section; `benchmark` adds a `Tool selection` table. `close-spec` is a thin CLI wrapper with `Inputs`/`Owner` headings and **no** `Associated Skills` or `Output` section. Requiring `<associated-skills>` and `<output>` on every command would fail parity and block migration.
+
+**Recommended direction (pending approval):**
+
+1. Keep split inventory/body XSDs under `https://jabrena.github.io/pml/schemas/command/1.0.0/`, published in the [PML project](https://github.com/jabrena/pml) following the `pml.xsd` 0.8.0 URL pattern — aligned with [`design-pml-agents-schema`](../design-pml-agents-schema/design.md).
+2. Add `@kind` on inventory and body `<command>` elements: `standard`, `delivery`, `performance`, `cli`.
+3. Use XSD as a structural superset; enforce kind profiles and slash/id parity in co-published Schematron (`pml-command.sch`).
+4. Migrate command-by-command in complexity order: standard slice → workflow-position commands → cli → performance → delivery last.
+
 ## Context
 
 Issue [#993](https://github.com/jabrena/plinth/issues/993) designs XSD validation for Plinth command sources. Current evidence:
 
 - `plinth-commands-generator/src/main/resources/commands.xml` — root `<command-inventory>` with `<command file="..."/>` only; no namespace, no `xsi:noNamespaceSchemaLocation`
-- Twelve command contracts under `plinth-commands-generator/src/main/resources/commands/` — unstructured Markdown with variable section headings (`Owning Agent` vs `Owner`, `Accepted Inputs` vs `Inputs`, `Associated Skills` vs `Associated Capabilities`, `Workflow position` for workflow-order commands)
+- Twelve command contracts under `plinth-commands-generator/src/main/resources/commands/` — four Markdown shapes:
+  - **Standard workflow (`kind="standard"`):** `update-issue`, `create-spec`, `explore-design`, `create-adr`, `create-diagram`, `review-alignment`, `create-feature-branch`, `create-worktree` — Purpose, Usage, Accepted Inputs/Inputs, Owning Agent/Owner, Associated Skills/Capabilities/Skill, Workflow, Output, Safeguards; some include `Workflow position`
+  - **Delivery orchestration (`kind="delivery"`):** `implement-spec` — adds `Owner and delegation`, `Mandatory execution contract`, `Branch/worktree gate` before workflow
+  - **Performance (`kind="performance"`):** `profile`, `benchmark` — combined `Owner and skills`; `benchmark` adds `Tool selection` table
+  - **CLI wrapper (`kind="cli"`):** `close-spec` — minimal sections (`Inputs`, `Owner`), no associations, no output section
 - Skills use `<prompt>` XML validated against [pml.xsd 0.8.0](https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd)
 - `analysis-design-commands` defines behavioral contracts (purpose, inputs, owning agent, skills, workflow, outputs, safeguards) enforced today by `CommandIndexesTest` substring checks and Gherkin acceptance tests
 - [ADR-001](../../adr/ADR-001-generate-cursor-rules-from-xml-files.md) establishes XSD-validated XML sources generating Markdown outputs
@@ -48,7 +63,41 @@ Alternative considered: extend `pml-workflow.xsd` for commands. Rejected because
 - Shared types in `pml-command-types.xsd` where inventory and body overlap (e.g. skill references, agent references)
 - Inventory documents declare `pml-command-inventory.xsd`; body documents declare `pml-command.xsd`
 
-Alternative considered: reuse the agent namespace with shared inventory types. Rejected to keep agent and command evolution independent.
+Alternative considered: reuse the agent namespace with shared inventory types. Rejected to keep agent and command schema evolution independent; share optional `pml-core-types.xsd` identifier patterns (agent id, skill id) at the PML project level.
+
+### Publication target
+
+Publish from the PML project to mirror skill and agent schema hosting:
+
+| Artifact | Target path |
+|----------|-------------|
+| `pml-command-types.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command-types.xsd` |
+| `pml-command-inventory.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command-inventory.xsd` |
+| `pml-command.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd` |
+| `pml-command.sch` (Schematron) | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.sch` |
+
+Until PML publication lands, Plinth generator tests MAY vendor copies under `plinth-commands-generator/src/test/resources/pml/command/1.0.0/`.
+
+### Command kind taxonomy
+
+Inventory and body documents carry `@kind` to select validation profiles and XSLT mapping templates:
+
+| `@kind` | Commands | Primary body structure |
+|---------|----------|------------------------|
+| `standard` | `update-issue`, `create-spec`, `explore-design`, `create-adr`, `create-diagram`, `review-alignment`, `create-feature-branch`, `create-worktree` | `<purpose>`, `<usage>`, `<accepted-inputs>`, `<owning-agent>`, `<associations>`, `<workflow>`, `<output>`, `<safeguards>` |
+| `delivery` | `implement-spec` | standard core plus `<delegation>`, `<execution-contract>`, `<branch-worktree-gate>` |
+| `performance` | `profile`, `benchmark` | `<purpose>`, `<usage>`, `<accepted-inputs>`, `<ownership>`, optional `<tool-selection>`, `<workflow>`, `<output>`, `<safeguards>` |
+| `cli` | `close-spec` | `<purpose>`, `<usage>`, `<accepted-inputs>`, `<owning-agent>`, `<workflow>`, `<safeguards>` — no `<associations>` or `<output>` |
+
+Inventory entries SHOULD declare `@kind` and `@slash` so generated inventory tables do not infer kind from filename heuristics.
+
+### Validation layers
+
+| Layer | Tool | Responsibility |
+|-------|------|----------------|
+| 1 — Structure | XSD | Element presence, types, cardinalities for superset model |
+| 2 — Profile | Schematron (`pml-command.sch`) | `@kind` required sections, `@slash`/`@id` parity, explore-design skill exclusions, implement-spec gate sections |
+| 3 — Behavior parity | Java tests (`CommandIndexesTest`, Gherkin) | Routing substrings until XSLT parity replaces them |
 
 ### Relationship to `pml.xsd` and `pml-workflow.xsd`
 
@@ -69,6 +118,7 @@ Extend `<command-inventory>` entries beyond bare `file` attributes:
     <description>Installation-order manifest for slash commands</description>
   </metadata>
   <command id="update-issue"
+           kind="standard"
            file="update-issue.xml"
            slash="/update-issue">
     <summary>Update an existing project issue with structured, evidence-backed content</summary>
@@ -94,6 +144,7 @@ Root `<command>` maps Markdown sections (commands have no YAML frontmatter; titl
 ```xml
 <command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
          id="update-issue"
+         kind="standard"
          slash="/update-issue">
 
   <purpose>
@@ -110,12 +161,12 @@ Root `<command>` maps Markdown sections (commands have no YAML frontmatter; titl
 
   <owning-agent>robot-business-analyst</owning-agent>
 
-  <associated-skills>
-    <skill id="043-planning-github-issues"/>
-    <skill id="044-planning-jira"/>
-    <skill id="045-planning-azure-devops"/>
-    <skill id="014-agile-user-story" when="user-story refinement is required"/>
-  </associated-skills>
+  <associations>
+    <association refkind="skill" id="043-planning-github-issues"/>
+    <association refkind="skill" id="044-planning-jira"/>
+    <association refkind="skill" id="045-planning-azure-devops"/>
+    <association refkind="skill" id="014-agile-user-story" when="user-story refinement is required"/>
+  </associations>
 
   <workflow>
     <step number="1">Load the current issue description and relevant discussion before drafting changes.</step>
@@ -137,33 +188,41 @@ Root `<command>` maps Markdown sections (commands have no YAML frontmatter; titl
 </command>
 ```
 
-**Required elements (all commands):**
+**Required for all commands (XSD + Schematron):**
 
-- `@id` and `<purpose>`
-- `<usage>` — invocation syntax (may contain CDATA for angle brackets)
+- `@id`, `@kind`, and `<purpose>`
+- `<usage>` — invocation syntax (CDATA allowed for angle brackets)
 - `<accepted-inputs>` — one or more `<input>` elements
-- `<owning-agent>` — agent id reference (without `@` prefix in XML; XSLT adds `@` in Markdown)
-- `<associated-skills>` — zero or more `<skill>` references (zero allowed for thin wrapper commands; most analysis/design commands require at least one)
+- `<owning-agent>` — agent id reference (XSLT emits `@robot-*` in Markdown)
 - `<workflow>` — ordered `<step>` elements
-- `<output>` — expected artifacts or reports
 - `<safeguards>` — at least one `<constraint>`
 
-**Optional elements:**
+**Required by `@kind` (Schematron profiles):**
 
-- `@slash` — redundant with inventory but useful in standalone body files
-- `<workflow-position>` — narrative placement in the analysis/design lifecycle (e.g. "Runs first before `/explore-design`" on `create-spec`)
-- `<associated-capabilities>` — alias container when commands reference OpenSpec capabilities instead of skills (normalize to `<associated-skills>` in XSD with optional `@kind="capability"`)
+| `@kind` | Additional required sections |
+|---------|------------------------------|
+| `standard` | `<associations>` with at least one skill or capability reference; `<output>` |
+| `delivery` | `<delegation>`, `<execution-contract>`, `<branch-worktree-gate>`, `<output>`; `<associations>` optional (delegation carries targets) |
+| `performance` | `<ownership>` combining owner and skills; `<output>`; `benchmark` also requires `<tool-selection>` |
+| `cli` | No `<associations>` or `<output>` |
 
-Section title variants in current Markdown (`Owner`, `Owning Agent`, `Inputs`, `Accepted Inputs`) normalize via XSLT, not XSD string enums.
+**Optional elements (all kinds where applicable):**
 
-### Conditional requirements (by command class)
+- `@slash` — user-facing prefix; SHOULD match inventory entry
+- `<workflow-position>` — lifecycle placement (`create-spec`, `explore-design`)
+- `<tool-selection>` — performance routing table (`benchmark`)
+- `<execution-contract>`, `<branch-worktree-gate>`, `<delegation>` — delivery-only but present in XSD superset
 
-| Command class | Additional guidance |
-|---------------|----------------------|
-| OpenSpec lifecycle (`create-spec`, `close-spec`, `implement-spec`) | `<workflow-position>` recommended; `<owning-agent>` typically `robot-architect` or `robot-tech-lead` |
-| Design refinement (`explore-design`) | `<associated-skills>` MUST list design skills per `analysis-design-commands`; MUST NOT list `042-planning-openspec` |
-| Read-only review (`review-alignment`) | `<safeguards>` MUST include no auto-modification constraints |
-| Git/worktree (`create-feature-branch`, `create-worktree`) | `<accepted-inputs>` MUST document branch/path/base parameters |
+**Association normalization:** Markdown headings `Associated Skills`, `Associated Skill`, `Associated Capabilities`, and combined `Owner and skills` map to `<associations>` with `@refkind="skill"` or `@refkind="capability"`, or to `<ownership>` for performance commands.
+
+Section titles in generated Markdown retain current per-command heading variants via **kind-specific XSLT templates** (`standard.xsl`, `delivery.xsl`, `performance.xsl`, `cli.xsl`).
+
+**Schematron behavioral rules (examples):**
+
+- `explore-design` MUST NOT reference `042-planning-openspec` or `034-architecture-design-exploration` in associations
+- `create-spec` MUST reference `042-planning-openspec` and document workflow position before `explore-design`
+- `close-spec` (`cli`) MUST NOT include `<output>` or non-empty `<associations>`
+- `implement-spec` MUST include branch/worktree gate steps referencing `/create-feature-branch` and `/create-worktree`
 
 ### Valid / invalid examples (update-issue)
 
@@ -175,21 +234,38 @@ Section title variants in current Markdown (`Owner`, `Owning Agent`, `Inputs`, `
 2. Duplicate `@id` in inventory — fails inventory schema.
 3. Missing `<owning-agent>` — fails command body schema.
 4. Empty `<safeguards>` — fails command body schema.
-5. Inventory `<command>` without `@file` and without inline body — fails inventory schema.
+5. Inventory `<command>` without `@file` and without inline body — fails inventory XSD.
+6. `kind="cli"` document with `<output>` — fails Schematron profile.
+7. `kind="delivery"` missing `<branch-worktree-gate>` — fails Schematron profile.
+
+Add valid examples for `close-spec` (`kind="cli"`) and invalid `kind="standard"` missing `<output>` during task execution. Add `implement-spec` valid example when delivery profile is implemented.
 
 Examples live under `documentation/openspec/changes/design-pml-commands-schema/examples/`.
 
 ### Migration notes (implementation deferred)
 
-Phased migration (mirrors agent schema [`MIGRATION.md`](../design-pml-agents-schema/MIGRATION.md)):
+Two-step delivery strategy ([`051-design-two-steps-methods`](../../../.agents/skills/051-design-two-steps-methods/SKILL.md)):
 
-1. **Phase 0 (this change):** Publish XSD, design doc, examples, migration notes only.
-2. **Phase 1:** Add optional XSD validation in `plinth-commands-generator` tests against parallel XML sources; Markdown remains authoritative.
-3. **Phase 2:** Author XML alongside Markdown; XSLT generates Markdown; parity tests match `CommandIndexesTest` substrings.
-4. **Phase 3:** XML source of truth; generate Markdown during `generate-resources`.
-5. **Phase 4:** Enrich `commands.xml` with `@slash`, `<summary>`, `<owning-agent>`; generate `java-commands-inventory-template.md` from validated inventory XML.
+**Step 1 — Schema and validation contract (this change)**
 
-Non-breaking until Phase 3: Markdown remains runtime installer input.
+- Publish XSD + Schematron + examples + migration notes.
+- No generator or installer behavior change.
+
+**Step 2 — Generator migration (follow-up issues, command-by-command slices)**
+
+| Slice | Command(s) | Rationale |
+|-------|------------|-----------|
+| 1 | `update-issue` | Standard profile; existing valid example |
+| 2 | `create-spec`, `explore-design` | Adds `<workflow-position>` and Schematron skill rules |
+| 3 | `create-adr`, `create-diagram`, `review-alignment` | Standard variants with capabilities vs skills |
+| 4 | `create-feature-branch`, `create-worktree` | Git isolation inputs |
+| 5 | `close-spec` | CLI profile without output/associations |
+| 6 | `profile`, `benchmark` | Performance profile with `<ownership>` and tool selection |
+| 7 | `implement-spec` | Delivery profile; migrate last |
+
+Phases within each slice: parallel XML staging → dual authoring with kind-specific XSLT → XML source of truth → enriched inventory generation.
+
+Non-breaking until Phase 3: Markdown remains runtime installer input; `004-commands-installation` asset-link model unchanged.
 
 ## Alternative Analysis
 
@@ -199,6 +275,26 @@ Non-breaking until Phase 3: Markdown remains runtime installer input.
 | B. Embed commands in `pml-workflow.xsd` | Single workflow family | Poor fit for slash commands and agent delegation metadata | Rejected |
 | C. Reuse `<prompt>` from `pml.xsd` | One schema family | Commands lack skill-style metadata/role/tone; different section model | Rejected |
 | D. Inventory-only schema (defer body) | Smaller delivery | Does not meet issue acceptance criteria | Rejected |
+| E. Single `<associated-skills>` + `<output>` for all commands | Simple XSD | Fails `close-spec` cli profile and `implement-spec` delivery shape | Rejected |
+| F. XSD-only validation without Schematron | Fewer artifacts | Cannot express `@kind` profiles or explore-design skill exclusions | Rejected |
+
+## Component Boundaries
+
+| Component | Owns | Consumes |
+|-----------|------|----------|
+| PML project | XSD, Schematron, published URLs, optional `pml-core-types.xsd` | — |
+| `plinth-commands-generator` (future) | XML sources, kind-specific XSLT, validation tests | PML schemas (remote or vendored) |
+| `plinth-skills-generator` bridge | staged `commands/*.md` asset links | generated Markdown from commands generator |
+| `CommandIndexesTest` (transition) | behavioral substring parity | Markdown until XSLT parity proven |
+
+## Failure Handling
+
+| Failure | Expected behavior |
+|---------|-------------------|
+| `cli` command includes `<output>` | Schematron failure |
+| `delivery` missing branch/worktree gate | Schematron failure |
+| `explore-design` lists `042-planning-openspec` | Schematron failure |
+| XSD pass but Schematron fail | CI blocks promotion |
 
 ## Risks / Trade-offs
 
@@ -209,13 +305,57 @@ Non-breaking until Phase 3: Markdown remains runtime installer input.
 
 ## Validation Strategy
 
-- XSD validity via `xmllint --noout --schema` once XSDs are drafted.
-- Valid examples pass; invalid examples fail with documented violations.
-- Future parity tests: XML → Markdown preserves substrings checked in `CommandIndexesTest`.
-- OpenSpec: `openspec validate --all`.
+Structural (XSD):
 
-## Compatibility Review
+- Inventory and body examples validate with `xmllint --noout --schema`.
 
-- **NON-BREAKING:** Design-only; no changes to installed command contracts or generated skills.
-- Existing `commands.xml` without namespace remains valid until Phase 3.
-- `analysis-design-commands` behavioral requirements unchanged.
+Profile (Schematron):
+
+- Valid `standard` example passes; invalid `cli` with `<output>` fails.
+- `explore-design` and `implement-spec` rules documented with rule ids.
+
+Behavior parity (130):
+
+- **Right:** kind-specific sections for all twelve commands after migration.
+- **Boundary:** empty safeguards rejected; duplicate inventory ids rejected.
+- **Cross-check:** generated Markdown preserves `CommandIndexesTest` substrings for create-spec, explore-design, implement-spec gates, close-spec CLI steps, performance routing.
+
+OpenSpec: `openspec validate --all`.
+
+## ADR Candidates
+
+| Topic | Recommendation | Status |
+|-------|----------------|--------|
+| Command XSD as parallel PML family | PML project docs | Open |
+| Schematron co-publication | Co-publish with XSD | Resolved pending approval |
+| Kind-specific XSLT templates | Four templates + shared partials | Resolved pending approval |
+| Shared `pml-core-types.xsd` with agent schema | Optional cross-family id patterns | Open |
+
+## Compatibility Review (`056`)
+
+| Surface | Changes? | Mitigation |
+|---------|----------|------------|
+| Installed command Markdown semantics | No in Step 1 | Design-only |
+| `004-commands-installation` asset-link model | No until Phase 3 | Parity tests before cutover |
+| `commands.xml` without namespace | No until Phase 3 | Forward-compatible attributes |
+| `CommandIndexesTest` substrings | No until XSLT replaces checks | Slice-by-slice parity |
+
+## Resolved Design Questions
+
+| Question | Decision | Status |
+|----------|----------|--------|
+| Publish XSD in PML repo? | `/pml/schemas/command/1.0.0/` | **Recommended — pending approval** |
+| Split inventory/body schemas? | Yes, plus `pml-command-types.xsd` | **Resolved** |
+| Normalize headings in XSD vs XSLT? | XSLT per `@kind` | **Resolved** |
+| Require associations/output on all commands? | No — use `@kind` profiles | **Resolved** |
+| XSD-only vs Schematron? | XSD superset + `pml-command.sch` | **Resolved pending approval** |
+
+## Approval Checkpoint
+
+Confirm this refined direction before implementation tasks proceed:
+
+1. `@kind` taxonomy: `standard`, `delivery`, `performance`, `cli`.
+2. XSD superset + Schematron for kind profiles and command-specific behavioral rules.
+3. PML publication aligned with agent schema conventions.
+4. Command migration slices with `implement-spec` last.
+5. Additional examples for `close-spec` (cli) during task execution.

@@ -4,6 +4,7 @@
          xsi:schemaLocation="https://jabrena.github.io/pml/schemas/command/1.0.0
                              https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd"
          id="update-issue"
+         kind="standard"
          slash="/update-issue">
 
     <purpose>
@@ -20,12 +21,12 @@
 
     <owning-agent>robot-business-analyst</owning-agent>
 
-    <associated-skills>
-        <skill id="043-planning-github-issues"/>
-        <skill id="044-planning-jira"/>
-        <skill id="045-planning-azure-devops"/>
-        <skill id="014-agile-user-story" when="user-story refinement is required"/>
-    </associated-skills>
+    <associations>
+        <association refkind="skill" id="043-planning-github-issues"/>
+        <association refkind="skill" id="044-planning-jira"/>
+        <association refkind="skill" id="045-planning-azure-devops"/>
+        <association refkind="skill" id="014-agile-user-story" when="user-story refinement is required"/>
+    </associations>
 
     <workflow>
         <step number="1">Load the current issue description and relevant discussion before drafting changes.</step>

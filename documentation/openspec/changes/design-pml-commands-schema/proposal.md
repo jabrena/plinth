@@ -42,9 +42,13 @@ This is a design-only change for milestone v0.18.0. It does not implement XSLT g
 
 | Question | Recommendation | Status |
 |----------|----------------|--------|
-| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish in PML project under `/pml/schemas/command/1.0.0/` alongside agent and skill schemas | Open — confirm with PML maintainer during design |
-| Single combined XSD vs split inventory and command-body schemas? | Split: `pml-command-inventory.xsd` and `pml-command.xsd` with shared types | Proposed in design |
-| Normalize section titles (`Owner` vs `Owning Agent`) in XSD or XSLT only? | Flexible `<section title="...">` in XSD; normalize to current Markdown conventions in XSLT | Proposed in design |
+| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish under `/pml/schemas/command/1.0.0/` alongside agent and skill schemas | **Recommended — pending approval** |
+| Single combined XSD vs split inventory and command-body schemas? | Split: `pml-command-inventory.xsd`, `pml-command.xsd`, `pml-command-types.xsd` | **Resolved** |
+| Normalize section titles in XSD or XSLT only? | Kind-specific XSLT templates (`standard`, `delivery`, `performance`, `cli`) | **Resolved** |
+| Require associations and output on all commands? | No — `@kind` profiles; `cli` omits both | **Resolved** |
+| XSD-only vs Schematron companion rules? | XSD superset + `pml-command.sch` | **Resolved pending approval** |
+
+See [`design.md`](design.md) for the full refinement analysis and approval checkpoint.
 
 ## Handoff
 
