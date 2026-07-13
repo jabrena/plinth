@@ -38,7 +38,6 @@ class SkillTriggerInventoryTest {
 
         String report = buildReport(counts);
         Path reportPath = writeReport(report);
-        logger.info("Skill trigger count details:{}", System.lineSeparator() + report);
 
         assertThat(reportPath)
             .exists()

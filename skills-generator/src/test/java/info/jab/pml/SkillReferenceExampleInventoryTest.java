@@ -43,7 +43,6 @@ class SkillReferenceExampleInventoryTest {
 
         String report = buildReport(counts);
         Path reportPath = writeReport(report);
-        logger.info("Skill reference example count details:{}", System.lineSeparator() + report);
 
         assertThat(reportPath)
             .exists()
