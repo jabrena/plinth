@@ -50,7 +50,8 @@ This is a multi-module project. The following modules are declared in the root `
 | Module | Artifact ID | Commands | Description |
 |--------|-------------|----------|-------------|
 | markdown-validator | markdown-validator | `./mvnw clean verify -pl markdown-validator`<br>`jbang markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java .` | Maven-owned Markdown validator used by contributors and CI. The JBang-compatible entrypoint lives in this module. |
-| skills-generator | cursor-rules-java-skills-generator | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator`<br>`./mvnw clean install -pl skills-generator -P release` | Unified XML → skills generator: produces agent skills into `skills-generator/target/skills`, copies local output into `.agents/skills`, and refreshes `skills/` only through the explicit `release` profile. |
+| commands-generator | commands-generator | `./mvnw clean verify -pl commands-generator` | Owns embedded command inventory (`commands.xml`), command markdown assets, loader code, and command-focused tests. |
+| skills-generator | cursor-rules-java-skills-generator | `./mvnw clean verify -pl skills-generator -am`<br>`./mvnw clean install -pl skills-generator -am`<br>`./mvnw clean install -pl skills-generator -am -P release` | Unified XML → skills generator: bridges command assets from `commands-generator`, produces agent skills into `skills-generator/target/skills`, copies local output into `.agents/skills`, and refreshes `skills/` only through the explicit `release` profile. |
 | site-generator | cursor-rules-java-site | `./mvnw clean verify -pl site-generator`<br>`./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview`<br>`./mvnw clean generate-resources -pl site-generator -P site-update` | JBake-based static site generator for documentation and GitHub Pages. |
 
 ## Maven Profiles

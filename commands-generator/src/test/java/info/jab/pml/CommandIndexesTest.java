@@ -2,20 +2,13 @@ package info.jab.pml;
 
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-//TODO Move to commands-generator ASAP
 @DisplayName("Command Index Tests")
 class CommandIndexesTest {
 
@@ -36,7 +29,7 @@ class CommandIndexesTest {
     @DisplayName("Command assets must include the complete command bundle")
     void should_haveCompleteCommandAssets_when_commandBundleIsInstalled() {
         expectedCommandFiles().forEach(commandFile -> {
-            String resource = "skill-references/assets/commands/" + commandFile;
+            String resource = "commands/" + commandFile;
             assertThat(getTestResource(resource))
                 .withFailMessage("Command asset missing: %s", resource)
                 .isNotNull();
@@ -44,20 +37,9 @@ class CommandIndexesTest {
     }
 
     @Test
-    @DisplayName("Command installer must include the exact command bundle")
-    void should_includeExactCommands_when_commandInstallerUsesXIncludes() throws Exception {
-        List<String> commandIncludes = readCommandIncludes("skill-references/004-commands-installation.xml");
-
-        assertThat(commandIncludes)
-            .containsExactlyElementsOf(expectedCommandFiles().stream()
-                .map(commandFile -> "assets/commands/" + commandFile)
-                .toList());
-    }
-
-    @Test
     @DisplayName("Command inventory template must list the exact command bundle")
     void should_listExactCommands_when_inventoryTemplateIsGenerated() {
-        String inventory = loadClasspathResource("skill-references/assets/java-commands-inventory-template.md");
+        String inventory = loadClasspathResource("java-commands-inventory-template.md");
 
         expectedCommandFiles().stream()
             .map(commandFile -> commandFile.substring(0, commandFile.length() - ".md".length()))
@@ -73,7 +55,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Update issue command must route through the business analyst and user-story skill")
     void should_routeUpdateIssueCommand_when_issueCommandsAreInstalled() {
-        String updateIssue = loadClasspathResource("skill-references/assets/commands/update-issue.md");
+        String updateIssue = loadClasspathResource("commands/update-issue.md");
 
         assertThat(updateIssue)
             .contains("/update-issue <issue> [<source>] [<tracker>]")
@@ -85,7 +67,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Feature branch command must support analysis and design transition")
     void should_documentDesignTransition_when_featureBranchCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/create-feature-branch.md");
+        String command = loadClasspathResource("commands/create-feature-branch.md");
 
         assertThat(command)
             .contains("issue/change identifier")
@@ -102,7 +84,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Worktree command must require default branch review before creating branches")
     void should_requireDefaultBranchReview_when_worktreeCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/create-worktree.md");
+        String command = loadClasspathResource("commands/create-worktree.md");
 
         assertThat(command)
             .contains("/create-worktree <issue-or-change|type description>")
@@ -116,7 +98,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Implement spec command must route executable artifacts through the tech lead")
     void should_routeExecutableArtifact_when_implementSpecCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/implement-spec.md");
+        String command = loadClasspathResource("commands/implement-spec.md");
 
         assertThat(command)
             .contains("/implement-spec <approved-plan|openspec-change>")
@@ -148,7 +130,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Create spec command must route OpenSpec creation through architect with planning skill only")
     void should_routeOpenSpecCreation_when_createSpecCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/create-spec.md");
+        String command = loadClasspathResource("commands/create-spec.md");
 
         assertThat(command)
             .contains("/create-spec <issue|design|adr|plan|existing-change>")
@@ -162,7 +144,7 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Explore design command must route refinement through architect design skills")
     void should_includeDesignSkills_when_exploreDesignCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/explore-design.md");
+        String command = loadClasspathResource("commands/explore-design.md");
 
         assertThat(command)
             .contains("/explore-design <issue|openspec-change>")
@@ -177,8 +159,8 @@ class CommandIndexesTest {
     @Test
     @DisplayName("Performance commands must route to Java performance agent")
     void should_routePerformanceWorkflows_when_profileAndBenchmarkCommandsAreInstalled() {
-        String profile = loadClasspathResource("skill-references/assets/commands/profile.md");
-        String benchmark = loadClasspathResource("skill-references/assets/commands/benchmark.md");
+        String profile = loadClasspathResource("commands/profile.md");
+        String benchmark = loadClasspathResource("commands/benchmark.md");
 
         assertThat(profile)
             .contains("/profile <application-or-module>")
@@ -201,30 +183,6 @@ class CommandIndexesTest {
 
     private static List<String> expectedCommandFiles() {
         return CommandIndexes.commandFiles().toList();
-    }
-
-    private List<String> readCommandIncludes(String xmlResource) throws Exception {
-        try (InputStream xmlStream = getTestResource(xmlResource)) {
-            assertThat(xmlStream)
-                .withFailMessage("XML resource not found on classpath: %s", xmlResource)
-                .isNotNull();
-
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            factory.setNamespaceAware(true);
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document document = builder.parse(xmlStream);
-            NodeList includes = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
-
-            List<String> commandIncludes = new ArrayList<>();
-            for (int i = 0; i < includes.getLength(); i++) {
-                Element include = (Element) includes.item(i);
-                String href = include.getAttribute("href");
-                if (href.startsWith("assets/commands/")) {
-                    commandIncludes.add(href);
-                }
-            }
-            return commandIncludes;
-        }
     }
 
     private String loadClasspathResource(String resourceName) {

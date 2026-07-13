@@ -20,6 +20,11 @@
     </properties>
 
     <dependencies>
+        <dependency>
+            <groupId>info.jab.pml</groupId>
+            <artifactId>commands-generator</artifactId>
+            <version>${project.version}</version>
+        </dependency>
         <!-- Logging dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -54,6 +59,14 @@
     </dependencies>
 
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+            <resource>
+                <directory>${project.build.directory}/generated-resources</directory>
+            </resource>
+        </resources>
         <plugins>
             <!-- Compiler configuration -->
             <plugin>
@@ -112,11 +125,47 @@
                 </executions>
             </plugin>
 
-            <!-- Include main resources in test classpath and copy generated skills for local use -->
+            <!-- Bridge commands-generator assets into skill-reference paths for XInclude generation -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <executions>
+                    <execution>
+                        <id>bridge-command-assets</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/generated-resources/skill-references/assets/commands</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/../commands-generator/src/main/resources/commands</directory>
+                                    <includes>
+                                        <include>**/*</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>bridge-command-inventory-template</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.directory}/generated-resources/skill-references/assets</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.basedir}/../commands-generator/src/main/resources</directory>
+                                    <includes>
+                                        <include>java-commands-inventory-template.md</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>copy-test-resources-from-main</id>
                         <phase>generate-test-resources</phase>
@@ -133,6 +182,24 @@
                                         <include>skill-indexes/**</include>
                                         <include>skill-references/**</include>
                                         <include>skill-reference-to-markdown.xsl</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>copy-bridged-command-assets-to-test</id>
+                        <phase>generate-test-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}/generated-resources</directory>
+                                    <includes>
+                                        <include>**/*</include>
                                     </includes>
                                 </resource>
                             </resources>

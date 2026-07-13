@@ -7,7 +7,7 @@ Background:
 @acceptance-test
 Scenario: Generate embedded commands inventory with every command asset
   Given the local generated skill path ".agents/skills/001-commands-inventory"
-  And the command assets directory "skills-generator/src/main/resources/skill-references/assets/commands"
+  And the command assets directory "commands-generator/src/main/resources/commands"
   And the requested inventory output path is "examples/skills/inventory/INVENTORY-COMMANDS-JAVA.md"
   And any existing report at the requested output path must be overwritten
   When the skill ".agents/skills/001-commands-inventory" is applied to generate the embedded commands inventory
@@ -30,7 +30,7 @@ Scenario: Generate embedded commands inventory with every command asset
     | implement-spec.md       | /implement-spec         |
     | profile.md               | /profile                 |
     | benchmark.md             | /benchmark               |
-  And every command row in the generated file corresponds to a same-named source file in "skills-generator/src/main/resources/skill-references/assets/commands"
-  And no command asset from "skills-generator/src/main/resources/skill-references/assets/commands" is missing from the generated inventory
+  And every command row in the generated file corresponds to a same-named source file in "commands-generator/src/main/resources/commands"
+  And no command asset from "commands-generator/src/main/resources/commands" is missing from the generated inventory
   And the generated inventory file does not include command rows outside the embedded command assets directory
   And any git changes produced under "examples/skills/inventory" during skill execution and verification are reset

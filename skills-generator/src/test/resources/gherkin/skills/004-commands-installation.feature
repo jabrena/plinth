@@ -16,7 +16,7 @@ Scenario: Install embedded commands into the GitHub commands destination
   And the skill presents ".github/commands", ".claude/commands", ".cursor/command", and ".codex/commands" as destination choices
   And the skill waits for the explicit destination answer ".github/commands" before writing files
   And the skill reads "references/004-commands-installation.md"
-  And the skill copies embedded command files only from "skills-generator/src/main/resources/skill-references/assets/commands"
+  And the skill copies embedded command files only from "commands-generator/src/main/resources/commands"
   And the target directory "examples/skills/installers/.github/commands" is created when missing
   And no command files are copied outside "examples/skills/installers"
   And the target directory contains exactly these command files:

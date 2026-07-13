@@ -47,7 +47,7 @@
         <step number="2">
             <step-title>Install embedded commands</step-title>
             <step-content>
-                Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/commands/` into the chosen destination directory:
+                Copy these exact source files from `commands-generator/src/main/resources/commands/` into the chosen destination directory:
 
                 ```markdown
                 <xi:include href="assets/commands/update-issue.md" parse="text"/>
