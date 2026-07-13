@@ -31,6 +31,7 @@ Create or update OpenSpec proposal, design, specification, and task artifacts fr
     <constraint-list>
       <constraint>**MUST**: Accept issue, plan, approved design, ADR, existing OpenSpec, or combined inputs</constraint>
       <constraint>**MUST**: Check CLI availability with `openspec --version` before OpenSpec operations</constraint>
+      <constraint>**MUST**: Use a stable change ID without date prefix/suffix when creating a new change; dates are only used as a prefix when archiving changes</constraint>
       <constraint>**MUST**: Assess one reviewable change versus multiple independently valuable or deployable changes</constraint>
       <constraint>**MUST**: Obtain user approval for a multiple-change map before creating changes</constraint>
       <constraint>**MUST**: Record source artifacts and derivation direction</constraint>
