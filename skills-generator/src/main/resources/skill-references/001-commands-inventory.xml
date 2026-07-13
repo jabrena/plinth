@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd">
 
     <metadata>
@@ -14,12 +13,10 @@
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal> Your task is to create a comprehensive checklist that follows the exact format
-        and structure defined in the embedded template below. Create a markdown file named
-        `INVENTORY-COMMANDS-JAVA.md` with the following content:
+        and structure defined in the embedded template asset. Create a markdown file named
+        `INVENTORY-COMMANDS-JAVA.md` using:
 
-        ```markdown
-        <xi:include href="assets/java-commands-inventory-template.md" parse="text" />
-        ```
+        - [java-commands-inventory-template.md](../assets/java-commands-inventory-template.md)
     </goal>
 
     <constraints>

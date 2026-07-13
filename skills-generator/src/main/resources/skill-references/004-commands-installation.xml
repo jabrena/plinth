@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xi="http://www.w3.org/2001/XInclude"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd">
 
     <metadata>
@@ -47,41 +46,19 @@
         <step number="2">
             <step-title>Install embedded commands</step-title>
             <step-content>
-                Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/commands/` into the chosen destination directory:
+                Copy these exact source files from the skill `assets/commands/` directory into the chosen destination directory:
 
-                ```markdown
-                <xi:include href="assets/commands/update-issue.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-feature-branch.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-worktree.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/explore-design.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-adr.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-diagram.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-spec.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/review-alignment.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/implement-spec.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/profile.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/benchmark.md" parse="text"/>
-                ```
+                - [update-issue.md](../assets/commands/update-issue.md)
+                - [create-feature-branch.md](../assets/commands/create-feature-branch.md)
+                - [create-worktree.md](../assets/commands/create-worktree.md)
+                - [explore-design.md](../assets/commands/explore-design.md)
+                - [create-adr.md](../assets/commands/create-adr.md)
+                - [create-diagram.md](../assets/commands/create-diagram.md)
+                - [create-spec.md](../assets/commands/create-spec.md)
+                - [review-alignment.md](../assets/commands/review-alignment.md)
+                - [implement-spec.md](../assets/commands/implement-spec.md)
+                - [profile.md](../assets/commands/profile.md)
+                - [benchmark.md](../assets/commands/benchmark.md)
 
                 Create the destination directory if it does not exist.
 

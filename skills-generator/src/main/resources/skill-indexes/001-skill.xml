@@ -45,7 +45,7 @@ Create a comprehensive checklist document for embedded commands inventory by fol
   <steps>
     <step number="1">
       <step-title>Read the embedded template</step-title>
-      <step-content>Read `references/001-commands-inventory.md` before generating output and use it as the authoritative template.</step-content>
+      <step-content>Read `references/001-commands-inventory.md` and `assets/java-commands-inventory-template.md` before generating output and use the asset as the authoritative template.</step-content>
       <step-constraints>
         <step-constraint-list>
           <step-constraint>Do not use cached or partial template content</step-constraint>

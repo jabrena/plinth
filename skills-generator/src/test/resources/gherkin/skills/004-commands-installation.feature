@@ -16,7 +16,7 @@ Scenario: Install embedded commands into the GitHub commands destination
   And the skill presents ".github/commands", ".claude/commands", ".cursor/command", and ".codex/commands" as destination choices
   And the skill waits for the explicit destination answer ".github/commands" before writing files
   And the skill reads "references/004-commands-installation.md"
-  And the skill copies embedded command files only from "skills-generator/src/main/resources/skill-references/assets/commands"
+  And the skill copies embedded command files only from "assets/commands"
   And the target directory "examples/skills/installers/.github/commands" is created when missing
   And no command files are copied outside "examples/skills/installers"
   And the target directory contains exactly these command files:
@@ -35,3 +35,16 @@ Scenario: Install embedded commands into the GitHub commands destination
   And each installed command file matches its same-named embedded asset content
   And the skill reports the selected destination, created files, overwrite actions, and an optional verification step
   And any git changes produced under "examples/skills/installers" during skill execution and verification are reset
+
+@integration-test
+Scenario: Skill follows the generator registration and local-output workflow
+  Given skill content must be maintained through the generator pipeline
+  When the embedded commands installation skill is implemented
+  Then the source changes are made under "skills-generator/src/main/resources"
+  And "skills-generator/src/main/resources/skills.xml" registers skill id "004" with the commands installation reference
+  And the generated local skill output includes ".agents/skills/004-commands-installation/SKILL.md"
+  And the generated local skill output includes ".agents/skills/004-commands-installation/assets/commands/update-issue.md"
+  And the generated local skill output includes ".agents/skills/004-commands-installation/assets/commands/benchmark.md"
+  And generated references contain no unresolved include markers or broken local reference paths
+  And generated release output under "skills/" is not edited directly
+  And applicable XML and skill generation validations can be executed before promotion

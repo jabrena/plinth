@@ -26,7 +26,7 @@ Install a predefined set of embedded project commands from repository assets int
     <constraints-description>This skill installs only the embedded project commands bundle and must ask for destination before writing files.</constraints-description>
     <constraint-list>
       <constraint>**MUST** ask the user to choose one of four command destinations before installing</constraint>
-      <constraint>**MUST** copy all embedded command files defined in `references/004-commands-installation.md`</constraint>
+      <constraint>**MUST** copy all embedded command files from skill `assets/commands/`</constraint>
       <constraint>**MUST** preserve file names from the reference content and report overwrite actions</constraint>
       <constraint>**MUST** create the destination directory if it does not exist</constraint>
     </constraint-list>

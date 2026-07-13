@@ -4,6 +4,10 @@
         <reference-list>
             <reference>001-commands-inventory</reference>
         </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/java-commands-inventory-template.md"
+                target="assets/java-commands-inventory-template.md" />
+        </resource-list>
     </skill>
     <skill id="002">
         <reference-list>
@@ -19,6 +23,30 @@
         <reference-list>
             <reference>004-commands-installation</reference>
         </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/commands/update-issue.md"
+                target="assets/commands/update-issue.md" />
+            <resource source="skill-references/assets/commands/create-feature-branch.md"
+                target="assets/commands/create-feature-branch.md" />
+            <resource source="skill-references/assets/commands/create-worktree.md"
+                target="assets/commands/create-worktree.md" />
+            <resource source="skill-references/assets/commands/explore-design.md"
+                target="assets/commands/explore-design.md" />
+            <resource source="skill-references/assets/commands/create-adr.md"
+                target="assets/commands/create-adr.md" />
+            <resource source="skill-references/assets/commands/create-diagram.md"
+                target="assets/commands/create-diagram.md" />
+            <resource source="skill-references/assets/commands/create-spec.md"
+                target="assets/commands/create-spec.md" />
+            <resource source="skill-references/assets/commands/review-alignment.md"
+                target="assets/commands/review-alignment.md" />
+            <resource source="skill-references/assets/commands/implement-spec.md"
+                target="assets/commands/implement-spec.md" />
+            <resource source="skill-references/assets/commands/profile.md"
+                target="assets/commands/profile.md" />
+            <resource source="skill-references/assets/commands/benchmark.md"
+                target="assets/commands/benchmark.md" />
+        </resource-list>
     </skill>
     <skill id="005">
         <reference-list>

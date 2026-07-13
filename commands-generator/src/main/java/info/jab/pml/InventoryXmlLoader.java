@@ -8,11 +8,11 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.w3c.dom.Document;
 
 /** Loads small local inventory documents with safe parser settings. */
-final class InventoryXmlLoader {
+public final class InventoryXmlLoader {
 
     private InventoryXmlLoader() {}
 
-    static Document parse(InputStream in) throws Exception {
+    public static Document parse(InputStream in) throws Exception {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         dbf.setNamespaceAware(false);
         dbf.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
