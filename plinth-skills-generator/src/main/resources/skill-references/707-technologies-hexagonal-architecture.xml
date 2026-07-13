@@ -43,7 +43,6 @@
             <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Hexagonal architecture review</constraint>
             <constraint>**DEPENDENCY ROUTING**: When ArchUnit or other Maven dependencies need to be added or evaluated, route that decision to `111-java-maven-dependencies`</constraint>
             <constraint>**FRAMEWORK ROUTING**: Route Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this reference</constraint>
-            <constraint>**MAINTAINER**: If you are changing skill source files in a skills-generator repository, regenerate the local skill outputs using the repository's documented build workflow, then run the relevant verification (tests/build) for the changed area</constraint>
         </constraint-list>
     </constraints>
 

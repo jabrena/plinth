@@ -35,7 +35,6 @@
             <constraint>**SCOPE**: Stay within MongoDB/non-relational modeling, query, index, migration, and operational guidance; defer framework wiring to 315/415/515 and Mongock migrations to 316/416/516</constraint>
             <constraint>**QUERY SAFETY**: Never build queries, aggregation stages, JSON documents, JavaScript expressions, or `$where` clauses by concatenating untrusted input</constraint>
             <constraint>**EVIDENCE**: Use `explain()` output, index definitions, representative data volume, and query frequency before making performance claims</constraint>
-            <constraint>**MAINTAINER**: If you are changing skill source files in a skills-generator repository, regenerate the local skill outputs using the repository's documented build workflow, then run the relevant verification (tests/build) for the changed area</constraint>
         </constraint-list>
     </constraints>
 

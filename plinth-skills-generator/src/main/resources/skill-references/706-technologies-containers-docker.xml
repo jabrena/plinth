@@ -37,7 +37,6 @@
             <constraint>**JLINK**: Prefer `jlink` custom runtimes for production images when the module graph is known, validated with smoke tests, and compatible with the application's dependencies</constraint>
             <constraint>**MICRO DISTRO**: Prefer micro runtime distributions such as Alpaquita only after checking libc compatibility, required OS certificates, timezone data, diagnostics, and security-scanner support</constraint>
             <constraint>**REPRODUCIBILITY**: Pin base image versions intentionally, explain digest pinning trade-offs, and keep build inputs deterministic</constraint>
-            <constraint>**MAINTAINER**: If you are changing skill source files in a skills-generator repository, regenerate the local skill outputs using the repository's documented build workflow, then run the relevant verification (tests/build) for the changed area</constraint>
         </constraint-list>
     </constraints>
 

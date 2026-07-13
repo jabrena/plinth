@@ -33,7 +33,6 @@
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
             <constraint>**PRECONDITION**: API contract input (OpenAPI or equivalent) must be available before configuring CATS</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
-            <constraint>**MAINTAINER**: If you are changing skill source files in a skills-generator repository, regenerate the local skill outputs using the repository's documented build workflow</constraint>
             <constraint>**LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` with a verified local `cats/cats.jar` when contributors need repeatable local CATS execution without installing CATS directly on the host</constraint>
             <constraint>**SUPPLY CHAIN**: Use only a verified local `cats/cats.jar` or an approved prebuilt image; generated artifacts must depend only on trusted local or approved image inputs</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after integrating fuzz testing changes</constraint>
