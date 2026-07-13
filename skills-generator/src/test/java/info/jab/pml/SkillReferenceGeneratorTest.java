@@ -7,9 +7,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -66,6 +68,21 @@ class SkillReferenceGeneratorTest {
     @DisplayName("Unified XSLT Generator Tests")
     class UnifiedXsltGeneratorTests {
 
+        private static final AtomicInteger generatedFileCount = new AtomicInteger();
+        private static final Path TARGET_DIR = Paths.get("target");
+
+        @AfterAll
+        static void logGeneratedContentSummary() {
+            int count = generatedFileCount.get();
+            if (count > 0) {
+                logger.info(
+                    "Generated {} reference markdown files under {}",
+                    count,
+                    TARGET_DIR.toAbsolutePath()
+                );
+            }
+        }
+
         /**
          * Provides the base file names for parameterized tests.
          * Each base name corresponds to both an XML file and expected MDC file.
@@ -105,7 +122,6 @@ class SkillReferenceGeneratorTest {
             validateOutputFormatSection(lines, baseFileName);
             validateSafeguardsSection(lines, baseFileName);
             validateExampleNumberingConsistency(lines, baseFileName);
-
         }
 
         /**
@@ -452,13 +468,12 @@ class SkillReferenceGeneratorTest {
          * Follows functional programming principles with clear input/output relationship.
          */
         private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
-            Path targetDir = Paths.get("target");
-            if (!Files.exists(targetDir)) {
-                Files.createDirectories(targetDir);
+            if (!Files.exists(TARGET_DIR)) {
+                Files.createDirectories(TARGET_DIR);
             }
-            Path outputPath = targetDir.resolve(filename);
+            Path outputPath = TARGET_DIR.resolve(filename);
             Files.writeString(outputPath, content);
-            logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
+            generatedFileCount.incrementAndGet();
         }
 
     }

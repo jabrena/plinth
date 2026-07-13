@@ -11,6 +11,7 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -22,6 +23,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -45,6 +47,27 @@ class SkillsGeneratorTest {
     @Nested
     @DisplayName("Parameterized Generate Skill Tests")
     class ParameterizedGenerateSkillTests {
+
+        private static final AtomicInteger skillMdCount = new AtomicInteger();
+        private static final AtomicInteger referenceCount = new AtomicInteger();
+        private static final AtomicInteger resourceCount = new AtomicInteger();
+        private static final Path TARGET_SKILLS_DIR = Paths.get("target", "skills");
+
+        @AfterAll
+        static void logGeneratedSkillsSummary() {
+            int skills = skillMdCount.get();
+            int references = referenceCount.get();
+            int resources = resourceCount.get();
+            if (skills > 0 || references > 0 || resources > 0) {
+                logger.info(
+                    "Generated {} SKILL.md files, {} references, and {} resources under {}",
+                    skills,
+                    references,
+                    resources,
+                    TARGET_SKILLS_DIR.toAbsolutePath()
+                );
+            }
+        }
 
         private static Stream<SkillIndexes.SkillDescriptor> provideSkillDescriptors() {
             return SkillIndexes.skillDescriptors();
@@ -115,6 +138,35 @@ class SkillsGeneratorTest {
                 }
             }
         }
+
+        private void saveToTarget(SkillsGenerator.SkillOutput output) throws IOException {
+            Path targetDir = TARGET_SKILLS_DIR.resolve(output.skillId());
+            Files.createDirectories(targetDir);
+
+            Path skillMdPath = targetDir.resolve("SKILL.md");
+            Files.writeString(skillMdPath, output.skillMd());
+            skillMdCount.incrementAndGet();
+
+            if (!output.referenceMds().isEmpty()) {
+                Path referencesDir = targetDir.resolve("references");
+                Files.createDirectories(referencesDir);
+                for (var entry : output.referenceMds().entrySet()) {
+                    Path referencePath = referencesDir.resolve(entry.getKey() + ".md");
+                    Files.writeString(referencePath, entry.getValue());
+                    referenceCount.incrementAndGet();
+                }
+            }
+
+            for (var entry : output.resourceFiles().entrySet()) {
+                Path resourcePath = targetDir.resolve(entry.getKey());
+                Files.createDirectories(resourcePath.getParent());
+                Files.writeString(resourcePath, entry.getValue(), StandardCharsets.UTF_8);
+                if (entry.getKey().startsWith("scripts/") && !resourcePath.toFile().setExecutable(true, false)) {
+                    throw new IOException("Failed to make generated script executable: " + resourcePath);
+                }
+                resourceCount.incrementAndGet();
+            }
+        }
     }
 
     @Nested
@@ -129,6 +181,7 @@ class SkillsGeneratorTest {
         }
     }
 
+    //TODO Move to agents-generator ASAP
     @Nested
     @DisplayName("Embedded agent bundle")
     class EmbeddedAgentBundleTests {
@@ -608,34 +661,5 @@ class SkillsGeneratorTest {
     private static String numericId(String skillId) {
         int dash = skillId.indexOf('-');
         return dash > 0 ? skillId.substring(0, dash) : skillId;
-    }
-
-    private void saveToTarget(SkillsGenerator.SkillOutput output) throws IOException {
-        Path targetDir = Paths.get("target", "skills", output.skillId());
-        Files.createDirectories(targetDir);
-
-        Path skillMdPath = targetDir.resolve("SKILL.md");
-        Files.writeString(skillMdPath, output.skillMd());
-        logger.info("Generated SKILL.md saved to: {}", skillMdPath.toAbsolutePath());
-
-        if (!output.referenceMds().isEmpty()) {
-            Path referencesDir = targetDir.resolve("references");
-            Files.createDirectories(referencesDir);
-            for (var entry : output.referenceMds().entrySet()) {
-                Path referencePath = referencesDir.resolve(entry.getKey() + ".md");
-                Files.writeString(referencePath, entry.getValue());
-                logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
-            }
-        }
-
-        for (var entry : output.resourceFiles().entrySet()) {
-            Path resourcePath = targetDir.resolve(entry.getKey());
-            Files.createDirectories(resourcePath.getParent());
-            Files.writeString(resourcePath, entry.getValue(), StandardCharsets.UTF_8);
-            if (entry.getKey().startsWith("scripts/") && !resourcePath.toFile().setExecutable(true, false)) {
-                throw new IOException("Failed to make generated script executable: " + resourcePath);
-            }
-            logger.info("Generated resource saved to: {}", resourcePath.toAbsolutePath());
-        }
     }
 }
