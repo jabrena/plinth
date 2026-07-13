@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jabrena.github.io/pml/schemas/command/1.0.0
+                             https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd"
+         id="update-issue"
+         slash="/update-issue">
+
+    <purpose>
+        <paragraph>Update an existing project issue description with structured, evidence-backed content.</paragraph>
+    </purpose>
+
+    <usage>/update-issue &lt;issue&gt;</usage>
+
+    <accepted-inputs>
+        <input>Existing GitHub or Jira issue number, key, or URL</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-business-analyst</owning-agent>
+
+    <associated-skills>
+        <skill id="043-planning-github-issues"/>
+    </associated-skills>
+
+    <!-- INVALID: missing required workflow section -->
+
+    <output>
+        <item>Updated structured issue description</item>
+    </output>
+
+    <safeguards>
+        <constraint>Do not invent requirements.</constraint>
+    </safeguards>
+</command>

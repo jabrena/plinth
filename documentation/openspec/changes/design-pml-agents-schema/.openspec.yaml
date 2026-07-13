@@ -1,0 +1,9 @@
+version: 1
+change:
+  name: design-pml-agents-schema
+  status: proposed
+  links:
+    - title: GitHub Issue #992
+      url: https://github.com/jabrena/plinth/issues/992
+specs:
+  - specs/pml-agents-schema/spec.md
