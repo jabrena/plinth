@@ -1,5 +1,8 @@
-## MODIFIED Requirements
+# skills-repo-agnostic-skill-content Specification
 
+## Purpose
+TBD - created by archiving change skills-repo-agnostic. Update Purpose after archive.
+## Requirements
 ### Requirement: Skill content must be repository-agnostic
 
 The repository MUST ensure that user-facing skills do not reference Plinth repository internals (module names, local clone paths, or Plinth-specific Maven invocations) and remain applicable to user projects.
@@ -23,7 +26,3 @@ The repository MUST ensure that user-facing skills do not reference Plinth repos
 - **WHEN** maintainers regenerate local skills into `.agents/skills`
 - **THEN** the generated `SKILL.md` outputs for the affected skills contain no Plinth-internal references
 
-## Source and Derivation
-
-- Source artifact: GitHub issue [#1039](https://github.com/jabrena/plinth/issues/1039).
-- Derivation direction: issue story and acceptance criteria -> OpenSpec requirement delta -> XML source edits -> regenerated local skills -> evidence.
