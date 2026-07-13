@@ -1,0 +1,10 @@
+version: 1
+change:
+  name: 2026-07-13-add-close-spec-command
+  status: proposed
+  links:
+    - title: GitHub Issue #1025
+      url: https://github.com/jabrena/plinth/issues/1025
+specs:
+  - specs/close-spec-command/spec.md
+
