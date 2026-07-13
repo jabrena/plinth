@@ -39,7 +39,6 @@ Now that the repository name change has been explained, let's continue by review
 - [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
 - [Recommended Books and Talks for this summer](#recommended-books-talks-for-this-summer)
 - [Next steps](#next-steps)
-- [Do you still have questions about the project?](#doubts)
 
 If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
@@ -701,11 +700,3 @@ For the next release, we plan to work on a few topics:
 - Update the `Spring Boot` support for `4.1.0`.
 - Add a skill about `JVM Flags`.
 - Go deeper into the EU regulation ecosystem for `GenAI`.
-
-<a id="doubts"></a>
-
-## Do you still have questions about the project?
-
-If you feel stuck using this project or have questions, you can attend the following workshop at [`JCConf 2026`](https://jcconf.tw/2026/):
-
-[![](/plinth/images/2026/7/jcconf-2026.png)](https://jcconf.tw/2026/)
