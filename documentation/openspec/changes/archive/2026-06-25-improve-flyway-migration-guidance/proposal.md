@@ -25,9 +25,9 @@ None.
 
 - Source artifact: GitHub issue [#895](https://github.com/jabrena/plinth/issues/895).
 - Existing implementation targets:
-  - `skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway.xml`
-  - `skills-generator/src/main/resources/skill-references/413-frameworks-quarkus-db-migrations-flyway.xml`
-  - `skills-generator/src/main/resources/skill-references/513-frameworks-micronaut-db-migrations-flyway.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/413-frameworks-quarkus-db-migrations-flyway.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/513-frameworks-micronaut-db-migrations-flyway.xml`
 - Supporting context from issue #895:
   - ChatGPT share about subtle Flyway data migration risks.
   - Martin Fowler's Parallel Change article.

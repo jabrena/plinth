@@ -27,13 +27,13 @@ The Simple Design Rules skill source MUST be registered in the generator invento
 
 #### Scenario: Register Simple Design Rules skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `053` declares explicit skill id `053-design-simple-rules`
 - **AND** skill id `053` registers reference `053-design-simple-rules`
 
 #### Scenario: Generate local Simple Design Rules skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/053-design-simple-rules/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
@@ -43,11 +43,11 @@ The Simple Design Rules skill MUST include Gherkin acceptance coverage and a mat
 
 #### Scenario: Add acceptance test for Simple Design Rules guidance
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature` is inspected
 - **THEN** it includes an acceptance scenario for applying the ordered simple design rules to Java design or refactoring work
 - **AND** the scenario expects the skill to explain that tests come before design cleanup
 - **AND** the scenario expects the skill to explain clarity, duplication reduction, and fewer elements as ordered design pressures
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature`
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature`
 
 ### Requirement: Source and generated-output boundaries
 

@@ -7,8 +7,8 @@ Each generated skill should expose enough meaningful trigger phrases to cover co
 ## What Changes
 
 - Update skill index XML sources for skills with fewer than five triggers so each affected `<triggers>` section contains at least five meaningful `<trigger>` entries.
-- Preserve generated-output ownership: edit `skills-generator/src/main/resources/skill-indexes/*.xml`, then regenerate local `.agents/skills` output through the generator.
-- Add or update automated inventory coverage so future regressions below five triggers are detected by the `skills-generator` test suite.
+- Preserve generated-output ownership: edit `plinth-skills-generator/src/main/resources/skill-indexes/*.xml`, then regenerate local `.agents/skills` output through the generator.
+- Add or update automated inventory coverage so future regressions below five triggers are detected by the `plinth-skills-generator` test suite.
 - Validate changed XML, local generated skills, and the trigger inventory after implementation.
 
 ## Capabilities
@@ -39,4 +39,4 @@ The first vertical slice is to update the affected existing skills identified by
 
 ## Impact
 
-XML skill index sources, `skills-generator` inventory tests, local generated `.agents/skills` output, and OpenSpec artifacts are affected. Generated `.cursor/rules/`, public `skills/`, and `docs/` must not be edited directly. Public `skills/` should only change through the documented release profile when release output is intentionally in scope.
+XML skill index sources, `plinth-skills-generator` inventory tests, local generated `.agents/skills` output, and OpenSpec artifacts are affected. Generated `.cursor/rules/`, public `skills/`, and `docs/` must not be edited directly. Public `skills/` should only change through the documented release profile when release output is intentionally in scope.

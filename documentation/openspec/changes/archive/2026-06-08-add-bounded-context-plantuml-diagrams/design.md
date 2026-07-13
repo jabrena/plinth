@@ -49,7 +49,7 @@ The bounded-context reference should include a template that groups bounded cont
 
 ### Preserve source and generated-output boundaries
 
-Implementation should edit XML sources under `skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl skills-generator` for validation. Public `skills/` release output should only be refreshed when release output is intentionally in scope.
+Implementation should edit XML sources under `plinth-skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl plinth-skills-generator` for validation. Public `skills/` release output should only be refreshed when release output is intentionally in scope.
 
 ## Risks / Trade-offs
 
@@ -68,6 +68,6 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 5. Include repository inventory and relationship-mapping templates in the bounded-context reference.
 6. Register the new reference for skill `033` in `skills.xml`.
 7. Validate changed XML files with `xmllint --noout`.
-8. Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
+8. Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills without refreshing public `skills/`.
 9. Inspect generated local `033-architecture-diagrams/SKILL.md` and reference links for bounded-context selection, multi-repository intake, "All diagrams" coverage, and reference links.
-10. Run `./mvnw clean verify -pl skills-generator` before promoting the implementation.
+10. Run `./mvnw clean verify -pl plinth-skills-generator` before promoting the implementation.

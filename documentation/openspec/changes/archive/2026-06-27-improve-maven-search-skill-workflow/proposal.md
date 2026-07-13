@@ -30,7 +30,7 @@ None.
 - Source artifact: GitHub issue [#881](https://github.com/jabrena/plinth/issues/881).
 - Source summary: User story and acceptance criteria added to issue #881 by the maintainer workflow.
 - Existing generated skill under review: `.agents/skills/114-java-maven-search/SKILL.md`.
-- Existing XML sources: `skills-generator/src/main/resources/skill-indexes/114-skill.xml` and `skills-generator/src/main/resources/skill-references/114-java-maven-search.xml`.
+- Existing XML sources: `plinth-skills-generator/src/main/resources/skill-indexes/114-skill.xml` and `plinth-skills-generator/src/main/resources/skill-references/114-java-maven-search.xml`.
 - Derivation direction: issue #881 -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
 
 ## Change Boundary Assessment

@@ -45,7 +45,7 @@ The skill should not infer production infrastructure from sparse application cod
 
 ### Preserve source and generated-output boundaries
 
-Implementation should edit XML sources under `skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl skills-generator` for validation. Public `skills/` release output should only be refreshed when release output is intentionally in scope.
+Implementation should edit XML sources under `plinth-skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl plinth-skills-generator` for validation. Public `skills/` release output should only be refreshed when release output is intentionally in scope.
 
 ## Risks / Trade-offs
 
@@ -64,7 +64,7 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 5. Include source-first topology intake, fallback questions, and reusable PlantUML deployment templates in the deployment reference.
 6. Register the new reference for skill `033` in `skills.xml`.
 7. Validate changed XML files with `xmllint --noout`.
-8. Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
+8. Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills without refreshing public `skills/`.
 9. Inspect generated local `033-architecture-diagrams/SKILL.md` and reference links for deployment selection, topology intake, "All diagrams" coverage, and reference links.
-10. Run `./mvnw clean verify -pl skills-generator` before promoting the implementation.
-11. Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; as of this change, `033-architecture-diagrams` is not listed, so no listed skill acceptance prompt is required unless that inventory changes.
+10. Run `./mvnw clean verify -pl plinth-skills-generator` before promoting the implementation.
+11. Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; as of this change, `033-architecture-diagrams` is not listed, so no listed skill acceptance prompt is required unless that inventory changes.

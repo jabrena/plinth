@@ -9,13 +9,13 @@ The repository MUST add a generated `707-technologies-hexagonal-architecture` sk
 
 #### Scenario: Skill is registered and generated
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** it registers skill id `707` with `skillId="707-technologies-hexagonal-architecture"`
 - **AND** it references the Hexagonal architecture skill guidance source
 
 #### Scenario: Local generated skill output exists
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** `.agents/skills/707-technologies-hexagonal-architecture/SKILL.md` exists
 - **AND** the generated skill describes framework-agnostic Hexagonal architecture guidance for Java projects
 - **AND** the generated skill includes references to its detailed guidance file
@@ -77,7 +77,7 @@ The repository MUST add acceptance coverage for `707-technologies-hexagonal-arch
 
 #### Scenario: Gherkin feature covers Hexagonal architecture review
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/707-technologies-hexagonal-architecture.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/707-technologies-hexagonal-architecture.feature` is inspected
 - **THEN** it includes a scenario requiring the skill to read `references/707-technologies-hexagonal-architecture.md`
 - **AND** it verifies findings for dependency direction, domain independence, ports and adapters boundaries, or infrastructure leakage
 - **AND** it verifies the skill proposes architecture-test or remediation guidance
@@ -85,7 +85,7 @@ The repository MUST add acceptance coverage for `707-technologies-hexagonal-arch
 
 #### Scenario: Acceptance prompt inventory includes 707
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `707-technologies-hexagonal-architecture` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

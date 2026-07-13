@@ -112,7 +112,7 @@ The DORA and GDPR skill sources MUST be registered in the generator inventory so
 
 #### Scenario: Register EU regulation skills
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `802` registers reference `802-regulations-dora`
 - **AND** skill id `803` registers reference `803-regulations-gdpr`
 - **AND** skill id `802` registers DORA questionnaire and report template resources
@@ -120,7 +120,7 @@ The DORA and GDPR skill sources MUST be registered in the generator inventory so
 
 #### Scenario: Generate local skills
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/802-regulations-dora/SKILL.md`
 - **AND** generated local skill output includes `.agents/skills/803-regulations-gdpr/SKILL.md`
 - **AND** generated local skill output includes questionnaire and report assets for `802-regulations-dora`
@@ -145,7 +145,7 @@ The implemented EU regulation skills `801-regulations-eu-ai-act`, `802-regulatio
 #### Scenario: Generated skills expose separate summary and examples references
 
 - **GIVEN** maintainers align EU regulation skills `801-803`
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output for `801-regulations-eu-ai-act` includes a dedicated regulation chapter or article summary reference
 - **AND** generated local skill output for `801-regulations-eu-ai-act` includes a dedicated Java engineering examples reference
 - **AND** generated local skill output for `802-regulations-dora` includes a dedicated regulation chapter or article summary reference
@@ -182,7 +182,7 @@ The implemented EU regulation skills `801-regulations-eu-ai-act`, `802-regulatio
 #### Scenario: Preserve generated-output ownership
 
 - **WHEN** implementation files are reviewed
-- **THEN** XML sources under `skills-generator/src/main/resources` are the source of truth for skill changes
+- **THEN** XML sources under `plinth-skills-generator/src/main/resources` are the source of truth for skill changes
 - **AND** `.cursor/rules/` is not edited directly
 - **AND** public `skills/` release output is not edited manually
 - **AND** public `skills/` is refreshed only through the release profile when release output is intentionally in scope

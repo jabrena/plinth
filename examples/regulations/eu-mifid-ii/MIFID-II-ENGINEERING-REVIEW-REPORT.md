@@ -12,4 +12,4 @@ This report is not legal advice. Regulated-service classification, investment-fi
 
 ## Acceptance Output
 
-The generated report should use `skills-generator/src/main/resources/skill-references/assets/reports/810-mifid-ii-engineering-review-report-template.md` and should be based only on the reviewed scenario files and bundled MiFID II references.
+The generated report should use `plinth-skills-generator/src/main/resources/skill-references/assets/reports/810-mifid-ii-engineering-review-report-template.md` and should be based only on the reviewed scenario files and bundled MiFID II references.

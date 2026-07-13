@@ -27,9 +27,9 @@ None.
 - Source artifact: GitHub issue [#932](https://github.com/jabrena/plinth/issues/932).
 - External reference: [Martin Fowler: Parallel Change](https://martinfowler.com/bliki/ParallelChange.html).
 - External reference: [DORA: Database Change Management](https://dora.dev/capabilities/database-change-management/).
-- Existing source reference: `skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway-parallel-change.xml`.
-- Existing source reference: `skills-generator/src/main/resources/skill-references/413-frameworks-quarkus-db-migrations-flyway-parallel-change.xml`.
-- Existing source reference: `skills-generator/src/main/resources/skill-references/513-frameworks-micronaut-db-migrations-flyway-parallel-change.xml`.
+- Existing source reference: `plinth-skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway-parallel-change.xml`.
+- Existing source reference: `plinth-skills-generator/src/main/resources/skill-references/413-frameworks-quarkus-db-migrations-flyway-parallel-change.xml`.
+- Existing source reference: `plinth-skills-generator/src/main/resources/skill-references/513-frameworks-micronaut-db-migrations-flyway-parallel-change.xml`.
 - Existing specification context: `documentation/openspec/specs/flyway-migration-skill-guidance/spec.md`.
 - Derivation direction: issue #932 plus cited references plus existing framework-specific XML references -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
 

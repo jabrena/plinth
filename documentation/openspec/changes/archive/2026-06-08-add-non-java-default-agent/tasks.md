@@ -13,7 +13,7 @@
 ## 3. Validation
 
 - [x] 3.1 Validate edited XML with `xmllint --noout`.
-- [x] 3.2 Run focused `skills-generator` tests or `./mvnw clean verify -pl skills-generator`.
+- [x] 3.2 Run focused `plinth-skills-generator` tests or `./mvnw clean verify -pl plinth-skills-generator`.
 - [x] 3.3 Run Markdown validation and inspect changed local links.
 - [x] 3.4 Run `openspec validate --all`.
 - [x] 3.5 Archive `add-non-java-default-agent` after implementation is complete and validation passes.

@@ -1,6 +1,6 @@
 # Getting Started with Agents for Java
 
-The embedded agents separate analysis, architecture, technical leadership, and implementation. Install them with `@005-agents-installation`; the canonical definitions live under `skills-generator/src/main/resources/skill-references/assets/agents/`.
+The embedded agents separate analysis, architecture, technical leadership, and implementation. Install them with `@005-agents-installation`; the canonical definitions live under `plinth-skills-generator/src/main/resources/skill-references/assets/agents/`.
 
 ## Agent Missions
 

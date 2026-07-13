@@ -7,7 +7,7 @@ The implemented EU regulation skills `801-regulations-eu-ai-act`, `802-regulatio
 #### Scenario: Generated skills expose separate summary and examples references
 
 - **GIVEN** maintainers align EU regulation skills `801-803`
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output for `801-regulations-eu-ai-act` includes a dedicated regulation chapter or article summary reference
 - **AND** generated local skill output for `801-regulations-eu-ai-act` includes a dedicated Java engineering examples reference
 - **AND** generated local skill output for `802-regulations-dora` includes a dedicated regulation chapter or article summary reference
@@ -44,7 +44,7 @@ The implemented EU regulation skills `801-regulations-eu-ai-act`, `802-regulatio
 #### Scenario: Preserve generated-output ownership
 
 - **WHEN** implementation files are reviewed
-- **THEN** XML sources under `skills-generator/src/main/resources` are the source of truth for skill changes
+- **THEN** XML sources under `plinth-skills-generator/src/main/resources` are the source of truth for skill changes
 - **AND** `.cursor/rules/` is not edited directly
 - **AND** public `skills/` release output is not edited manually
 - **AND** public `skills/` is refreshed only through the release profile when release output is intentionally in scope

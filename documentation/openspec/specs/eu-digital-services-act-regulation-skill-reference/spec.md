@@ -41,12 +41,12 @@ The Digital Services Act skill source MUST be registered in the generator invent
 
 #### Scenario: Register Digital Services Act regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `807` registers reference `807-regulations-eu-digital-services-act`
 
 #### Scenario: Generate local Digital Services Act skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/807-regulations-eu-digital-services-act/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

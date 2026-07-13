@@ -10,9 +10,9 @@ informed: Repository contributors and downstream skill consumers
 
 ## Context and Problem Statement
 
-The repository generates Agent Skills from XML sources in `skills-generator/src/main/resources`.
+The repository generates Agent Skills from XML sources in `plinth-skills-generator/src/main/resources`.
 The generated `skills/` directory is also the public skill registry source. Before this
-decision, running the normal Maven install workflow for `skills-generator` copied generated
+decision, running the normal Maven install workflow for `plinth-skills-generator` copied generated
 skills into `skills/`. That made routine XML-side edits produce release-visible changes before
 maintainers had intentionally prepared a public skill release.
 
@@ -32,7 +32,7 @@ for release.
 
 * Option 1: Continue copying generated skills into `skills/` during the normal install workflow.
 * Option 2: Copy normal generated skills into `.agents/skills` and add a `release` profile for `skills/`.
-* Option 3: Stop copying generated skills anywhere and require maintainers to inspect only `skills-generator/target/skills`.
+* Option 3: Stop copying generated skills anywhere and require maintainers to inspect only `plinth-skills-generator/target/skills`.
 
 ## Decision Outcome
 
@@ -56,9 +56,9 @@ The normal `copy-skills` action copies generated output into `.agents/skills`. W
 
 The implementation is confirmed when:
 
-* `./mvnw clean install -pl skills-generator` generates skills and copies them into `.agents/skills`.
+* `./mvnw clean install -pl plinth-skills-generator` generates skills and copies them into `.agents/skills`.
 * The normal local workflow does not create, modify, clean, or delete repository-level `skills/`.
-* `./mvnw clean install -pl skills-generator -P release` cleans and refreshes `skills/`.
+* `./mvnw clean install -pl plinth-skills-generator -P release` cleans and refreshes `skills/`.
 * `AGENTS.md` and `DEVELOPER.md` document the distinction between local generation and release publishing.
 
 ## Pros and Cons of the Options

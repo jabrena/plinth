@@ -109,7 +109,7 @@ The DORA and GDPR skill sources MUST be registered in the generator inventory so
 
 #### Scenario: Register EU regulation skills
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `802` registers reference `802-regulations-dora`
 - **AND** skill id `803` registers reference `803-regulations-gdpr`
 - **AND** skill id `802` registers DORA questionnaire and report template resources
@@ -117,7 +117,7 @@ The DORA and GDPR skill sources MUST be registered in the generator inventory so
 
 #### Scenario: Generate local skills
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/802-regulations-dora/SKILL.md`
 - **AND** generated local skill output includes `.agents/skills/803-regulations-gdpr/SKILL.md`
 - **AND** generated local skill output includes questionnaire and report assets for `802-regulations-dora`

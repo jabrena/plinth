@@ -68,18 +68,18 @@ The Flyway skills should add migration test expectations beyond application star
 
 ### Source and Generated Output Boundaries
 
-Implementation must edit XML sources under `skills-generator/src/main/resources/skill-references/`, update `skills-generator/src/main/resources/skills.xml` so the new references are registered, and update the relevant skill index workflow steps so agents read the main, antipatterns, and Parallel Change references. Generated `.agents/skills` output should be regenerated for local validation only. Public `skills/` release output should not be refreshed unless a later release task explicitly requests it.
+Implementation must edit XML sources under `plinth-skills-generator/src/main/resources/skill-references/`, update `plinth-skills-generator/src/main/resources/skills.xml` so the new references are registered, and update the relevant skill index workflow steps so agents read the main, antipatterns, and Parallel Change references. Generated `.agents/skills` output should be regenerated for local validation only. Public `skills/` release output should not be refreshed unless a later release task explicitly requests it.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local Flyway skills:
   - `.agents/skills/313-frameworks-spring-db-migrations-flyway/SKILL.md`
   - `.agents/skills/413-frameworks-quarkus-db-migrations-flyway/SKILL.md`
   - `.agents/skills/513-frameworks-micronaut-db-migrations-flyway/SKILL.md`
-- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` before promoting. Run only listed prompts for changed skills if any are present.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` before promoting. Run only listed prompts for changed skills if any are present.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

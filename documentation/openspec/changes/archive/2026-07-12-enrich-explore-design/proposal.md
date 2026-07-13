@@ -30,19 +30,19 @@ None.
 - Source artifact: GitHub issue #1026, "Enrich /explore-design", https://github.com/jabrena/plinth/issues/1026
 - Prerequisite change: archived `2026-07-12-move-planning-spec-ownership-to-architect` (issue #1019)
 - Supporting repository evidence:
-  - `skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
-  - `skills-generator/src/test/resources/gherkin/commands/explore-design.feature`
-  - `skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
-  - `skills-generator/src/main/resources/skill-references/assets/commands/create-spec.md`
-  - `skills-generator/src/main/resources/skill-references/assets/commands/explore-design.md`
-  - `skills-generator/src/main/resources/skill-references/assets/agents/robot-architect.md`
-  - `skills-generator/src/main/resources/skill-indexes/034-skill.xml`
-  - `skills-generator/src/main/resources/skills.xml`
+  - `plinth-skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/commands/explore-design.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
+  - `plinth-skills-generator/src/main/resources/skill-references/assets/commands/create-spec.md`
+  - `plinth-skills-generator/src/main/resources/skill-references/assets/commands/explore-design.md`
+  - `plinth-skills-generator/src/main/resources/skill-references/assets/agents/robot-architect.md`
+  - `plinth-skills-generator/src/main/resources/skill-indexes/034-skill.xml`
+  - `plinth-skills-generator/src/main/resources/skills.xml`
 - Derivation direction: GitHub issue #1026 → OpenSpec change → canonical command/agent/skill source assets, acceptance tests, generated local output, workflow documentation, and release guidance.
 
 ## Impact
 
-This is a compatibility-relevant workflow-boundary change for users who invoke `/create-spec` expecting embedded design exploration, or `/explore-design` expecting `034-architecture-design-exploration`. Implementation must update source assets and regenerate through the documented `skills-generator` workflow rather than editing generated `.cursor/commands`, `.cursor/agents`, `.agents/skills`, or public `skills/` directly. Skill `034` removal is a breaking inventory change mitigated by the enriched `/explore-design` contract and documentation updates.
+This is a compatibility-relevant workflow-boundary change for users who invoke `/create-spec` expecting embedded design exploration, or `/explore-design` expecting `034-architecture-design-exploration`. Implementation must update source assets and regenerate through the documented `plinth-skills-generator` workflow rather than editing generated `.cursor/commands`, `.cursor/agents`, `.agents/skills`, or public `skills/` directly. Skill `034` removal is a breaking inventory change mitigated by the enriched `/explore-design` contract and documentation updates.
 
 ## Unresolved Questions
 

@@ -52,13 +52,13 @@ The Parallel Change design skill source MUST be registered in the generator inve
 
 #### Scenario: Register Parallel Change design skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `055` registers reference `055-design-parallel-change`
 - **AND** the skill entry uses explicit `skillId="055-design-parallel-change"`
 
 #### Scenario: Generate local Parallel Change design skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/055-design-parallel-change/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

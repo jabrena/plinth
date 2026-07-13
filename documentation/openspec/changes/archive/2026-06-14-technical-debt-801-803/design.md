@@ -54,11 +54,11 @@ Existing Gherkin acceptance scenarios for `801-803` must be updated so they expe
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills`.
 - Inspect generated local `801-803` `SKILL.md` files, chapter summaries, engineering examples, questionnaire assets, and report templates.
-- Update and review `skills-generator/src/test/resources/gherkin/skills/801-regulations-eu-ai-act.feature`, `802-regulations-dora.feature`, and `803-regulations-gdpr.feature`.
-- If regenerated local skill output changes for skills listed in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`, execute the listed prompt for each changed skill and verify acceptance passes.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Update and review `plinth-skills-generator/src/test/resources/gherkin/skills/801-regulations-eu-ai-act.feature`, `802-regulations-dora.feature`, and `803-regulations-gdpr.feature`.
+- If regenerated local skill output changes for skills listed in `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`, execute the listed prompt for each changed skill and verify acceptance passes.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

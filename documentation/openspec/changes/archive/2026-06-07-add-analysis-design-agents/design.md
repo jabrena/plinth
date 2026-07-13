@@ -23,7 +23,7 @@ Issue #806 requires three coordinating roles: business analyst for need/traceabi
 
 ### Promote the legacy architect
 
-Use the tracked legacy architect as migration input, then make the embedded `skills-generator` asset authoritative. Extend it from diagram-only behavior to design exploration, ADRs, and diagrams.
+Use the tracked legacy architect as migration input, then make the embedded `plinth-skills-generator` asset authoritative. Extend it from diagram-only behavior to design exploration, ADRs, and diagrams.
 
 ### Rename coordinator to tech lead
 

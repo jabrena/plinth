@@ -69,7 +69,7 @@ The CORRECT reference should cover:
 
 ### Acceptance Coverage
 
-Add `skills-generator/src/test/resources/gherkin/skills/130-java-testing-strategies.feature`.
+Add `plinth-skills-generator/src/test/resources/gherkin/skills/130-java-testing-strategies.feature`.
 
 The acceptance scenarios should verify:
 
@@ -79,7 +79,7 @@ The acceptance scenarios should verify:
 - Broad test-strategy requests may combine all three references.
 - Code changes remain gated by compile and verification instructions.
 
-Add a matching `130-java-testing-strategies` entry to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+Add a matching `130-java-testing-strategies` entry to `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 
 ## Two-Step Sequencing
 
@@ -93,16 +93,16 @@ Validation after Step 1 should include `openspec validate --all` and Markdown va
 
 Add the split XML references, update `130-skill.xml` routing, register references in `skills.xml`, add acceptance tests, regenerate local skills, and inspect generated Markdown. This changes generated skill behavior by making reference selection more precise and examples deeper.
 
-Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, applicable acceptance prompt execution, and skills-generator module verification.
+Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, applicable acceptance prompt execution, and plinth-skills-generator module verification.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated `.agents/skills/130-java-testing-strategies/SKILL.md`.
 - Inspect generated `.agents/skills/130-java-testing-strategies/references/130-*.md`.
 - Execute the listed `130-java-testing-strategies` acceptance prompt after adding it to the prompt inventory, or record a skipped prompt with reason.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

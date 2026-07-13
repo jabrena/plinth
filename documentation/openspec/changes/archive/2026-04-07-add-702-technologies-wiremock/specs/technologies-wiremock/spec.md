@@ -37,11 +37,11 @@ The new skill SHALL complement, not replace, framework integration-test skills: 
 
 ### Requirement: Generator Integration
 
-New sources for **702** MUST be registered in both `skill-inventory.json` and `system-prompt-inventory.json`, and the `skills-generator` module MUST build successfully after the change.
+New sources for **702** MUST be registered in both `skill-inventory.json` and `system-prompt-inventory.json`, and the `plinth-skills-generator` module MUST build successfully after the change.
 
 #### Scenario: Maven verify passes
 
 - **Given** the XML sources and inventory entries for **702** are added
-- **When** a maintainer runs `./mvnw clean verify -pl skills-generator`
+- **When** a maintainer runs `./mvnw clean verify -pl plinth-skills-generator`
 - **Then** the build completes without failure
 - **And** regenerated skill output reflects the new id where the pipeline emits skills

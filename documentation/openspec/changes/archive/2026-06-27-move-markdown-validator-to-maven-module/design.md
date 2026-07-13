@@ -6,7 +6,7 @@ Issue #941 asks for a dedicated Maven module for the Markdown validator because 
 jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .
 ```
 
-The repository currently has `skills-generator` and `site-generator` modules registered in the root `pom.xml`.
+The repository currently has `plinth-skills-generator` and `site-generator` modules registered in the root `pom.xml`.
 
 ## Intended Behavior Change
 

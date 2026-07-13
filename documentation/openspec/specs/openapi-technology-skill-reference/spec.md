@@ -61,7 +61,7 @@ The repository MUST add acceptance coverage for `701-technologies-openapi`.
 
 #### Scenario: Gherkin feature covers OpenAPI contract review
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/701-technologies-openapi.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/701-technologies-openapi.feature` is inspected
 - **THEN** it includes a scenario requiring the skill to read `references/701-technologies-openapi.md`
 - **AND** it verifies concrete findings for schemas, parameters, errors, security, examples, or breaking changes
 - **AND** it verifies the skill proposes OpenAPI YAML or JSON snippets
@@ -69,7 +69,7 @@ The repository MUST add acceptance coverage for `701-technologies-openapi`.
 
 #### Scenario: Acceptance prompt inventory includes 701
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `701-technologies-openapi` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

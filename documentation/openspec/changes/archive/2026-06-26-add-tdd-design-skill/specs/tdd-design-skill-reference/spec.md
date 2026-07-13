@@ -36,13 +36,13 @@ The TDD design skill source MUST be registered in the generator inventory so loc
 
 #### Scenario: Register TDD design skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `054` declares explicit skill id `054-design-tdd`
 - **AND** skill id `054` registers reference `054-design-tdd`
 
 #### Scenario: Generate local TDD skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/054-design-tdd/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
@@ -52,13 +52,13 @@ The TDD design skill MUST include Gherkin acceptance coverage and a matching pro
 
 #### Scenario: Add acceptance test for TDD guidance
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature` is inspected
 - **THEN** it includes an acceptance scenario for guiding Java development with the TDD workflow
 - **AND** the scenario expects the skill to identify the next behavior or test case
 - **AND** the scenario expects the skill to guide failing-test-first development
 - **AND** the scenario expects the skill to limit implementation to code needed to pass the selected test
 - **AND** the scenario expects the skill to include a refactoring step after the test passes
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature`
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature`
 
 ### Requirement: Source and generated-output boundaries
 

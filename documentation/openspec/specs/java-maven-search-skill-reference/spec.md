@@ -43,7 +43,7 @@ The detailed guidance for `114-java-maven-search` MUST separate project-local up
 #### Scenario: Reference guidance is split or clearly sectioned
 
 - **GIVEN** maintainers update the XML source for `114-java-maven-search`
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local reference output separates project-local version update guidance from Maven Central search guidance
 - **AND** the project-local guidance covers maintainer-provided Versions Maven Plugin reports and local resolver output
 - **AND** the Maven Central guidance covers structured Search API fields, generated repository URLs, coordinate verification, version browsing, and artifact URL construction
@@ -76,7 +76,7 @@ The implementation MUST update XML sources and validate generated local skill ou
 
 - **WHEN** Maven search skill workflow clarification is implemented
 - **THEN** each edited XML source file passes `xmllint --noout`
-- **AND** `./mvnw clean install -pl skills-generator` succeeds
+- **AND** `./mvnw clean install -pl plinth-skills-generator` succeeds
 - **AND** generated local `114-java-maven-search/SKILL.md` and references satisfy the workflow routing requirements
 
 ### Requirement: Acceptance prompt discipline is followed
@@ -86,7 +86,7 @@ The implementation MUST follow the repository acceptance prompt policy for regen
 #### Scenario: Run only the changed skill acceptance prompt
 
 - **GIVEN** regenerated local output for `114-java-maven-search` changes
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists the `114-java-maven-search` prompt
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists the `114-java-maven-search` prompt
 - **WHEN** acceptance validation is performed
 - **THEN** only the listed `114-java-maven-search` acceptance prompt is executed for this changed skill
 - **AND** prompts for unchanged skills are not executed by default

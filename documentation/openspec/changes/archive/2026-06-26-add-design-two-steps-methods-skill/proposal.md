@@ -9,7 +9,7 @@ Java Enterprise practitioners need concise guidance for complex or risky code ch
 - Add a generated agent skill named `051-design-two-steps-methods`.
 - The skill explains and applies Kent Beck's two-step change method: first make the change easy through preparatory refactoring, then make the intended behavior change once the design supports it.
 - The skill is intended for complex or risky code changes.
-- Implementation must be authored from XML sources under `skills-generator/src/main/resources/`.
+- Implementation must be authored from XML sources under `plinth-skills-generator/src/main/resources/`.
 - Generated output under `skills/` must not be edited directly.
 - Acceptance coverage must include a Gherkin scenario where a developer with a complex or risky code change uses `051-design-two-steps-methods` and is guided through preparatory refactoring before the intended behavior change.
 - External reference supplied by the issue: `https://x.com/KentBeck/status/250733358307500032`.

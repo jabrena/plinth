@@ -40,16 +40,16 @@ Add the JavaMoney guidance in XML source content and update focused tests or pro
 Validation after Step 2:
 
 - run `xmllint --noout` for each edited XML file;
-- run `./mvnw clean install -pl skills-generator`;
+- run `./mvnw clean install -pl plinth-skills-generator`;
 - inspect `.agents/skills/111-java-maven-dependencies/SKILL.md` for the JavaMoney guidance;
-- if `111-java-maven-dependencies` generated output changed and the skill is listed in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`, execute only the listed `111-java-maven-dependencies` acceptance prompt;
+- if `111-java-maven-dependencies` generated output changed and the skill is listed in `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`, execute only the listed `111-java-maven-dependencies` acceptance prompt;
 - run `openspec validate --all` from `documentation/`.
 
 ## Decisions
 
 ### Source of Truth
 
-Author the implementation in XML under `skills-generator/src/main/resources/`. Do not manually edit `.cursor/rules/`, `.agents/skills/`, `skills/`, or generated website output.
+Author the implementation in XML under `plinth-skills-generator/src/main/resources/`. Do not manually edit `.cursor/rules/`, `.agents/skills/`, `skills/`, or generated website output.
 
 ### JavaMoney Scope
 
@@ -57,7 +57,7 @@ Limit this change to discoverable JavaMoney guidance for Maven-oriented skill us
 
 ### Acceptance Coverage
 
-The existing `111-java-maven-dependencies` acceptance prompt is listed in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`. If the generated local `111` skill output changes, execute only that listed prompt for the changed skill after local generation, following repository policy.
+The existing `111-java-maven-dependencies` acceptance prompt is listed in `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`. If the generated local `111` skill output changes, execute only that listed prompt for the changed skill after local generation, following repository policy.
 
 ## Source and Derivation
 

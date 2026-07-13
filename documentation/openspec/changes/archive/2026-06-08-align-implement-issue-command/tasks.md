@@ -13,7 +13,7 @@
 ## 3. Validation
 
 - [x] 3.1 Validate the edited XML and OpenSpec change.
-- [x] 3.2 Run focused and full `skills-generator` verification.
+- [x] 3.2 Run focused and full `plinth-skills-generator` verification.
 - [x] 3.3 Run Markdown validation and inspect changed links.
 
 ## 4. Coder Skill Alignment

@@ -55,7 +55,7 @@ The implementation will be validated through automated tests and CI pipelines th
 
 * Good, because it maximises reusability of existing XML sources, XSLT stylesheets, and Maven build tooling
 * Good, because it treats skills as a natural evolution of cursor rules within the same project lifecycle
-* Neutral, because the existing `skills-generator` Maven module already exists as a foundation
+* Neutral, because the existing `plinth-skills-generator` Maven module already exists as a foundation
 * Bad, because it makes the generation pipeline more complex to maintain and understand
 
 ## More Information

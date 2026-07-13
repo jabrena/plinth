@@ -6,9 +6,9 @@
 
 ## 2. Skill Orchestration
 
-- [x] 2.1 Create `skills-generator/src/main/resources/skill-references/assets/questions/033-architecture-diagrams-questions.xml`.
+- [x] 2.1 Create `plinth-skills-generator/src/main/resources/skill-references/assets/questions/033-architecture-diagrams-questions.xml`.
 - [x] 2.2 Move diagram preference questions into the new question-flow asset and remove C4 Code/Level 4 options.
-- [x] 2.3 Update `skills-generator/src/main/resources/skill-indexes/033-skill.xml` to include the question flow before reference reading.
+- [x] 2.3 Update `plinth-skills-generator/src/main/resources/skill-indexes/033-skill.xml` to include the question flow before reference reading.
 - [x] 2.4 Add selection-to-reference mapping in `033-skill.xml` and instruct agents not to read unselected diagram-family references.
 
 ## 3. Focused Reference Split
@@ -23,14 +23,14 @@
 
 ## 4. Generator Registration
 
-- [x] 4.1 Update `skills-generator/src/main/resources/skills.xml` so skill `033` registers the focused references.
+- [x] 4.1 Update `plinth-skills-generator/src/main/resources/skills.xml` so skill `033` registers the focused references.
 - [x] 4.2 Confirm generated `033-architecture-diagrams/SKILL.md` lists the split reference links.
 - [x] 4.3 Confirm generated references do not contain unresolved include markers, broken local reference paths, duplicated stale sections, or stale monolith references.
 
 ## 5. Validation
 
 - [x] 5.1 Validate changed XML files with `xmllint --noout`.
-- [x] 5.2 Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
+- [x] 5.2 Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills without refreshing public `skills/`.
 - [x] 5.3 Inspect generated local `033-architecture-diagrams` output for question flow, selected-reference mapping, guardrails, and C4 alignment.
-- [x] 5.4 Run focused generator tests or `./mvnw clean verify -pl skills-generator` if source changes affect generator behavior or tests.
+- [x] 5.4 Run focused generator tests or `./mvnw clean verify -pl plinth-skills-generator` if source changes affect generator behavior or tests.
 - [x] 5.5 Run `openspec validate --all`.

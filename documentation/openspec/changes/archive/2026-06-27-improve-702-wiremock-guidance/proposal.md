@@ -25,8 +25,8 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer request to create OpenSpec change `improve-702-wiremock-guidance`.
-- Local source inspection: `skills-generator/src/main/resources/skill-indexes/702-skill.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/702-technologies-wiremock.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-indexes/702-skill.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/702-technologies-wiremock.xml`.
 - Local generated output inspection: `.agents/skills/702-technologies-wiremock/SKILL.md`.
 - Local generated output inspection: `.agents/skills/702-technologies-wiremock/references/702-technologies-wiremock.md`.
 - Derivation direction: maintainer request plus local source review -> OpenSpec change artifacts -> XML source improvement -> local generated skill validation.

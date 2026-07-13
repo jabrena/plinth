@@ -14,9 +14,9 @@ This identifier keeps pending EU regulation skills in the `804` through `809` ra
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/807-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/807-regulations-eu-digital-services-act.xml` provides detailed examples and output guidance.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/807-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/807-regulations-eu-digital-services-act.xml` provides detailed examples and output guidance.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
 Dedicated questionnaire and report assets are not required for the initial change. The first deliverable is regulation-aware engineering guidance with concrete review patterns. Formal questionnaire/report assets can be added later if maintainers request parity with `801`, `802`, and `803` report workflows.
 
@@ -39,9 +39,9 @@ The skill must not decide intermediary or platform classification, very-large-on
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills`.
 - Inspect generated local `807-regulations-eu-digital-services-act/SKILL.md`.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

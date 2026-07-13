@@ -20,8 +20,8 @@
 
 ## 4. Integrated Verification
 
-- [x] 4.1 Run `./mvnw clean verify -pl skills-generator`.
-- [x] 4.2 Run `./mvnw clean install -pl skills-generator` without the `release` profile and inspect `.agents/skills`.
+- [x] 4.1 Run `./mvnw clean verify -pl plinth-skills-generator`.
+- [x] 4.2 Run `./mvnw clean install -pl plinth-skills-generator` without the `release` profile and inspect `.agents/skills`.
 - [x] 4.3 Run `jbang .github/scripts/MarkdownValidator.java --verbose .`.
 - [x] 4.4 Run `npx skill-check@latest .agents/skills --no-security-scan --format github` when available.
 - [x] 4.5 Run stale-name and local-link checks across README and documentation.

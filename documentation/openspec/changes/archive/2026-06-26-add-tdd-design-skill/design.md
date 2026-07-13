@@ -16,9 +16,9 @@ This identifier follows `051-design-two-steps-methods`, `052-design-hamburger-me
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/054-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/054-design-tdd.xml` provides detailed TDD guidance, examples, output structure, and self-check criteria.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/054-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/054-design-tdd.xml` provides detailed TDD guidance, examples, output structure, and self-check criteria.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
 Dedicated report templates are not required for the first version. The initial deliverable is an agent skill that guides TDD implementation flow for Java code.
 
@@ -56,12 +56,12 @@ Implementation must edit generator XML sources and tests, then regenerate local 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/054-design-tdd/SKILL.md`.
-- Add `skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature`.
-- Add `054-design-tdd` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+- Add `plinth-skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature`.
+- Add `054-design-tdd` to `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - Execute only the listed `054-design-tdd` acceptance prompt and verify it passes when the prompt runner is available.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

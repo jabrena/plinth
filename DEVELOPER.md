@@ -50,8 +50,9 @@ This is a multi-module project. The following modules are declared in the root `
 | Module | Artifact ID | Commands | Description |
 |--------|-------------|----------|-------------|
 | markdown-validator | markdown-validator | `./mvnw clean verify -pl markdown-validator`<br>`jbang markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java .` | Maven-owned Markdown validator used by contributors and CI. The JBang-compatible entrypoint lives in this module. |
-| commands-generator | commands-generator | `./mvnw clean verify -pl commands-generator` | Owns embedded command inventory (`commands.xml`), command markdown assets, loader code, and command-focused tests. |
-| skills-generator | skills-generator | `./mvnw clean verify -pl skills-generator -am`<br>`./mvnw clean install -pl skills-generator -am`<br>`./mvnw clean install -pl skills-generator -am -P release` | Unified XML → skills generator: bridges command assets from `commands-generator`, produces agent skills into `skills-generator/target/skills`, copies local output into `.agents/skills`, and refreshes `skills/` only through the explicit `release` profile. |
+| plinth-commands-generator | plinth-commands-generator | `./mvnw clean verify -pl plinth-commands-generator` | Owns embedded command inventory (`commands.xml`), command markdown assets, loader code, and command-focused tests. |
+| plinth-agents-generator | plinth-agents-generator | `./mvnw clean verify -pl plinth-agents-generator` | Owns embedded agent inventory (`agents.xml`), agent markdown assets, loader code, and agent-focused tests. |
+| plinth-skills-generator | plinth-skills-generator | `./mvnw clean verify -pl plinth-skills-generator -am`<br>`./mvnw clean install -pl plinth-skills-generator -am`<br>`./mvnw clean install -pl plinth-skills-generator -am -P release` | Unified XML → skills generator: bridges command assets from `plinth-commands-generator` and agent assets from `plinth-agents-generator`, produces agent skills into `plinth-skills-generator/target/skills`, copies local output into `.agents/skills`, and refreshes `skills/` only through the explicit `release` profile. |
 | site-generator | site | `./mvnw clean verify -pl site-generator`<br>`./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview`<br>`./mvnw clean generate-resources -pl site-generator -P site-update` | JBake-based static site generator for documentation and GitHub Pages. |
 
 ## Maven Profiles
@@ -62,7 +63,7 @@ The following profiles are declared in this project. Activate them with `-P <pro
 |------------|---------|------------|-------------|
 | security | `./mvnw clean verify -P security` | manual | Runs OWASP dependency-check-maven to scan for known vulnerabilities; fails on CVSS ≥ 7. |
 | find-bugs | `./mvnw clean verify -P find-bugs` | manual | Runs PMD and SpotBugs static analysis with max effort and low threshold. |
-| release | `./mvnw clean install -pl skills-generator -P release` | manual | Cleans and refreshes the public `skills/` release output instead of copying generated skills to `.agents/skills`. |
+| release | `./mvnw clean install -pl plinth-skills-generator -P release` | manual | Cleans and refreshes the public `skills/` release output instead of copying generated skills to `.agents/skills`. |
 | local-preview | `./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview` | manual | Generates site to `target/docs-local` and serves it locally (site-generator). |
 | site-update | `./mvnw clean generate-resources -pl site-generator -P site-update` | manual | Regenerates the static site into `docs/` for GitHub Pages (site-generator). |
 
@@ -102,11 +103,11 @@ The following sections list useful goals for each plugin configured in this proj
 |------|-------------|
 | `./mvnw resources:resources` | Copy main resources to output directory |
 | `./mvnw resources:testResources` | Copy test resources to output directory |
-| `./mvnw resources:copy-resources@copy-skills -pl skills-generator` | Copy already generated skills from `skills-generator/target/skills` into `.agents/skills` for local agent use |
+| `./mvnw resources:copy-resources@copy-skills -pl plinth-skills-generator` | Copy already generated skills from `plinth-skills-generator/target/skills` into `.agents/skills` for local agent use |
 
 ### maven-antrun-plugin
 
-The `skills-generator` module uses this plugin inside the `release` profile to
+The `plinth-skills-generator` module uses this plugin inside the `release` profile to
 clean `skills/` before the install-phase `copy-skills` execution refreshes the
 public release output.
 

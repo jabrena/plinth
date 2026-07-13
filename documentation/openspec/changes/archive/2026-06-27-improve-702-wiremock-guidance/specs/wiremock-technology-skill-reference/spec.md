@@ -60,7 +60,7 @@ The repository MUST add acceptance coverage for `702-technologies-wiremock`.
 
 #### Scenario: Gherkin feature covers WireMock stub review
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/702-technologies-wiremock.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/702-technologies-wiremock.feature` is inspected
 - **THEN** it includes a scenario requiring the skill to read `references/702-technologies-wiremock.md`
 - **AND** it verifies findings for broad matchers, missing verification, leaked stubs, hardcoded ports, fixture layout, or unmatched request debugging
 - **AND** it verifies the skill proposes concrete JSON mapping or Java DSL snippets
@@ -68,7 +68,7 @@ The repository MUST add acceptance coverage for `702-technologies-wiremock`.
 
 #### Scenario: Acceptance prompt inventory includes 702
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `702-technologies-wiremock` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

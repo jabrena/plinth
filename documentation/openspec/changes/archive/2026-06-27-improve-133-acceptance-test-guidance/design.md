@@ -66,7 +66,7 @@ The reference should grow from four examples to at least seven examples:
 
 ### Acceptance Coverage
 
-Add `skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature`.
+Add `plinth-skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature`.
 
 The acceptance scenario should verify that the skill:
 
@@ -95,16 +95,16 @@ Validation after Step 1 should include `openspec validate --all` and Markdown va
 
 Update the `133` XML reference and skill index wording, add the `133` Gherkin feature and prompt inventory entry, regenerate local skills, and inspect generated Markdown. This changes generated skill behavior by making acceptance-test generation safer, more explicit, and better validated.
 
-Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, listed acceptance prompt execution, and skills-generator module verification.
+Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, listed acceptance prompt execution, and plinth-skills-generator module verification.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated `.agents/skills/133-java-testing-acceptance-tests/SKILL.md`.
 - Inspect generated `.agents/skills/133-java-testing-acceptance-tests/references/133-java-testing-acceptance-tests.md`.
 - Execute the listed `133-java-testing-acceptance-tests` acceptance prompt after adding it to the prompt inventory, or record a skipped prompt with reason.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

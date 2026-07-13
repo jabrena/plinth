@@ -23,7 +23,7 @@ None.
 
 ## Impact
 
-- Affects the `skills.xml` inventory, `skills-generator` Java output modeling, test-driven packaging, and three XML skill references.
+- Affects the `skills.xml` inventory, `plinth-skills-generator` Java output modeling, test-driven packaging, and three XML skill references.
 - Adds no external dependencies and does not change public Java APIs outside the generator module.
 - Existing generated references become smaller; consumers migrate from embedded code blocks to the linked files in the same skill package.
 - Local generation continues to target `.agents/skills`; public `skills/` output remains release-profile only.

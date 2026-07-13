@@ -25,13 +25,13 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer request to create an OpenSpec change to improve `123-java-design-patterns`.
-- Local source inspection: `skills-generator/src/main/resources/skill-indexes/123-skill.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/123-java-design-patterns.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/123-rest-api-patterns.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/123-kafka-event-driven-patterns.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/123-database-persistence-patterns.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/123-cross-cutting-integration-patterns.xml`.
-- Existing acceptance coverage: `skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-indexes/123-skill.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/123-java-design-patterns.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/123-rest-api-patterns.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/123-kafka-event-driven-patterns.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/123-database-persistence-patterns.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/123-cross-cutting-integration-patterns.xml`.
+- Existing acceptance coverage: `plinth-skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`.
 - Derivation direction: maintainer request plus local generated/source review -> OpenSpec change artifacts -> XML source improvement -> local generated skill validation.
 
 ## Change Boundary Assessment

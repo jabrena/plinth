@@ -6,13 +6,13 @@ The repository MUST add a generated `707-technologies-onion-architecture` skill 
 
 #### Scenario: Skill is registered and generated
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** it registers skill id `707` with `skillId="707-technologies-onion-architecture"`
 - **AND** it references the Onion architecture skill guidance source
 
 #### Scenario: Local generated skill output exists
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** `.agents/skills/707-technologies-onion-architecture/SKILL.md` exists
 - **AND** the generated skill describes framework-agnostic Onion architecture guidance for Java projects
 - **AND** the generated skill includes references to its detailed guidance file
@@ -74,7 +74,7 @@ The repository MUST add acceptance coverage for `707-technologies-onion-architec
 
 #### Scenario: Gherkin feature covers Onion architecture review
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature` is inspected
 - **THEN** it includes a scenario requiring the skill to read `references/707-technologies-onion-architecture.md`
 - **AND** it verifies findings for inward dependency direction, domain independence, adapter boundaries, or infrastructure leakage
 - **AND** it verifies the skill proposes architecture-test or remediation guidance
@@ -82,7 +82,7 @@ The repository MUST add acceptance coverage for `707-technologies-onion-architec
 
 #### Scenario: Acceptance prompt inventory includes 707
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `707-technologies-onion-architecture` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

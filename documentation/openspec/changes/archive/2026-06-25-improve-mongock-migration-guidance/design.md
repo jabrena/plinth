@@ -82,18 +82,18 @@ The skills should recommend:
 
 ### Source and Generated Output Boundaries
 
-Implementation must edit XML sources under `skills-generator/src/main/resources/skill-references/`, update `skills-generator/src/main/resources/skills.xml` if supplemental references are added, and update relevant skill index workflow steps so agents read every required reference. Generated `.agents/skills` output should be regenerated for local validation only. Public `skills/` release output should not be refreshed unless a later release task explicitly requests it.
+Implementation must edit XML sources under `plinth-skills-generator/src/main/resources/skill-references/`, update `plinth-skills-generator/src/main/resources/skills.xml` if supplemental references are added, and update relevant skill index workflow steps so agents read every required reference. Generated `.agents/skills` output should be regenerated for local validation only. Public `skills/` release output should not be refreshed unless a later release task explicitly requests it.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local Mongock skills:
   - `.agents/skills/316-frameworks-spring-mongodb-migrations-mongock/SKILL.md`
   - `.agents/skills/416-frameworks-quarkus-mongodb-migrations-mongock/SKILL.md`
   - `.agents/skills/516-frameworks-micronaut-mongodb-migrations-mongock/SKILL.md`
-- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` before promoting. Run only listed prompts for changed skills if any are present.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` before promoting. Run only listed prompts for changed skills if any are present.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

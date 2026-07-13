@@ -85,8 +85,9 @@
 
     <modules>
         <module>markdown-validator</module>
-        <module>commands-generator</module>
-        <module>skills-generator</module>
+        <module>plinth-commands-generator</module>
+        <module>plinth-agents-generator</module>
+        <module>plinth-skills-generator</module>
         <module>site-generator</module>
     </modules>
 

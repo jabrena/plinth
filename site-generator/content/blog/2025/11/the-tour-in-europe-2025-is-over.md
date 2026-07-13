@@ -61,7 +61,7 @@ PML project has 2 different schemas, one schema which defines the diferent parts
 </xs:element>
 ```
 
-You can see PML in action [here](https://github.com/jabrena/plinth/tree/main/skills-generator/src/main/resources).
+You can see PML in action [here](https://github.com/jabrena/plinth/tree/main/plinth-skills-generator/src/main/resources).
 
 Finally, here is a novel Schema dedicated to Workflows:
 

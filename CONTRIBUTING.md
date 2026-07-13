@@ -15,16 +15,16 @@ AI coding assistants, generators, and automation may help prepare a contribution
 
 ## Generator
 
-The unified `skills-generator` module holds all XML sources and Java code used to build **agent skills** under `skills/`.
+The unified `plinth-skills-generator` module holds all XML sources and Java code used to build **agent skills** under `skills/`.
 
-- [System prompt XML files](./skills-generator/src/main/resources/skill-references/) use the PML Schema ([pml.xsd](https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd)). They are transformed with [SkillReferenceGenerator.java](./skills-generator/src/main/java/info/jab/pml/SkillReferenceGenerator.java) and [skill-reference-to-markdown.xsl](./skills-generator/src/main/resources/skill-reference-to-markdown.xsl) when producing reference content for skills.
-- [Skill summaries and inventory](./skills-generator/src/main/resources/) (`skill-indexes/`, `skills.xml`) drive `SKILL.md` generation.
+- [System prompt XML files](./plinth-skills-generator/src/main/resources/skill-references/) use the PML Schema ([pml.xsd](https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd)). They are transformed with [SkillReferenceGenerator.java](./plinth-skills-generator/src/main/java/info/jab/pml/SkillReferenceGenerator.java) and [skill-reference-to-markdown.xsl](./plinth-skills-generator/src/main/resources/skill-reference-to-markdown.xsl) when producing reference content for skills.
+- [Skill summaries and inventory](./plinth-skills-generator/src/main/resources/) (`skill-indexes/`, `skills.xml`) drive `SKILL.md` generation.
 
 If you have the idea to contribute, review the whole process in detail:
 
 ```bash
-./mvnw clean verify -pl skills-generator   # Build and test the generator
-./mvnw clean install -pl skills-generator  # Generate local skills in .agents/skills/
+./mvnw clean verify -pl plinth-skills-generator   # Build and test the generator
+./mvnw clean install -pl plinth-skills-generator  # Generate local skills in .agents/skills/
 ```
 
 Maintainers who change skill XML sources should use the normal install command
@@ -34,7 +34,7 @@ the public `skills/` directory during normal development.
 When preparing an intentional release, refresh and validate the public output:
 
 ```bash
-./mvnw clean install -pl skills-generator -P release
+./mvnw clean install -pl plinth-skills-generator -P release
 npx skill-check@latest skills --no-security-scan --format github
 skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
 ```

@@ -16,12 +16,12 @@ The `813` prefix follows the existing regulation sequence after `812-regulations
 
 The skill uses the established XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/813-skill.xml` defines metadata, goal, scope, constraints, triggers, and workflow.
-- `skills-generator/src/main/resources/skill-references/813-regulations-iso-42001-chapters-summary.xml` summarizes ISO/IEC 42001 concepts using issue-provided official references and stable public descriptions.
-- `skills-generator/src/main/resources/skill-references/813-regulations-iso-42001-engineering-examples.xml` provides Java-focused GenAI examples and output guidance.
-- `skills-generator/src/main/resources/skill-references/assets/questions/813-iso-42001-engineering-review-questionnaire.md` captures structured evidence questions.
-- `skills-generator/src/main/resources/skill-references/assets/reports/813-iso-42001-engineering-review-report-template.md` captures scope, evidence, potential management-system nonconformity signals, controls, owner handoffs, residual risks, release decision, and action plan.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id, references, questionnaire, and report template assets.
+- `plinth-skills-generator/src/main/resources/skill-indexes/813-skill.xml` defines metadata, goal, scope, constraints, triggers, and workflow.
+- `plinth-skills-generator/src/main/resources/skill-references/813-regulations-iso-42001-chapters-summary.xml` summarizes ISO/IEC 42001 concepts using issue-provided official references and stable public descriptions.
+- `plinth-skills-generator/src/main/resources/skill-references/813-regulations-iso-42001-engineering-examples.xml` provides Java-focused GenAI examples and output guidance.
+- `plinth-skills-generator/src/main/resources/skill-references/assets/questions/813-iso-42001-engineering-review-questionnaire.md` captures structured evidence questions.
+- `plinth-skills-generator/src/main/resources/skill-references/assets/reports/813-iso-42001-engineering-review-report-template.md` captures scope, evidence, potential management-system nonconformity signals, controls, owner handoffs, residual risks, release decision, and action plan.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id, references, questionnaire, and report template assets.
 
 ### ISO/IEC 42001 Scope
 
@@ -52,11 +52,11 @@ The skill must not decide whether an organization is ISO/IEC 42001 certified, wh
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/813-regulations-iso-42001/SKILL.md`.
 - Inspect generated local ISO/IEC 42001 summary, engineering examples, questionnaire, and report template outputs.
 - Execute the listed `813-regulations-iso-42001` acceptance prompt and verify it passes.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

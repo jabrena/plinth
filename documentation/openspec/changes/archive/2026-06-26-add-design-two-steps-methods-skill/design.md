@@ -16,9 +16,9 @@ This preserves the identifier requested by issue #877 and places the skill near 
 
 The skill should use the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/051-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/051-design-two-steps-methods.xml` provides detailed guidance and examples for applying the method.
-- `skills-generator/src/main/resources/skills.xml` registers skill id `051` with explicit `skillId="051-design-two-steps-methods"` and the reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/051-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/051-design-two-steps-methods.xml` provides detailed guidance and examples for applying the method.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers skill id `051` with explicit `skillId="051-design-two-steps-methods"` and the reference.
 
 The initial deliverable does not require separate report templates, command assets, or generated release output. Those can be added later only if a follow-up issue requests them.
 
@@ -40,12 +40,12 @@ The skill should discourage mixing broad refactoring and behavior changes in the
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/051-design-two-steps-methods/SKILL.md`.
-- Add `skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature`.
-- Update `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` with the matching prompt for the new feature file.
+- Add `plinth-skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature`.
+- Update `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` with the matching prompt for the new feature file.
 - Execute the listed `051-design-two-steps-methods` acceptance prompt after local generation.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all` from `documentation/` when the OpenSpec CLI is available.
 
 ## Source and Derivation
