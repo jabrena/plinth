@@ -4,6 +4,10 @@
         <reference-list>
             <reference>001-commands-inventory</reference>
         </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/java-commands-inventory-template.md"
+                target="assets/java-commands-inventory-template.md" />
+        </resource-list>
     </skill>
     <skill id="002">
         <reference-list>

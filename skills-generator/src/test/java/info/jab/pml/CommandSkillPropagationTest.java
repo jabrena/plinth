@@ -40,31 +40,45 @@ class CommandSkillPropagationTest {
     }
 
     @Test
-    @DisplayName("Generated 001 reference must list every command from the manifest")
-    void should_listManifestCommands_when_commandsInventorySkillIsGenerated() {
+    @DisplayName("Generated 001 must ship inventory template asset and reference it without embedding content")
+    void should_shipInventoryTemplateAsset_when_commandsInventorySkillIsGenerated() {
         SkillsGenerator generator = new SkillsGenerator();
         SkillsGenerator.SkillOutput output = generator.generateSkill("001-commands-inventory", true, true);
 
         String reference = output.referenceMds().get("001-commands-inventory");
-        assertThat(reference).contains("# Embedded Commands Inventory");
+        String templateAssetPath = "assets/java-commands-inventory-template.md";
+        String template = output.resourceFiles().get(templateAssetPath);
+
+        assertThat(output.resourceFiles())
+            .withFailMessage("Generated 001 missing asset %s", templateAssetPath)
+            .containsEntry(templateAssetPath, template);
+        assertThat(reference)
+            .contains("](../" + templateAssetPath + ")")
+            .doesNotContain("# Embedded Commands Inventory");
 
         CommandIndexes.commandFiles().forEach(commandFile -> {
             String commandName = commandFile.substring(0, commandFile.length() - ".md".length());
-            assertThat(reference)
-                .withFailMessage("Generated 001 reference missing command /%s", commandName)
+            assertThat(template)
+                .withFailMessage("Generated 001 template asset missing command /%s", commandName)
                 .contains("`/" + commandName + "`");
+            assertThat(reference)
+                .withFailMessage("Generated 001 reference must not embed command /%s", commandName)
+                .doesNotContain("`/" + commandName + "`");
         });
     }
 
     private String loadBridgedCommand(String commandFile) {
-        try (var stream = CommandSkillPropagationTest.class.getClassLoader()
-            .getResourceAsStream("skill-references/assets/commands/" + commandFile)) {
+        return loadBridgedAsset("skill-references/assets/commands/" + commandFile);
+    }
+
+    private String loadBridgedAsset(String resourceName) {
+        try (var stream = CommandSkillPropagationTest.class.getClassLoader().getResourceAsStream(resourceName)) {
             assertThat(stream)
-                .withFailMessage("Bridged command asset not found: %s", commandFile)
+                .withFailMessage("Bridged asset not found: %s", resourceName)
                 .isNotNull();
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load bridged command asset: " + commandFile, e);
+            throw new RuntimeException("Failed to load bridged asset: " + resourceName, e);
         }
     }
 }
