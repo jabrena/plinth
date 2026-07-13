@@ -28,6 +28,14 @@ jobs:
         run: |
           set -euo pipefail
 
+          resolve_skills_module() {
+            if grep -q '<module>plinth-skills-generator</module>' pom.xml; then
+              echo plinth-skills-generator
+            else
+              echo skills-generator
+            fi
+          }
+
           if [ "${{ github.event_name }}" = "pull_request" ]; then
             BASE_SHA="${{ github.event.pull_request.base.sha }}"
           else
@@ -47,11 +55,11 @@ jobs:
           fi
 
           git checkout "$BASE_SHA"
-          ./mvnw --batch-mode --no-transfer-progress clean install -pl plinth-skills-generator -am
+          ./mvnw --batch-mode --no-transfer-progress clean install -pl "$(resolve_skills_module)" -am
           cp -R .agents/skills /tmp/base-skills
 
           git checkout "$HEAD_SHA"
-          ./mvnw --batch-mode --no-transfer-progress clean install -pl plinth-skills-generator -am
+          ./mvnw --batch-mode --no-transfer-progress clean install -pl "$(resolve_skills_module)" -am
           cp -R .agents/skills /tmp/head-skills
 
           if diff -qr /tmp/base-skills /tmp/head-skills >/dev/null; then
