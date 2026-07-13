@@ -109,6 +109,7 @@ The embedded agent bundle SHALL include `robot-no-java` as the default implement
 - **WHEN** a user installs the embedded agent bundle
 - **THEN** the installer copies `robot-no-java.md` with the existing agents
 - **AND** the embedded agent inventory lists `robot-no-java`
+- **AND** active agent sources are owned by `plinth-agents-generator`, not `plinth-skills-generator`
 
 ### Requirement: Tech lead non-Java routing
 
@@ -120,10 +121,12 @@ The embedded agent bundle SHALL include `robot-no-java` as the default implement
 - **WHEN** `robot-tech-lead` selects an implementation delegate
 - **THEN** it delegates to `@robot-no-java`
 - **AND** it does not delegate the work to `@robot-java-coder` by default
+- **AND** agent markdown assets that define routing are owned by `plinth-agents-generator`
 
 #### Scenario: Delegate plain Java work
 
 - **GIVEN** an issue, plan, or OpenSpec task list uses Java, Maven, or framework-neutral JVM implementation
 - **WHEN** `robot-tech-lead` selects an implementation delegate
 - **THEN** it delegates to `@robot-java-coder` unless Spring Boot, Quarkus, or Micronaut evidence selects a framework-specific coder
+- **AND** agent markdown assets that define routing are owned by `plinth-agents-generator`
 
