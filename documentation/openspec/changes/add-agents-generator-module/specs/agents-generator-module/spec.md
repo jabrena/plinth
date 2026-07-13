@@ -99,15 +99,24 @@ The build MUST prove that bridged agent assets from `agents-generator` reach gen
 
 - **GIVEN** `./mvnw clean install -pl skills-generator -am` has been executed
 - **WHEN** generated output under `.agents/skills/005-agents-installation` is inspected
-- **THEN** `references/005-agents-installation.md` contains embedded markdown blocks sourced from `agents-generator` agent assets
-- **AND** identifiable markers from agents listed in `agents.xml` are present (for example `name: robot-architect`, `name: robot-tech-lead`, `name: robot-no-java`, `name: robot-java-performance`)
+- **THEN** `references/005-agents-installation.md` embeds full agent bodies sourced from bridged `agents-generator` assets through XInclude expansion
+- **AND** identifiable markers from agents listed in `agents.xml` are present inline (for example `name: robot-architect`, `name: robot-tech-lead`, `name: robot-no-java`, `name: robot-java-performance`)
+- **AND** the generated `005` skill does not rely on a separate `assets/agents/` resource list in `skills.xml` (embed-first model preserved)
 
-#### Scenario: Generated 002 skill lists the agent inventory
+#### Scenario: Generated 002 skill embeds the inventory template
 
 - **GIVEN** `./mvnw clean install -pl skills-generator -am` has been executed
 - **WHEN** generated output under `.agents/skills/002-agents-inventory` is inspected
-- **THEN** `references/002-agents-inventory.md` lists every agent row corresponding to `agents.xml`
+- **THEN** `references/002-agents-inventory.md` embeds the inventory template content inline
+- **AND** the embedded content lists every agent row corresponding to `agents.xml`
 - **AND** no agent asset from `agents-generator` is missing from the generated `002` or `005` skill references
+
+#### Scenario: Installer XML parity uses XInclude hrefs
+
+- **GIVEN** `005-agents-installation.xml` remains owned by `skills-generator` and has no `skills.xml` resource list
+- **WHEN** `AgentInstallerParityTest` runs
+- **THEN** it compares direct-child XInclude hrefs in the installer XML against `AgentIndexes.agentFiles()`
+- **AND** the test does not depend on `SkillIndexes.SkillDescriptor.resources()` for `005`
 
 #### Scenario: Automated guard fails when bridge breaks
 

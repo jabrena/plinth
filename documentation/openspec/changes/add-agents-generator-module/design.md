@@ -1,3 +1,9 @@
+## Design Refinement Summary
+
+`/explore-design` review against the shipped `commands-generator` implementation ([#1035](https://github.com/jabrena/plinth/issues/1035)) confirms the extraction pattern but **must not copy command propagation tests verbatim**. Agent installer and inventory skills (`002`, `005`) embed bundle content inline in generated references through XInclude `parse="text"`, while command skills (`001`, `004`) ship linked assets under `assets/commands/` without embedding command bodies.
+
+**Recommended direction (pending approval):** mirror the commands module boundary and bridge mechanics, introduce `agents.xml` + `AgentIndexes`, reuse `InventoryXmlLoader` from `commands-generator`, and implement agent-specific propagation and installer parity tests that assert **embedded reference bodies**, not asset links.
+
 ## Context
 
 Issue [#1036](https://github.com/jabrena/plinth/issues/1036) extracts agent ownership from `skills-generator` into `agents-generator`. Today:
@@ -107,6 +113,23 @@ flowchart TB
   GEN --> SKILLS
 ```
 
+## Alternative Analysis
+
+| Approach | Pros | Cons | Decision |
+|----------|------|------|----------|
+| A. Mirror `commands-generator` bridge with `agents.xml` manifest | Proven reactor pattern; manifest-driven parity; independent ownership | Requires new manifest and test split; `agents-generator` depends on `commands-generator` for XML helper | **Recommended** |
+| B. Move assets only; keep hand-maintained inventory template without manifest | Smaller first diff | No manifest parity; installer/template drift returns; diverges from commands model | Rejected |
+| C. Migrate `002`/`005` to asset-link output like `001`/`004` | Uniform propagation tests across bundles | Changes generated skill semantics; breaks skill-only installs that rely on embedded reference bodies; out of scope | Rejected for this change |
+| D. Extract `InventoryXmlLoader` into a shared `pml-common` module | Removes semantic coupling between bundle modules | New module scope; contradicts commands decision to colocate helper with first owner | Rejected |
+| E. Duplicate `InventoryXmlLoader` in `agents-generator` | No cross-module dependency | Two copies to maintain; violates commands design | Rejected |
+
+## Success Criteria
+
+- `./mvnw clean verify -pl agents-generator` validates manifest, assets, and relocated contract tests.
+- `./mvnw clean install -pl skills-generator -am` stages bridged agent assets and regenerates `.agents/skills/002-agents-inventory` and `.agents/skills/005-agents-installation` with **byte-equivalent embedded content** to pre-extraction output.
+- No change to agent names, delegation routing, installed filenames, or nine-agent bundle semantics.
+- `SkillsGeneratorTest` no longer owns `EmbeddedAgentBundleTests`; installer parity and propagation guards live in dedicated `skills-generator` tests.
+
 ## Decisions
 
 ### Module naming and coordinates
@@ -127,6 +150,38 @@ Unlike the pre-extraction agent bundle, which relied on installer XIncludes and 
 
 Alternative considered: keep inventory-only without a manifest. Rejected because `commands-generator` already established manifest-driven parity tests and drift prevention.
 
+### `agents.xml` shape
+
+Mirror the command inventory document without waiting for PML schema ([#993](https://github.com/jabrena/plinth/issues/993)):
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<agent-inventory>
+    <agent file="robot-business-analyst.md"/>
+    <agent file="robot-architect.md"/>
+    <agent file="robot-tech-lead.md"/>
+    <agent file="robot-no-java.md"/>
+    <agent file="robot-java-performance.md"/>
+    <agent file="robot-java-coder.md"/>
+    <agent file="robot-java-micronaut-coder.md"/>
+    <agent file="robot-java-quarkus-coder.md"/>
+    <agent file="robot-java-spring-boot-coder.md"/>
+</agent-inventory>
+```
+
+`AgentIndexes.agentFiles()` returns installation-order file names. Root element MUST be `<agent-inventory>`; entries MUST be direct-child `<agent file="..."/>` elements ending in `.md`.
+
+### Embed-first skill propagation model (differs from commands)
+
+| Skill | Current output model | `skills.xml` resources | Propagation test expectation |
+|-------|---------------------|------------------------|------------------------------|
+| `004-commands-installation` | Reference links to `assets/commands/*.md`; assets shipped separately | Explicit `<resource-list>` per command | `CommandSkillPropagationTest` asserts links exist and bodies are **not** embedded |
+| `005-agents-installation` | Reference embeds full agent bodies via XInclude `parse="text"` | No `<resource-list>` | `AgentSkillPropagationTest` asserts each staged agent body **is embedded** in reference |
+| `001-commands-inventory` | Reference links to template asset | Template in `<resource-list>` | Assert template asset shipped; reference does not embed rows |
+| `002-agents-inventory` | Reference embeds full inventory template inline | No `<resource-list>` | Assert all manifest agent rows appear embedded in reference |
+
+Do **not** add `<resource-list>` entries for `002` or `005` in this change. Changing to the command asset-link model is a separate compatibility decision.
+
 ### Bridge at `skills-generator` `generate-resources`
 
 `skills-generator` declares a Maven dependency on `agents-generator` and, during `generate-resources`:
@@ -136,6 +191,15 @@ Alternative considered: keep inventory-only without a manifest. Rejected because
 3. Optionally generates inventory rows from `agents.xml` before skill generation.
 
 Implementation preference: mirror the sibling-module copy pattern used by `commands-generator` bridge (`maven-resources-plugin:copy-resources`), followed by test classpath staging so `SkillReferenceGenerator` continues resolving existing XInclude paths without XML edits.
+
+Add two executions alongside the existing command bridge:
+
+| Execution id | Source | Staged target |
+|--------------|--------|---------------|
+| `bridge-agent-assets` | `../agents-generator/src/main/resources/agents` | `target/generated-resources/skill-references/assets/agents` |
+| `bridge-agent-inventory-template` | `../agents-generator/src/main/resources/java-agents-inventory-template.md` | `target/generated-resources/skill-references/assets` |
+
+Reuse the existing `copy-bridged-command-assets-to-test` execution (copies all of `target/generated-resources`) so bridged agent files land on the test classpath without a third copy step.
 
 Alternative considered: point XIncludes directly at dependency JAR paths. Rejected for the first iteration because it changes `SkillReferenceGenerator` base URIs and complicates local IDE resolution.
 
@@ -153,14 +217,24 @@ Do not duplicate `InventoryXmlLoader`. Do not add a separate shared-library modu
 
 `EmbeddedAgentBundleTests` currently spans agent ownership and skill-installer ownership. Split as follows:
 
-| Concern | Module | Examples |
-|--------|--------|----------|
-| Manifest integrity, asset presence, per-agent contracts | `agents-generator` | `agents.xml` order, tech-lead routing, coder skill precedence |
-| Installer XInclude parity with manifest | `skills-generator` | `005-agents-installation.xml` includes exactly manifest files |
-| Bridge staging correctness | `skills-generator` | staged assets match `AgentIndexes.agentFiles()` |
-| Generated skill propagation | `skills-generator` | `002` / `005` references embed staged agent bodies |
+| Concern | Module | Test class | Examples |
+|--------|--------|------------|----------|
+| Manifest integrity, asset presence, per-agent contracts | `agents-generator` | `AgentIndexesTest` | `agents.xml` order; tech-lead routing; coder skill precedence; JDBC preferences; coordinator absence |
+| Inventory template rows vs manifest | `agents-generator` | `AgentIndexesTest` | template lists exactly nine agents with correct backtick names |
+| Installer XInclude parity with manifest | `skills-generator` | `AgentInstallerParityTest` | `005-agents-installation.xml` XInclude hrefs match manifest |
+| Bridge staging correctness | `skills-generator` | `AgentBridgeTest` | staged `skill-references/assets/agents/*` match `AgentIndexes.agentFiles()` |
+| Generated skill propagation | `skills-generator` | `AgentSkillPropagationTest` | `002` / `005` references embed staged bodies |
 
-The installer parity test must remain in `skills-generator` because `005-agents-installation.xml` stays there. It should call `AgentIndexes.agentFiles()` from the dependency instead of duplicating manifest parsing.
+**Important:** `AgentInstallerParityTest` MUST parse `005-agents-installation.xml` XInclude hrefs (as `EmbeddedAgentBundleTests` does today). It MUST NOT use `SkillIndexes.skillDescriptors().resources()` because `005` has no `<resource-list>` in `skills.xml` — unlike `004-commands-installation`.
+
+Relocate these `EmbeddedAgentBundleTests` methods to `AgentIndexesTest` unchanged except for classpath prefix `agents/` instead of `skill-references/assets/agents/`:
+
+- `should_installRenamedAnalysisDesignAgents_withoutCoordinatorAlias` — asset/inventory assertions only; installer XML check moves to `AgentInstallerParityTest`
+- `should_referenceAllCoderAgents_when_techLeadCoordinatesDelivery` — tech-lead + installer split as above
+- `should_routeNonJavaWork_when_executionArtifactIsNotJava`
+- `should_coordinatePerformanceWorkflows_when_javaPerformanceAgentIsInstalled`
+- `should_shareSkillPrecedence_when_coderAgentsImplementChanges`
+- `should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence`
 
 ### Runtime installer path in the Plinth repo
 
@@ -212,9 +286,11 @@ Bridged agent assets under `skills-generator` source tree are removed after the 
 
 **Integration tests (`skills-generator`)**
 
-- `AgentBridgeTest`: staged `skill-references/assets/agents/` matches `AgentIndexes.agentFiles()`
-- `AgentInstallerParityTest`: `005-agents-installation.xml` XIncludes match manifest
-- `AgentSkillPropagationTest` (or `SkillsGeneratorTest` extension): generated `002` / `005` references contain markers from staged assets; fails if staging breaks
+- `AgentBridgeTest`: staged `skill-references/assets/agents/` matches `AgentIndexes.agentFiles()`; staged inventory template present
+- `AgentInstallerParityTest`: `005-agents-installation.xml` direct-child XInclude hrefs equal `assets/agents/<file>` for every manifest entry
+- `AgentSkillPropagationTest`:
+  - **005:** for each manifest agent, generated reference contains a unique substring from the bridged asset (for example `name: robot-architect`) and does **not** merely link to `assets/agents/<file>`
+  - **002:** generated reference embeds `# Embedded Agents Inventory` and every `` `robot-*` `` row from the bridged template; does **not** link to `assets/java-agents-inventory-template.md` as a separate shipped asset
 
 **Acceptance / Gherkin**
 
@@ -233,9 +309,21 @@ Bridged agent assets under `skills-generator` source tree are removed after the 
 
 - No change to public agent names, routing tables, or delegation contracts in agent markdown.
 - No change to installed `.cursor/agents/` file names.
+- No change to generated skill output model: `002`/`005` remain embed-first; `001`/`004` remain asset-link.
+- Skill-only installs from `skills/` continue to work because embedded reference bodies remain self-contained after bridge regeneration.
 - `analysis-design-agents` bundle and delegation requirements remain satisfied; only source ownership moves.
 - Phase 1 "no generator coupling" principle is preserved as directed dependencies, not cycles.
 - Mirrors the completed `commands-generator` ([#1035](https://github.com/jabrena/plinth/issues/1035)) extraction pattern.
+
+### Breaking-change surfaces reviewed (`056`)
+
+| Surface | Changes? | Mitigation |
+|---------|----------|------------|
+| Generated `005` reference structure | No | Embed-first model preserved |
+| Generated `002` reference structure | No | Template remains inline |
+| Contributor source paths | Yes (intentional) | Update `005-agents-installation.xml` repo copy-path guidance and docs |
+| Gherkin acceptance paths | Yes (intentional) | Update features to reference `agents-generator` and embedded reference semantics |
+| Public agent routing contracts | No | Contract tests relocate unchanged |
 
 ## Risks / Trade-offs
 
@@ -275,4 +363,17 @@ Bridged agent assets under `skills-generator` source tree are removed after the 
 
 ## Open Questions
 
-None blocking implementation. Step 2 template auto-generation timing remains an implementation convenience decision inside the approved two-step strategy.
+| Question | Recommendation | Status |
+|----------|----------------|--------|
+| Step 2: auto-generate `java-agents-inventory-template.md` from `agents.xml` in the same PR? | Yes, when Step 1 parity tests are green — same approach as commands Step 2 | Resolved pending Step 1 |
+| Should `skills-generator` keep a direct `commands-generator` dependency after adding `agents-generator`? | Yes — `CommandIndexes`, command bridge tests, and command skills still need it | Resolved |
+| Migrate `002`/`005` to asset-link output later? | Track as future enhancement only if embed-first model becomes a maintenance burden | Deferred |
+
+## Approval Checkpoint
+
+Confirm this refined direction before implementation:
+
+1. `agents-generator` with `agents.xml`, one-way dependency on `commands-generator`.
+2. Sibling-module bridge into `target/generated-resources/` preserving embed-first `002`/`005` output.
+3. Agent-specific propagation tests (embedded bodies) and XML-based installer parity (not `skills.xml` resources).
+4. Step 2 inventory template hardening in the same change when Step 1 is green.
