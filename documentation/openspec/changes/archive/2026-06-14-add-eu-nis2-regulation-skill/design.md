@@ -14,11 +14,11 @@ This identifier keeps pending EU regulation skills in the `804` through `809` ra
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/804-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/804-regulations-eu-nis2-chapters-summary.xml` provides the NIS2 Directive chapter, article, and annex summary for engineering review.
-- `skills-generator/src/main/resources/skill-references/804-regulations-eu-nis2-engineering-examples.xml` provides Java-focused NIS2 engineering examples and output guidance.
-- `skills-generator/src/main/resources/skill-references/assets/reports/804-nis2-engineering-review-report-template.md` provides the engineering review report structure.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id and references.
+- `plinth-skills-generator/src/main/resources/skill-indexes/804-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/804-regulations-eu-nis2-chapters-summary.xml` provides the NIS2 Directive chapter, article, and annex summary for engineering review.
+- `plinth-skills-generator/src/main/resources/skill-references/804-regulations-eu-nis2-engineering-examples.xml` provides Java-focused NIS2 engineering examples and output guidance.
+- `plinth-skills-generator/src/main/resources/skill-references/assets/reports/804-nis2-engineering-review-report-template.md` provides the engineering review report structure.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id and references.
 
 Dedicated questionnaire assets are not required for the initial change. The skill must still generate a structured engineering review report, so a report template is required and must be packaged as a local skill asset.
 
@@ -55,14 +55,14 @@ The reports must stay grounded in the reviewed example files, use the NIS2 chapt
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills`.
 - Inspect generated local `804-regulations-eu-nis2/SKILL.md`.
 - Inspect generated local `804-regulations-eu-nis2/references/804-regulations-eu-nis2-chapters-summary.md`.
 - Inspect generated local `804-regulations-eu-nis2/references/804-regulations-eu-nis2-engineering-examples.md`.
 - Inspect generated local `804-regulations-eu-nis2/assets/reports/804-nis2-engineering-review-report-template.md`.
-- Add and review `skills-generator/src/test/resources/gherkin/skills/804-regulations-eu-nis2.feature` with PR-based and direct-to-main scenarios that write reports under `examples/regulations/nis2`.
+- Add and review `plinth-skills-generator/src/test/resources/gherkin/skills/804-regulations-eu-nis2.feature` with PR-based and direct-to-main scenarios that write reports under `examples/regulations/nis2`.
 - Review `examples/regulations/nis2/NIS2-ENGINEERING-REVIEW-REPORT.md` and `examples/regulations/nis2/NIS2-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md` as acceptance execution evidence.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

@@ -16,9 +16,9 @@ This identifier follows `051-design-two-steps-methods` and `052-design-hamburger
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/053-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/053-design-simple-rules.xml` provides detailed method guidance, examples, output structure, and self-check criteria.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/053-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/053-design-simple-rules.xml` provides detailed method guidance, examples, output structure, and self-check criteria.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
 Dedicated report templates are not required for the first version. The initial deliverable is an agent skill that guides design evaluation and refactoring recommendations.
 
@@ -54,12 +54,12 @@ Implementation must edit generator XML sources and tests, then regenerate local 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/053-design-simple-rules/SKILL.md`.
-- Add or update `skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature`.
-- Add `053-design-simple-rules` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+- Add or update `plinth-skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature`.
+- Add `053-design-simple-rules` to `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - Execute only the listed `053-design-simple-rules` acceptance prompt and verify it passes when the prompt runner is available.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

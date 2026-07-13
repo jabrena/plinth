@@ -5,9 +5,9 @@
 
 ## 2. Design Discovery
 
-- [x] 2.1 Add `skills-generator/src/main/resources/skill-indexes/034-skill.xml`.
-- [x] 2.2 Add `skills-generator/src/main/resources/skill-references/034-architecture-design-exploration.xml`.
-- [x] 2.3 Add skill `034` to `skills-generator/src/main/resources/skills.xml`.
+- [x] 2.1 Add `plinth-skills-generator/src/main/resources/skill-indexes/034-skill.xml`.
+- [x] 2.2 Add `plinth-skills-generator/src/main/resources/skill-references/034-architecture-design-exploration.xml`.
+- [x] 2.3 Add skill `034` to `plinth-skills-generator/src/main/resources/skills.xml`.
 
 ## 3. Composable Planning
 
@@ -25,5 +25,5 @@
 
 - [x] 5.1 Validate all edited XML files with `xmllint`.
 - [x] 5.2 Run skill-focused generator tests.
-- [x] 5.3 Run `./mvnw clean verify -pl skills-generator`.
+- [x] 5.3 Run `./mvnw clean verify -pl plinth-skills-generator`.
 - [x] 5.4 Run local skill generation without the `release` profile and inspect skills `034`, `041`, and `042`.

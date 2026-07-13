@@ -16,9 +16,9 @@ This identifier follows the existing `051-design-two-steps-methods` design skill
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/052-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/052-design-hamburger-method.xml` provides detailed method guidance, examples, output structure, and self-check criteria.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/052-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/052-design-hamburger-method.xml` provides detailed method guidance, examples, output structure, and self-check criteria.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
 Dedicated report templates are not required for the first version. The initial deliverable is an agent skill that produces slicing analysis and recommendations.
 
@@ -58,12 +58,12 @@ Validation must happen after preparation and again after the behavior-changing a
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/052-design-hamburger-method/SKILL.md`.
-- Add or update `skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature`.
-- Add `052-design-hamburger-method` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+- Add or update `plinth-skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature`.
+- Add `052-design-hamburger-method` to `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - Execute only the listed `052-design-hamburger-method` acceptance prompt and verify it passes.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

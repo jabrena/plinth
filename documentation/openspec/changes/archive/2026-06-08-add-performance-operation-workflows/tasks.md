@@ -27,8 +27,8 @@
 ## 5. Validation
 
 - [x] 5.1 Validate edited XML sources with `xmllint --noout`.
-- [x] 5.2 Run focused generator tests or `./mvnw clean verify -pl skills-generator` for command, agent, and skill source changes.
-- [x] 5.3 Run local skill generation with `./mvnw clean install -pl skills-generator` and validate generated local skills.
+- [x] 5.2 Run focused generator tests or `./mvnw clean verify -pl plinth-skills-generator` for command, agent, and skill source changes.
+- [x] 5.3 Run local skill generation with `./mvnw clean install -pl plinth-skills-generator` and validate generated local skills.
 - [x] 5.4 Confirm release output was not refreshed; release-profile validation remains required only when updating public `skills/`.
 - [x] 5.5 Run Markdown validation for documentation changes and inspect changed local links.
 - [x] 5.6 Run `openspec validate --all`.

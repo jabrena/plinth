@@ -69,7 +69,7 @@ The architecture diagram skill reference source MUST include focused UML Deploym
 
 #### Scenario: Register deployment reference for skill 033
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill `033` registers a deployment diagram reference
 - **AND** the reference is separate from the UML sequence, UML class, C4, UML state-machine, ER, and bounded-context diagram references
 
@@ -115,7 +115,7 @@ The architecture diagram skill reference source MUST be split into focused XML r
 
 #### Scenario: Register focused references for skill 033
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill `033` registers multiple architecture diagram references
 - **AND** those references include UML sequence, UML class, C4, UML state-machine, ER, bounded-context, and UML Deployment Diagram guidance
 - **AND** skill `033` no longer depends on one monolithic `033-architecture-diagrams` reference as its only detailed source
@@ -135,7 +135,7 @@ The implementation MUST edit XML sources and validate generated local skill outp
 
 - **WHEN** the change is implemented
 - **THEN** changed XML files are validated with `xmllint --noout`
-- **AND** local skill generation succeeds with `./mvnw clean install -pl skills-generator`
+- **AND** local skill generation succeeds with `./mvnw clean install -pl plinth-skills-generator`
 - **AND** the generated local `033-architecture-diagrams/SKILL.md` includes deployment diagram selection, topology intake, selected-reference mapping, and split reference links
 - **AND** generated references have no unresolved include markers, broken local reference paths, duplicated stale sections, or lingering references to removed monolithic guidance
 

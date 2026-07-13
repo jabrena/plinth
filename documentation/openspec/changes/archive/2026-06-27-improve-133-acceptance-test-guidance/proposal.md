@@ -26,12 +26,12 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer request to create an OpenSpec change for improving `133-java-testing-acceptance-tests`.
-- Local source inspection: `skills-generator/src/main/resources/skill-indexes/133-skill.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/133-java-testing-acceptance-tests.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-indexes/133-skill.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/133-java-testing-acceptance-tests.xml`.
 - Local generated output inspection: `.agents/skills/133-java-testing-acceptance-tests/SKILL.md`.
 - Local generated output inspection: `.agents/skills/133-java-testing-acceptance-tests/references/133-java-testing-acceptance-tests.md`.
-- Comparison source: `skills-generator/src/main/resources/skill-references/323-frameworks-spring-boot-testing-acceptance-tests.xml`.
-- Existing acceptance model: `skills-generator/src/test/resources/gherkin/skills/323-frameworks-spring-boot-testing-acceptance-tests.feature`.
+- Comparison source: `plinth-skills-generator/src/main/resources/skill-references/323-frameworks-spring-boot-testing-acceptance-tests.xml`.
+- Existing acceptance model: `plinth-skills-generator/src/test/resources/gherkin/skills/323-frameworks-spring-boot-testing-acceptance-tests.feature`.
 - Derivation direction: maintainer design discussion plus local source review -> OpenSpec change artifacts -> XML source improvement -> local generated skill validation.
 
 ## Change Boundary Assessment

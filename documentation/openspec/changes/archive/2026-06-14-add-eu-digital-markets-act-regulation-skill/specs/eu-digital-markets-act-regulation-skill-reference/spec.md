@@ -39,12 +39,12 @@ The Digital Markets Act skill source MUST be registered in the generator invento
 
 #### Scenario: Register Digital Markets Act regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `808` registers reference `808-regulations-eu-digital-markets-act`
 
 #### Scenario: Generate local Digital Markets Act skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/808-regulations-eu-digital-markets-act/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

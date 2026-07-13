@@ -16,12 +16,12 @@ This follows issue #876 and keeps the new EU regulation skills contiguous after 
 
 The skill uses the established XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/811-skill.xml` defines metadata, goal, scope, constraints, triggers, and workflow.
-- `skills-generator/src/main/resources/skill-references/811-regulations-eu-market-abuse-regulation-chapters-summary.xml` summarizes MAR structure and official-source anchors.
-- `skills-generator/src/main/resources/skill-references/811-regulations-eu-market-abuse-regulation-engineering-examples.xml` provides Java-focused examples and output guidance.
-- `skills-generator/src/main/resources/skill-references/assets/questions/811-market-abuse-regulation-engineering-review-questionnaire.md` captures structured review questions.
-- `skills-generator/src/main/resources/skill-references/assets/reports/811-market-abuse-regulation-engineering-review-report-template.md` captures review findings, evidence, owner handoffs, and potential non-compliance signals.
-- `skills-generator/src/main/resources/skills.xml` registers the skill id, references, and assets.
+- `plinth-skills-generator/src/main/resources/skill-indexes/811-skill.xml` defines metadata, goal, scope, constraints, triggers, and workflow.
+- `plinth-skills-generator/src/main/resources/skill-references/811-regulations-eu-market-abuse-regulation-chapters-summary.xml` summarizes MAR structure and official-source anchors.
+- `plinth-skills-generator/src/main/resources/skill-references/811-regulations-eu-market-abuse-regulation-engineering-examples.xml` provides Java-focused examples and output guidance.
+- `plinth-skills-generator/src/main/resources/skill-references/assets/questions/811-market-abuse-regulation-engineering-review-questionnaire.md` captures structured review questions.
+- `plinth-skills-generator/src/main/resources/skill-references/assets/reports/811-market-abuse-regulation-engineering-review-report-template.md` captures review findings, evidence, owner handoffs, and potential non-compliance signals.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers the skill id, references, and assets.
 
 ### MAR Scope
 
@@ -45,11 +45,11 @@ The skill must not decide whether behavior is insider dealing, market manipulati
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/811-regulations-eu-market-abuse-regulation/SKILL.md`.
 - Inspect generated local chapters summary, engineering examples, questionnaire, and report template outputs.
 - Execute the listed `811-regulations-eu-market-abuse-regulation` acceptance prompt and verify it passes.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

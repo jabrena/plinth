@@ -51,7 +51,7 @@ The source work can be parallelized by ownership: commands, agent, skill alignme
 
 ## Migration Plan
 
-1. Add command and agent source assets under `skills-generator/src/main/resources/`.
+1. Add command and agent source assets under `plinth-skills-generator/src/main/resources/`.
 2. Align skill inputs/outputs only where required by the command and agent contracts.
 3. Update installer, inventory, focused tests, README, and localized guides.
 4. Regenerate local skills for validation without refreshing public `skills/` unless preparing an intentional release.

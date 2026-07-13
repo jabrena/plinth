@@ -16,9 +16,9 @@ This follows the existing `700` technology skill sequence after `706-technologie
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/707-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/707-technologies-onion-architecture.xml` provides detailed guidance, examples, and output expectations.
-- `skills-generator/src/main/resources/skills.xml` registers skill id `707` and its reference.
+- `plinth-skills-generator/src/main/resources/skill-indexes/707-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/707-technologies-onion-architecture.xml` provides detailed guidance, examples, and output expectations.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers skill id `707` and its reference.
 
 Dedicated report templates are not required for the first slice. The initial deliverable is practical review guidance and acceptance-testable generated skill behavior.
 
@@ -60,12 +60,12 @@ Each step must have verification: XML validation and focused source inspection a
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/707-technologies-onion-architecture/SKILL.md`.
-- Add `skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature`.
-- Add `707-technologies-onion-architecture` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+- Add `plinth-skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature`.
+- Add `707-technologies-onion-architecture` to `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - Execute only the listed `707` acceptance prompt when local generated output changes and the prompt runner is available; otherwise record the skip reason.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

@@ -12,4 +12,4 @@ This report is not legal advice. Insider dealing, unlawful disclosure, market ma
 
 ## Acceptance Output
 
-The generated report should use `skills-generator/src/main/resources/skill-references/assets/reports/811-market-abuse-regulation-engineering-review-report-template.md` and should be based only on the reviewed scenario files and bundled Market Abuse Regulation references.
+The generated report should use `plinth-skills-generator/src/main/resources/skill-references/assets/reports/811-market-abuse-regulation-engineering-review-report-template.md` and should be based only on the reviewed scenario files and bundled Market Abuse Regulation references.

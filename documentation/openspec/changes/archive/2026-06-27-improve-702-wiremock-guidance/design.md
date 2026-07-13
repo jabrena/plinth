@@ -39,7 +39,7 @@ The improved guidance must stay at the WireMock behavior and HTTP-stub layer:
 
 ### Acceptance Coverage
 
-Add `skills-generator/src/test/resources/gherkin/skills/702-technologies-wiremock.feature`.
+Add `plinth-skills-generator/src/test/resources/gherkin/skills/702-technologies-wiremock.feature`.
 
 The acceptance scenarios should verify that the skill:
 
@@ -63,16 +63,16 @@ Validation after Step 1 should include `openspec validate --all` and Markdown va
 
 Update the `702` XML reference and any skill-index wording, add Gherkin acceptance coverage and prompt inventory entry, regenerate local skills, and inspect generated Markdown.
 
-Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, listed acceptance prompt execution, and skills-generator module verification.
+Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, listed acceptance prompt execution, and plinth-skills-generator module verification.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated `.agents/skills/702-technologies-wiremock/SKILL.md`.
 - Inspect generated `.agents/skills/702-technologies-wiremock/references/702-technologies-wiremock.md`.
 - Execute the listed `702-technologies-wiremock` acceptance prompt after adding it to the prompt inventory, or record a skipped prompt with reason.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

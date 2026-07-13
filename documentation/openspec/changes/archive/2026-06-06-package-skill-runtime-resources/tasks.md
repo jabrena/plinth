@@ -15,6 +15,6 @@
 ## 3. Verification
 
 - [x] 3.1 Add generator tests for exact paths, contents, isolation, links, and executable scripts.
-- [x] 3.2 Run `./mvnw clean verify -pl skills-generator`.
+- [x] 3.2 Run `./mvnw clean verify -pl plinth-skills-generator`.
 - [x] 3.3 Run local generation and inspect `.agents/skills` without refreshing public `skills/`.
 - [x] 3.4 Validate all OpenSpec changes.

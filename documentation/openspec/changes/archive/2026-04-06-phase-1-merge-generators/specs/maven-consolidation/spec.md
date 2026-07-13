@@ -3,7 +3,7 @@
 ## REMOVED Requirements
 
 ### Requirement: Separate Generator Modules
-The system SHALL no longer maintain separate `system-prompts-generator` and `skills-generator` Maven modules.
+The system SHALL no longer maintain separate `system-prompts-generator` and `plinth-skills-generator` Maven modules.
 
 #### Scenario: Single module structure
 - **Given** the generators are being merged

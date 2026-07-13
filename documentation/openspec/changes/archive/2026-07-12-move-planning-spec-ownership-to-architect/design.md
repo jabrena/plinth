@@ -51,9 +51,9 @@ The implementation should first update acceptance tests and documentation expect
 
 The first implementation slice MUST update the current acceptance-test contracts to match issue #1019 before changing agent or command prompt source assets. The planned target Gherkin files live under this OpenSpec change so `/implement-spec` can copy their intent into the repository acceptance-test sources:
 
-- `acceptance-tests/robot-architect.feature` -> `skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
-- `acceptance-tests/robot-tech-lead.feature` -> `skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature`
-- `acceptance-tests/create-spec.feature` -> `skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
+- `acceptance-tests/robot-architect.feature` -> `plinth-skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
+- `acceptance-tests/robot-tech-lead.feature` -> `plinth-skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature`
+- `acceptance-tests/create-spec.feature` -> `plinth-skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
 
 These files are planned target state for `/implement-spec`; they are not applied by `/create-spec`.
 
@@ -73,8 +73,8 @@ These files are planned target state for `/implement-spec`; they are not applied
 ## Validation Strategy
 
 - Validate OpenSpec with `openspec validate --all`.
-- Validate changed Gherkin acceptance-test syntax through the `skills-generator` test suite.
+- Validate changed Gherkin acceptance-test syntax through the `plinth-skills-generator` test suite.
 - Validate edited XML assets with `xmllint --noout` when XML changes are made.
-- Regenerate local agent/command output with `./mvnw clean install -pl skills-generator`.
+- Regenerate local agent/command output with `./mvnw clean install -pl plinth-skills-generator`.
 - Run focused command/agent acceptance prompts for changed prompt outputs listed in the repository prompt inventories.
 - Run Markdown validation for documentation-only changes when applicable.

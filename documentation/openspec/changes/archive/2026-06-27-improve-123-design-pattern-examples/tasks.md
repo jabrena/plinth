@@ -12,12 +12,12 @@
 - [x] 1.8 Improve `123-database-persistence-patterns.xml` to include at least five examples covering repository boundaries, optimistic locking, transaction boundaries or unit of work, aggregate boundaries, and migration or N+1/query behavior.
 - [x] 1.9 Improve `123-cross-cutting-integration-patterns.xml` to include at least five examples covering anti-corruption layer, timeout/retry/circuit-breaker policy, correlation or trace propagation, bulkhead or fallback behavior, and strangler fig or reliable boundary evolution.
 - [x] 1.10 Ensure each new or revised example includes benefit, cost, when-not-to-use, and validation guidance.
-- [x] 1.11 Extend `skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature` with Kafka/event-driven and database/persistence acceptance scenarios.
-- [x] 1.12 Update `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` if the `123` acceptance prompt entry needs adjustment.
+- [x] 1.11 Extend `plinth-skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature` with Kafka/event-driven and database/persistence acceptance scenarios.
+- [x] 1.12 Update `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` if the `123` acceptance prompt entry needs adjustment.
 - [x] 1.13 Validate changed XML files with `xmllint --noout`.
-- [x] 1.14 Run `./mvnw clean install -pl skills-generator`.
+- [x] 1.14 Run `./mvnw clean install -pl plinth-skills-generator`.
 - [x] 1.15 Inspect generated local `.agents/skills/123-java-design-patterns/SKILL.md`.
 - [x] 1.16 Inspect generated local `.agents/skills/123-java-design-patterns/references/123-*.md`.
 - [x] 1.17 Execute the listed `123-java-design-patterns` acceptance prompt and verify it passes, or record a skipped prompt with reason. Skipped: no interactive acceptance-prompt runner is available in this environment; generated Gherkin coverage and local skill output were inspected.
-- [x] 1.18 Run `./mvnw clean verify -pl skills-generator`.
+- [x] 1.18 Run `./mvnw clean verify -pl plinth-skills-generator`.
 - [x] 1.19 Run `openspec validate --all`.

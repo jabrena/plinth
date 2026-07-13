@@ -42,7 +42,7 @@ The architecture diagram skill reference source MUST include focused bounded-con
 
 #### Scenario: Register bounded-context reference for skill 033
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill `033` registers a bounded-context diagram reference
 - **AND** the reference is separate from the UML sequence, UML class, C4, UML state-machine, and ER diagram references
 
@@ -89,7 +89,7 @@ The architecture diagram skill reference source MUST be split into focused XML r
 
 #### Scenario: Register focused references for skill 033
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill `033` registers multiple architecture diagram references
 - **AND** those references include UML sequence, UML class, C4, UML state-machine, ER, and bounded-context diagram guidance
 - **AND** skill `033` no longer depends on one monolithic `033-architecture-diagrams` reference as its only detailed source

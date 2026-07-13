@@ -11,7 +11,7 @@ That structure makes the generated skill harder to use selectively. A request ab
   - `130-java-testing-strategies-a-trip.xml`
   - `130-java-testing-strategies-correct.xml`
 - Update `130-skill.xml` so the generated skill routes agents to the relevant reference by testing concern.
-- Register the three references in `skills-generator/src/main/resources/skills.xml`.
+- Register the three references in `plinth-skills-generator/src/main/resources/skills.xml`.
 - Expand each technique reference with detailed cases, good/bad examples, guidance on when the technique applies, and validation signals.
 - Add acceptance coverage for `130-java-testing-strategies` because no `130` Gherkin feature currently exists.
 - Regenerate local skill output under `.agents/skills` for validation without refreshing public `skills/` release output.
@@ -29,8 +29,8 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer discussion requesting one reference per testing technique for `130-java-testing-strategies`.
-- Local source inspection: `skills-generator/src/main/resources/skill-indexes/130-skill.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/130-java-testing-strategies.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-indexes/130-skill.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/130-java-testing-strategies.xml`.
 - Local generated output inspection: `.agents/skills/130-java-testing-strategies/SKILL.md`.
 - Local generated output inspection: `.agents/skills/130-java-testing-strategies/references/130-java-testing-strategies.md`.
 - Related skill boundary: `131-java-testing-unit-testing` remains responsible for framework-agnostic JUnit 5, AssertJ, Mockito, and unit-test implementation mechanics.

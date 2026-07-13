@@ -40,13 +40,13 @@ The two-step change method skill source MUST be registered in the generator inve
 
 #### Scenario: Register two-step method skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `051` declares explicit skill id `051-design-two-steps-methods`
 - **AND** skill id `051` registers reference `051-design-two-steps-methods`
 
 #### Scenario: Generate local two-step method skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/051-design-two-steps-methods/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
@@ -56,10 +56,10 @@ The two-step change method skill MUST include Gherkin acceptance coverage and a 
 
 #### Scenario: Add acceptance test for two-step method guidance
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature` is inspected
 - **THEN** it includes an acceptance scenario for a developer making a complex or risky code change
 - **AND** the scenario expects the skill to guide preparatory refactoring before the intended behavior change
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature`
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature`
 
 ### Requirement: Source and generated-output boundaries
 

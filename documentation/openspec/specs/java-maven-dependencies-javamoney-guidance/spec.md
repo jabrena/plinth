@@ -10,7 +10,7 @@ The repository MUST provide JavaMoney guidance in the generated `111-java-maven-
 #### Scenario: Generated skill includes JavaMoney reference
 
 - **GIVEN** maintainers update the XML source for `111-java-maven-dependencies`
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output for `111-java-maven-dependencies` includes `https://javamoney.github.io/`
 - **AND** the generated guidance explains that JavaMoney is relevant for Java Money and Currency API support
 - **AND** the generated guidance mentions the JSR 354 API or Moneta reference implementation context
@@ -38,7 +38,7 @@ The implementation MUST edit XML sources and validate generated local skill outp
 
 - **WHEN** JavaMoney guidance is implemented
 - **THEN** each edited XML source file passes `xmllint --noout`
-- **AND** `./mvnw clean install -pl skills-generator` succeeds
+- **AND** `./mvnw clean install -pl plinth-skills-generator` succeeds
 - **AND** generated local `111-java-maven-dependencies/SKILL.md` contains the JavaMoney guidance
 
 ### Requirement: Acceptance prompt discipline
@@ -48,7 +48,7 @@ The implementation MUST follow the repository acceptance prompt policy for regen
 #### Scenario: Run only the changed skill acceptance prompt
 
 - **GIVEN** regenerated local output for `111-java-maven-dependencies` changes
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists the `111-java-maven-dependencies` prompt
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists the `111-java-maven-dependencies` prompt
 - **WHEN** acceptance validation is performed
 - **THEN** only the listed `111-java-maven-dependencies` acceptance prompt is executed for this changed skill
 - **AND** prompts for unchanged skills are not executed by default

@@ -33,7 +33,7 @@ The new skill should retain traceability to issue #886 in OpenSpec artifacts and
 
 ### Keep implementation source-owned
 
-Skill behavior should be authored in XML sources under `skills-generator/src/main/resources/`. Command retirement should edit generator sources and tests, not generated files directly. README files are authored docs and should be updated directly, with localized README files kept in sync.
+Skill behavior should be authored in XML sources under `plinth-skills-generator/src/main/resources/`. Command retirement should edit generator sources and tests, not generated files directly. README files are authored docs and should be updated directly, with localized README files kept in sync.
 
 ## Two-Step Sequencing
 
@@ -54,7 +54,7 @@ Remove `/review-breaking-changes` from command sources, inventories, command tes
 Validation after Step 2:
 
 - Run `rg "review-breaking-changes"` and confirm only historical OpenSpec, changelog, or intentional traceability references remain.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all` from `documentation/`.
 
 ## Compatibility Review Output

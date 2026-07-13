@@ -25,8 +25,8 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer request to create OpenSpec change `improve-701-openapi-guidance`.
-- Local source inspection: `skills-generator/src/main/resources/skill-indexes/701-skill.xml`.
-- Local source inspection: `skills-generator/src/main/resources/skill-references/701-technologies-openapi.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-indexes/701-skill.xml`.
+- Local source inspection: `plinth-skills-generator/src/main/resources/skill-references/701-technologies-openapi.xml`.
 - Local generated output inspection: `.agents/skills/701-technologies-openapi/SKILL.md`.
 - Local generated output inspection: `.agents/skills/701-technologies-openapi/references/701-technologies-openapi.md`.
 - Derivation direction: maintainer request plus local source review -> OpenSpec change artifacts -> XML source improvement -> local generated skill validation.

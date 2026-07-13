@@ -6,7 +6,7 @@ The repository MUST improve `123-java-design-patterns` so its reference examples
 
 #### Scenario: Classic Java pattern reference covers major pattern pressures
 
-- **GIVEN** maintainers improve `skills-generator/src/main/resources/skill-references/123-java-design-patterns.xml`
+- **GIVEN** maintainers improve `plinth-skills-generator/src/main/resources/skill-references/123-java-design-patterns.xml`
 - **WHEN** the local skill is generated
 - **THEN** `references/123-java-design-patterns.md` includes at least six top-level examples
 - **AND** the examples cover creation, behavior variation, adaptation or wrapping, and state or command collaboration pressures
@@ -14,7 +14,7 @@ The repository MUST improve `123-java-design-patterns` so its reference examples
 
 #### Scenario: REST API pattern reference covers contract evolution
 
-- **GIVEN** maintainers improve `skills-generator/src/main/resources/skill-references/123-rest-api-patterns.xml`
+- **GIVEN** maintainers improve `plinth-skills-generator/src/main/resources/skill-references/123-rest-api-patterns.xml`
 - **WHEN** the local skill is generated
 - **THEN** `references/123-rest-api-patterns.md` includes at least five top-level examples
 - **AND** the examples cover resource design, idempotency, Problem Details, pagination or filtering, and optimistic concurrency or contract versioning
@@ -22,7 +22,7 @@ The repository MUST improve `123-java-design-patterns` so its reference examples
 
 #### Scenario: Kafka pattern reference covers reliability and evolution
 
-- **GIVEN** maintainers improve `skills-generator/src/main/resources/skill-references/123-kafka-event-driven-patterns.xml`
+- **GIVEN** maintainers improve `plinth-skills-generator/src/main/resources/skill-references/123-kafka-event-driven-patterns.xml`
 - **WHEN** the local skill is generated
 - **THEN** `references/123-kafka-event-driven-patterns.md` includes at least five top-level examples
 - **AND** the examples cover event-carried state transfer, transactional outbox, partition key selection, idempotent consumer or inbox, and retry/DLT or schema evolution behavior
@@ -30,7 +30,7 @@ The repository MUST improve `123-java-design-patterns` so its reference examples
 
 #### Scenario: Persistence pattern reference covers consistency and query behavior
 
-- **GIVEN** maintainers improve `skills-generator/src/main/resources/skill-references/123-database-persistence-patterns.xml`
+- **GIVEN** maintainers improve `plinth-skills-generator/src/main/resources/skill-references/123-database-persistence-patterns.xml`
 - **WHEN** the local skill is generated
 - **THEN** `references/123-database-persistence-patterns.md` includes at least five top-level examples
 - **AND** the examples cover repository boundaries, optimistic locking, transaction boundaries or unit of work, aggregate boundaries, and migration or N+1/query behavior
@@ -38,7 +38,7 @@ The repository MUST improve `123-java-design-patterns` so its reference examples
 
 #### Scenario: Cross-cutting integration reference covers resilience and observability
 
-- **GIVEN** maintainers improve `skills-generator/src/main/resources/skill-references/123-cross-cutting-integration-patterns.xml`
+- **GIVEN** maintainers improve `plinth-skills-generator/src/main/resources/skill-references/123-cross-cutting-integration-patterns.xml`
 - **WHEN** the local skill is generated
 - **THEN** `references/123-cross-cutting-integration-patterns.md` includes at least five top-level examples
 - **AND** the examples cover anti-corruption layer, timeout/retry/circuit-breaker policy, correlation or trace propagation, bulkhead or fallback behavior, and strangler fig or reliable boundary evolution
@@ -62,23 +62,23 @@ The repository MUST extend `123-java-design-patterns` acceptance coverage beyond
 
 #### Scenario: Kafka reliability review acceptance scenario exists
 
-- **GIVEN** maintainers update `skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
+- **GIVEN** maintainers update `plinth-skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
 - **WHEN** the acceptance scenarios are inspected
 - **THEN** at least one scenario requires the skill to read `references/123-kafka-event-driven-patterns.md`
 - **AND** the scenario verifies problem-first pattern selection, reliability trade-offs, and when-not-to-use guidance
 
 #### Scenario: Persistence review acceptance scenario exists
 
-- **GIVEN** maintainers update `skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
+- **GIVEN** maintainers update `plinth-skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
 - **WHEN** the acceptance scenarios are inspected
 - **THEN** at least one scenario requires the skill to read `references/123-database-persistence-patterns.md`
 - **AND** the scenario verifies consistency, query behavior, validation signal, and explicit no-pattern decisions where simple persistence code is enough
 
 #### Scenario: Acceptance prompt inventory remains synchronized
 
-- **GIVEN** maintainers change `skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
+- **GIVEN** maintainers change `plinth-skills-generator/src/test/resources/gherkin/skills/123-java-design-patterns.feature`
 - **WHEN** the change is reviewed
-- **THEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` includes the matching `123-java-design-patterns` prompt entry
+- **THEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` includes the matching `123-java-design-patterns` prompt entry
 - **AND** the implementation records whether the listed prompt was executed or skipped with a reason
 
 ### Requirement: Source and generated-output boundaries

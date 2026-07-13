@@ -27,14 +27,14 @@ None.
 - Supporting source artifact: maintainer-authored issue comment with MongoDB-oriented improvement ideas.
 - Related pattern source: GitHub issue [#895](https://github.com/jabrena/plinth/issues/895) and OpenSpec change `improve-flyway-migration-guidance`, used as a structural precedent only.
 - Existing implementation targets:
-  - `skills-generator/src/main/resources/skill-references/316-frameworks-spring-mongodb-migrations-mongock.xml`
-  - `skills-generator/src/main/resources/skill-references/416-frameworks-quarkus-mongodb-migrations-mongock.xml`
-  - `skills-generator/src/main/resources/skill-references/516-frameworks-micronaut-mongodb-migrations-mongock.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/316-frameworks-spring-mongodb-migrations-mongock.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/416-frameworks-quarkus-mongodb-migrations-mongock.xml`
+  - `plinth-skills-generator/src/main/resources/skill-references/516-frameworks-micronaut-mongodb-migrations-mongock.xml`
 - Supporting acceptance targets:
-  - `skills-generator/src/test/resources/gherkin/skills/316-frameworks-spring-mongodb-migrations-mongock.feature`
-  - `skills-generator/src/test/resources/gherkin/skills/416-frameworks-quarkus-mongodb-migrations-mongock.feature`
-  - `skills-generator/src/test/resources/gherkin/skills/516-frameworks-micronaut-mongodb-migrations-mongock.feature`
-  - `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`
+  - `plinth-skills-generator/src/test/resources/gherkin/skills/316-frameworks-spring-mongodb-migrations-mongock.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/skills/416-frameworks-quarkus-mongodb-migrations-mongock.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/skills/516-frameworks-micronaut-mongodb-migrations-mongock.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`
 - Derivation direction: issue #902 -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
 
 ## Change Boundary Assessment

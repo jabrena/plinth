@@ -4,7 +4,7 @@
 
 Currently, the project has two separate Maven modules:
 - `system-prompts-generator` - generates rules to `.cursor/rules/`
-- `skills-generator` - generates skills to `skills/` and depends on the first module
+- `plinth-skills-generator` - generates skills to `skills/` and depends on the first module
 
 This creates unnecessary complexity and inter-module dependencies that need to be consolidated.
 

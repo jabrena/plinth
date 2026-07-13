@@ -46,10 +46,10 @@ Dependency insight should come from local resolver output, maintainer-provided d
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated `.agents/skills/114-java-maven-search/SKILL.md` and generated references for clear routing language.
-- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; if `114-java-maven-search` is listed and regenerated local output changes, execute only the listed prompt for this skill.
-- Run focused `skills-generator` verification appropriate to the implementation.
+- Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; if `114-java-maven-search` is listed and regenerated local output changes, execute only the listed prompt for this skill.
+- Run focused `plinth-skills-generator` verification appropriate to the implementation.
 - Run `openspec validate --all`.
 
 ## Open Questions

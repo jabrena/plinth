@@ -1,0 +1,172 @@
+package info.jab.pml;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.HashSet;
+import java.util.List;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DisplayName("Agent Index Tests")
+class AgentIndexesTest {
+
+    private static final List<String> CODER_AGENTS = List.of(
+        "robot-java-coder.md",
+        "robot-java-spring-boot-coder.md",
+        "robot-java-quarkus-coder.md",
+        "robot-java-micronaut-coder.md"
+    );
+
+    @Test
+    @DisplayName("Agent inventory XML must load agent files in installation order")
+    void should_loadAgentFiles_when_agentInventoryIsParsed() {
+        List<String> agentFiles = expectedAgentFiles();
+
+        assertThat(agentFiles)
+            .isNotEmpty()
+            .allSatisfy(agentFile -> assertThat(agentFile).endsWith(".md"));
+        assertThat(new HashSet<>(agentFiles))
+            .withFailMessage("Agent inventory must not contain duplicate agent files")
+            .hasSize(agentFiles.size());
+    }
+
+    @Test
+    @DisplayName("Agent assets must include the complete agent bundle")
+    void should_haveCompleteAgentAssets_when_agentBundleIsInstalled() {
+        expectedAgentFiles().forEach(agentFile -> {
+            String resource = "agents/" + agentFile;
+            assertThat(getTestResource(resource))
+                .withFailMessage("Agent asset missing: %s", resource)
+                .isNotNull();
+        });
+    }
+
+    @Test
+    @DisplayName("Agent inventory template must list the exact agent bundle")
+    void should_listExactAgents_when_inventoryTemplateIsGenerated() {
+        String inventory = loadClasspathResource("java-agents-inventory-template.md");
+
+        expectedAgentFiles().stream()
+            .map(agentFile -> agentFile.substring(0, agentFile.length() - ".md".length()))
+            .map(agentName -> "`" + agentName + "`")
+            .forEach(agent -> assertThat(inventory).contains(agent));
+
+        long agentRows = inventory.lines()
+            .filter(line -> line.startsWith("| `robot-"))
+            .count();
+        assertThat(agentRows).isEqualTo(expectedAgentFiles().size());
+    }
+
+    @Test
+    @DisplayName("Inventory provides architect and tech lead without coordinator")
+    void should_installRenamedAnalysisDesignAgents_withoutCoordinatorAlias() {
+        String inventory = loadClasspathResource("java-agents-inventory-template.md");
+
+        assertThat(inventory)
+            .contains("`robot-architect`")
+            .contains("`robot-tech-lead`")
+            .contains("`robot-no-java`")
+            .contains("`robot-java-performance`")
+            .doesNotContain("`robot-coordinator`");
+        assertThat(getTestResource("agents/robot-coordinator.md"))
+            .isNull();
+    }
+
+    @Test
+    @DisplayName("Tech lead preserves all framework coder routes")
+    void should_referenceAllCoderAgents_when_techLeadCoordinatesDelivery() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+
+        CODER_AGENTS.forEach(coderAgent -> assertThat(techLead).contains(coderAgent));
+    }
+
+    @Test
+    @DisplayName("Tech lead must route non-Java work to default non-Java agent")
+    void should_routeNonJavaWork_when_executionArtifactIsNotJava() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+        String noJavaAgent = loadClasspathResource("agents/robot-no-java.md");
+
+        assertThat(techLead)
+            .contains("no Java, Maven, or JVM implementation scope")
+            .contains("| Plain Java, Maven/JVM work, Java CLI-only work, or Java framework-neutral requirements | [@robot-java-coder](robot-java-coder.md) |")
+            .contains("| Explicit non-Java stack, no Java/JVM implementation scope, or no Java evidence in the selected issue/plan/spec | [@robot-no-java](robot-no-java.md) |")
+            .contains("Prefer **robot-no-java** when the selected issue, plan, or OpenSpec tasks do not use Java");
+        assertThat(noJavaAgent)
+            .contains("name: robot-no-java")
+            .contains("does not use Java, Maven, or a JVM-based framework")
+            .contains("If the task is actually plain Java or Maven work");
+    }
+
+    @Test
+    @DisplayName("Java performance agent must coordinate profiling and benchmarks without direct implementation")
+    void should_coordinatePerformanceWorkflows_when_javaPerformanceAgentIsInstalled() {
+        String performanceAgent = loadClasspathResource("agents/robot-java-performance.md");
+
+        assertThat(performanceAgent)
+            .contains("name: robot-java-performance")
+            .contains("`@161-java-profiling-detect`")
+            .contains("`@162-java-profiling-analyze`")
+            .contains("`@164-java-profiling-verify`")
+            .contains("`@151-java-performance-jmeter`")
+            .contains("`@152-java-performance-gatling`")
+            .contains("JMH")
+            .contains("You do not directly implement application-code optimizations")
+            .contains("verified, inconclusive, or regressed");
+    }
+
+    @Test
+    @DisplayName("Coder agents must share implementation skill precedence")
+    void should_shareSkillPrecedence_when_coderAgentsImplementChanges() {
+        CODER_AGENTS.forEach(coderAgent -> {
+            String coder = loadClasspathResource("agents/" + coderAgent);
+
+            assertThat(coder)
+                .contains("Prefer `@143-java-functional-exception-handling`")
+                .contains("Use `@126-java-exception-handling`")
+                .contains("`@121-java-object-oriented-design`")
+                .contains("`@122-java-type-design`")
+                .contains("`@123-java-design-patterns`")
+                .contains("`@142-java-functional-programming`")
+                .contains("`@124-java-secure-coding`")
+                .contains("`@701-technologies-openapi`")
+                .contains("`@704-technologies-sql`")
+                .contains("`@705-technologies-nosql-mongodb`")
+                .contains("`@706-technologies-containers-docker`");
+        });
+    }
+
+    @Test
+    @DisplayName("Framework coders must prefer JDBC for relational persistence")
+    void should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence() {
+        assertThat(loadClasspathResource("agents/robot-java-spring-boot-coder.md"))
+            .contains("Prefer `@311-frameworks-spring-jdbc`")
+            .contains("Use `@312-frameworks-spring-data-jdbc` only");
+        assertThat(loadClasspathResource("agents/robot-java-quarkus-coder.md"))
+            .contains("Prefer `@411-frameworks-quarkus-jdbc`")
+            .contains("Use `@412-frameworks-quarkus-panache` only");
+        assertThat(loadClasspathResource("agents/robot-java-micronaut-coder.md"))
+            .contains("Prefer `@511-frameworks-micronaut-jdbc`")
+            .contains("Use `@512-frameworks-micronaut-data` only");
+    }
+
+    private static List<String> expectedAgentFiles() {
+        return AgentIndexes.agentFiles().toList();
+    }
+
+    private String loadClasspathResource(String resourceName) {
+        try (InputStream stream = getTestResource(resourceName)) {
+            if (stream == null) {
+                throw new IllegalArgumentException("Resource not found: " + resourceName);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load classpath resource: " + resourceName, e);
+        }
+    }
+
+    private InputStream getTestResource(String resourceName) {
+        return AgentIndexesTest.class.getClassLoader().getResourceAsStream(resourceName);
+    }
+}

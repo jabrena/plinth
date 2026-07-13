@@ -96,13 +96,13 @@ The avoid-breaking-changes skill source MUST be registered in the generator inve
 
 #### Scenario: Register avoid breaking changes skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `056` declares explicit skill id `056-design-avoid-breaking-changes`
 - **AND** skill id `056` registers reference `056-design-avoid-breaking-changes`
 
 #### Scenario: Generate local avoid breaking changes skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/056-design-avoid-breaking-changes/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
@@ -112,8 +112,8 @@ The avoid-breaking-changes skill MUST include Gherkin acceptance coverage and a 
 
 #### Scenario: Add acceptance test for compatibility review
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/056-design-avoid-breaking-changes.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/056-design-avoid-breaking-changes.feature` is inspected
 - **THEN** it includes an acceptance scenario for reviewing an OpenSpec plan or spec for breaking-change risk
 - **AND** the scenario expects the skill to report affected contracts, generated outputs, commands, skills, documentation, tests, or release guidance where applicable
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @skills-generator/src/test/resources/gherkin/skills/056-design-avoid-breaking-changes.feature`
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/056-design-avoid-breaking-changes.feature`
 

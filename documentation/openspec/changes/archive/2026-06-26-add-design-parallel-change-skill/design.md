@@ -25,9 +25,9 @@ This places the skill immediately after the existing design workflow skills:
 
 The skill uses the existing XML source pattern:
 
-- `skills-generator/src/main/resources/skill-indexes/055-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
-- `skills-generator/src/main/resources/skill-references/055-design-parallel-change.xml` provides detailed guidance, examples, output expectations, and tradeoffs.
-- `skills-generator/src/main/resources/skills.xml` registers skill id `055` with explicit `skillId="055-design-parallel-change"`.
+- `plinth-skills-generator/src/main/resources/skill-indexes/055-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
+- `plinth-skills-generator/src/main/resources/skill-references/055-design-parallel-change.xml` provides detailed guidance, examples, output expectations, and tradeoffs.
+- `plinth-skills-generator/src/main/resources/skills.xml` registers skill id `055` with explicit `skillId="055-design-parallel-change"`.
 
 Dedicated report assets are not required for the first addition. The initial deliverable is pattern guidance and examples for database migration scenarios.
 
@@ -57,10 +57,10 @@ The new design skill complements, not replaces, framework-specific Flyway skills
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `.agents/skills/055-design-parallel-change/SKILL.md`.
-- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; if a `055-design-parallel-change` acceptance prompt is added, execute only that listed prompt.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; if a `055-design-parallel-change` acceptance prompt is added, execute only that listed prompt.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

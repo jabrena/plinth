@@ -192,7 +192,7 @@ All skills have an acceptance-test inventory file, and it lives in `acceptance-t
 The inventory has a prompt to validate the skill:
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
 and verify that acceptance-tests pass.
 ```
 
@@ -264,7 +264,7 @@ Given this `User story` and the `OpenSpec` change defined here: https://github.c
 Using this prompt:
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 ```
 
@@ -333,7 +333,7 @@ In this case, the command internally uses the agent `@robot-tech-lead`, which re
 But if you refine the prompt a bit, you can implement the requirement in `Quarkus`:
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 Implement it using Quarkus, not Spring Boot, as the default requirement.
 ```
@@ -347,7 +347,7 @@ In this case, the agent `@robot-tech-lead` redirects the workload to the specifi
 Or, if required, the agent `@robot-tech-lead` redirects to the specific agent `@robot-java-micronaut-coder`, which handles specific `Java skills` and specific `Micronaut skills`. This is the result for a `Micronaut` implementation:
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 Implement it using Micronaut, not Spring Boot, as the default requirement.
 ```

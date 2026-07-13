@@ -41,12 +41,12 @@ The MAR skill source MUST be registered in the generator inventory so local skil
 
 #### Scenario: Register MAR regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `811` registers reference `811-regulations-eu-market-abuse-regulation`
 
 #### Scenario: Generate local MAR skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/811-regulations-eu-market-abuse-regulation/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

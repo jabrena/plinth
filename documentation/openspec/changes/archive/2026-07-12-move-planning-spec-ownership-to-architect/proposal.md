@@ -27,10 +27,10 @@ None.
 
 - Source artifact: GitHub issue #1019, "Move planning and specification ownership from tech lead to architect", https://github.com/jabrena/plinth/issues/1019
 - Supporting repository evidence:
-  - `skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
-  - `skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature`
-  - `skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
-  - `skills-generator/src/main/resources/skill-references/assets/commands/create-spec.md`
+  - `plinth-skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature`
+  - `plinth-skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
+  - `plinth-skills-generator/src/main/resources/skill-references/assets/commands/create-spec.md`
 - Derivation direction: GitHub issue #1019 -> OpenSpec change -> canonical agent/command source assets, acceptance tests, generated local output, and documentation.
 
 ## Impact

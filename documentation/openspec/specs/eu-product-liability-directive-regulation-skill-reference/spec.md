@@ -49,12 +49,12 @@ The Product Liability Directive skill source MUST be registered in the generator
 
 #### Scenario: Register Product Liability Directive regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `812` registers reference `812-regulations-eu-product-liability-directive`
 
 #### Scenario: Generate local Product Liability Directive skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/812-regulations-eu-product-liability-directive/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

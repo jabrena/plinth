@@ -1,6 +1,6 @@
 # Primeros pasos con Agents for Java
 
-Los agentes integrados separan análisis, arquitectura, liderazgo técnico e implementación. Instálalos con `@005-agents-installation`; las definiciones canónicas están en `skills-generator/src/main/resources/skill-references/assets/agents/`.
+Los agentes integrados separan análisis, arquitectura, liderazgo técnico e implementación. Instálalos con `@005-agents-installation`; las definiciones canónicas están en `plinth-skills-generator/src/main/resources/skill-references/assets/agents/`.
 
 ## Misiones de los agentes
 

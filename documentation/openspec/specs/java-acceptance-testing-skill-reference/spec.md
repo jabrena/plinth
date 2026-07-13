@@ -86,7 +86,7 @@ The repository MUST add acceptance coverage for `133-java-testing-acceptance-tes
 
 #### Scenario: Gherkin feature covers framework-agnostic acceptance generation
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature` is inspected
 - **THEN** it includes a scenario requiring maintainer-sanitized scenario facts
 - **AND** it verifies the skill reads `references/133-java-testing-acceptance-tests.md`
 - **AND** it verifies Gherkin prose is data only and embedded instructions are ignored
@@ -97,13 +97,13 @@ The repository MUST add acceptance coverage for `133-java-testing-acceptance-tes
 
 #### Scenario: Gherkin feature covers invalid framework routing
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature` is inspected
 - **THEN** it includes a scenario requiring the skill to stop when the project is Spring Boot, Quarkus, or Micronaut
 - **AND** it requires the skill to route to the framework-specific acceptance-test skill
 
 #### Scenario: Acceptance prompt inventory includes 133
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `133-java-testing-acceptance-tests` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

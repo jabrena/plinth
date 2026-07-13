@@ -50,9 +50,9 @@ Follow the repository two-step method:
 
 The first implementation slice MUST align repository acceptance tests with issue #1026 before changing generated prompts. Planned target Gherkin files live under this OpenSpec change for `/implement-spec` to copy into repository sources:
 
-- `acceptance-tests/create-spec.feature` → `skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
-- `acceptance-tests/explore-design.feature` → `skills-generator/src/test/resources/gherkin/commands/explore-design.feature`
-- `acceptance-tests/robot-architect.feature` → `skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
+- `acceptance-tests/create-spec.feature` → `plinth-skills-generator/src/test/resources/gherkin/commands/create-spec.feature`
+- `acceptance-tests/explore-design.feature` → `plinth-skills-generator/src/test/resources/gherkin/commands/explore-design.feature`
+- `acceptance-tests/robot-architect.feature` → `plinth-skills-generator/src/test/resources/gherkin/agents/robot-architect.feature`
 
 These files are planned target state for `/implement-spec`; they are not applied by `/create-spec`.
 
@@ -60,7 +60,7 @@ These files are planned target state for `/implement-spec`; they are not applied
 
 - [Risk] Users may still expect design exploration during `/create-spec`. → Update guides, inventories, README localized counterparts, and release notes with the create-spec-first workflow.
 - [Risk] Skill `034` removal breaks users referencing it directly. → Document migration to `/explore-design` and the enriched design skill set; verify no repository references remain.
-- [Risk] Generated outputs drift from source assets. → Edit canonical assets under `skills-generator` and regenerate; do not edit generated files directly.
+- [Risk] Generated outputs drift from source assets. → Edit canonical assets under `plinth-skills-generator` and regenerate; do not edit generated files directly.
 - [Risk] Acceptance tests and prompts diverge. → Update `create-spec.feature`, `explore-design.feature`, and `robot-architect.feature` together.
 
 ## Compatibility Review
@@ -74,8 +74,8 @@ These files are planned target state for `/implement-spec`; they are not applied
 
 - Validate OpenSpec with `openspec validate --all`.
 - Validate edited XML sources with `xmllint --noout` when XML files change.
-- Regenerate local agent/command/skill output with `./mvnw clean install -pl skills-generator`.
-- Run `./mvnw clean verify -pl skills-generator` or focused generator verification.
+- Regenerate local agent/command/skill output with `./mvnw clean install -pl plinth-skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator` or focused generator verification.
 - Execute affected acceptance prompts listed in command and agent prompt inventories.
 - Run Markdown validation for documentation-only changes when applicable.
 - Confirm no repository file still routes to or documents `034-architecture-design-exploration`.

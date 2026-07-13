@@ -5,7 +5,7 @@ TBD - created by archiving change add-analysis-design-commands. Update Purpose a
 ## Requirements
 ### Requirement: Analysis and design command bundle
 
-The generator SHALL provide embedded command assets for `/create-worktree`, `/explore-design`, `/create-adr`, `/create-diagram`, `/create-spec`, and `/review-alignment`. The generator MUST NOT install or advertise `/review-breaking-changes`; breaking-change review is owned by `@056-design-avoid-breaking-changes`.
+The repository SHALL provide embedded command assets for `/create-worktree`, `/explore-design`, `/create-adr`, `/create-diagram`, `/create-spec`, and `/review-alignment` through the `plinth-commands-generator` module. The generator MUST NOT install or advertise `/review-breaking-changes`; breaking-change review is owned by `@056-design-avoid-breaking-changes`.
 
 #### Scenario: Install the command bundle without the retired breaking-change command
 
@@ -21,6 +21,7 @@ The generator SHALL provide embedded command assets for `/create-worktree`, `/ex
 - **THEN** `/review-breaking-changes` is absent from active command sources
 - **AND** command-focused tests no longer assert the retired command contract
 - **AND** skill-focused acceptance coverage exists for `056-design-avoid-breaking-changes`
+- **AND** active command sources are owned by `plinth-commands-generator`, not `plinth-skills-generator`
 
 #### Scenario: Update README discoverability
 

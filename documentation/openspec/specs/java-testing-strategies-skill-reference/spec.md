@@ -106,14 +106,14 @@ The repository MUST add acceptance coverage for `130-java-testing-strategies`.
 
 #### Scenario: Gherkin feature covers focused reference selection
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/130-java-testing-strategies.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/130-java-testing-strategies.feature` is inspected
 - **THEN** it includes scenarios requiring RIGHT-BICEP, A-TRIP, and CORRECT focused reference selection
 - **AND** it verifies that broad review requests may combine all three references
 - **AND** it verifies that code edits remain gated by compile and verification guidance
 
 #### Scenario: Acceptance prompt inventory includes 130
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` is inspected
 - **THEN** it includes a `130-java-testing-strategies` entry
 - **AND** the entry uses the existing `execute @...feature` prompt format
 

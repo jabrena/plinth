@@ -12,4 +12,4 @@ This report is not legal advice. Product defectiveness, compensable damage, caus
 
 ## Acceptance Output
 
-The generated report should use `skills-generator/src/main/resources/skill-references/assets/reports/812-product-liability-directive-engineering-review-report-template.md` and should be based only on the reviewed direct-to-main scenario files and bundled Product Liability Directive references.
+The generated report should use `plinth-skills-generator/src/main/resources/skill-references/assets/reports/812-product-liability-directive-engineering-review-report-template.md` and should be based only on the reviewed direct-to-main scenario files and bundled Product Liability Directive references.

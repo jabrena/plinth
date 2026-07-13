@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Create a Checklist with all Java steps to use with system prompts for Java</title>
+        <description>Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal> Your task is to create a comprehensive step-by-step guide that follows the exact
+        section structure defined in the embedded template asset and derives the inventory rows from
+        `plinth-skills-generator/src/main/resources/skills.xml`. Create a markdown file named
+        `INVENTORY-SKILLS-JAVA.md` using:
+
+        - [java-skills-inventory-template.md](../assets/java-skills-inventory-template.md)
+    </goal>
+
+    <constraints>
+        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded section template and
+            use `plinth-skills-generator/src/main/resources/skills.xml` as the single source of truth for
+            skill rows. ### What NOT to Include:</constraints-description>
+        <constraint-list>
+            <constraint>**DO NOT** create additional sections beyond what is shown in the template</constraint>
+            <constraint>**SECTION ORDER**: Keep `Regulations skills` as the final inventory section before the closing note</constraint>
+            <constraint>**DO NOT** add skill rows that are absent from `skills.xml`</constraint>
+            <constraint>**DO NOT** omit any skill declared in `skills.xml`</constraint>
+            <constraint>**ONLY** use the `skillId` attribute as the generated skill id when it exists</constraint>
+            <constraint>**ONLY** use the single `reference-list/reference` value as the generated
+                skill id when `skillId` is absent</constraint>
+            <constraint>If a skill has multiple references and no `skillId`, stop and report the
+                inventory source issue instead of guessing a generated id</constraint>
+        </constraint-list>
+    </constraints>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**File Creation**: Generate the complete markdown file named
+                `INVENTORY-SKILLS-JAVA.md` at the requested output path, or in the project root
+                directory when no explicit path is requested</output-format-item>
+            <output-format-item>**Template Adherence**: Follow the embedded section structure and
+                populate one table row for every skill declared in `skills.xml`, including the
+                final `Regulations skills` section</output-format-item>
+            <output-format-item>**File Handling**: If `INVENTORY-SKILLS-JAVA.md` already exists,
+                overwrite it completely with the new generated content</output-format-item>
+            <output-format-item>**Validation**: Before finishing, compare generated row ids against
+                `skills.xml` effective skill ids and confirm there are no missing or extra rows</output-format-item>
+        </output-format-list>
+    </output-format>
+</prompt>

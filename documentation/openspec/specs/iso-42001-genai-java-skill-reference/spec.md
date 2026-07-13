@@ -50,12 +50,12 @@ The ISO/IEC 42001 skill source MUST be registered in the generator inventory so 
 
 #### Scenario: Register ISO/IEC 42001 regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `813` registers reference `813-regulations-iso-42001`
 
 #### Scenario: Generate local ISO/IEC 42001 skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/813-regulations-iso-42001/SKILL.md`
 - **AND** generated local skill output includes `.agents/skills/813-regulations-iso-42001/assets/questions/813-iso-42001-engineering-review-questionnaire.md`
 - **AND** generated local skill output includes `.agents/skills/813-regulations-iso-42001/assets/reports/813-iso-42001-engineering-review-report-template.md`

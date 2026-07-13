@@ -24,4 +24,4 @@ None.
 
 ## Impact
 
-The command filename and invocation change for existing users, who must migrate from `/implement` to `/implement-issue`. Canonical command and coder-agent assets under `skills-generator`, installer XIncludes, command inventory sources, generator tests, checked-in Cursor commands and agents, and README links are affected. No new dependency, coder agent, or generated `skills/` release output is introduced.
+The command filename and invocation change for existing users, who must migrate from `/implement` to `/implement-issue`. Canonical command and coder-agent assets under `plinth-skills-generator`, installer XIncludes, command inventory sources, generator tests, checked-in Cursor commands and agents, and README links are affected. No new dependency, coder agent, or generated `skills/` release output is introduced.

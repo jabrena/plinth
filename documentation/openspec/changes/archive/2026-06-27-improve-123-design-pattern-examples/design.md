@@ -75,15 +75,15 @@ Validation after Step 1 should include OpenSpec validation and inspection that t
 
 Add the new XML reference examples and decision aids, regenerate local skills, and verify generated Markdown. This changes the skill guidance behavior by giving agents more concrete examples and stronger selection support.
 
-Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, applicable acceptance prompt execution, and the skills-generator module verification.
+Validation after Step 2 should include XML well-formedness checks, local skill generation, generated output inspection, applicable acceptance prompt execution, and the plinth-skills-generator module verification.
 
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated `.agents/skills/123-java-design-patterns/SKILL.md` and generated `references/123-*.md`.
-- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` and run only the listed `123-java-design-patterns` acceptance prompt when the `123` Gherkin file or generated skill output changes.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Check `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` and run only the listed `123-java-design-patterns` acceptance prompt when the `123` Gherkin file or generated skill output changes.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Open Questions

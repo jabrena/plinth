@@ -55,13 +55,13 @@ The Hamburger Method skill source MUST be registered in the generator inventory 
 
 #### Scenario: Register Hamburger Method design skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `052` declares explicit skill id `052-design-hamburger-method`
 - **AND** skill id `052` registers reference `052-design-hamburger-method`
 
 #### Scenario: Generate local Hamburger Method skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/052-design-hamburger-method/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
@@ -71,10 +71,10 @@ The Hamburger Method skill MUST include Gherkin acceptance coverage and a matchi
 
 #### Scenario: Add acceptance test for Hamburger Method guidance
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature` is inspected
+- **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature` is inspected
 - **THEN** it includes an acceptance scenario for splitting a large feature into a smallest useful vertical slice
 - **AND** it includes expectations for follow-up slices and tracker-routing guidance
-- **AND** `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature`
+- **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature`
 
 ### Requirement: Source and generated-output boundaries
 

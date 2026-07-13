@@ -33,7 +33,7 @@ None.
 
 - Source artifact: local generated skill structure review for `.agents/skills/801-regulations-eu-ai-act`, `.agents/skills/802-regulations-dora`, `.agents/skills/803-regulations-gdpr`, and `.agents/skills/804-regulations-eu-nis2`.
 - Existing implementation model: `804-regulations-eu-nis2` generated `SKILL.md`, `references/804-regulations-eu-nis2-chapters-summary.md`, `references/804-regulations-eu-nis2-engineering-examples.md`, and `assets/reports/804-nis2-engineering-review-report-template.md`.
-- Existing baseline sources: `skills-generator/src/main/resources/skill-indexes/801-skill.xml`, `802-skill.xml`, `803-skill.xml`; their skill references; their questionnaire and report assets; their Gherkin acceptance scenarios.
+- Existing baseline sources: `plinth-skills-generator/src/main/resources/skill-indexes/801-skill.xml`, `802-skill.xml`, `803-skill.xml`; their skill references; their questionnaire and report assets; their Gherkin acceptance scenarios.
 - Derivation direction: generated skill structure comparison -> OpenSpec technical-debt change -> future XML source refactor -> local skill regeneration and validation.
 
 ## Change Boundary Assessment

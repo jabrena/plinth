@@ -10,10 +10,10 @@ The Maven dependencies skill currently guides users through selected dependency 
 - Use `https://javamoney.github.io/` as the reference website.
 - JavaMoney covers the Java Money and Currency API, JSR 354 API, Moneta reference implementation, and related libraries.
 - The guidance should explain when JavaMoney is relevant for Money and Currency API support.
-- Implementation must be authored from XML sources under `skills-generator/src/main/resources/`.
+- Implementation must be authored from XML sources under `plinth-skills-generator/src/main/resources/`.
 - Generated release output under `skills/` and legacy checked-in Cursor rules under `.cursor/rules/` must not be edited directly.
 - Local generated output for `111-java-maven-dependencies` must include the JavaMoney guidance after regeneration.
-- Validation must include XML well-formedness checks and `./mvnw clean install -pl skills-generator`.
+- Validation must include XML well-formedness checks and `./mvnw clean install -pl plinth-skills-generator`.
 
 ## What Changes
 

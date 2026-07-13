@@ -7,7 +7,7 @@ Every generated skill MUST define at least five meaningful trigger phrases in it
 #### Scenario: Existing below-threshold skills are updated
 
 - **GIVEN** a skill listed in issue #890 has fewer than five triggers
-- **WHEN** its source file under `skills-generator/src/main/resources/skill-indexes/` is inspected after implementation
+- **WHEN** its source file under `plinth-skills-generator/src/main/resources/skill-indexes/` is inspected after implementation
 - **THEN** its `<triggers>` section contains at least five non-empty `<trigger>` entries
 - **AND** each added trigger describes a plausible user request for that skill
 - **AND** the triggers use domain-specific wording for the skill's language, framework, technology, regulation, command, planning workflow, or testing concern
@@ -21,18 +21,18 @@ Every generated skill MUST define at least five meaningful trigger phrases in it
 
 ### Requirement: Trigger minimum is covered by inventory validation
 
-The `skills-generator` module MUST include focused validation that detects generated skills with fewer than five source triggers.
+The `plinth-skills-generator` module MUST include focused validation that detects generated skills with fewer than five source triggers.
 
 #### Scenario: Inventory test fails for below-threshold skills
 
-- **WHEN** `./mvnw -pl skills-generator -Dtest=SkillTriggerInventoryTest test` is run
+- **WHEN** `./mvnw -pl plinth-skills-generator -Dtest=SkillTriggerInventoryTest test` is run
 - **THEN** the test fails if any skill source has fewer than five trigger entries
 - **AND** the failure output identifies the affected skill ids and trigger counts
 
 #### Scenario: Inventory test passes after trigger update
 
 - **WHEN** all affected skill sources have at least five meaningful triggers
-- **AND** `./mvnw -pl skills-generator -Dtest=SkillTriggerInventoryTest test` is run
+- **AND** `./mvnw -pl plinth-skills-generator -Dtest=SkillTriggerInventoryTest test` is run
 - **THEN** the trigger inventory validation passes
 
 ### Requirement: Source and generated-output boundaries are preserved
@@ -50,6 +50,6 @@ The implementation MUST update XML sources and regenerate local skill output wit
 
 #### Scenario: Local generated output reflects trigger changes
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run after XML trigger updates
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run after XML trigger updates
 - **THEN** representative generated `.agents/skills/*/SKILL.md` files include descriptions derived from the updated trigger phrases
 - **AND** generated references contain no unresolved include markers or broken local reference paths

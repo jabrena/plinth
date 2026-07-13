@@ -40,12 +40,12 @@ The Cyber Resilience Act skill source MUST be registered in the generator invent
 
 #### Scenario: Register Cyber Resilience Act regulation skill
 
-- **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
+- **WHEN** `plinth-skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `805` registers reference `805-regulations-eu-cyber-resilience-act`
 
 #### Scenario: Generate local Cyber Resilience Act skill
 
-- **WHEN** `./mvnw clean install -pl skills-generator` is run
+- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/805-regulations-eu-cyber-resilience-act/SKILL.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 

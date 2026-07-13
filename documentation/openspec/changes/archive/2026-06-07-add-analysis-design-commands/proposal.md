@@ -22,6 +22,6 @@ None.
 
 ## Impact
 
-- Owns `skills-generator/src/main/resources/skill-references/assets/commands/`, `004-commands-installation.xml`, `java-commands-inventory-template.md`, and command-focused tests.
+- Owns `plinth-skills-generator/src/main/resources/skill-references/assets/commands/`, `004-commands-installation.xml`, `java-commands-inventory-template.md`, and command-focused tests.
 - Does not change agents, planning/OpenSpec XML skills, README files, localized guides, or public generated `skills/`.
 - Commands may reference agent and skill names delivered by sibling changes, but this change does not edit those sources.

@@ -1,6 +1,6 @@
 # Java Agents 快速入门
 
-内置 Agents 将分析、架构、技术领导和实现职责分离。使用 `@005-agents-installation` 安装；规范定义位于 `skills-generator/src/main/resources/skill-references/assets/agents/`。
+内置 Agents 将分析、架构、技术领导和实现职责分离。使用 `@005-agents-installation` 安装；规范定义位于 `plinth-skills-generator/src/main/resources/skill-references/assets/agents/`。
 
 ## Agent 职责
 

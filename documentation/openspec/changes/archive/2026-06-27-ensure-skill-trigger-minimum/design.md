@@ -1,6 +1,6 @@
 ## Context
 
-Issue #890 provides a generated trigger count table and identifies skills with trigger counts from zero to four. The repository already treats `skills/` as generated release output and `.agents/skills/` as local generated output, so the source of truth for this change is the skill index XML under `skills-generator/src/main/resources/skill-indexes/`.
+Issue #890 provides a generated trigger count table and identifies skills with trigger counts from zero to four. The repository already treats `skills/` as generated release output and `.agents/skills/` as local generated output, so the source of truth for this change is the skill index XML under `plinth-skills-generator/src/main/resources/skill-indexes/`.
 
 ## Intended Behavior Change
 
@@ -14,7 +14,7 @@ Before changing trigger content, confirm the affected skill list from issue #890
 
 Validation after Step 1:
 
-- Run the focused `skills-generator` test that reports or validates trigger counts.
+- Run the focused `plinth-skills-generator` test that reports or validates trigger counts.
 - Confirm the test either characterizes the current failing inventory or reports the affected skills clearly.
 
 ### Step 2: Make The Behavior Change
@@ -24,10 +24,10 @@ Update affected skill index XML files so every skill has at least five meaningfu
 Validation after Step 2:
 
 - Validate every changed XML file with `xmllint --noout`.
-- Run `./mvnw clean install -pl skills-generator` to regenerate local `.agents/skills`.
+- Run `./mvnw clean install -pl plinth-skills-generator` to regenerate local `.agents/skills`.
 - Run the focused trigger inventory test.
 - Inspect representative generated `SKILL.md` files for updated trigger wording.
-- Run `./mvnw clean verify -pl skills-generator`.
+- Run `./mvnw clean verify -pl plinth-skills-generator`.
 - Run `openspec validate --all`.
 
 ## Hamburger Slice Assessment
@@ -35,7 +35,7 @@ Validation after Step 2:
 This request is broad because it affects many skill families. The layers are:
 
 - Inventory source: issue #890 trigger counts and local trigger-count test output.
-- XML source updates: skill index files under `skills-generator/src/main/resources/skill-indexes/`.
+- XML source updates: skill index files under `plinth-skills-generator/src/main/resources/skill-indexes/`.
 - Meaningfulness policy: domain-specific, non-duplicate trigger wording.
 - Generator output: local `.agents/skills` regenerated from XML.
 - Validation: XML well-formedness, focused trigger inventory test, module verification, and OpenSpec validation.

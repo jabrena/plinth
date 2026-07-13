@@ -51,7 +51,7 @@ The skill entry point already restricts C4 diagrams to Context, Container, and C
 
 ### Preserve generated-output boundaries
 
-Implementation should edit XML sources under `skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl skills-generator` for validation. Public `skills/` release output should only be refreshed when the release profile is intentionally used.
+Implementation should edit XML sources under `plinth-skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl plinth-skills-generator` for validation. Public `skills/` release output should only be refreshed when the release profile is intentionally used.
 
 ## Risks / Trade-offs
 
@@ -67,6 +67,6 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 3. Split the monolithic `033-architecture-diagrams.xml` source into focused diagram-family references with local guardrails.
 4. Update `skills.xml` so skill `033` registers the split references.
 5. Validate changed XML with `xmllint --noout`.
-6. Run local skill generation with `./mvnw clean install -pl skills-generator`.
+6. Run local skill generation with `./mvnw clean install -pl plinth-skills-generator`.
 7. Inspect generated local `033-architecture-diagrams/SKILL.md` and references for question flow, reference links, guardrails, and C4 alignment.
 8. Run applicable focused Maven or generator validation.

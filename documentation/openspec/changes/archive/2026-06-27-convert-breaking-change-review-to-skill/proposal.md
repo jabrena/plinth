@@ -40,6 +40,6 @@ The smallest useful slice is to add the skill, remove the command from every com
 
 ## Impact
 
-Affected areas include `skills-generator/src/main/resources/skill-indexes/`, `skills-generator/src/main/resources/skill-references/`, `skills-generator/src/main/resources/skills.xml`, `skills-generator/src/main/resources/commands.xml`, command assets, command installation references, command inventory templates, command-focused tests, skill acceptance tests, README files, and OpenSpec artifacts.
+Affected areas include `plinth-skills-generator/src/main/resources/skill-indexes/`, `plinth-skills-generator/src/main/resources/skill-references/`, `plinth-skills-generator/src/main/resources/skills.xml`, `plinth-skills-generator/src/main/resources/commands.xml`, command assets, command installation references, command inventory templates, command-focused tests, skill acceptance tests, README files, and OpenSpec artifacts.
 
-Generated `.agents/skills` output should be refreshed through `./mvnw clean install -pl skills-generator` for local verification. Public `skills/` release output should only be refreshed through the release profile when release output is intentionally in scope.
+Generated `.agents/skills` output should be refreshed through `./mvnw clean install -pl plinth-skills-generator` for local verification. Public `skills/` release output should only be refreshed through the release profile when release output is intentionally in scope.
