@@ -78,7 +78,7 @@ Flag any plan that edits generated output directly without the corresponding sou
 Check whether the plan covers validation appropriate to touched files:
 
 - XML and XInclude: `xmllint --noout <changed XML>`
-- Build or generator changes: run the repository's documented build/test command(s) for the area you changed (for example `mvn clean verify`, `./gradlew test`, or `npm test`)
+- Build or generator changes: run the repository's documented build/test command(s) for the area you changed (for example `mvn clean verify`)
 - OpenSpec changes: `openspec validate --all`
 - Markdown-only docs: repository markdown validator when available
 - README changes: keep `README_ES.md` and `README_ZH.md` synchronized when `README.md` changes
