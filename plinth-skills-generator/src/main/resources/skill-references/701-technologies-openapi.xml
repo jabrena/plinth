@@ -32,7 +32,6 @@
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before changing Java or build descriptors alongside the spec</constraint>
             <constraint>**SCOPE**: Stay within OpenAPI artifacts and cross-cutting contract hygiene; defer framework wiring to 302/402/502</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
 

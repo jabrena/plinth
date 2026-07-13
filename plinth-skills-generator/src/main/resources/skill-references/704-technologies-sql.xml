@@ -34,7 +34,6 @@
             <constraint>**SCOPE**: Stay within SQL, schema design, migrations, and database operations unless the user asks for framework-specific Java implementation</constraint>
             <constraint>**SAFETY**: Do not propose destructive migration steps without backup, rollback/forward-fix, locking, and data-retention considerations</constraint>
             <constraint>**PORTABILITY**: Mark dialect-specific syntax explicitly, especially identity columns, enum types, upserts, generated columns, JSON, full-text search, partitioning, and stored procedures</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
 

@@ -43,7 +43,6 @@
             <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Hexagonal architecture review</constraint>
             <constraint>**DEPENDENCY ROUTING**: When ArchUnit or other Maven dependencies need to be added or evaluated, route that decision to `111-java-maven-dependencies`</constraint>
             <constraint>**FRAMEWORK ROUTING**: Route Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this reference</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
 

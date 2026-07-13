@@ -30,7 +30,6 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
       <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
-      <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl plinth-skills-generator` after editing skill XML</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**SUPPLY CHAIN**: Use only a verified local `cats/cats.jar` or an approved prebuilt image; generated artifacts must depend only on trusted local or approved image inputs</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>

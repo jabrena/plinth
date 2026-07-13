@@ -35,7 +35,6 @@ Help teams review and improve **Hexagonal architecture** boundaries in Java appl
       <constraint>**ARCHUNIT OPTIONAL**: Treat ArchUnit as an optional verification approach selected when it fits the project; do not require adding it before Hexagonal architecture guidance is useful</constraint>
       <constraint>**DEPENDENCIES**: Route Maven dependency evaluation, including ArchUnit dependency additions, to `111-java-maven-dependencies`</constraint>
       <constraint>**FRAMEWORK ROUTING**: Defer Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this guidance</constraint>
-      <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl plinth-skills-generator` after editing skill or system-prompt XML in this repo</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
       <constraint>**EDGE CASE**: If package layout, module boundaries, framework ownership, or persistence strategy is ambiguous and affects the review, ask a clarifying question before editing architecture-sensitive code</constraint>
       <constraint>**EDGE CASE**: Distinguish confirmed boundary violations from assumptions, conventions inferred from naming, and missing context</constraint>

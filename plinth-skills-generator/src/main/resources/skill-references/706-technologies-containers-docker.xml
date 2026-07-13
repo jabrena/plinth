@@ -37,7 +37,6 @@
             <constraint>**JLINK**: Prefer `jlink` custom runtimes for production images when the module graph is known, validated with smoke tests, and compatible with the application's dependencies</constraint>
             <constraint>**MICRO DISTRO**: Prefer micro runtime distributions such as Alpaquita only after checking libc compatibility, required OS certificates, timezone data, diagnostics, and security-scanner support</constraint>
             <constraint>**REPRODUCIBILITY**: Pin base image versions intentionally, explain digest pinning trade-offs, and keep build inputs deterministic</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
 

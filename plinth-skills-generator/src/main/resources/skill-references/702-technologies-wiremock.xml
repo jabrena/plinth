@@ -34,7 +34,6 @@
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before changing Java or build descriptors alongside stubbing strategy</constraint>
             <constraint>**SCOPE**: Stay within WireMock usage patterns and HTTP stub design; defer framework test bootstrap to 132/322/422/522</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
 
