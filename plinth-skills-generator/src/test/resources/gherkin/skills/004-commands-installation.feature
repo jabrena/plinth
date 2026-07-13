@@ -30,6 +30,7 @@ Scenario: Install embedded commands into the GitHub commands destination
     | create-spec.md           |
     | review-alignment.md      |
     | implement-spec.md       |
+    | close-spec.md           |
     | profile.md               |
     | benchmark.md             |
   And each installed command file matches its same-named embedded asset content

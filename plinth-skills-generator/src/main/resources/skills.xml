@@ -50,6 +50,8 @@
                 target="assets/commands/review-alignment.md" />
             <resource source="skill-references/assets/commands/implement-spec.md"
                 target="assets/commands/implement-spec.md" />
+            <resource source="skill-references/assets/commands/close-spec.md"
+                target="assets/commands/close-spec.md" />
             <resource source="skill-references/assets/commands/profile.md"
                 target="assets/commands/profile.md" />
             <resource source="skill-references/assets/commands/benchmark.md"
