@@ -15,6 +15,7 @@ import org.w3c.dom.NodeList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//TODO Move to commands-generator ASAP
 @DisplayName("Command Index Tests")
 class CommandIndexesTest {
 

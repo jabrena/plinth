@@ -181,6 +181,7 @@ class SkillsGeneratorTest {
         }
     }
 
+    //TODO Move to agents-generator ASAP
     @Nested
     @DisplayName("Embedded agent bundle")
     class EmbeddedAgentBundleTests {

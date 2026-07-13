@@ -122,7 +122,6 @@ class SkillReferenceGeneratorTest {
             validateOutputFormatSection(lines, baseFileName);
             validateSafeguardsSection(lines, baseFileName);
             validateExampleNumberingConsistency(lines, baseFileName);
-
         }
 
         /**
