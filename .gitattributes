@@ -11,11 +11,15 @@ site-generator/** linguist-documentation=true
 # Ensure Java examples are properly detected
 examples/**/*.java linguist-language=Java
 *.java linguist-detectable=true
-skills-generator/** linguist-language=Java
+markdown-validator/** linguist-language=Java
+plinth-commands-generator/** linguist-language=Java
+plinth-agents-generator/** linguist-language=Java
+plinth-skills-generator/** linguist-language=Java
 
 # Mark XML files as part of Java ecosystem (transformation definitions)
-skills-generator/**/system-prompts/**/*.xml linguist-language=Java
-skills-generator/**/skills/**/*.xml linguist-language=Java
+plinth-skills-generator/**/skill-indexes/**/*.xml linguist-language=Java
+plinth-skills-generator/**/skill-references/**/*.xml linguist-language=Java
+plinth-commands-generator/**/*.xml linguist-language=Java
+plinth-agents-generator/**/*.xml linguist-language=Java
 *.xsl linguist-language=Java
 *.xslt linguist-language=Java
-
