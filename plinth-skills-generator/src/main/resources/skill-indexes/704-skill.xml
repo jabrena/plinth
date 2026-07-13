@@ -31,7 +31,7 @@ Help teams create maintainable, secure, and performant **SQL** for Java applicat
       <constraint>**SQL INJECTION**: Never concatenate untrusted input into SQL strings; use bind parameters through the application's data-access API</constraint>
       <constraint>**DIALECTS**: Call out database-specific syntax and portability trade-offs when using PostgreSQL, MySQL, Oracle, SQL Server, H2, or another engine</constraint>
       <constraint>**FRAMEWORK**: Defer Spring JDBC to `@311-frameworks-spring-jdbc`, Quarkus JDBC to `@411-frameworks-quarkus-jdbc`, Micronaut JDBC to `@511-frameworks-micronaut-jdbc`, and framework-specific migrations to the matching Flyway skill</constraint>
-      <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl plinth-skills-generator` after editing skill or system-prompt XML in this repo</constraint>
+      <constraint>**MAINTAINER**: If you edit skill source files in a skills-generator repository, regenerate local skill outputs using the repository's documented build workflow</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
       <constraint>**EDGE CASE**: If the target database dialect, migration tool, or production constraint is missing and affects the recommendation, ask a clarifying question before editing SQL</constraint>
       <constraint>**EDGE CASE**: If requested changes conflict with data safety, backwards compatibility, or zero-downtime deployment constraints, explain the trade-off and ask for confirmation</constraint>

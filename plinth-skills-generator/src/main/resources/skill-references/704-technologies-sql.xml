@@ -34,7 +34,7 @@
             <constraint>**SCOPE**: Stay within SQL, schema design, migrations, and database operations unless the user asks for framework-specific Java implementation</constraint>
             <constraint>**SAFETY**: Do not propose destructive migration steps without backup, rollback/forward-fix, locking, and data-retention considerations</constraint>
             <constraint>**PORTABILITY**: Mark dialect-specific syntax explicitly, especially identity columns, enum types, upserts, generated columns, JSON, full-text search, partitioning, and stored procedures</constraint>
-            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl plinth-skills-generator` and `./mvnw clean verify` as appropriate</constraint>
+            <constraint>**MAINTAINER**: If you are changing skill source files in a skills-generator repository, regenerate the local skill outputs using the repository's documented build workflow, then run the relevant verification (tests/build) for the changed area</constraint>
         </constraint-list>
     </constraints>
 

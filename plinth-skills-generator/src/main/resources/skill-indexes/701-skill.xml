@@ -31,7 +31,7 @@ Help teams produce maintainable **OpenAPI 3.x** contracts that stay aligned with
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before proposing Java or Maven changes in the same change set</constraint>
       <constraint>**FRAMEWORK**: Keep guidance contract-centric; do not prescribe framework-specific controller wiring or runtime exposure details</constraint>
       <constraint>**FUZZING**: Keep fuzzing guidance high-level and contract-focused without linking to external skill identifiers</constraint>
-      <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl plinth-skills-generator` after editing skill or system-prompt XML in this repo</constraint>
+      <constraint>**MAINTAINER**: If you edit skill source files in a skills-generator repository, regenerate local skill outputs using the repository's documented build workflow</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
       <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
       <constraint>**EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance</constraint>
