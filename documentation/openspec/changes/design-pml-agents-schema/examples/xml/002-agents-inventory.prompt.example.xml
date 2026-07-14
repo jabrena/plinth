@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Skill reference example copied from plinth-skills-generator/src/main/resources/skill-references/002-agents-inventory.xml -->
+<prompt>
+
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Create a Checklist with embedded agents inventory for Java</title>
+        <description>Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal> Your task is to create a comprehensive checklist that follows the exact format
+        and structure defined in the embedded template asset. Create a markdown file named
+        `INVENTORY-AGENTS-JAVA.md` using:
+
+        - [java-agents-inventory-template.md](../assets/java-agents-inventory-template.md)
+    </goal>
+
+    <constraints>
+        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY -
+            do not add, remove, or modify any sections, rows, or agent entries not explicitly shown in the template.</constraints-description>
+        <constraint-list>
+            <constraint>**DO NOT** create additional rows beyond what's shown in the template</constraint>
+            <constraint>**DO NOT** add agent entries that are not explicitly listed in the embedded template</constraint>
+            <constraint>**DO NOT** expand or elaborate on sections beyond what the template shows</constraint>
+            <constraint>**ONLY** use the exact wording and structure from the template</constraint>
+        </constraint-list>
+    </constraints>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**File Creation**: Generate the complete markdown file named
+                `INVENTORY-AGENTS-JAVA.md` in the project root directory</output-format-item>
+            <output-format-item>**Template Adherence**: Follow the embedded template structure and
+                content exactly - no additions, modifications, or omissions</output-format-item>
+            <output-format-item>**File Handling**: If `INVENTORY-AGENTS-JAVA.md` already exists,
+                overwrite it completely with the new generated content</output-format-item>
+        </output-format-list>
+    </output-format>
+</prompt>

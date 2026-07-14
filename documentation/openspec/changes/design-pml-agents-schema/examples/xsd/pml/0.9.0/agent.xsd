@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Tentative agent schema v0.9.0 for OpenSpec change design-pml-agents-schema.
+  Trimmed to elements used by robot-business-analyst.xml.
+  Reuses element shapes from pml.xsd 0.9.0.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Root element for an agent definition -->
+    <xs:element name="agent">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="metadata" minOccurs="0"/>
+                <xs:element ref="role" minOccurs="0"/>
+                <xs:element ref="goal" minOccurs="0"/>
+                <xs:element ref="constraints" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="output-format" minOccurs="0"/>
+                <xs:element ref="safeguards" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="agentSlug" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Metadata section (equivalent to frontmatter) -->
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="authors" minOccurs="0"/>
+                <xs:element ref="version" minOccurs="0"/>
+                <xs:element ref="license" minOccurs="0"/>
+                <xs:element ref="title" minOccurs="0"/>
+                <xs:element ref="description" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="author" type="xs:string"/>
+    <xs:element name="authors">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="author" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="version" type="xs:string"/>
+    <xs:element name="license" type="xs:string"/>
+    <xs:element name="title" type="xs:string"/>
+    <xs:element name="description" type="xs:string"/>
+
+    <!-- System role -->
+    <xs:element name="role" type="xs:string"/>
+
+    <!-- Goal statement -->
+    <xs:element name="goal">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Constraints block -->
+    <xs:element name="constraints">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="constraints-description" minOccurs="0"/>
+                <xs:element ref="constraint-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="constraints-description" type="xs:string"/>
+
+    <xs:element name="constraint-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="constraint" type="xs:string"/>
+
+    <!-- Output format section -->
+    <xs:element name="output-format">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-list" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-item" type="xs:string"/>
+
+    <!-- Safeguards section -->
+    <xs:element name="safeguards">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-list" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-item" type="xs:string"/>
+
+    <!-- Named types -->
+    <xs:simpleType name="agentSlug">
+        <xs:annotation>
+            <xs:documentation>Lowercase slug identifier for agents. Maps to YAML frontmatter name and root @id.</xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:token">
+            <xs:pattern value="[a-z][a-z0-9-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>

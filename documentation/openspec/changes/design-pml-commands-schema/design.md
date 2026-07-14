@@ -4,7 +4,7 @@
 
 **Recommended direction (pending approval):**
 
-1. Keep split inventory/body XSDs under `https://jabrena.github.io/pml/schemas/command/1.0.0/`, published in the [PML project](https://github.com/jabrena/pml) following the `pml.xsd` 0.8.0 URL pattern — aligned with [`design-pml-agents-schema`](../design-pml-agents-schema/design.md).
+1. Keep split inventory/body XSDs under the stable namespace `https://jabrena.github.io/pml/schemas/command/1.0.0/`, with **artifact files hosted locally** in `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/` for this iteration (external [PML project](https://github.com/jabrena/pml) publication deferred) — aligned with [`design-pml-agents-schema`](../design-pml-agents-schema/design.md).
 2. Add `@kind` on inventory and body `<command>` elements: `standard`, `delivery`, `performance`, `cli`.
 3. Use XSD as a structural superset; enforce kind profiles and slash/id parity in co-published Schematron (`pml-command.sch`).
 4. Migrate command-by-command in complexity order: standard slice → workflow-position commands → cli → performance → delivery last.
@@ -46,7 +46,7 @@ The commands generator extraction ([`2026-07-13-add-commands-generator-module`](
 
 ### Schema split: inventory vs command body
 
-Use two XSD documents published from the PML project:
+Use two XSD documents authored in Plinth for this iteration:
 
 | Schema | Root element | Purpose |
 |--------|--------------|---------|
@@ -67,16 +67,18 @@ Alternative considered: reuse the agent namespace with shared inventory types. R
 
 ### Publication target
 
-Publish from the PML project to mirror skill and agent schema hosting:
+**This iteration:** host schema artifacts locally in Plinth, colocated with the commands generator module:
 
-| Artifact | Target path |
-|----------|-------------|
-| `pml-command-types.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command-types.xsd` |
-| `pml-command-inventory.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command-inventory.xsd` |
-| `pml-command.xsd` | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd` |
-| `pml-command.sch` (Schematron) | `https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.sch` |
+| Artifact | Local path (this iteration) |
+|----------|----------------------------|
+| `pml-command-types.xsd` | `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/pml-command-types.xsd` |
+| `pml-command-inventory.xsd` | `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/pml-command-inventory.xsd` |
+| `pml-command.xsd` | `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/pml-command.xsd` |
+| `pml-command.sch` (Schematron) | `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/pml-command.sch` |
 
-Until PML publication lands, Plinth generator tests MAY vendor copies under `plinth-commands-generator/src/test/resources/pml/command/1.0.0/`.
+Documents keep the stable logical namespace `https://jabrena.github.io/pml/schemas/command/1.0.0` and use `xsi:schemaLocation` values that resolve to these local files during validation.
+
+**Deferred:** publish the same artifacts from the external PML project in a follow-up iteration.
 
 ### Command kind taxonomy
 
@@ -105,7 +107,7 @@ Inventory entries SHOULD declare `@kind` and `@slash` so generated inventory tab
 |--------------|------|----------------------------|
 | `pml.xsd` | Skill `<prompt>` contract | **Parallel, not embedded.** Commands are slash-invoked workflow entry points with owning-agent and skill-delegation metadata; skills are executable instruction bundles. Shared pattern: XSD-validated XML → generated Markdown. Reuse naming where semantics align (`workflow`, `constraints`/`safeguards`). |
 | `pml-workflow.xsd` | Multi-step workflow graph definitions | **Complementary.** Command `<workflow>` steps describe invocation procedure; workflow schema may reference commands by id in future cross-schema linking. Command schema does not embed workflow graph nodes. |
-| `pml-command-inventory.xsd` / `pml-command.xsd` | Command bundle manifest and contracts | **New extension family** under `/pml/schemas/command/1.0.0/`, documented alongside agent and skill schema families in the PML project. |
+| `pml-command-inventory.xsd` / `pml-command.xsd` | Command bundle manifest and contracts | **New extension family** under `/pml/schemas/command/1.0.0/`. Local in Plinth this iteration; external PML publication deferred. |
 
 ### Inventory schema shape (beyond filename-only)
 
@@ -282,7 +284,8 @@ Non-breaking until Phase 3: Markdown remains runtime installer input; `004-comma
 
 | Component | Owns | Consumes |
 |-----------|------|----------|
-| PML project | XSD, Schematron, published URLs, optional `pml-core-types.xsd` | — |
+| `plinth-commands-generator` (this iteration) | Local XSD, Schematron under `src/main/resources/pml/schemas/command/1.0.0/` | — |
+| PML project (deferred) | External publication of same namespace artifacts | Plinth-local schemas as source |
 | `plinth-commands-generator` (future) | XML sources, kind-specific XSLT, validation tests | PML schemas (remote or vendored) |
 | `plinth-skills-generator` bridge | staged `commands/*.md` asset links | generated Markdown from commands generator |
 | `CommandIndexesTest` (transition) | behavioral substring parity | Markdown until XSLT parity proven |
@@ -344,7 +347,7 @@ OpenSpec: `openspec validate --all`.
 
 | Question | Decision | Status |
 |----------|----------|--------|
-| Publish XSD in PML repo? | `/pml/schemas/command/1.0.0/` | **Recommended — pending approval** |
+| Publish XSD in PML repo? | Local under `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/` this iteration | **Resolved** |
 | Split inventory/body schemas? | Yes, plus `pml-command-types.xsd` | **Resolved** |
 | Normalize headings in XSD vs XSLT? | XSLT per `@kind` | **Resolved** |
 | Require associations/output on all commands? | No — use `@kind` profiles | **Resolved** |
@@ -356,6 +359,6 @@ Confirm this refined direction before implementation tasks proceed:
 
 1. `@kind` taxonomy: `standard`, `delivery`, `performance`, `cli`.
 2. XSD superset + Schematron for kind profiles and command-specific behavioral rules.
-3. PML publication aligned with agent schema conventions.
+3. Local schema hosting in `plinth-commands-generator` with stable logical namespace for future PML publication.
 4. Command migration slices with `implement-spec` last.
 5. Additional examples for `close-spec` (cli) during task execution.

@@ -4,7 +4,7 @@ GitHub issue [#992](https://github.com/jabrena/plinth/issues/992) requests an XS
 
 ## What Changes
 
-- Design and publish a PML agent XSD covering the inventory manifest and structured agent definition elements.
+- Design a PML agent XSD covering the inventory manifest and structured agent definition elements, hosted locally in Plinth for this iteration.
 - Document how the agent schema relates to existing `pml.xsd` and `pml-workflow.xsd` in the PML project.
 - Produce a schema design document with inventory vs agent-body element mapping, namespace strategy, and frontmatter field mapping.
 - Provide representative valid and invalid XML examples for at least one existing agent (`robot-business-analyst`).
@@ -22,7 +22,7 @@ None. Agent behavioral contracts in `analysis-design-agents` remain authoritativ
 
 ## Impact
 
-This is a design-only change for milestone v0.18.0. It does not implement XSLT generation, migrate `plinth-agents-generator` sources, or refresh public `skills/` release output. Follow-up issues may consume the published schema for generator migration and CI validation.
+This is a design-only change for milestone v0.18.0. It does not implement XSLT generation, migrate `plinth-agents-generator` sources, or refresh public `skills/` release output. `agent.xsd` lives under `plinth-agents-generator` in this iteration; external PML publication is deferred. Follow-up issues may wire local XSD validation and generator migration.
 
 ## Source Artifacts and Derivation
 
@@ -35,20 +35,21 @@ This is a design-only change for milestone v0.18.0. It does not implement XSLT g
 | [ADR-001](../../adr/ADR-001-generate-cursor-rules-from-xml-files.md) | XSD → Markdown precedent | Design alignment |
 | Archived change `2026-07-13-add-agents-generator-module` | Deferred non-goal | Confirms schema design is separate from extraction |
 
-**Derivation direction:** Issue #992 → OpenSpec change artifacts → future PML XSD publication and generator migration (not in this change).
+**Derivation direction:** Issue #992 → OpenSpec change artifacts → local `agent.xsd` in `plinth-agents-generator` → future external PML publication and generator migration (not in this change).
 
-## Unresolved Questions
+## Design Decisions
 
-| Question | Recommendation | Status |
-|----------|----------------|--------|
-| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish in PML project under `/pml/schemas/agent/1.0.0/` | **Recommended — pending approval** |
-| Single combined XSD vs split inventory and agent-body schemas? | Split: `pml-agent-inventory.xsd`, `pml-agent.xsd`, `pml-agent-types.xsd` | **Resolved** |
+| Question | Decision | Status |
+|----------|----------|--------|
+| Publish XSD in the external PML repo vs Plinth-only first? | Host locally under `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/` this iteration | **Resolved** |
+| Single combined XSD vs split inventory and agent-body schemas? | Single `agent.xsd` covering `<agent-inventory>` and `<agent>` root elements | **Resolved** |
 | Require inline agent bodies in inventory vs file references during migration? | Keep `@file` `.md` references through Phase 2; allow `.xml` from Phase 2 | **Resolved** |
-| Single `<missions>` element for all agents? | No — use `@kind` profiles with Schematron | **Resolved — pending approval** |
-| XSD-only vs Schematron companion rules? | XSD superset + `pml-agent.sch` for kind profiles and id/name equality | **Resolved — pending approval** |
+| Single `<missions>` element for all agents? | No — body sections are an optional XSD superset; no global `<missions>` requirement | **Resolved** |
+| XSD-only vs Schematron companion rules? | **XSD-only** — no `pml-agent.sch`, no `@kind` validation profiles | **Resolved** |
+| `@kind` profiles with Schematron? | **Rejected** — behavioral contracts stay in `AgentIndexesTest` and Gherkin | **Resolved** |
 
 See [`design.md`](design.md) for the full refinement analysis and approval checkpoint.
 
 ## Handoff
 
-After this change is approved and tasks complete, `@robot-tech-lead` can coordinate follow-up implementation issues for XSD publication, generator validation wiring, and Markdown source migration.
+After this change is approved and tasks complete, `@robot-tech-lead` can coordinate follow-up implementation issues for local XSD authoring, generator validation wiring, and Markdown source migration.

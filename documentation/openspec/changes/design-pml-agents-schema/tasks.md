@@ -1,26 +1,23 @@
 ## 1. Schema Design
 
-- [ ] 1.1 Draft `pml-agent-inventory.xsd` covering `<agent-inventory>`, metadata, ordered `<agent>` entries with `@id`, `@kind`, `@file`, optional `@readonly`, and `<summary>`.
-- [ ] 1.2 Draft `pml-agent.xsd` as a structural superset for all `@kind` profiles (`analyst`, `architect`, `coordinator`, `performance`, `coder`).
-- [ ] 1.3 Extract shared types into `pml-agent-types.xsd` (agent id, skill-ref, optional shared patterns with `pml-core-types.xsd`).
-- [ ] 1.4 Define namespace `https://jabrena.github.io/pml/schemas/agent/1.0.0` and schema location conventions for inventory and body documents.
-- [ ] 1.5 Draft `pml-agent.sch` Schematron rules for `@kind` profiles, id/name parity, and non-empty boundary/safeguard sections.
+- [ ] 1.1 Draft `agent.xsd` covering `<agent-inventory>` (metadata, ordered entries with `@id`, `@file`, optional `@readonly`, `<summary>`) and `<agent>` body superset with required `<frontmatter>` only.
+- [ ] 1.2 Define optional body elements (`<missions>`, `<role-boundaries>`, `<responsibilities>`, `<routing>`, `<output-format>`, `<safeguards>`, etc.) without a global `<missions>` requirement.
+- [ ] 1.3 Define namespace `https://jabrena.github.io/pml/schemas/agent/0.9.0` and `xsi:schemaLocation` conventions pointing to local `agent.xsd`.
 
 ## 2. PML Alignment and Documentation
 
-- [ ] 2.1 Document inventory vs agent-body elements, `@kind` taxonomy, frontmatter mapping, and kind-specific XSLT template strategy.
+- [ ] 2.1 Document inventory vs agent-body elements, frontmatter mapping, optional section superset, and per-agent-shape XSLT mapping notes.
 - [ ] 2.2 Document the relationship to `pml.xsd` (skill `<prompt>` parallel family) and `pml-workflow.xsd` (orthogonal workflow graphs).
-- [ ] 2.3 Map each of the nine agents to a `@kind` profile and align required sections with `analysis-design-agents` and `AgentIndexesTest` behavioral checks.
+- [ ] 2.3 Document that behavioral contracts remain in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin — not in XSD profiles.
 
 ## 3. Examples and Migration
 
-- [x] 3.1 Add a valid XML example pair for `robot-business-analyst` (`kind="analyst"`) under `examples/`.
-- [x] 3.2 Add at least one invalid XML example demonstrating a documented schema failure.
-- [ ] 3.3 Add a valid XML example for `robot-tech-lead` (`kind="coordinator"`) and an invalid `kind="coder"` profile example.
-- [ ] 3.4 Update migration notes with agent-by-agent slice order and Schematron/XSLT phased rollout.
+- [x] 3.1 Add valid XML examples for all nine agents from `.cursor/agents/` under `examples/xml/` (`robot-*.xml` plus source `robot-*.md` copies under `examples/md/`).
+- [x] 3.2 Replace invalid examples with XSD-only failures (e.g. missing frontmatter fields, duplicate inventory `@id`).
+- [ ] 3.3 Update migration notes with agent-by-agent slice order and XSD-only phased rollout.
 
 ## 4. Publication and Validation
 
-- [ ] 4.1 Publish or prepare publication of XSD + Schematron artifacts in the PML project under `/schemas/agent/1.0.0/`.
-- [ ] 4.2 Validate example XML with `xmllint --schema` and Schematron tooling against draft rules.
+- [ ] 4.1 Add `agent.xsd` under `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/` (local hosting this iteration; external PML publication deferred).
+- [x] 4.2 Validate example XML with `xmllint --noout --schema` against draft `agent.xsd` (all nine `robot-*.xml` files under `examples/xml/`).
 - [ ] 4.3 Run `openspec validate --all` and resolve any OpenSpec validation failures for this change.

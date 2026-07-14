@@ -2,12 +2,13 @@
 
 `/explore-design` review of the nine shipped agent contracts reveals **three distinct Markdown shapes**, not one uniform `Missions`-centric template. Coder agents (`robot-java-*`, `robot-no-java`) use `### Core Responsibilities`, `### Skill selection rules`, and `### Reference Rules` instead of `## Missions`. `robot-tech-lead` uses only `###`-level sections including routing tables and parallel-delegation rules. Forcing a single `<missions>` element for every agent would fail parity with current contracts and block migration.
 
-**Recommended direction (pending approval):**
+**Accepted direction:**
 
-1. Keep split inventory/body XSDs under `https://jabrena.github.io/pml/schemas/agent/1.0.0/`, published in the [PML project](https://github.com/jabrena/pml) following the `pml.xsd` 0.8.0 URL pattern.
-2. Add `@kind` on inventory and body `<agent>` elements to drive **kind-specific required sections** validated by co-published Schematron rules, not XSD alone.
-3. Use XSD as a structural superset; enforce cross-field rules (`frontmatter/name` equals `@id`, inventory/body id parity) and kind profiles in Schematron.
-4. Migrate agent-by-agent in complexity order: analyst → architect → performance → coders (shared template) → tech lead last.
+1. Use a **single XSD** (`agent.xsd`) under the stable namespace `https://jabrena.github.io/pml/schemas/agent/0.9.0/`, hosted locally in `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/` for this iteration (external [PML project](https://github.com/jabrena/pml) publication deferred). The schema defines both `<agent-inventory>` and `<agent>` root elements.
+2. Define body sections (`<missions>`, `<responsibilities>`, `<routing>`, `<core-role>`, etc.) as an **optional XSD superset** — no global `<missions>` requirement.
+3. Enforce **structural validation with XSD only**; no Schematron companion rules and no `@kind` validation profiles.
+4. Keep kind-specific behavioral contracts in `AgentIndexesTest`, Gherkin acceptance tests, and `analysis-design-agents` until XSLT parity replaces substring checks.
+5. Migrate agent-by-agent in complexity order: analyst → architect → performance → coders (shared template) → tech lead last.
 
 ## Context
 
@@ -30,7 +31,7 @@ The agents generator extraction ([`2026-07-13-add-agents-generator-module`](../a
 
 - Define XSD schemas for agent inventory and agent definition documents.
 - Map existing YAML frontmatter and Markdown section semantics to structured XML elements.
-- Align required sections with `analysis-design-agents` behavioral fields and the nine current agent contracts.
+- Document optional body section superset covering all nine current agent contracts.
 - Document relationship to `pml.xsd` (skill `<prompt>`) and `pml-workflow.xsd` (workflow orchestration).
 - Provide valid/invalid XML examples and migration notes for a future generator pipeline.
 
@@ -40,35 +41,43 @@ The agents generator extraction ([`2026-07-13-add-agents-generator-module`](../a
 - Design PML schemas for commands (`commands.xml`) or skills (`<prompt>` sources).
 - Add, remove, or change agent delegation contracts or agent roles.
 - Promote public `skills/` release output.
+- Schematron rules or `@kind`-based schema validation profiles.
 
 ## Decisions
 
-### Schema split: inventory vs agent body
+### Single schema: `agent.xsd`
 
-Use two XSD documents published from the PML project:
+Use one XSD document authored in Plinth for this iteration:
 
-| Schema | Root element | Purpose |
-|--------|--------------|---------|
-| `pml-agent-inventory.xsd` | `<agent-inventory>` | Manifest ordering, discovery metadata, file or inline references |
-| `pml-agent.xsd` | `<agent>` | Single agent contract: metadata, identity, missions, boundaries, routing, output, safeguards |
+| Schema | Root elements | Purpose |
+|--------|---------------|---------|
+| `agent.xsd` | `<agent-inventory>`, `<agent>` | Inventory manifest and individual agent contracts in one schema module |
 
-**Rationale:** Mirrors the current two-file model (`agents.xml` + `agents/*.md`), allows independent validation of inventory parity vs contract depth, and avoids overloading skill `<prompt>` semantics.
+**Rationale:** Simpler local authoring and validation for this iteration; shared types (frontmatter, skill refs) live in one file. Inventory and body documents remain separate XML instances but validate against the same schema.
+
+Alternative considered: split `pml-agent-inventory.xsd` and `pml-agent.xsd`. Rejected for this iteration in favor of a single `agent.xsd` module.
 
 Alternative considered: extend `pml.xsd` with an `<agent>` element. Rejected because skills and agents have different frontmatter, section vocabulary, and downstream generators; coupling would complicate independent versioning.
 
 ### Namespace and schema location
 
-- Target namespace: `https://jabrena.github.io/pml/schemas/agent/1.0.0` (inventory and agent body share types via an included `pml-agent-types.xsd` where needed).
-- Inventory documents declare:
+- Target namespace: `https://jabrena.github.io/pml/schemas/agent/0.9.0`
+- Inventory and body documents both declare `agent.xsd`:
 
 ```xml
-<agent-inventory xmlns="https://jabrena.github.io/pml/schemas/agent/1.0.0"
+<agent-inventory xmlns="https://jabrena.github.io/pml/schemas/agent/0.9.0"
                  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-                 xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/1.0.0
-                                     https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent-inventory.xsd">
+                 xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/0.9.0
+                                     https://jabrena.github.io/pml/schemas/agent/0.9.0/agent.xsd">
 ```
 
-- Agent body documents declare `pml-agent.xsd` at the same version path.
+```xml
+<agent xmlns="https://jabrena.github.io/pml/schemas/agent/0.9.0"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/0.9.0
+                           https://jabrena.github.io/pml/schemas/agent/0.9.0/agent.xsd"
+       id="robot-business-analyst">
+```
 
 Alternative considered: no namespace (like pre-schema `agents.xml`). Rejected to support schema evolution and cross-project reuse.
 
@@ -76,61 +85,56 @@ Alternative considered: reuse the command namespace from [`design-pml-commands-s
 
 ### Publication target
 
-Publish from the PML project to mirror skill schema hosting:
+**This iteration:** host schema artifacts locally in Plinth, colocated with the agents generator module:
 
-| Artifact | Target path |
-|----------|-------------|
-| `pml-agent-types.xsd` | `https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent-types.xsd` |
-| `pml-agent-inventory.xsd` | `https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent-inventory.xsd` |
-| `pml-agent.xsd` | `https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent.xsd` |
-| `pml-agent.sch` (Schematron) | `https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent.sch` |
+| Artifact | Local path (this iteration) |
+|----------|----------------------------|
+| `agent.xsd` | `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/agent.xsd` |
 
-Until PML publication lands, Plinth generator tests MAY vendor copies under `plinth-agents-generator/src/test/resources/pml/agent/1.0.0/` with the same relative imports.
+Documents keep the stable logical namespace `https://jabrena.github.io/pml/schemas/agent/0.9.0` and use `xsi:schemaLocation` values that resolve to these local files during validation (classpath or relative path in tests).
 
-### Agent kind taxonomy
+**Deferred:** mirror skill hosting by publishing the same artifacts under `https://jabrena.github.io/pml/schemas/agent/0.9.0/` from the external PML project in a follow-up iteration.
 
-Inventory and body documents carry `@kind` to select validation profiles and XSLT mapping templates:
+### Agent shape reference (documentation only)
 
-| `@kind` | Agents | Primary body structure |
-|---------|--------|------------------------|
-| `analyst` | `robot-business-analyst` | `<missions>`, `<role-boundaries>`, `<routing>`, `<output-format>` |
-| `architect` | `robot-architect` | `<identity>`, `<workflow-order>`, `<missions>`, `<workflow>`, `<constraints>`, `<output-format>` |
-| `coordinator` | `robot-tech-lead` | `<core-role>`, `<delivery-mission>`, `<collaboration>`, `<framework-identification>`, `<routing-table>`, `<parallel-delegation>`, `<constraints>`, `<output-format>` |
-| `performance` | `robot-java-performance` | `<identity>`, `<missions>`, `<output-format>`, `<safeguards>` |
-| `coder` | `robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, `robot-no-java` | `<responsibilities>`, `<skill-rules>`, `<reference-rules>`, `<workflow>`, `<constraints>` |
+Nine agents use three Markdown shapes. This taxonomy guides XSLT mapping and migration slices; it is **not** enforced by XSD or Schematron:
 
-Inventory entries SHOULD declare `@kind` so generated inventory tables and future template generation do not infer kind from filename heuristics.
+| Shape | Agents | Primary body structure |
+|-------|--------|------------------------|
+| Analyst | `robot-business-analyst` | `<missions>`, `<role-boundaries>`, `<routing>`, `<output-format>` |
+| Architect | `robot-architect` | `<identity>`, `<workflow-order>`, `<missions>`, `<workflow>`, `<constraints>`, `<output-format>` |
+| Coordinator | `robot-tech-lead` | `<core-role>`, `<delivery-mission>`, `<collaboration>`, `<framework-identification>`, `<routing-table>`, `<parallel-delegation>`, `<constraints>`, `<output-format>` |
+| Performance | `robot-java-performance` | `<identity>`, `<missions>`, `<output-format>`, `<safeguards>` |
+| Coder | `robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, `robot-no-java` | `<responsibilities>`, `<skill-rules>`, `<reference-rules>`, `<workflow>`, `<constraints>` |
 
 ### Validation layers
 
 | Layer | Tool | Responsibility |
 |-------|------|----------------|
-| 1 — Structure | XSD (`pml-agent-inventory.xsd`, `pml-agent.xsd`) | Element presence, types, cardinalities for superset model |
-| 2 — Profile | Schematron (`pml-agent.sch`) | `@kind`-specific required sections, `@id`/`name` equality, non-empty safeguards/boundaries |
-| 3 — Behavior parity | Java tests (`AgentIndexesTest`, Gherkin) | Delegation substrings, routing tables, skill references until XSLT parity replaces substring checks |
+| 1 — Structure | XSD (`agent.xsd`) | Element presence, types, cardinalities for `<agent-inventory>` and `<agent>` superset model; required `<frontmatter>` only on body documents |
+| 2 — Behavior parity | Java tests (`AgentIndexesTest`, Gherkin) | Delegation substrings, routing tables, skill references, kind-specific section requirements until XSLT parity replaces substring checks |
 
-XSD 1.0 cannot express `@kind`-conditional requirements cleanly; Schematron is the recommended companion, matching how strict semantic rules exceed structural XSD in other PML families.
+**Rejected:** Schematron (`pml-agent.sch`) and `@kind` validation profiles. XSD 1.0 cannot express id/name equality or kind-conditional requirements without a companion rules language; those semantics remain in behavioral tests for this iteration.
 
 ### Relationship to `pml.xsd` and `pml-workflow.xsd`
 
 | PML artifact | Role | Agent schema relationship |
 |--------------|------|---------------------------|
 | `pml.xsd` | Skill `<prompt>` contract (`metadata`, `role`, `tone`, `goal`, `steps`, `constraints`, `reference`) | **Parallel, not embedded.** Agents are runtime orchestration personas with YAML-compatible frontmatter and mission/routing sections; skills are executable instruction bundles. Shared pattern: XSD-validated XML → generated Markdown with frontmatter. Reuse naming conventions (`metadata`, `constraints`) where semantics align; do not require `<prompt>` wrapper for agents. |
-| `pml-workflow.xsd` | Multi-step workflow definitions | **Orthogonal.** Agent contracts may *reference* workflow commands (e.g. `/create-spec`, `/explore-design`) in mission text, but workflow graph structure stays in workflow schema. Optional future `workflow-ref` attribute on mission steps is out of scope for v1.0.0. |
-| `pml-agent-inventory.xsd` / `pml-agent.xsd` | Agent bundle manifest and contracts | **New extension family** versioned under `/pml/schemas/agent/1.0.0/`. Documented in PML project README as the agent companion to skill prompts. |
+| `pml-workflow.xsd` | Multi-step workflow definitions | **Orthogonal.** Agent contracts may *reference* workflow commands (e.g. `/create-spec`, `/explore-design`) in mission text, but workflow graph structure stays in workflow schema. Optional future `workflow-ref` attribute on mission steps is out of scope for v0.9.0. |
+| `agent.xsd` | Agent bundle manifest and contracts | **New extension family** versioned under `/pml/schemas/agent/0.9.0/`. Local in Plinth this iteration; document relationship to skill `pml.xsd` in module README or design notes until external PML publication. |
 
 ### Inventory schema shape (beyond filename-only)
 
 Extend `<agent-inventory>` entries beyond bare `file` attributes:
 
 ```xml
-<agent-inventory version="1.0.0">
+<agent-inventory version="0.9.0">
   <metadata>
     <title>Plinth Embedded Agents</title>
     <description>Installation-order manifest for embedded robot agents</description>
   </metadata>
   <agent id="robot-business-analyst"
-         kind="analyst"
          file="robot-business-analyst.md"
          readonly="true">
     <summary>Business analyst for issue quality and read-only alignment review</summary>
@@ -139,12 +143,11 @@ Extend `<agent-inventory>` entries beyond bare `file` attributes:
 </agent-inventory>
 ```
 
-Required inventory constraints:
+Required inventory constraints (XSD):
 
 - Root `<agent-inventory>` with optional `<metadata>` and one-or-more `<agent>` entries.
-- Each `<agent>` MUST have unique `@id` matching `^[a-z][a-z0-9-]*$` and consistent with generated Markdown `name` frontmatter.
-- Each `<agent>` MUST declare `@kind` from the taxonomy above.
-- Each `<agent>` MUST provide `@file` ending in `.md` during migration phases 0–2 and MAY use `.xml` from phase 2 onward **or** an inline embedded `<agent-definition>` (optional in v1.0.0).
+- Each `<agent>` MUST have unique `@id` matching `^[a-z][a-z0-9-]*$`.
+- Each `<agent>` MUST provide `@file` ending in `.md` during migration phases 0–2 and MAY use `.xml` from phase 2 onward **or** an inline embedded `<agent-definition>` (optional in v0.9.0).
 - Optional `@readonly` boolean mirrors frontmatter.
 - `<summary>` provides inventory-table text without opening the body file.
 - Child order of `<agent>` elements defines installation order (preserves current `005-agents-installation` semantics).
@@ -154,12 +157,11 @@ Required inventory constraints:
 Root `<agent>` maps frontmatter and body sections:
 
 ```xml
-<agent xmlns="https://jabrena.github.io/pml/schemas/agent/1.0.0"
+<agent xmlns="https://jabrena.github.io/pml/schemas/agent/0.9.0"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/1.0.0
-                           https://jabrena.github.io/pml/schemas/agent/1.0.0/pml-agent.xsd"
-       id="robot-business-analyst"
-       kind="analyst">
+       xsi:schemaLocation="https://jabrena.github.io/pml/schemas/agent/0.9.0
+                           https://jabrena.github.io/pml/schemas/agent/0.9.0/agent.xsd"
+       id="robot-business-analyst">
 
   <frontmatter>
     <name>robot-business-analyst</name>
@@ -209,53 +211,39 @@ Root `<agent>` maps frontmatter and body sections:
 </agent>
 ```
 
-**Required for all agents (XSD + Schematron):**
+**Required for all agents (XSD):**
 
 - `<frontmatter>` with `<name>`, `<model>`, `<description>`; `<readonly>` optional.
-- `@kind` on root `<agent>` matching inventory entry.
+- `@id` on root `<agent>`.
 
-**Required by `@kind` (Schematron profiles):**
+**Optional body elements (XSD superset):**
 
-| `@kind` | Required body sections |
-|---------|------------------------|
-| `analyst` | `<missions>`, `<role-boundaries>`, `<output-format>`; `<routing>` recommended |
-| `architect` | `<identity>`, `<missions>`, `<workflow-order>`, `<constraints>`, `<output-format>`; `<workflow>` recommended |
-| `coordinator` | `<core-role>`, `<collaboration>`, `<framework-identification>`, `<routing-table>`, `<parallel-delegation>`, `<constraints>`, `<output-format>` |
-| `performance` | `<identity>`, `<missions>`, `<output-format>`, `<safeguards>` |
-| `coder` | `<responsibilities>`, `<skill-rules>`, `<reference-rules>`, `<workflow>`, `<constraints>` |
-
-**Optional / shared elements across kinds:**
-
-- `<routing>` with `<delegate>` — analyst conflicts; architect handoff notes.
-- `<workflow>` — architect command order; coders implementation steps.
-- `<safeguards>` — performance agent; may appear on other kinds without being globally required.
+- `<identity>`, `<missions>`, `<role-boundaries>`, `<routing>`, `<workflow-order>`, `<workflow>`, `<core-role>`, `<collaboration>`, `<framework-identification>`, `<routing-table>`, `<parallel-delegation>`, `<responsibilities>`, `<skill-rules>`, `<reference-rules>`, `<constraints>`, `<output-format>`, `<safeguards>`.
 - `<skill-ref id="..."/>` inside `<skill-rules>` and `<reference-rules>` — reuse pattern from optional `pml-core-types.xsd`.
 
-Section titles in generated Markdown retain current heading variants per agent via **kind-specific XSLT templates** (`analyst.xsl`, `architect.xsl`, `coordinator.xsl`, `performance.xsl`, `coder.xsl`), not one global heading map.
+Behavioral requirements for which sections each agent shape must contain are **not** XSD-enforced; they remain in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin until XSLT migration proves parity.
+
+Section titles in generated Markdown retain current heading variants per agent via **shape-specific XSLT templates** (analyst, architect, coordinator, performance, coder), not one global heading map.
 
 ### Frontmatter mapping
 
 | Markdown YAML | XML element | Notes |
 |---------------|-------------|-------|
-| `name` | `<frontmatter><name>` | MUST equal `@id` and inventory `@id` |
+| `name` | `<frontmatter><name>` | SHOULD equal `@id` and inventory `@id` (convention; not XSD-enforced) |
 | `model` | `<frontmatter><model>` | Enumerated: `inherit` or explicit model slug list (extensible string) |
 | `description` | `<frontmatter><description>` | Single-line installer/summary description |
 | `readonly` | `<frontmatter><readonly>` or `@readonly` on inventory entry | Boolean, default false |
 
 ### Valid / invalid examples (robot-business-analyst)
 
-**Valid (minimal):** inventory entry with `id`, `file`, `readonly`, `summary`; agent body with all required sections populated from current `robot-business-analyst.md` content.
+**Valid (minimal):** inventory entry with `id`, `file`, `readonly`, `summary`; agent body with required frontmatter and representative optional sections from current `robot-business-analyst.md` content.
 
 **Invalid examples to document:**
 
-1. Missing `<missions>` — fails agent body schema.
-2. Duplicate `@id` in inventory — fails inventory schema.
-3. `<name>` mismatch between frontmatter and `@id` — fails Schematron identity rule.
-4. Empty `<role-boundaries>` on `kind="analyst"` — fails Schematron profile.
-5. Inventory `<agent>` without `@file` and without inline body — fails inventory XSD.
-6. `kind="coder"` document with `<missions>` but missing `<skill-rules>` — fails Schematron profile (illustrates kind mismatch).
-
-Add a second valid example pair for `robot-tech-lead` (`kind="coordinator"`) during implementation to prove the coordinator profile, not only the analyst slice.
+1. Missing `<frontmatter><description>` — fails XSD required element rule.
+2. Duplicate `@id` in inventory — fails inventory XSD uniqueness constraint.
+3. Inventory `<agent>` without `@file` and without inline body — fails inventory XSD.
+4. Malformed `@id` (uppercase or invalid characters) — fails XSD pattern.
 
 Store examples under `documentation/openspec/changes/design-pml-agents-schema/examples/` (valid + invalid pairs) as part of task delivery; reference paths from the schema design document.
 
@@ -265,7 +253,7 @@ Two-step delivery strategy ([`051-design-two-steps-methods`](../../../.agents/sk
 
 **Step 1 — Schema and validation contract (this change)**
 
-- Publish XSD + Schematron + examples + migration notes.
+- Publish XSD + examples + migration notes.
 - No generator or installer behavior change.
 
 **Step 2 — Generator migration (follow-up issues, agent-by-agent slices)**
@@ -281,10 +269,10 @@ Two-step delivery strategy ([`051-design-two-steps-methods`](../../../.agents/sk
 
 Phases within Step 2:
 
-1. **Phase 1:** Parallel XML under staging path; XSD + Schematron in tests; Markdown authoritative.
-2. **Phase 2:** Dual authoring; kind-specific XSLT; parity tests vs `AgentIndexesTest` substrings.
+1. **Phase 1:** Parallel XML under staging path; XSD in tests; Markdown authoritative.
+2. **Phase 2:** Dual authoring; shape-specific XSLT; parity tests vs `AgentIndexesTest` substrings.
 3. **Phase 3:** XML source of truth; generate Markdown at `generate-resources`; namespace-aware `AgentIndexes`.
-4. **Phase 4:** Enriched inventory with `@kind`, `@readonly`, `<summary>`; generate `java-agents-inventory-template.md`.
+4. **Phase 4:** Enriched inventory with `@readonly`, `<summary>`; generate `java-agents-inventory-template.md`.
 
 Non-breaking rule: until Phase 3, Markdown remains the runtime installer input; XML is additive. Each slice is independently revertible.
 
@@ -292,26 +280,29 @@ Non-breaking rule: until Phase 3, Markdown remains the runtime installer input; 
 
 | Approach | Pros | Cons | Decision |
 |----------|------|------|----------|
-| A. Split agent inventory + agent body XSDs | Matches current layout; independent validation; clear migration | Two schema files to publish | **Recommended** |
+| A. Single `agent.xsd` for inventory and body roots | One module to author and validate locally; shared types in one file | Larger schema file | **Accepted** |
+| A2. Split agent inventory + agent body XSDs | Independent validation per document type | Multiple schema files for this iteration | Rejected |
 | B. Reuse `<prompt>` from `pml.xsd` for agents | Single schema family | Poor fit for frontmatter, routing tables, delegate links; conflates skills and agents | Rejected |
 | C. JSON Schema instead of XSD | Popular for tooling | Breaks ADR-001 and skills pipeline precedent; no XInclude/XSLT synergy | Rejected |
 | D. Inventory-only schema (defer body) | Smaller first delivery | Does not meet issue acceptance criteria for mission/routing/boundary elements | Rejected |
 | E. Single global `<missions>` required element | Simple XSD | Fails coder and coordinator contracts; blocks migration | Rejected |
-| F. XSD-only validation without Schematron | Fewer artifacts | Cannot express `@kind` profiles or id/name equality | Rejected |
+| F. XSD-only validation without Schematron | Fewer artifacts; matches rejected Schematron scope | Cannot express id/name equality or kind profiles in schema | **Accepted** — behavioral rules stay in tests |
+| G. XSD + Schematron with `@kind` profiles | Expresses kind-specific required sections | Extra artifact; user rejected for this iteration | Rejected |
 
 ## Component Boundaries
 
 | Component | Owns | Consumes |
 |-----------|------|----------|
-| PML project | XSD, Schematron, published URLs, `pml-core-types.xsd` (optional) | — |
-| `plinth-agents-generator` (future) | XML sources, XSLT templates, validation tests | PML schemas (remote or vendored) |
+| `plinth-agents-generator` (this iteration) | Local `agent.xsd` under `src/main/resources/pml/schemas/agent/0.9.0/` | — |
+| PML project (deferred) | External publication of same namespace artifacts | Plinth-local schemas as source |
+| `plinth-agents-generator` (future) | XML sources, XSLT templates, validation tests | Local schemas from classpath |
 | `plinth-skills-generator` bridge | staged `agents/*.md` for XInclude | generated Markdown from agents generator |
 | `AgentIndexesTest` (transition) | behavioral substring parity | Markdown until XSLT parity proven |
 
 ## Data Flow (target)
 
 1. Contributor edits XML agent source or inventory in `plinth-agents-generator`.
-2. Build validates XSD + Schematron, runs XSLT to emit `agents/*.md`.
+2. Build validates XSD, runs XSLT to emit `agents/*.md`.
 3. `./mvnw clean verify -pl plinth-agents-generator` checks schema and parity.
 4. Skills bridge copies generated Markdown; `005-agents-installation` embed path unchanged until explicitly updated.
 
@@ -319,16 +310,16 @@ Non-breaking rule: until Phase 3, Markdown remains the runtime installer input; 
 
 | Failure | Expected behavior |
 |---------|-------------------|
-| Wrong `@kind` profile (coder missing `<skill-rules>`) | Schematron failure with kind-specific message |
-| `@id` / `<name>` mismatch | Schematron failure before XSLT |
-| XSD pass but Schematron fail | CI blocks promotion; Markdown not regenerated |
+| Missing required frontmatter field | XSD validation failure with element name |
+| Duplicate `@id` in inventory | XSD validation failure |
+| Behavioral contract drift (missing routing table, etc.) | `AgentIndexesTest` or Gherkin failure until XSLT parity |
 | XSLT parity drift from substring tests | `AgentIndexesTest` fails until mapping fixed |
 
 ## Risks / Trade-offs
 
 - [Risk] Agent Markdown section headings vary across nine contracts. → Use flexible `<section title="...">` containers; normalize in XSLT, not XSD enums.
-- [Risk] PML repo publication lag blocks CI schema URLs. → Pin schema URLs in design doc; stub validation with local copies in generator tests until published.
-- [Risk] Over-constraining optional sections breaks future agents. → Use optional elements with documented conditional requirements by agent class, not one global rigid sequence.
+- [Risk] External PML publication deferred while skills already use remote `pml.xsd`. → Validate against local classpath schemas in `plinth-agents-generator` tests; plan PML publication as a separate follow-up without blocking this iteration.
+- [Risk] XSD-only cannot catch id/name mismatch or empty safeguards. → Accept for this iteration; enforce via behavioral tests and XSLT review during migration slices.
 - [Risk] Confusion with issue #993 (commands schema). → Keep agent and command schemas separate; cross-reference only in PML documentation.
 
 ## Validation Strategy
@@ -336,17 +327,12 @@ Non-breaking rule: until Phase 3, Markdown remains the runtime installer input; 
 Structural (XSD):
 
 - Inventory and body examples validate with `xmllint --noout --schema`.
-- Invalid XSD examples fail before Schematron runs.
-
-Profile (Schematron):
-
-- Valid analyst example passes `pml-agent.sch`.
-- Invalid kind-profile example fails with documented rule id.
+- Invalid XSD examples fail with documented element or constraint violations.
 
 Behavior parity (130 — RIGHT-BICEP oriented):
 
-- **Right:** kind-specific required sections present for each of the nine agents after migration.
-- **Boundary:** empty safeguards, empty role-boundaries, duplicate inventory ids rejected.
+- **Right:** shape-specific required sections present for each of the nine agents after migration (test-enforced).
+- **Boundary:** duplicate inventory ids rejected by XSD; empty safeguards caught by tests during migration.
 - **Cross-check:** generated Markdown preserves `AgentIndexesTest` substrings for tech-lead routing, coder skill precedence, JDBC preferences, performance coordination.
 - **Performance:** schema validation stays file-local; no runtime Maven invocation in agents.
 
@@ -356,10 +342,10 @@ OpenSpec: `openspec validate --all` for this change.
 
 | Topic | Recommendation | Status |
 |-------|----------------|--------|
-| Agent XML schema as companion to skill `<prompt>` | PML project docs; Plinth ADR if XML becomes source of truth | Open |
-| Split inventory/body schemas | Accepted | Resolved |
-| Schematron for `@kind` profiles | Co-publish with XSD in PML | Resolved pending approval |
-| Kind-specific XSLT vs one template | Five kind templates + shared frontmatter partial | Resolved pending approval |
+| Agent XML schema as companion to skill `<prompt>` | Plinth module docs this iteration; PML project docs when published | Open |
+| Single `agent.xsd` module | Accepted for this iteration | **Resolved** |
+| XSD-only vs Schematron | XSD-only; no `pml-agent.sch` | **Resolved** |
+| Shape-specific XSLT vs one template | Five shape templates + shared frontmatter partial | Resolved |
 
 ## Compatibility Review (`056`)
 
@@ -375,18 +361,9 @@ OpenSpec: `openspec validate --all` for this change.
 
 | Question | Decision | Status |
 |----------|----------|--------|
-| Publish XSD in PML repo vs Plinth-only? | Publish under `/pml/schemas/agent/1.0.0/` | **Recommended — pending approval** |
-| Split inventory/body schemas? | Yes, plus `pml-agent-types.xsd` | **Resolved** |
+| Publish XSD in PML repo vs Plinth-only? | Local under `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/` this iteration | **Resolved** |
+| Split inventory/body schemas? | No — single `agent.xsd` | **Resolved** |
 | Inline bodies vs file references? | `@file` references through Phase 2; `.xml` allowed from Phase 2 | **Resolved** |
-| Single `<missions>` for all agents? | No — use `@kind` profiles | **Resolved** |
-| XSD-only vs Schematron? | XSD superset + Schematron profiles | **Resolved pending approval** |
-
-## Approval Checkpoint
-
-Confirm this refined direction before implementation tasks proceed:
-
-1. `@kind` taxonomy with five profiles matching the nine current agents.
-2. XSD structural superset + co-published Schematron for semantic rules.
-3. PML publication at `/schemas/agent/1.0.0/` with vendored fallback in generator tests.
-4. Agent-by-agent migration slices with tech lead last.
-5. Second valid example for `robot-tech-lead` added during task execution.
+| Single `<missions>` for all agents? | No — optional body superset | **Resolved** |
+| XSD-only vs Schematron? | **XSD-only** | **Resolved** |
+| `@kind` profiles with Schematron? | **Rejected** | **Resolved** |

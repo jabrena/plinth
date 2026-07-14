@@ -21,6 +21,6 @@
 
 ## 4. Publication and Validation
 
-- [ ] 4.1 Publish or prepare publication of XSD + Schematron artifacts in the PML project under `/schemas/command/1.0.0/`.
+- [ ] 4.1 Add XSD + Schematron artifacts under `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/` (local hosting this iteration; external PML publication deferred).
 - [ ] 4.2 Validate example XML with `xmllint --schema` and Schematron tooling against draft rules.
 - [ ] 4.3 Run `openspec validate --all` and resolve any OpenSpec validation failures for this change.

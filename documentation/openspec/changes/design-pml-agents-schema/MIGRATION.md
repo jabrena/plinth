@@ -15,8 +15,8 @@ This document accompanies OpenSpec change `design-pml-agents-schema` ([issue #99
 
 | Artifact | Target format | Validation |
 |----------|---------------|------------|
-| Inventory manifest | Namespaced `<agent-inventory>` XML | `pml-agent-inventory.xsd` |
-| Agent contracts | Namespaced `<agent>` XML (one file per agent) | `pml-agent.xsd` |
+| Inventory manifest | Namespaced `<agent-inventory>` XML | `agent.xsd` |
+| Agent contracts | Namespaced `<agent>` XML (one file per agent) | `agent.xsd` |
 | Generated Markdown | XSLT output with YAML frontmatter | Parity tests vs current contracts |
 | Inventory template | Generated from validated inventory XML | Manifest-driven generation |
 
@@ -29,21 +29,11 @@ This document accompanies OpenSpec change `design-pml-agents-schema` ([issue #99
 | `description` | `<frontmatter><description>` |
 | `readonly` | `<frontmatter><readonly>` or inventory `@readonly` |
 
-## Agent kind taxonomy
+## Agent shape reference (XSLT mapping, not XSD enforcement)
 
-| `@kind` | Agents |
-|---------|--------|
-| `analyst` | `robot-business-analyst` |
-| `architect` | `robot-architect` |
-| `coordinator` | `robot-tech-lead` |
-| `performance` | `robot-java-performance` |
-| `coder` | `robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, `robot-no-java` |
+Nine agents use three Markdown shapes. Section mapping guides future XSLT templates; XSD defines all body elements as optional except `<frontmatter>`.
 
-Inventory and body documents declare `@kind` to select Schematron profiles and XSLT templates.
-
-## Section mapping by kind
-
-### `analyst`
+### Analyst (`robot-business-analyst`)
 
 | Markdown heading | XML element |
 |------------------|-------------|
@@ -52,7 +42,7 @@ Inventory and body documents declare `@kind` to select Schematron profiles and X
 | `## Read-only boundary` | `<role-boundaries><section>` |
 | `## Output format` | `<output-format>` |
 
-### `architect`
+### Architect (`robot-architect`)
 
 | Markdown heading | XML element |
 |------------------|-------------|
@@ -63,7 +53,7 @@ Inventory and body documents declare `@kind` to select Schematron profiles and X
 | `## Constraints` | `<constraints>` |
 | `## Output format` | `<output-format>` |
 
-### `coordinator`
+### Coordinator (`robot-tech-lead`)
 
 | Markdown heading | XML element |
 |------------------|-------------|
@@ -74,7 +64,7 @@ Inventory and body documents declare `@kind` to select Schematron profiles and X
 | Parallel delegation sections | `<parallel-delegation>` |
 | `### Final output format` | `<output-format>` |
 
-### `performance`
+### Performance (`robot-java-performance`)
 
 | Markdown heading | XML element |
 |------------------|-------------|
@@ -83,7 +73,7 @@ Inventory and body documents declare `@kind` to select Schematron profiles and X
 | `## Output format` | `<output-format>` |
 | `## Safeguards` | `<safeguards>` |
 
-### `coder`
+### Coder (five agents)
 
 | Markdown heading | XML element |
 |------------------|-------------|
@@ -97,15 +87,16 @@ Coder agents do **not** use `<missions>` in the target XML model.
 
 ## Validation layers
 
-1. **XSD** — structural superset for all kinds.
-2. **Schematron (`pml-agent.sch`)** — `@kind` profiles, id/name parity, non-empty required sections.
-3. **Java parity tests** — `AgentIndexesTest` substrings until XSLT parity replaces them.
+1. **XSD** — structural superset: required `<frontmatter>` on body documents; optional body sections; unique inventory `@id`.
+2. **Java parity tests** — `AgentIndexesTest` substrings and Gherkin until XSLT parity replaces them.
+
+No Schematron companion rules in this iteration.
 
 ## Phased migration
 
 ### Step 1 — Schema contract (this OpenSpec change)
 
-- Publish XSD + Schematron + examples.
+- Publish XSD + examples.
 - No installer behavior change.
 
 ### Step 2 — Generator migration (follow-up), slice order
@@ -121,8 +112,8 @@ Coder agents do **not** use `<missions>` in the target XML model.
 
 Within each slice:
 
-1. **Phase 1:** Parallel XML staging; XSD + Schematron in tests; Markdown authoritative.
-2. **Phase 2:** Dual authoring; kind-specific XSLT; parity vs `AgentIndexesTest`.
+1. **Phase 1:** Parallel XML staging; XSD in tests; Markdown authoritative.
+2. **Phase 2:** Dual authoring; shape-specific XSLT; parity vs `AgentIndexesTest`.
 3. **Phase 3:** XML source of truth; generate Markdown at `generate-resources`.
 4. **Phase 4:** Enriched inventory; generate `java-agents-inventory-template.md` from XML.
 
@@ -132,6 +123,7 @@ Within each slice:
 - Skill `<prompt>` schema changes ([#991](https://github.com/jabrena/plinth/issues/991))
 - Changing agent roles, routing tables, or delegation contracts
 - Public `skills/` release promotion
+- Schematron or `@kind` schema validation profiles
 
 ## Rollback
 

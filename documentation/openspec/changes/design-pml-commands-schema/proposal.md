@@ -42,7 +42,7 @@ This is a design-only change for milestone v0.18.0. It does not implement XSLT g
 
 | Question | Recommendation | Status |
 |----------|----------------|--------|
-| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Publish under `/pml/schemas/command/1.0.0/` alongside agent and skill schemas | **Recommended — pending approval** |
+| Publish XSD in the external PML repo vs document as Plinth-only extension first? | Host locally under `plinth-commands-generator/src/main/resources/pml/schemas/command/1.0.0/` in this iteration; defer [PML project](https://github.com/jabrena/pml) publication | **Resolved** |
 | Single combined XSD vs split inventory and command-body schemas? | Split: `pml-command-inventory.xsd`, `pml-command.xsd`, `pml-command-types.xsd` | **Resolved** |
 | Normalize section titles in XSD or XSLT only? | Kind-specific XSLT templates (`standard`, `delivery`, `performance`, `cli`) | **Resolved** |
 | Require associations and output on all commands? | No — `@kind` profiles; `cli` omits both | **Resolved** |
