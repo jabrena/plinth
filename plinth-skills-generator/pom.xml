@@ -181,9 +181,9 @@
                             <outputDirectory>${project.build.directory}/generated-resources/skill-references/assets/agents</outputDirectory>
                             <resources>
                                 <resource>
-                                    <directory>${project.basedir}/../plinth-agents-generator/src/main/resources/agents</directory>
+                                    <directory>${project.basedir}/../plinth-agents-generator/target/generated-resources/agents</directory>
                                     <includes>
-                                        <include>**/*</include>
+                                        <include>*.md</include>
                                     </includes>
                                 </resource>
                             </resources>

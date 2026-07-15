@@ -6,6 +6,7 @@ import java.util.HashSet;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,20 +21,28 @@ class AgentIndexesTest {
     );
 
     @Test
-    @DisplayName("Agent inventory XML must load agent files in installation order")
+    @DisplayName("Agent inventory XML must list XML sources and map to Markdown assets")
     void should_loadAgentFiles_when_agentInventoryIsParsed() {
+        List<String> sources = AgentIndexes.agentSources().toList();
         List<String> agentFiles = expectedAgentFiles();
 
-        assertThat(agentFiles)
+        assertThat(sources)
             .isNotEmpty()
+            .allSatisfy(source -> assertThat(source).endsWith(".xml"));
+        assertThat(agentFiles)
+            .hasSize(sources.size())
             .allSatisfy(agentFile -> assertThat(agentFile).endsWith(".md"));
+        assertThat(agentFiles)
+            .containsExactlyElementsOf(
+                sources.stream().map(AgentIndexes::toMarkdownFileName).toList()
+            );
         assertThat(new HashSet<>(agentFiles))
             .withFailMessage("Agent inventory must not contain duplicate agent files")
             .hasSize(agentFiles.size());
     }
 
     @Test
-    @DisplayName("Agent assets must include the complete agent bundle")
+    @DisplayName("Agent assets must include the complete generated Markdown bundle")
     void should_haveCompleteAgentAssets_when_agentBundleIsInstalled() {
         expectedAgentFiles().forEach(agentFile -> {
             String resource = "agents/" + agentFile;
@@ -41,6 +50,27 @@ class AgentIndexesTest {
                 .withFailMessage("Agent asset missing: %s", resource)
                 .isNotNull();
         });
+        AgentIndexes.agentSources().forEach(sourceFile -> {
+            String resource = "agents/" + sourceFile;
+            assertThat(getTestResource(resource))
+                .withFailMessage("Agent XML source missing: %s", resource)
+                .isNotNull();
+        });
+    }
+
+    @Test
+    @DisplayName("Classpath Markdown must match generation from inventory XML sources")
+    void should_matchGeneratedMarkdown_when_agentXmlIsSourceOfTruth() throws Exception {
+        for (String sourceFile : AgentIndexes.agentSources().toList()) {
+            String markdownFile = AgentIndexes.toMarkdownFileName(sourceFile);
+            Document document = InventoryXmlLoader.parse(requireResource("agents/" + sourceFile));
+            String rendered = AgentMarkdownRenderer.render(document);
+            String classpathMarkdown = loadClasspathResource("agents/" + markdownFile);
+
+            assertThat(classpathMarkdown)
+                .withFailMessage("Generated Markdown parity failed for %s", sourceFile)
+                .isEqualTo(rendered);
+        }
     }
 
     @Test
@@ -156,14 +186,19 @@ class AgentIndexesTest {
     }
 
     private String loadClasspathResource(String resourceName) {
-        try (InputStream stream = getTestResource(resourceName)) {
-            if (stream == null) {
-                throw new IllegalArgumentException("Resource not found: " + resourceName);
-            }
+        try (InputStream stream = requireResource(resourceName)) {
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load classpath resource: " + resourceName, e);
         }
+    }
+
+    private InputStream requireResource(String resourceName) {
+        InputStream stream = getTestResource(resourceName);
+        if (stream == null) {
+            throw new IllegalArgumentException("Resource not found: " + resourceName);
+        }
+        return stream;
     }
 
     private InputStream getTestResource(String resourceName) {

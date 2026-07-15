@@ -1,55 +1,60 @@
 ## Why
 
-GitHub issue [#992](https://github.com/jabrena/plinth/issues/992) requests an XSD-backed PML schema for agent definitions. Agents today use a minimal `agents.xml` inventory manifest plus freeform Markdown contracts with YAML frontmatter, while skills already follow validated `<prompt>` XML against [pml.xsd 0.8.0](https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd). Without a schema, agent structure is enforced only by substring tests and Gherkin acceptance coverage, which cannot guarantee structural consistency or enable the same XML → generated Markdown pipeline established by [ADR-001](../../adr/ADR-001-generate-cursor-rules-from-xml-files.md).
+GitHub issue [#992](https://github.com/jabrena/plinth/issues/992) requests an XSD-backed PML schema for agent definitions. Agents previously used a minimal `agents.xml` inventory plus freeform Markdown contracts with YAML frontmatter, while skills already follow validated `<prompt>` XML against PML schemas. Without a schema and XML source-of-truth path, agent structure was enforced only by substring tests and Gherkin acceptance coverage, which could not guarantee structural consistency or enable the same XML → generated Markdown pipeline established by [ADR-001](../../../adr/ADR-001-generate-cursor-rules-from-xml-files.md).
 
 ## What Changes
 
-- Design a PML agent XSD covering the inventory manifest and structured agent definition elements, hosted locally in Plinth for this iteration.
-- Document how the agent schema relates to existing `pml.xsd` and `pml-workflow.xsd` in the PML project.
-- Produce a schema design document with inventory vs agent-body element mapping, namespace strategy, and frontmatter field mapping.
-- Provide representative valid and invalid XML examples for at least one existing agent (`robot-business-analyst`).
-- Record migration notes from current Markdown-first assets to schema-validated sources (implementation deferred).
+- Author production schema `agents.xsd` for individual `<agent>` documents (PML-aligned body: `<metadata>`, `<role>`, `<goal>`, optional `<constraints>` / `<steps>` / `<output-format>` / `<safeguards>`), hosted at `plinth-agents-generator/src/main/resources/agents.xsd`, with an OpenSpec mirror under `examples/xsd/pml/0.9.0/` (`agent.xsd` remains a shim include of `agents.xsd`).
+- Keep inventory manifest `agents.xml` outside the XSD; inventory `@file` values point at XML agent sources under `agents/`.
+- Store XML agent sources at `plinth-agents-generator/src/main/resources/agents/robot-*.xml` and validate them against `agents.xsd`.
+- Generate Cursor-compatible `.md` (YAML frontmatter + body) at build time via `AgentMarkdownGenerator` / `AgentMarkdownRenderer` (`exec-maven-plugin` at `process-classes`) into `agents/` for the existing `plinth-skills-generator` bridge (`*.md` only).
+- Map inventory XML `@file` to installer Markdown via `AgentIndexes.agentFiles()`; keep behavioral contracts in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin (not Schematron / `@kind` profiles).
+- Document relationship to staged `pml.xsd` 0.9.0 (shared element shapes) and orthogonal `pml-workflow.xsd`; agents remain a parallel family, not a `<prompt>` reuse.
+- Provide valid/invalid XML examples and migration notes from Markdown-first assets to XML sources + generated Markdown.
 
 ## Capabilities
 
 ### New Capabilities
 
-- `pml-agents-schema`: Defines the XSD contract, PML relationship, examples, and migration guidance for agent inventory and agent definition sources.
+- `pml-agents-schema`: Defines the XSD contract, PML relationship, examples, migration guidance, and build-time Markdown generation for agent definition sources consumed by the skills bridge.
 
 ### Modified Capabilities
 
-None. Agent behavioral contracts in `analysis-design-agents` remain authoritative for missions and routing semantics; this change defines structural validation only.
+None. Agent behavioral contracts in `analysis-design-agents` remain authoritative for missions, routing, and role boundaries; this change defines structural validation and the XML → Markdown delivery path only.
 
 ## Impact
 
-This is a design-only change for milestone v0.18.0. It does not implement XSLT generation, migrate `plinth-agents-generator` sources, or refresh public `skills/` release output. `agent.xsd` lives under `plinth-agents-generator` in this iteration; external PML publication is deferred. Follow-up issues may wire local XSD validation and generator migration.
+This change delivers schema, XML sources, Java Markdown generation, and inventory/`AgentIndexes` wiring inside `plinth-agents-generator`. Generated `.md` continues to feed the existing `plinth-skills-generator` bridge; public `skills/` release output is not refreshed unless a separate release profile run is prepared. External publication of `agents.xsd` under the PML project hosting site remains deferred.
 
 ## Source Artifacts and Derivation
 
 | Source | Authority | Derivation |
 |--------|-----------|------------|
 | [Issue #992](https://github.com/jabrena/plinth/issues/992) | Problem, scope, acceptance criteria, deliverables | OpenSpec proposal, spec, tasks |
-| `plinth-agents-generator/src/main/resources/agents.xml` | Current inventory shape | Inventory schema baseline |
-| `plinth-agents-generator/src/main/resources/agents/*.md` | Current agent contract surface | Agent body element mapping |
-| `documentation/openspec/specs/analysis-design-agents/spec.md` | Behavioral contract fields | Required structured sections |
-| [ADR-001](../../adr/ADR-001-generate-cursor-rules-from-xml-files.md) | XSD → Markdown precedent | Design alignment |
-| Archived change `2026-07-13-add-agents-generator-module` | Deferred non-goal | Confirms schema design is separate from extraction |
+| `plinth-agents-generator/src/main/resources/agents.xsd` | Production schema | Structural contract; OpenSpec mirror |
+| `plinth-agents-generator/src/main/resources/agents/robot-*.xml` | XML agent sources | Authoritative contract surface |
+| `plinth-agents-generator/src/main/resources/agents.xml` | Inventory discovery order | Installer order; `@file` → `.xml` |
+| `AgentMarkdownGenerator` / `AgentMarkdownRenderer` | Build-time `.md` emission | Skills-bridge input |
+| `documentation/openspec/specs/analysis-design-agents/spec.md` | Behavioral contract fields | Enforced outside XSD |
+| Staged `examples/xsd/pml/0.9.0/pml.xsd` | Shared PML element shapes | Parallel family reference (not `<prompt>` reuse) |
+| [ADR-001](../../../adr/ADR-001-generate-cursor-rules-from-xml-files.md) | XSD → Markdown precedent | Delivery alignment |
+| Archived change `2026-07-13-add-agents-generator-module` | Deferred non-goal baseline | Schema + generator delivery completes that gap |
 
-**Derivation direction:** Issue #992 → OpenSpec change artifacts → local `agent.xsd` in `plinth-agents-generator` → future external PML publication and generator migration (not in this change).
+**Derivation direction:** Issue #992 → OpenSpec change artifacts → local `agents.xsd` + XML sources + Java Markdown generation in `plinth-agents-generator` → skills-generator bridge consumes generated `.md` → future external PML publication (not required for this change).
 
 ## Design Decisions
 
 | Question | Decision | Status |
 |----------|----------|--------|
-| Publish XSD in the external PML repo vs Plinth-only first? | Host locally under `plinth-agents-generator/src/main/resources/pml/schemas/agent/0.9.0/` this iteration | **Resolved** |
-| Single combined XSD vs split inventory and agent-body schemas? | Single `agent.xsd` covering `<agent-inventory>` and `<agent>` root elements | **Resolved** |
-| Require inline agent bodies in inventory vs file references during migration? | Keep `@file` `.md` references through Phase 2; allow `.xml` from Phase 2 | **Resolved** |
-| Single `<missions>` element for all agents? | No — body sections are an optional XSD superset; no global `<missions>` requirement | **Resolved** |
-| XSD-only vs Schematron companion rules? | **XSD-only** — no `pml-agent.sch`, no `@kind` validation profiles | **Resolved** |
-| `@kind` profiles with Schematron? | **Rejected** — behavioral contracts stay in `AgentIndexesTest` and Gherkin | **Resolved** |
+| Schema file name and location? | Canonical `agents.xsd` at `plinth-agents-generator/src/main/resources/agents.xsd`; OpenSpec mirror at `examples/xsd/pml/0.9.0/agents.xsd`; `agent.xsd` is a shim include | **Resolved** |
+| Inventory inside XSD? | No — `agents.xml` (`<agent-inventory>`) stays outside `agents.xsd` | **Resolved** |
+| Body model? | PML-aligned `<metadata>`, `<role>`, `<goal>` (+ optional structured sections); not the older `<frontmatter>` / `<missions>` design elements | **Resolved** |
+| Required vs optional? | Required: `@id`, `<metadata>` with title/description, `<role>`, `<goal>`; optional constraints/steps/output-format/safeguards — see [`REQUIRED-OPTIONAL.md`](examples/xsd/pml/0.9.0/REQUIRED-OPTIONAL.md) | **Resolved** |
+| How are installers fed? | Java generates `.md` beside XML; skills bridge copies `*.md` only from `agents/` | **Resolved** |
+| XSD-only vs Schematron / `@kind`? | **XSD-only** — behavioral contracts stay in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin | **Resolved** |
 
-See [`design.md`](design.md) for the full refinement analysis and approval checkpoint.
+See [`design.md`](design.md) for the delivery model, PML relationship, and validation layers.
 
 ## Handoff
 
-After this change is approved and tasks complete, `@robot-tech-lead` can coordinate follow-up implementation issues for local XSD authoring, generator validation wiring, and Markdown source migration.
+After OpenSpec docs and validation complete, `@robot-tech-lead` can close remaining checklist items and coordinate any follow-up (external PML publication, release-profile skills refresh) outside this docs alignment slice.

@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
  * Inventory of embedded agent assets, loaded from {@code agents.xml}.
+ *
+ * <p>Inventory {@code @file} entries reference XML sources (for example
+ * {@code robot-architect.xml}). {@link #agentFiles()} exposes the generated
+ * Markdown asset names installers and the skills bridge consume
+ * ({@code robot-architect.md}).
  */
 public final class AgentIndexes {
 
@@ -18,15 +24,24 @@ public final class AgentIndexes {
     private AgentIndexes() {}
 
     /**
-     * Returns agent asset file names in installation order.
+     * Returns generated agent Markdown asset file names in installation order.
      *
      * @return stream of agent file names, for example {@code robot-architect.md}
      */
     public static Stream<String> agentFiles() {
-        return loadInventory().stream();
+        return loadInventorySources().stream().map(AgentIndexes::toMarkdownFileName);
     }
 
-    static List<String> loadInventory() {
+    /**
+     * Returns agent XML source file names in installation order.
+     *
+     * @return stream of agent source file names, for example {@code robot-architect.xml}
+     */
+    public static Stream<String> agentSources() {
+        return loadInventorySources().stream();
+    }
+
+    static List<String> loadInventorySources() {
         try (InputStream stream = getResource(INVENTORY_RESOURCE)) {
             if (stream == null) {
                 throw new RuntimeException("Agent inventory not found: " + INVENTORY_RESOURCE);
@@ -37,6 +52,19 @@ public final class AgentIndexes {
         }
     }
 
+    /**
+     * Maps an inventory XML source file name to the generated Markdown asset name.
+     *
+     * @param sourceFile inventory {@code @file} value ending in {@code .xml}
+     * @return corresponding Markdown file name ending in {@code .md}
+     */
+    static String toMarkdownFileName(String sourceFile) {
+        if (!sourceFile.endsWith(".xml")) {
+            throw new IllegalArgumentException("Agent source must be an XML file name: " + sourceFile);
+        }
+        return sourceFile.substring(0, sourceFile.length() - ".xml".length()) + ".md";
+    }
+
     private static List<String> parseInventory(InputStream in) {
         try {
             Element root = InventoryXmlLoader.parse(in).getDocumentElement();
@@ -45,7 +73,7 @@ public final class AgentIndexes {
             }
 
             NodeList agentNodes = root.getElementsByTagName("agent");
-            List<String> agentFiles = new ArrayList<>();
+            List<String> agentSources = new ArrayList<>();
             for (int i = 0; i < agentNodes.getLength(); i++) {
                 if (!(agentNodes.item(i) instanceof Element agentEl)) {
                     continue;
@@ -57,15 +85,15 @@ public final class AgentIndexes {
                 if (file.isEmpty()) {
                     throw new RuntimeException("agent-inventory entry missing file attribute");
                 }
-                if (file.startsWith("/") || file.contains("..") || !file.endsWith(".md")) {
-                    throw new RuntimeException("Agent file must be a markdown file name: " + file);
+                if (file.startsWith("/") || file.contains("..") || !file.endsWith(".xml")) {
+                    throw new RuntimeException("Agent file must be an XML source file name: " + file);
                 }
-                agentFiles.add(file);
+                agentSources.add(file);
             }
-            if (agentFiles.isEmpty()) {
+            if (agentSources.isEmpty()) {
                 throw new RuntimeException("Agent inventory must contain at least one <agent> entry");
             }
-            return List.copyOf(agentFiles);
+            return List.copyOf(agentSources);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -73,7 +101,7 @@ public final class AgentIndexes {
         }
     }
 
-    private static InputStream getResource(String name) {
+    private static @Nullable InputStream getResource(String name) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl == null) {
             cl = AgentIndexes.class.getClassLoader();

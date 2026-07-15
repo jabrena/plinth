@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<agent id="robot-java-quarkus-coder">
+<agent id="robot-java-quarkus-coder"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../xsd/pml/0.9.0/agents.xsd">
 
     <metadata>
         <authors>
@@ -9,6 +11,7 @@
         <license>Apache-2.0</license>
         <title>robot-java-quarkus-coder</title>
         <description>Implementation specialist for Quarkus projects. Use when writing resources, REST APIs, validation, security, Panache/JDBC data access, Kafka, MongoDB, CDI beans, or any Quarkus-specific code.</description>
+        <model>inherit</model>
     </metadata>
 
     <role>You are an Implementation Specialist for Quarkus projects. You focus on writing and improving Quarkus application code.</role>

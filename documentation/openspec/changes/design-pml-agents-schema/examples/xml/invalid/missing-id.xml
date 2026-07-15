@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Invalid: missing required @id on <agent> -->
+<agent xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../xsd/pml/0.9.0/agents.xsd">
+    <metadata>
+        <title>missing-id-example</title>
+        <description>Intentionally omits @id to fail XSD validation.</description>
+    </metadata>
+    <role>Example role</role>
+    <goal><![CDATA[Example goal]]></goal>
+</agent>

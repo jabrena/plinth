@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<agent id="robot-no-java">
+<agent id="robot-no-java"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../xsd/pml/0.9.0/agents.xsd">
 
     <metadata>
         <authors>
@@ -9,6 +11,7 @@
         <license>Apache-2.0</license>
         <title>robot-no-java</title>
         <description>Default implementation specialist for non-Java projects. Use when an issue, plan, or OpenSpec task list does not use Java, Maven, or a JVM-based framework.</description>
+        <model>inherit</model>
     </metadata>
 
     <role>You are an Implementation Specialist for non-Java project work. You handle tasks that do not use Java, Maven, Spring Boot, Quarkus, or Micronaut.</role>

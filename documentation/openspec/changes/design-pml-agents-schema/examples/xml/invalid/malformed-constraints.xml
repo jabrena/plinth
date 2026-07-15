@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Invalid: <constraints> requires <constraint-list>; bare <constraint> children are malformed -->
+<agent id="malformed-constraints-example"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../../xsd/pml/0.9.0/agents.xsd">
+    <metadata>
+        <title>malformed-constraints-example</title>
+        <description>Intentionally omits required constraint-list under constraints.</description>
+    </metadata>
+    <role>Example role</role>
+    <goal><![CDATA[Example goal]]></goal>
+    <constraints>
+        <constraint>Direct constraint children without constraint-list must fail.</constraint>
+    </constraints>
+</agent>

@@ -48,6 +48,7 @@ Can you update the current changelog for 0.17.0 comparing git commits in relatio
 - [ ] Review Skill validation output
 - [ ] Review Skill security validation
 - [ ] Last review in docs (Manual)
+- [ ] Optionally validate generated site HTML with Nu Html Checker (see [Validate site HTML](#validate-site-html-on-demand))
 - [ ] Refresh public skills/ release output with `./mvnw clean install -pl plinth-skills-generator -P release`
 - [ ] Verify that Pipeline is in Green
 
@@ -107,3 +108,26 @@ review if exist a new id in @plinth-skills-generator/src/main/resources/skills.x
 ```
 solving the problem with the skill, did you learn something that it didn´t work as expected or something to improve in the skill?
 ```
+
+## Validate site HTML (on demand)
+
+After regenerating the GitHub Pages site into `docs/` (`./mvnw clean generate-resources -pl site-generator -P site-update`), you can run the [Nu Html Checker (vnu)](https://validator.github.io/validator/) manually with JBang. This is **not** part of the default Maven build; use it when reviewing site/HTML quality.
+
+Requires [JBang](https://www.jbang.dev/) on `PATH`. First run may prompt to trust the validator catalog.
+
+```bash
+# Validate only *.html / *.htm / *.xhtml under docs/ (skip feeds, images, and other non-HTML)
+jbang vnu@validator/validator --skip-non-html --format text docs
+```
+
+Useful options:
+
+```bash
+# Errors only (quieter)
+jbang vnu@validator/validator --skip-non-html --errors-only --format text docs
+
+# Single page
+jbang vnu@validator/validator --skip-non-html --format text docs/index.html
+```
+
+Without `--skip-non-html`, pointing vnu at the `docs/` directory also tries to parse Atom feeds, images, and other assets as HTML and produces large amounts of noise.

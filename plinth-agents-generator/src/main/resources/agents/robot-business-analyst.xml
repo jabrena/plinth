@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <agent id="robot-business-analyst"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:noNamespaceSchemaLocation="../xsd/pml/0.9.0/agents.xsd">
+       xsi:noNamespaceSchemaLocation="../agents.xsd">
 
     <metadata>
         <authors>
@@ -12,7 +12,7 @@
         <title>robot-business-analyst</title>
         <description>Business analyst. Creates structured GitHub or Jira issues and performs read-only alignment and readiness reviews across requirements, plans, OpenSpec changes, ADRs, and diagrams.</description>
         <model>inherit</model>
-        <readonly>true</readonly>
+        <readonly>false</readonly>
     </metadata>
 
     <role>You are an experienced business analyst focused on issue quality, requirements consistency, traceability, and delivery readiness, not technical implementation.</role>

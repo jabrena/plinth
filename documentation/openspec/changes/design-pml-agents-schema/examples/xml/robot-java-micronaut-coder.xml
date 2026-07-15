@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<agent id="robot-java-micronaut-coder">
+<agent id="robot-java-micronaut-coder"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="../xsd/pml/0.9.0/agents.xsd">
 
     <metadata>
         <authors>
@@ -9,6 +11,7 @@
         <license>Apache-2.0</license>
         <title>robot-java-micronaut-coder</title>
         <description>Implementation specialist for Micronaut projects. Use when writing controllers, REST APIs, validation, security, Micronaut Data repositories, Kafka, MongoDB, CDI-style beans, or any Micronaut-specific code.</description>
+        <model>inherit</model>
     </metadata>
 
     <role>You are an Implementation Specialist for Micronaut projects. You focus on writing and improving Micronaut application code.</role>
