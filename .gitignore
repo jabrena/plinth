@@ -3,6 +3,9 @@ target/
 .idea/
 .vscode/
 .classpath
+.project
+.settings/
+.factorypath
 .agents
 .env
 dependency-reduced-pom.xml

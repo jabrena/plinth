@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Deprecated filename for OpenSpec exploration drafts.
+  Canonical schema name is agents.xsd (mirrors
+  plinth-agents-generator/src/main/resources/agents.xsd).
+  Kept so older example paths that referenced agent.xsd still resolve.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+    <xs:include schemaLocation="agents.xsd"/>
+</xs:schema>

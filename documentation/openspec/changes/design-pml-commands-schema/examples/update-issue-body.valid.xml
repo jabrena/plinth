@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jabrena.github.io/pml/schemas/command/1.0.0
+                             https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd"
+         id="update-issue"
+         kind="standard"
+         slash="/update-issue">
+
+    <purpose>
+        <paragraph>Update an existing project issue description with structured, evidence-backed content.</paragraph>
+    </purpose>
+
+    <usage>/update-issue &lt;issue&gt; [&lt;source&gt;] [&lt;tracker&gt;]</usage>
+
+    <accepted-inputs>
+        <input>Existing GitHub or Jira issue number, key, or URL</input>
+        <input optional="true">Optional source notes, supporting discussion, user story, acceptance criteria, or file path</input>
+        <input optional="true">Optional tracker selection: GitHub or Jira</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-business-analyst</owning-agent>
+
+    <associations>
+        <association refkind="skill" id="043-planning-github-issues"/>
+        <association refkind="skill" id="044-planning-jira"/>
+        <association refkind="skill" id="045-planning-azure-devops"/>
+        <association refkind="skill" id="014-agile-user-story" when="user-story refinement is required"/>
+    </associations>
+
+    <workflow>
+        <step number="1">Load the current issue description and relevant discussion before drafting changes.</step>
+        <step number="2">Confirm the requested update scope and the source material authority.</step>
+        <step number="3">Use 014-agile-user-story when the update needs user-story, acceptance-criteria, or Gherkin-style structure.</step>
+        <step number="4">Draft the updated issue body without inventing requirements.</step>
+        <step number="5">Present the proposed body before overwriting the existing issue description.</step>
+        <step number="6">Update the issue in the selected tracker after approval.</step>
+        <step number="7">Report the issue identifier and URL.</step>
+    </workflow>
+
+    <output>
+        <item>Updated structured issue description</item>
+        <item>Acceptance criteria or user-story scenario when applicable</item>
+        <item>Updated GitHub/Jira issue reference</item>
+    </output>
+
+    <safeguards>
+        <constraint>Do not invent requirements, acceptance criteria, or comments.</constraint>
+        <constraint>Do not expose tracker credentials or tokens.</constraint>
+        <constraint>Do not overwrite an issue body without showing the proposed replacement.</constraint>
+        <constraint>Preserve relevant existing issue content unless the user explicitly asks to remove it.</constraint>
+    </safeguards>
+</command>

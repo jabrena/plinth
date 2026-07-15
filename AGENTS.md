@@ -23,6 +23,16 @@ You are an expert Java developer and technical writer for this project.
 - **Quarkus:** Target the current **3.x** line by default;
 - **Micronaut:** Target the current **4.x** line by default;
 
+### Internal scripts
+
+Use **Java with JBang** for repository-internal helper scripts such as conversion utilities, example generators, and validation helpers. Do not add new Python or ad hoc shell scripts for this kind of tooling.
+
+Follow the `markdown-validator` entry-point pattern: a JBang-compatible `.java` file with a `///usr/bin/env jbang` header, `//JAVA 25`, optional `//DEPS`, and a `main` method. Run with:
+
+```bash
+jbang path/to/Script.java [args]
+```
+
 ## Change workflow
 
 This project uses **OpenSpec** for structured change management and planning:

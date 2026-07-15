@@ -1,0 +1,9 @@
+version: 1
+change:
+  name: design-pml-commands-schema
+  status: proposed
+  links:
+    - title: GitHub Issue #993
+      url: https://github.com/jabrena/plinth/issues/993
+specs:
+  - specs/pml-commands-schema/spec.md

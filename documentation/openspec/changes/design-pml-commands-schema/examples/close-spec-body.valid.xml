@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://jabrena.github.io/pml/schemas/command/1.0.0
+                             https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command.xsd"
+         id="close-spec"
+         kind="cli"
+         slash="/close-spec">
+
+    <purpose>
+        <paragraph>Archive an OpenSpec change by name, using the OpenSpec CLI, so completed changes can be reconciled and removed from the active change list.</paragraph>
+    </purpose>
+
+    <usage>/close-spec &lt;change-name&gt;</usage>
+
+    <accepted-inputs>
+        <input>change-name: the OpenSpec change name to archive</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-architect</owning-agent>
+
+    <workflow>
+        <step number="1">Validate the argument is present.</step>
+        <step number="2">Verify the OpenSpec CLI is available.</step>
+        <step number="3">Verify the change exists before attempting to archive it.</step>
+        <step number="4">From the documentation/ working directory, execute openspec archive change-name.</step>
+        <step number="5">If the archive command fails, surface the OpenSpec CLI output and stop.</step>
+        <step number="6">If the archive command succeeds, report a success message that includes change-name.</step>
+    </workflow>
+
+    <safeguards>
+        <constraint>Do not guess or auto-correct the change name.</constraint>
+        <constraint>Do not claim success when openspec archive fails.</constraint>
+        <constraint>Do not run openspec archive unless the change exists.</constraint>
+    </safeguards>
+</command>

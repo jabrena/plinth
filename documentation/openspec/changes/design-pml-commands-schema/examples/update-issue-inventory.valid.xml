@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command-inventory xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="https://jabrena.github.io/pml/schemas/command/1.0.0
+                                       https://jabrena.github.io/pml/schemas/command/1.0.0/pml-command-inventory.xsd"
+                   version="1.0.0">
+    <metadata>
+        <title>Plinth Embedded Commands</title>
+        <description>Installation-order manifest for slash commands</description>
+    </metadata>
+    <command id="update-issue"
+             kind="standard"
+             file="update-issue.xml"
+             slash="/update-issue">
+        <summary>Update an existing project issue with structured, evidence-backed content</summary>
+        <owning-agent>robot-business-analyst</owning-agent>
+    </command>
+</command-inventory>

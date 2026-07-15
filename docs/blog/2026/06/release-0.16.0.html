@@ -252,7 +252,7 @@ Operate
 <p>All skills have an acceptance-test inventory file, and it lives in <code>acceptance-tests-prompts-skills.md</code>. When a generated skill changes for any reason, it is now possible to run only the matching prompt for that changed skill. Let's review the scenario for <code>@111-java-maven-dependencies</code>.</p>
 <p><strong>@111-java-maven-dependencies:</strong></p>
 <p>The inventory has a prompt to validate the skill:</p>
-<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
+<pre><code class="language-bash">execute @plinth-skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
 and verify that acceptance-tests pass.
 </code></pre>
 <p>That prompt is linked with the following <code>Gherkin</code> file:</p>
@@ -311,7 +311,7 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
 <p>Given this <code>User story</code> and the <code>OpenSpec</code> change defined here: <a href="https://github.com/jabrena/plinth/tree/main/examples/openspec">https://github.com/jabrena/plinth/tree/main/examples/openspec</a>, you can implement it using the new <code>/implement-issue</code> command. Let's see how to do it and how to validate it.</p>
 <p><strong>/implement-issue:</strong></p>
 <p>Using this prompt:</p>
-<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+<pre><code class="language-bash">execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 </code></pre>
 <p>You can run the following <code>Gherkin</code> file:</p>
@@ -366,7 +366,7 @@ Scenario: Implement God Analysis API from a validated OpenSpec change
 <p><img src="/plinth/images/2026/6/vscode-codex.png" alt="" /></p>
 <p><em>Running the test with VS Code + Codex plugin</em></p>
 <p>But if you refine the prompt a bit, you can implement the requirement in <code>Quarkus</code>:</p>
-<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+<pre><code class="language-bash">execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 Implement it using Quarkus, not Spring Boot, as the default requirement.
 </code></pre>
@@ -374,7 +374,7 @@ Implement it using Quarkus, not Spring Boot, as the default requirement.
 <p><a href="https://asciinema.org/a/1257861"><img src="https://asciinema.org/a/1257861.svg" alt="asciicast" /></a></p>
 <p><em>Running the test with Codex CLI for the Quarkus variant</em></p>
 <p>Or, if required, the agent <code>@robot-tech-lead</code> redirects to the specific agent <code>@robot-java-micronaut-coder</code>, which handles specific <code>Java skills</code> and specific <code>Micronaut skills</code>. This is the result for a <code>Micronaut</code> implementation:</p>
-<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+<pre><code class="language-bash">execute @plinth-skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass.
 Implement it using Micronaut, not Spring Boot, as the default requirement.
 </code></pre>
