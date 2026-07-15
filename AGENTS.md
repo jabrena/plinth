@@ -33,8 +33,6 @@ Follow the `markdown-validator` entry-point pattern: a JBang-compatible `.java` 
 jbang path/to/Script.java [args]
 ```
 
-Provisional scripts in OpenSpec examples (for example `documentation/openspec/changes/design-pml-agents-schema/examples/convert-agent-md-to-xml.py`) are exploration-only; migrate them to JBang Java before promoting the workflow into generator modules or CI.
-
 ## Change workflow
 
 This project uses **OpenSpec** for structured change management and planning:
