@@ -15,10 +15,11 @@
                 <xs:element ref="role" minOccurs="0"/>
                 <xs:element ref="goal" minOccurs="0"/>
                 <xs:element ref="constraints" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="steps" minOccurs="0"/>
                 <xs:element ref="output-format" minOccurs="0"/>
                 <xs:element ref="safeguards" minOccurs="0"/>
             </xs:sequence>
-            <xs:attribute name="id" type="agentSlug" use="required"/>
+            <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
 
@@ -82,6 +83,55 @@
 
     <xs:element name="constraint" type="xs:string"/>
 
+    <!-- Steps container -->
+    <xs:element name="steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Individual step -->
+    <xs:element name="step">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-title"/>
+                <xs:element ref="step-content"/>
+                <xs:element ref="step-constraints" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-title" type="xs:string"/>
+    <xs:element name="step-content">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Step constraints -->
+    <xs:element name="step-constraints">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint" type="xs:string"/>
+
     <!-- Output format section -->
     <xs:element name="output-format">
         <xs:complexType>
@@ -119,15 +169,4 @@
     </xs:element>
 
     <xs:element name="safeguards-item" type="xs:string"/>
-
-    <!-- Named types -->
-    <xs:simpleType name="agentSlug">
-        <xs:annotation>
-            <xs:documentation>Lowercase slug identifier for agents. Maps to YAML frontmatter name and root @id.</xs:documentation>
-        </xs:annotation>
-        <xs:restriction base="xs:token">
-            <xs:pattern value="[a-z][a-z0-9-]*"/>
-        </xs:restriction>
-    </xs:simpleType>
-
 </xs:schema>
