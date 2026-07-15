@@ -49,7 +49,7 @@ This change delivers schema, XML sources, Java Markdown generation, and inventor
 | Schema file name and location? | Canonical `agents.xsd` at `plinth-agents-generator/src/main/resources/agents.xsd`; OpenSpec mirror at `examples/xsd/pml/0.9.0/agents.xsd`; `agent.xsd` is a shim include | **Resolved** |
 | Inventory inside XSD? | No — `agents.xml` (`<agent-inventory>`) stays outside `agents.xsd` | **Resolved** |
 | Body model? | PML-aligned `<metadata>`, `<role>`, `<goal>` (+ optional structured sections); not the older `<frontmatter>` / `<missions>` design elements | **Resolved** |
-| Required vs optional? | Required: `@id`, `<metadata>` with title/description, `<role>`, `<goal>`; optional constraints/steps/output-format/safeguards — see [`REQUIRED-OPTIONAL.md`](examples/xsd/pml/0.9.0/REQUIRED-OPTIONAL.md) | **Resolved** |
+| Required vs optional? | Required: `@id`, `<metadata>` with title/description, `<role>`, `<goal>`; optional constraints/steps/output-format/safeguards (documented in [`design.md`](design.md)) | **Resolved** |
 | How are installers fed? | Java generates `.md` beside XML; skills bridge copies `*.md` only from `agents/` | **Resolved** |
 | XSD-only vs Schematron / `@kind`? | **XSD-only** — behavioral contracts stay in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin | **Resolved** |
 

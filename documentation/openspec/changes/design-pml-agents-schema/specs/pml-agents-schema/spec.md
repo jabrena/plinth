@@ -20,7 +20,7 @@ The PML agent schema family SHALL define a production XSD (`agents.xsd`) that va
 - **AND** the schema allows optional `<constraints>`, `<steps>`, `<output-format>`, and `<safeguards>`
 - **AND** the schema does not require typed `<missions>`, `<frontmatter>`, or other per-shape body roots
 - **AND** documents missing required identity/role/goal fields fail validation
-- **AND** required vs optional policy is documented in `examples/xsd/pml/0.9.0/REQUIRED-OPTIONAL.md`
+- **AND** required vs optional cardinalities are documented in this change’s [`design.md`](../../design.md)
 
 #### Scenario: Inventory remains outside agents.xsd
 
@@ -87,22 +87,21 @@ The schema design SHALL document how `agents.xsd` relates to staged PML `pml.xsd
 
 The change SHALL provide representative valid and invalid XML examples for the agent contract surface.
 
-#### Scenario: Valid and invalid robot agent examples
+#### Scenario: Valid robot agent examples
 
 - **GIVEN** the shipped `robot-*.xml` contracts under `plinth-agents-generator/src/main/resources/agents/`
 - **WHEN** examples are authored for the schema design
 - **THEN** OpenSpec `examples/xml/robot-*.xml` cover valid agent-body structures for those agents
-- **AND** `examples/xml/invalid/` demonstrates XSD violations such as missing `@id`, disallowed children, or malformed `<constraints>` (see `examples/xml/invalid/README.md`)
 - **AND** examples are stored with the OpenSpec change for reviewer inspection
 
 ### Requirement: Migration notes from Markdown-first sources
 
 The change SHALL document migration guidance from Markdown-first agent assets to schema-validated XML sources and generated Markdown used by the skills bridge.
 
-#### Scenario: Phased and slice-ordered migration guidance
+#### Scenario: Slice-ordered migration guidance
 
 - **GIVEN** agents previously lived as Markdown-first `agents/*.md` contracts with YAML frontmatter
-- **WHEN** migration notes are published in `MIGRATION.md`
+- **WHEN** migration guidance is recorded in this change’s design artifacts
 - **THEN** they describe moving sources to XML under `src/main/resources/agents/`
 - **AND** they map frontmatter to `<metadata>` + `@id` and body content to `<role>` / `<goal>` plus optional structured sections
 - **AND** they state that generated `.md` remains the skill-bridge input

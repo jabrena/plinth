@@ -10,7 +10,7 @@ Early `/explore-design` review showed three Markdown shapes across nine agent co
 4. Existing `plinth-skills-generator` bridge continues to copy **`*.md` only** from that `agents/` directory.
 5. Inventory `agents.xml` lists XML `@file` sources; `AgentIndexes.agentFiles()` maps `.xml` → `.md` for installers.
 6. Behavioral contracts stay in `analysis-design-agents`, `AgentIndexesTest`, and Gherkin — **not** Schematron or `@kind` profiles.
-7. Migrate/review agent-by-agent in complexity order: analyst → architect → performance → framework coders → `robot-no-java` → tech lead last (see [`MIGRATION.md`](MIGRATION.md)).
+7. Migrate/review agent-by-agent in complexity order: analyst → architect → performance → framework coders → `robot-no-java` → tech lead last.
 
 ## Context
 
@@ -54,7 +54,7 @@ The agents generator extraction ([`2026-07-13-add-agents-generator-module`](../a
 |--------|------|---------|
 | `agents.xsd` | `<agent>` | Individual agent contracts |
 
-**Inventory** (`agents.xml` / `<agent-inventory>`) remains a separate installer discovery manifest **outside** this XSD. See [`REQUIRED-OPTIONAL.md`](examples/xsd/pml/0.9.0/REQUIRED-OPTIONAL.md).
+**Inventory** (`agents.xml` / `<agent-inventory>`) remains a separate installer discovery manifest **outside** this XSD. Required body fields are `@id`, `<metadata>` with `<title>` / `<description>`, `<role>`, and `<goal>`; `<constraints>`, `<steps>`, `<output-format>`, and `<safeguards>` are optional.
 
 **Shim:** OpenSpec `examples/xsd/pml/0.9.0/agent.xsd` only includes `agents.xsd` so older paths keep resolving.
 
@@ -171,15 +171,14 @@ YAML frontmatter is an **output** of `AgentMarkdownRenderer`, not an XML `<front
 - Unique logical agent identity comes from each document’s `@id` (and generated Markdown `name`).
 - Enriched inventory metadata (`@readonly`, `<summary>`) stays optional future work; not required for this delivery.
 
-### Valid / invalid examples
+### Valid examples
 
 - Valid: module `agents/robot-*.xml` and OpenSpec `examples/xml/robot-*.xml`.
-- Invalid (documented failures): `examples/xml/invalid/` — see [invalid README](examples/xml/invalid/README.md) (`missing-id`, `disallowed-child`, `malformed-constraints`).
-- Required/optional policy: [`REQUIRED-OPTIONAL.md`](examples/xsd/pml/0.9.0/REQUIRED-OPTIONAL.md).
+- Required body fields: `@id`, `<metadata>` with `<title>` / `<description>`, `<role>`, `<goal>`; optional `<constraints>`, `<steps>`, `<output-format>`, `<safeguards>`.
 
 ### Migration (Markdown-first → XML + generated Markdown)
 
-Historical Markdown-first `agents/*.md` sources are replaced by XML sources; generated `.md` remains the skill-bridge and installer input. Slice order and field mapping live in [`MIGRATION.md`](MIGRATION.md).
+Historical Markdown-first `agents/*.md` sources are replaced by XML sources; generated `.md` remains the skill-bridge and installer input. Prefer agent-by-agent slices: analyst → architect → performance → framework coders → `robot-no-java` → tech lead.
 
 ## Alternative Analysis
 
@@ -199,7 +198,7 @@ Historical Markdown-first `agents/*.md` sources are replaced by XML sources; gen
 | `plinth-agents-generator` | `agents.xsd`, `agents/robot-*.xml`, `agents.xml`, Java generator/renderer, `AgentIndexes` | Schema + XML sources |
 | `plinth-skills-generator` bridge | Copy of `agents/*.md` into skill-reference assets | Generated Markdown only |
 | `AgentIndexesTest` / Gherkin | Behavioral substring parity | Generated Markdown |
-| OpenSpec change examples | Mirror XSD, XML/MD samples, invalid cases, REQUIRED-OPTIONAL | Module canonical schema |
+| OpenSpec change examples | Mirror XSD and XML/MD samples | Module canonical schema |
 | PML project (deferred) | External publication of agents schema | Plinth-local schemas as source |
 
 ## Data Flow (delivered)
