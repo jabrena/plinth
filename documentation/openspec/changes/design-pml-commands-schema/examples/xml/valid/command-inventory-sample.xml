@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Valid inventory sample (agents-parity): file references only.
+  Inventory is outside commands.xsd; uniqueness is enforced by CommandIndexes.
+-->
+<command-inventory>
+  <command file="update-issue.xml"/>
+  <command file="close-spec.xml"/>
+</command-inventory>

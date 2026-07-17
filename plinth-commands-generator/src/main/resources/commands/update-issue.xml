@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="update-issue"
+         kind="standard"
+         slash="/update-issue"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <purpose>Update an existing project issue description with structured, evidence-backed content.</purpose>
+
+    <usage><![CDATA[/update-issue <issue> [<source>] [<tracker>]]]></usage>
+
+    <accepted-inputs heading="Accepted Inputs">
+        <input>Existing GitHub or Jira issue number, key, or URL</input>
+        <input>Optional source notes, supporting discussion, user story, acceptance criteria, or file path</input>
+        <input>Optional tracker selection: GitHub or Jira</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-business-analyst</owning-agent>
+
+    <associations heading="Associated Skills">
+        <association refkind="skill">043-planning-github-issues</association>
+        <association refkind="skill">044-planning-jira</association>
+        <association refkind="skill">045-planning-azure-devops</association>
+        <association refkind="skill" when="user-story refinement is required">014-agile-user-story</association>
+    </associations>
+
+    <workflow>
+        <step number="1">Load the current issue description and relevant discussion before drafting changes.</step>
+        <step number="2">Confirm the requested update scope and the source material authority.</step>
+        <step number="3">Use `014-agile-user-story` when the update needs user-story, acceptance-criteria, or Gherkin-style structure.</step>
+        <step number="4">Draft the updated issue body without inventing requirements.</step>
+        <step number="5">Present the proposed body before overwriting the existing issue description.</step>
+        <step number="6">Update the issue in the selected tracker after approval.</step>
+        <step number="7">Report the issue identifier and URL.</step>
+    </workflow>
+
+    <output>
+        <item>Updated structured issue description</item>
+        <item>Acceptance criteria or user-story scenario when applicable</item>
+        <item>Updated GitHub/Jira issue reference</item>
+    </output>
+
+    <safeguards>
+        <item>Do not invent requirements, acceptance criteria, or comments.</item>
+        <item>Do not expose tracker credentials or tokens.</item>
+        <item>Do not overwrite an issue body without showing the proposed replacement.</item>
+        <item>Preserve relevant existing issue content unless the user explicitly asks to remove it.</item>
+    </safeguards>
+</command>

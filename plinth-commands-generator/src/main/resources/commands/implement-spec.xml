@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="implement-spec"
+         kind="delivery"
+         slash="/implement-spec"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <purpose>Deliver an approved implementation plan or validated OpenSpec task list through controlled implementation.</purpose>
+
+    <usage><![CDATA[/implement-spec <approved-plan|openspec-change> [task-or-group] [constraints]]]></usage>
+
+    <accepted-inputs heading="Accepted inputs">
+        <input>An approved implementation plan (`*.plan.md`)</input>
+        <input>An OpenSpec change containing a validated `tasks.md`</input>
+        <input>Optional task or group selection, branch/worktree context, and implementation constraints</input>
+        <note>A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to provide an approved implementation plan or run `/create-spec`.</note>
+    </accepted-inputs>
+
+    <delegation heading="Owner and delegation">
+        <item>Owner: `@robot-tech-lead`</item>
+        <item>Delegation targets: `@robot-java-coder`, `@robot-java-spring-boot-coder`, `@robot-java-quarkus-coder`, `@robot-java-micronaut-coder`, or `@robot-no-java`</item>
+        <item>The tech lead coordinates delivery and MUST NOT implement application code directly.</item>
+    </delegation>
+
+    <execution-contract heading="Mandatory execution contract">
+        <item>If the command runner is not `@robot-tech-lead`, immediately delegate the whole command execution to `@robot-tech-lead` and wait for its result.</item>
+        <item>`@robot-tech-lead` MUST invoke the selected implementation agent for implementation, test, and verification work; naming an agent in the response is not delegation.</item>
+        <item>If agent invocation is unavailable in the current environment, stop and report that `/implement-spec` cannot proceed instead of implementing directly.</item>
+        <item>Before any implementation agent starts, pass the branch/worktree gate below and report the selected isolation strategy.</item>
+    </execution-contract>
+
+    <branch-worktree-gate heading="Branch/worktree gate">
+        <item>Before choosing a branch or worktree strategy, inspect the workspace with `git status --short`.</item>
+        <item>If the workspace is dirty, stop immediately and report the changed/untracked paths. Do not create a feature branch, create a worktree, delegate implementation, or ask for approval to continue in the dirty checkout.</item>
+        <item>Continue only after the user cleans, commits, or stashes the workspace and reruns `/implement-spec`.</item>
+        <item>Determine whether the selected artifact should run in the current checkout, a new feature branch, or one or more linked worktrees.</item>
+        <item>If the work is serial and the current checkout is not already a safe, suitable feature branch, execute `/create-feature-branch` before delegating implementation.</item>
+        <item>If independent groups can run in parallel or need isolation, execute `/create-worktree` for each independent branch/worktree before delegating implementation.</item>
+        <item>Do not start implementation on `main` or the repository default branch unless the user explicitly approves that exception after being warned.</item>
+        <item>If branch or worktree creation is blocked by unsafe git state, existing branches, existing worktrees, or ambiguous base references, stop and ask the user how to proceed.</item>
+    </branch-worktree-gate>
+
+    <workflow>
+        <step number="1">Load the actual selected plan or OpenSpec `tasks.md` and confirm it is current, approved, and internally consistent.</step>
+        <step number="2">Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.</step>
+        <step number="3">Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.</step>
+        <step number="4">Extract task groups, dependencies, milestones, verification gates, and expected file ownership.</step>
+        <step number="5">Complete the branch/worktree gate: use `/create-feature-branch` for serial work in the current checkout, or `/create-worktree` when independent groups can run safely in parallel.</step>
+        <step number="6">Report the selected feature branch or worktree paths before delegating implementation.</step>
+        <step number="7">Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.</step>
+        <step number="8">Invoke the selected implementation agent for each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.</step>
+        <step number="9">Integrate delegated results and require changed-file, test, build, risk, and blocker evidence.</step>
+        <step number="10">Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.</step>
+        <step number="11">Report completion against the selected artifact.</step>
+    </workflow>
+
+    <output>
+        <item>Selected execution artifact and source reference</item>
+        <item>Framework decision and coder routing rationale</item>
+        <item>Feature-branch or worktree gate result, branch names, worktree paths, and rationale</item>
+        <item>Serial/parallel execution map with dependencies and file ownership</item>
+        <item>Results and changed files by task or group</item>
+        <item>Test and build evidence</item>
+        <item>Updated OpenSpec task status, when applicable</item>
+        <item>Remaining blockers, risks, and follow-up work</item>
+    </output>
+
+    <safeguards>
+        <item>Do not implement from a stale, unapproved, missing, or conflicting execution artifact.</item>
+        <item>Do not continue in the original command runner when `@robot-tech-lead` has not accepted the orchestration handoff.</item>
+        <item>Do not start implementation before the feature-branch or worktree gate has passed.</item>
+        <item>Do not bypass a dirty workspace by asking for approval to continue; stop and resume only after the workspace is clean.</item>
+        <item>Do not treat a written plan to delegate as delegation; invoke the selected implementation agent.</item>
+        <item>Do not silently change issue scope, requirements, ADR decisions, or plan approach.</item>
+        <item>Do not run dependent groups before prerequisite verification gates pass.</item>
+        <item>Do not delegate concurrent groups with overlapping file ownership without an explicit integration strategy.</item>
+        <item>Do not mark tasks complete before acceptance criteria and focused checks pass.</item>
+        <item>Do not bypass repository validation or edit generated outputs directly.</item>
+    </safeguards>
+</command>

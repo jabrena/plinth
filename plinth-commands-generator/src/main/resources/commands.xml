@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command-inventory>
-    <command file="update-issue.md"/>
-    <command file="create-feature-branch.md"/>
-    <command file="create-worktree.md"/>
-    <command file="explore-design.md"/>
-    <command file="create-adr.md"/>
-    <command file="create-diagram.md"/>
-    <command file="create-spec.md"/>
-    <command file="review-alignment.md"/>
-    <command file="implement-spec.md"/>
-    <command file="close-spec.md"/>
-    <command file="profile.md"/>
-    <command file="benchmark.md"/>
+    <command file="update-issue.xml"/>
+    <command file="create-feature-branch.xml"/>
+    <command file="create-worktree.xml"/>
+    <command file="explore-design.xml"/>
+    <command file="create-adr.xml"/>
+    <command file="create-diagram.xml"/>
+    <command file="create-spec.xml"/>
+    <command file="review-alignment.xml"/>
+    <command file="implement-spec.xml"/>
+    <command file="close-spec.xml"/>
+    <command file="profile.xml"/>
+    <command file="benchmark.xml"/>
 </command-inventory>

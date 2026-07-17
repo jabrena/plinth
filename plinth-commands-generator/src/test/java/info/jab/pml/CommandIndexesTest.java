@@ -13,25 +13,39 @@ import static org.assertj.core.api.Assertions.assertThat;
 class CommandIndexesTest {
 
     @Test
-    @DisplayName("Command inventory XML must load command files in installation order")
+    @DisplayName("Command inventory XML must list XML sources and map to Markdown assets")
     void should_loadCommandFiles_when_commandInventoryIsParsed() {
+        List<String> sources = CommandIndexes.commandSources().toList();
         List<String> commandFiles = expectedCommandFiles();
 
-        assertThat(commandFiles)
+        assertThat(sources)
             .isNotEmpty()
+            .allSatisfy(source -> assertThat(source).endsWith(".xml"));
+        assertThat(commandFiles)
+            .hasSize(sources.size())
             .allSatisfy(commandFile -> assertThat(commandFile).endsWith(".md"));
+        assertThat(commandFiles)
+            .containsExactlyElementsOf(
+                sources.stream().map(CommandIndexes::toMarkdownFileName).toList()
+            );
         assertThat(new HashSet<>(commandFiles))
             .withFailMessage("Command inventory must not contain duplicate command files")
             .hasSize(commandFiles.size());
     }
 
     @Test
-    @DisplayName("Command assets must include the complete command bundle")
+    @DisplayName("Command assets must include the complete generated Markdown bundle")
     void should_haveCompleteCommandAssets_when_commandBundleIsInstalled() {
         expectedCommandFiles().forEach(commandFile -> {
             String resource = "commands/" + commandFile;
             assertThat(getTestResource(resource))
                 .withFailMessage("Command asset missing: %s", resource)
+                .isNotNull();
+        });
+        CommandIndexes.commandSources().forEach(sourceFile -> {
+            String resource = "commands/" + sourceFile;
+            assertThat(getTestResource(resource))
+                .withFailMessage("Command XML source missing: %s", resource)
                 .isNotNull();
         });
     }

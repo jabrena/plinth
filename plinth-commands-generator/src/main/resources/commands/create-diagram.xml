@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="create-diagram"
+         kind="standard"
+         slash="/create-diagram"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <purpose>Create an architecture or design diagram that explains a selected system view.</purpose>
+
+    <usage><![CDATA[/create-diagram <source-artifact> [<diagram-type>]]]></usage>
+
+    <accepted-inputs heading="Accepted Inputs">
+        <input>Issue, approved design, ADR, specification, plan, or repository architecture</input>
+        <input>Optional diagram type: sequence, class, state machine, ER, or C4</input>
+        <input>Desired audience and level of detail</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-architect</owning-agent>
+
+    <associations heading="Associated Skill">
+        <association refkind="skill">033-architecture-diagrams</association>
+    </associations>
+
+    <workflow>
+        <step number="1">Confirm the diagram purpose, audience, type, and scope.</step>
+        <step number="2">Extract only the components and relationships needed for that view.</step>
+        <step number="3">Generate the diagram source using the repository convention.</step>
+        <step number="4">Check names and relationships against the source artifacts.</step>
+        <step number="5">Report the diagram path and any assumptions.</step>
+    </workflow>
+
+    <output>
+        <item>Diagram source for the selected architecture view</item>
+        <item>Concise explanation of scope and assumptions</item>
+        <item>Links to the source artifacts represented</item>
+    </output>
+
+    <safeguards>
+        <item>Do not mix unrelated architecture views into one diagram.</item>
+        <item>Do not invent components or interactions.</item>
+        <item>Do not replace an existing diagram without reviewing its current purpose.</item>
+    </safeguards>
+</command>

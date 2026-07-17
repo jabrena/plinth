@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="create-spec"
+         kind="standard"
+         slash="/create-spec"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <purpose>Create or update one or more OpenSpec changes from the available issue, design, ADR, plan, or existing OpenSpec artifacts.</purpose>
+
+    <usage><![CDATA[/create-spec <issue|design|adr|plan|existing-change>]]></usage>
+
+    <accepted-inputs heading="Accepted Inputs">
+        <input>Issue or user story</input>
+        <input>Approved design and ADRs</input>
+        <input>Implementation plan</input>
+        <input>Existing OpenSpec change</input>
+        <input>Any valid combination of these artifacts</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-architect</owning-agent>
+
+    <associations heading="Associated Skills">
+        <association refkind="skill">042-planning-openspec</association>
+    </associations>
+
+    <workflow-position>Runs first to create the initial OpenSpec proposal, design, specification, and task artifacts. Use `/explore-design` afterward when technical approach refinement is still needed.</workflow-position>
+
+    <workflow>
+        <step number="1">Identify the available source artifacts and their authority.</step>
+        <step number="2">Assess whether the scope fits one reviewable change.</step>
+        <step number="3">Create or update the approved OpenSpec proposal, design, specifications, and tasks.</step>
+        <step number="4">Record derivation direction, source links, unresolved questions, and compatibility-review assumptions.</step>
+        <step number="5">Validate the resulting OpenSpec changes.</step>
+    </workflow>
+
+    <output>
+        <item>One OpenSpec change, or an approved map of multiple changes</item>
+        <item>Proposal, design, specifications, and task artifacts</item>
+        <item>Validation and traceability report</item>
+    </output>
+
+    <safeguards>
+        <item>Do not require a plan when a spec-first workflow is selected.</item>
+        <item>Do not silently synchronize changes back into source artifacts.</item>
+        <item>Do not invent requirements or split work by technical layer alone.</item>
+        <item>Do not apply design skills `051`–`057`, `121`–`123`, or `130`; those belong to `/explore-design`.</item>
+    </safeguards>
+</command>

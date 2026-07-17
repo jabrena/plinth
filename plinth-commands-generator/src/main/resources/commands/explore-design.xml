@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="explore-design"
+         kind="standard"
+         slash="/explore-design"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <purpose>Improve and refine the technical approach for an issue or OpenSpec change after initial specification—with alternatives, trade-offs, compatibility review, rollout controls, and verification strategy—before implementation.</purpose>
+
+    <usage><![CDATA[/explore-design <issue|openspec-change>]]></usage>
+
+    <accepted-inputs heading="Accepted Inputs">
+        <input>Issue or user story</input>
+        <input>OpenSpec change with unresolved technical approaches or design gaps</input>
+        <input>Existing architecture context and constraints</input>
+        <input>Relevant requirements, ADRs, or technical notes linked to the issue or change</input>
+    </accepted-inputs>
+
+    <owning-agent>robot-architect</owning-agent>
+
+    <associations heading="Associated Skills">
+        <association refkind="skill">`051-design-two-steps-methods` for every refinement so preparatory work, behavior change, and verification remain explicitly sequenced</association>
+        <association refkind="skill">`052-design-hamburger-method` when the scope is broad enough to need smallest-useful vertical slices</association>
+        <association refkind="skill">`053-design-simple-rules` when alternatives need ordered design tradeoff evaluation before finalizing the direction</association>
+        <association refkind="skill">`054-design-tdd` when testing-related requirements need test-first sequencing and verification-driven refinement</association>
+        <association refkind="skill">`055-design-parallel-change` when database migration requirements need expand, migrate, contract sequencing</association>
+        <association refkind="skill">`056-design-avoid-breaking-changes` when compatibility surfaces may change during refinement</association>
+        <association refkind="skill">`057-design-feature-toggles` when rollout, rollback, compatibility windows, or temporary behavior controls affect the design direction</association>
+        <association refkind="skill">`121-java-object-oriented-design`, then `122-java-type-design`, then `123-java-design-patterns` when Java responsibilities, type boundaries, or collaboration decisions affect the refined approach</association>
+        <association refkind="skill">`130-java-testing-strategies` when testing strategy, boundary coverage, flakiness, or verification quality affect the refined approach</association>
+    </associations>
+
+    <workflow-position>Runs after `/create-spec`, not as the first mission in the workflow.</workflow-position>
+
+    <workflow>
+        <step number="1">Clarify goals, constraints, assumptions, unknowns, and success criteria.</step>
+        <step number="2">Compare feasible approaches and trade-offs.</step>
+        <step number="3">Recommend a design direction with rationale.</step>
+        <step number="4">Describe components, boundaries, interactions, data flow, failure handling, and testing strategy.</step>
+        <step number="5">Identify unresolved questions and ADR candidates.</step>
+        <step number="6">Refine the existing OpenSpec change when one is provided, without replacing initial OpenSpec authoring owned by `/create-spec`.</step>
+        <step number="7">Request approval or revise the design direction.</step>
+    </workflow>
+
+    <output>
+        <item>Approved design direction</item>
+        <item>Alternative and trade-off analysis</item>
+        <item>ADR candidates</item>
+        <item>Open questions and assumptions</item>
+        <item>Refined OpenSpec change artifacts when applicable</item>
+    </output>
+
+    <safeguards>
+        <item>Do not implement application code.</item>
+        <item>Do not hide material trade-offs or unresolved decisions.</item>
+        <item>Do not treat the recommendation as approved until the user confirms it.</item>
+        <item>Do not apply `042-planning-openspec`; initial OpenSpec authoring belongs to `/create-spec`.</item>
+    </safeguards>
+</command>

@@ -5,11 +5,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
  * Inventory of embedded command assets, loaded from {@code commands.xml}.
+ *
+ * <p>Inventory {@code @file} entries reference XML sources (for example
+ * {@code update-issue.xml}). {@link #commandFiles()} exposes the generated
+ * Markdown asset names installers and the skills bridge consume
+ * ({@code update-issue.md}).
  */
 public final class CommandIndexes {
 
@@ -18,15 +24,24 @@ public final class CommandIndexes {
     private CommandIndexes() {}
 
     /**
-     * Returns command asset file names in installation order.
+     * Returns generated command Markdown asset file names in installation order.
      *
      * @return stream of command file names, for example {@code update-issue.md}
      */
     public static Stream<String> commandFiles() {
-        return loadInventory().stream();
+        return loadInventorySources().stream().map(CommandIndexes::toMarkdownFileName);
     }
 
-    static List<String> loadInventory() {
+    /**
+     * Returns command XML source file names in installation order.
+     *
+     * @return stream of command source file names, for example {@code update-issue.xml}
+     */
+    public static Stream<String> commandSources() {
+        return loadInventorySources().stream();
+    }
+
+    static List<String> loadInventorySources() {
         try (InputStream stream = getResource(INVENTORY_RESOURCE)) {
             if (stream == null) {
                 throw new RuntimeException("Command inventory not found: " + INVENTORY_RESOURCE);
@@ -37,6 +52,19 @@ public final class CommandIndexes {
         }
     }
 
+    /**
+     * Maps an inventory XML source file name to the generated Markdown asset name.
+     *
+     * @param sourceFile inventory {@code @file} value ending in {@code .xml}
+     * @return corresponding Markdown file name ending in {@code .md}
+     */
+    static String toMarkdownFileName(String sourceFile) {
+        if (!sourceFile.endsWith(".xml")) {
+            throw new IllegalArgumentException("Command source must be an XML file name: " + sourceFile);
+        }
+        return sourceFile.substring(0, sourceFile.length() - ".xml".length()) + ".md";
+    }
+
     private static List<String> parseInventory(InputStream in) {
         try {
             Element root = InventoryXmlLoader.parse(in).getDocumentElement();
@@ -45,7 +73,7 @@ public final class CommandIndexes {
             }
 
             NodeList commandNodes = root.getElementsByTagName("command");
-            List<String> commandFiles = new ArrayList<>();
+            List<String> commandSources = new ArrayList<>();
             for (int i = 0; i < commandNodes.getLength(); i++) {
                 if (!(commandNodes.item(i) instanceof Element commandEl)) {
                     continue;
@@ -57,15 +85,15 @@ public final class CommandIndexes {
                 if (file.isEmpty()) {
                     throw new RuntimeException("command-inventory entry missing file attribute");
                 }
-                if (file.startsWith("/") || file.contains("..") || !file.endsWith(".md")) {
-                    throw new RuntimeException("Command file must be a markdown file name: " + file);
+                if (file.startsWith("/") || file.contains("..") || !file.endsWith(".xml")) {
+                    throw new RuntimeException("Command file must be an XML source file name: " + file);
                 }
-                commandFiles.add(file);
+                commandSources.add(file);
             }
-            if (commandFiles.isEmpty()) {
+            if (commandSources.isEmpty()) {
                 throw new RuntimeException("Command inventory must contain at least one <command> entry");
             }
-            return List.copyOf(commandFiles);
+            return List.copyOf(commandSources);
         } catch (RuntimeException e) {
             throw e;
         } catch (Exception e) {
@@ -73,7 +101,7 @@ public final class CommandIndexes {
         }
     }
 
-    private static InputStream getResource(String name) {
+    private static @Nullable InputStream getResource(String name) {
         ClassLoader cl = Thread.currentThread().getContextClassLoader();
         if (cl == null) {
             cl = CommandIndexes.class.getClassLoader();
