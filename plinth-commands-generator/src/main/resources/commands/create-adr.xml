@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="create-adr"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <goal><![CDATA[
+Record an important architectural decision, its context, alternatives, and consequences.
+
+## Usage
+
+```text
+/create-adr <decision-source> [<adr-type>]
+```
+
+## Accepted Inputs
+
+- Approved design exploration, issue, specification, or implementation plan
+- Existing architecture constraints and related ADRs
+- Optional ADR type: general, functional requirements, or non-functional requirements
+
+## Owning Agent
+
+`@robot-architect`
+
+## Associated Skills
+
+- `030-architecture-adr-general`
+- `031-architecture-adr-functional-requirements`
+- `032-architecture-adr-non-functional-requirements`
+]]></goal>
+
+    <steps>
+        <step number="1">Confirm the decision scope and select the appropriate ADR skill.</step>
+        <step number="2">Gather context, constraints, considered alternatives, and consequences.</step>
+        <step number="3">Draft the ADR using the repository convention.</step>
+        <step number="4">Check consistency with related issues, designs, specifications, and ADRs.</step>
+        <step number="5">Present the ADR for approval before finalizing it.</step>
+    </steps>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>One repository-compliant ADR</output-format-item>
+            <output-format-item>Decision status, rationale, alternatives, and consequences</output-format-item>
+            <output-format-item>Links to relevant source artifacts</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not create an ADR for a decision that has not been made.</safeguards-item>
+            <safeguards-item>Do not invent alternatives or constraints.</safeguards-item>
+            <safeguards-item>Do not modify unrelated ADRs.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

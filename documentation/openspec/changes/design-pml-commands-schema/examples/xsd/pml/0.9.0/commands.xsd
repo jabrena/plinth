@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Root element for a single command definition document (inventory stays in commands.xml).
+         Sequence aligned with agents.xsd: goal → constraints → steps → output-format → safeguards -->
+    <xs:element name="command">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="goal"/>
+                <xs:element ref="constraints" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="steps"/>
+                <xs:element ref="output-format" minOccurs="0"/>
+                <xs:element ref="safeguards" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Mixed text blocks for Markdown-heavy sections (agents-style goal CDATA) -->
+    <xs:complexType name="MixedText" mixed="true">
+        <xs:sequence>
+            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Goal holds the short purpose sentence plus narrative contract sections as Markdown -->
+    <xs:element name="goal">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Aligned with agents.xsd constraints shape -->
+    <xs:element name="constraints">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="constraints-description" minOccurs="0"/>
+                <xs:element ref="constraint-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="constraints-description" type="xs:string"/>
+
+    <xs:element name="constraint-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="constraint" type="MixedText"/>
+
+    <xs:element name="steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="heading" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Aligned with agents.xsd output-format shape -->
+    <xs:element name="output-format">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-list" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="heading" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-item" type="MixedText"/>
+
+    <!-- Aligned with agents.xsd safeguards shape -->
+    <xs:element name="safeguards">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-list" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-item" type="MixedText"/>
+
+</xs:schema>

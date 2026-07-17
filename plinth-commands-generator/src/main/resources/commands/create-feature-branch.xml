@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command id="create-feature-branch"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <goal><![CDATA[
+Create and switch the current checkout to a conventionally named local branch for analysis, design, or implementation work.
+
+## Usage
+
+```text
+/create-feature-branch <issue-or-change|type description> [<base-reference>]
+```
+
+## Accepted Inputs
+
+- An issue/change identifier, or an explicit branch type and description
+- Optional base reference
+- Supported branch types: `feat`, `fix`, `docs`, `refactor`, and `chore`
+
+## Owning Agent
+
+`@robot-tech-lead`
+
+## Associated Capabilities
+
+- Git branch naming and validation
+- Issue and OpenSpec change traceability
+- Analysis/design-to-implementation transition
+]]></goal>
+
+    <steps>
+        <step number="1">Resolve the branch type, issue/change identifier, and kebab-case description.</step>
+        <step number="2">Verify the repository and selected base reference.</step>
+        <step number="3">Resolve the repository default branch and the current branch.</step>
+        <step number="4">Verify the current checkout is `main` or the repository default branch before creating the new branch.</step>
+        <step number="5">If the current branch is not `main` or the default branch, stop and ask whether to switch to the default branch, choose a different base, or continue explicitly from the current branch.</step>
+        <step number="6">Verify a safe working tree before changing the current checkout.</step>
+        <step number="7">Stop if the proposed branch already exists or is checked out in another worktree.</step>
+        <step number="8">Create and switch to the conventionally named local branch.</step>
+        <step number="9">Report the branch name and base reference.</step>
+    </steps>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>Created local branch</output-format-item>
+            <output-format-item>Confirmation with the exact branch name and base reference</output-format-item>
+            <output-format-item>A checkout ready for plans, OpenSpec artifacts, ADRs, diagrams, documentation, or application code</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Stop when uncommitted work could be displaced or mixed into the new branch.</safeguards-item>
+            <safeguards-item>Stop and ask when the current branch is not `main` or the repository default branch.</safeguards-item>
+            <safeguards-item>Do not overwrite, delete, or force-update an existing branch.</safeguards-item>
+            <safeguards-item>Allow analysis and design artifacts to be committed before application-code implementation.</safeguards-item>
+            <safeguards-item>The command does not create a commit automatically.</safeguards-item>
+            <safeguards-item>Do not push or open a pull request automatically.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

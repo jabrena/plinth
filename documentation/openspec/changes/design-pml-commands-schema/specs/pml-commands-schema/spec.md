@@ -1,105 +1,96 @@
 ## ADDED Requirements
 
-### Requirement: Command inventory XSD
+### Requirement: Command body XSD (agents parity)
 
-The PML command schema family SHALL define an XSD for the command inventory manifest that validates structure beyond filename-only `<command file="..."/>` references.
+The commands generator SHALL validate individual command contracts with a single no-namespace `commands.xsd` colocated at `plinth-commands-generator/src/main/resources/commands.xsd`, following the same style as `agents.xsd`.
 
-#### Scenario: Validate enriched inventory manifest
+#### Scenario: Validate structural command contract sections
 
-- **GIVEN** a Plinth command inventory document at `plinth-commands-generator/src/main/resources/commands.xml`
-- **WHEN** the PML command inventory XSD is applied
-- **THEN** the schema validates a root `<command-inventory>` element with ordered `<command>` entries
-- **AND** each entry provides a unique command `@id`, a `@kind`, a `@file` reference ending in `.md` or an approved inline body reference, and optional discovery metadata such as `@slash`, `<summary>`, and `<owning-agent>`
-- **AND** duplicate command ids fail validation
-
-### Requirement: Command definition XSD
-
-The PML command schema family SHALL define an XSD for individual command contracts with structured elements aligned with OpenSpec `analysis-design-commands` behavioral fields.
-
-#### Scenario: Validate required command contract sections by kind
-
-- **GIVEN** a command definition document with `@kind` set to `standard`, `delivery`, `performance`, or `cli`
-- **WHEN** the PML command body XSD and companion Schematron rules are applied
-- **THEN** the schema requires `<purpose>`, `<usage>`, `<accepted-inputs>`, `<owning-agent>`, `<workflow>`, and `<safeguards>` for all kinds
-- **AND** `standard` commands require `<associations>` and `<output>`
-- **AND** `delivery` commands require `<delegation>`, `<execution-contract>`, and `<branch-worktree-gate>`
-- **AND** `performance` commands require `<ownership>` and `<output>`; `benchmark` additionally requires `<tool-selection>`
-- **AND** `cli` commands MUST NOT require `<associations>` or `<output>`
-- **AND** documents missing kind-specific required sections fail validation
+- **GIVEN** a command definition document with required `@id` and optional `@kind` (`standard`, `delivery`, `performance`, `cli`) and `@slash`
+- **WHEN** `commands.xsd` is applied
+- **THEN** the schema requires core sections `goal` and `steps`, with optional `constraints`, `output-format`, and `safeguards` in agents order
+- **AND** optional `output-format` is expressible in the structural sequence
+- **AND** narrative contract content (Usage, Accepted Inputs, owner, associations, delegation, ownership, tool selection, workflow position, execution contract, branch/worktree gate) is authored as Markdown inside `goal` CDATA
+- **AND** documents missing a required core section fail XSD validation
+- **AND** documents declare `xsi:noNamespaceSchemaLocation` pointing at `commands.xsd`
 
 #### Scenario: Align with analysis-design-commands contract fields
 
 - **GIVEN** OpenSpec `analysis-design-commands` requires purpose, accepted inputs, owning agent, associated skills or capabilities, workflow, outputs, and safeguards
-- **WHEN** the command body XSD is designed
-- **THEN** each behavioral field maps to an explicit XML element or kind-specific profile
-- **AND** inventory `@id`, body `@id`, and `@slash` refer to the same command identity as the Markdown H1 title
+- **WHEN** the command body XSD and XSLT are designed
+- **THEN** workflow, outputs, and safeguards map to structured XML elements; purpose and remaining narrative fields map to Markdown inside `goal` CDATA
+- **AND** kind-specific required/forbidden sections remain enforced by `analysis-design-commands`, `CommandIndexesTest`, and Gherkin — not by Schematron
+- **AND** body `@id` / `@slash` match the generated Markdown H1 / usage line identity
+
+### Requirement: Inventory outside body schema
+
+The command inventory manifest SHALL remain a separate `commands.xml` document outside `commands.xsd`, matching `agents.xml` / `agents.xsd` separation.
+
+#### Scenario: Inventory lists XML sources mapped to Markdown assets
+
+- **GIVEN** `plinth-commands-generator/src/main/resources/commands.xml`
+- **WHEN** `CommandIndexes` loads the inventory
+- **THEN** each `<command file="..."/>` entry ends in `.xml`
+- **AND** `commandFiles()` returns the corresponding `.md` names in installation order
+- **AND** duplicate mapped Markdown names fail inventory uniqueness checks in tests / Java loaders
+- **AND** inventory is not validated by `commands.xsd`
+
+### Requirement: XML sources and generated Markdown
+
+Command contracts SHALL be authored as XML under `commands/` and transformed to Markdown only under `target/`, mirroring agents generation.
+
+#### Scenario: Build-time Markdown generation
+
+- **GIVEN** twelve command XML sources under `src/main/resources/commands/`
+- **WHEN** Maven reaches `process-classes` for `plinth-commands-generator`
+- **THEN** `CommandMarkdownGenerator` writes Markdown to `target/generated-resources/commands` and `target/classes/commands`
+- **AND** hand-authored `commands/*.md` are not present under `src/main/resources/commands/`
+- **AND** `CommandIndexesTest` substring assertions pass against the generated classpath Markdown
 
 ### Requirement: Command kind taxonomy
 
-The command schema design SHALL define an `@kind` attribute that selects validation profiles aligned with the twelve current Plinth command contracts.
+The schema design SHALL define optional `@kind` values that select documentation heading profiles without Schematron.
 
 #### Scenario: Classify embedded commands by kind
 
 - **GIVEN** the twelve commands under `plinth-commands-generator/src/main/resources/commands/`
-- **WHEN** the schema design is published
-- **THEN** it defines `@kind` values `standard`, `delivery`, `performance`, and `cli`
-- **AND** it maps each command id to exactly one kind
-- **AND** inventory entries declare `@kind` alongside `@id` and `@slash`
+- **WHEN** command XML documents are authored
+- **THEN** `@kind` values `standard`, `delivery`, `performance`, and `cli` are available
+- **AND** each command id maps to exactly one kind in design documentation
+- **AND** kind-profile section rules stay in behavioral tests
 
-### Requirement: Companion Schematron validation
+### Requirement: PML / agents relationship documentation
 
-The command schema family SHALL document companion Schematron rules for semantic constraints that XSD alone cannot express.
+The schema design SHALL document that command schemas are a parallel, agents-style no-namespace family — not namespaced split schemas under `/pml/schemas/command/1.0.0/`.
 
-#### Scenario: Enforce kind profiles and command-specific behavioral rules
+#### Scenario: Document parallel skill, agent, and command families
 
-- **GIVEN** a valid XSD command document
-- **WHEN** Schematron rules are applied
-- **THEN** kind-specific required sections are enforced
-- **AND** `explore-design` MUST NOT list `042-planning-openspec` in associations
-- **AND** `cli` commands MUST NOT include `<output>` or non-empty `<associations>`
-- **AND** violations produce documented rule identifiers for CI reporting
-
-### Requirement: PML schema relationship documentation
-
-The schema design SHALL document how command XSDs relate to existing PML `pml.xsd` and `pml-workflow.xsd` artifacts.
-
-#### Scenario: Document parallel skill and command schema families
-
-- **GIVEN** skills validate against `pml.xsd` 0.8.0 using `<prompt>` documents
-- **AND** workflows may validate against `pml-workflow.xsd`
+- **GIVEN** skills use `pml.xsd` `<prompt>` documents and agents use no-namespace `agents.xsd`
 - **WHEN** the command schema design is published
-- **THEN** the design states that command schemas are a parallel extension for slash-invoked workflow entry points, not a replacement for skill `<prompt>` documents
-- **AND** the design states that workflow graph structure remains in `pml-workflow.xsd` while command `<workflow>` steps describe invocation procedure
-- **AND** the design references ADR-001 XSD-to-Markdown generation precedent and the parallel agent schema change `design-pml-agents-schema`
+- **THEN** the design states commands follow the agents generator pattern (single body XSD + inventory XML + XSLT Markdown)
+- **AND** the design states command schemas are not a replacement for skill `<prompt>` documents
+- **AND** the design references ADR-001 and the shipped agents generator as the parity target
 
-### Requirement: Representative XML examples
+### Requirement: Authoritative command XML sources
 
-The change SHALL provide representative valid and invalid XML examples for at least one existing command contract surface.
+The change SHALL treat production command XML under `plinth-commands-generator` as the authoritative examples for `commands.xsd`.
 
-#### Scenario: update-issue examples
+#### Scenario: Production sources and XSD mirror
 
-- **GIVEN** the current `update-issue.md` contract under `plinth-commands-generator/src/main/resources/commands/`
-- **WHEN** examples are authored for the schema design
-- **THEN** at least one valid XML example covers inventory and command-body structures for that command with `kind="standard"`
-- **AND** at least one invalid XML example demonstrates a documented schema or Schematron violation
-- **AND** examples are stored with the OpenSpec change for reviewer inspection
+- **GIVEN** twelve command XML sources under `plinth-commands-generator/src/main/resources/commands/`
+- **WHEN** the schema design is published
+- **THEN** those documents validate against `commands.xsd`
+- **AND** the OpenSpec XSD mirror lives at `examples/xsd/pml/0.9.0/commands.xsd`
+- **AND** separate OpenSpec valid/invalid XML fixture trees are not required
 
-#### Scenario: CLI example coverage
+### Requirement: Migration notes
 
-- **GIVEN** `close-spec` uses a minimal CLI profile without associations or output sections
-- **WHEN** examples are extended during implementation
-- **THEN** a valid XML example for `kind="cli"` is added
-- **AND** an invalid example demonstrates a `cli` command incorrectly including `<output>`
+The change SHALL document migration from Markdown-first command assets to XML sources with agents-parity generation.
 
-### Requirement: Migration notes from Markdown-first sources
+#### Scenario: Completed cutover guidance
 
-The change SHALL document migration guidance from current Markdown-first command assets to schema-validated XML sources without implementing the generator pipeline in the same change.
-
-#### Scenario: Phased migration guidance
-
-- **GIVEN** twelve command Markdown contracts and a minimal `commands.xml` manifest are the current source of truth
+- **GIVEN** former Markdown-first contracts and the rejected namespaced `pml/` schema tree
 - **WHEN** migration notes are published
-- **THEN** they describe a phased path where XSD publication precedes optional validation, XML authoring, XSLT Markdown generation, and eventual XML source-of-truth cutover
-- **AND** they document command-by-command migration slices with `implement-spec` migrated last
-- **AND** they state that full XSLT or generator migration is follow-up work outside this change
-- **AND** they preserve non-breaking behavior for skill installer output until an explicit cutover phase
+- **THEN** they describe XML under `commands/`, generation via `command-to-markdown.xsl`, and removal of hand-authored Markdown from `src/`
+- **AND** they state inventory remains outside `commands.xsd`
+- **AND** they preserve behavioral contract stability for installers consuming generated Markdown
