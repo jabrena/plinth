@@ -16,8 +16,7 @@ import org.w3c.dom.Document;
  * as skill Markdown generation in {@code plinth-skills-generator}.
  *
  * <p>Frontmatter fields are emitted only from XML source values ({@code @id},
- * {@code metadata/description}, optional {@code metadata/model}, optional
- * {@code metadata/readonly}).
+ * {@code metadata/description}, optional {@code metadata/model}).
  */
 public final class AgentMarkdownRenderer {
 

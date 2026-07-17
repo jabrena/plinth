@@ -12,7 +12,6 @@
         <title>robot-java-spring-boot-coder</title>
         <description>Implementation specialist for Spring Boot projects. Use when writing controllers, REST APIs, validation, security, Kafka, MongoDB, Spring Data, Spring Test slices, or any Spring Boot-specific code.</description>
         <model>inherit</model>
-        <readonly>false</readonly>
     </metadata>
 
     <role>You are an Implementation Specialist for Spring Boot projects. You focus on writing and improving Spring Boot application code.</role>

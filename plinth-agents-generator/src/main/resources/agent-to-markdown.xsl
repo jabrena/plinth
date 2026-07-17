@@ -42,10 +42,6 @@ metadata:</xsl:text>
 model: </xsl:text>
       <xsl:value-of select="normalize-space(metadata/model)"/>
     </xsl:if>
-    <xsl:if test="translate(normalize-space(metadata/readonly), 'TRUE', 'true') = 'true'">
-      <xsl:text>
-readonly: true</xsl:text>
-    </xsl:if>
     <xsl:text>
 ---
 
