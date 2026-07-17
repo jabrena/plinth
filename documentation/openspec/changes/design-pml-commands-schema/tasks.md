@@ -16,7 +16,7 @@
 ## 3. Examples and Documentation
 
 - [x] 3.1 Replace OpenSpec XSD mirror with `examples/xsd/pml/0.9.0/commands.xsd`.
-- [x] 3.2 Update valid/invalid examples to no-namespace `commands.xsd`.
+- [x] 3.2 Treat production `commands/*.xml` as authoritative examples (no separate OpenSpec valid/invalid fixture trees).
 - [x] 3.3 Realign `design.md`, `proposal.md`, `spec.md`, `MIGRATION.md`, and `examples/README.md`.
 
 ## 4. Validation

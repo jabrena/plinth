@@ -1,50 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="review-alignment"
-         kind="standard"
-         slash="/review-alignment"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
-    <purpose>Review available analysis and design artifacts for consistency, traceability, completeness, and implementation readiness.</purpose>
+    <goal><![CDATA[
+Review available analysis and design artifacts for consistency, traceability, completeness, and implementation readiness.
 
-    <usage><![CDATA[/review-alignment <artifact> [<artifact> ...]]]></usage>
+## Usage
 
-    <accepted-inputs heading="Accepted Inputs">
-        <input>Issue or user story</input>
-        <input>Approved design</input>
-        <input>ADRs and diagrams</input>
-        <input>Implementation plan</input>
-        <input>OpenSpec proposal, design, specifications, and tasks</input>
-        <input>Any partial combination of these artifacts</input>
-    </accepted-inputs>
+```text
+/review-alignment <artifact> [<artifact> ...]
+```
 
-    <owning-agent>robot-business-analyst</owning-agent>
+## Accepted Inputs
 
-    <associations heading="Associated Capabilities">
-        <association refkind="capability">Requirement and acceptance-criteria traceability</association>
-        <association refkind="capability">Plan and OpenSpec consistency review</association>
-        <association refkind="capability">ADR and design alignment review</association>
-        <association refkind="capability">Readiness assessment</association>
-    </associations>
+- Issue or user story
+- Approved design
+- ADRs and diagrams
+- Implementation plan
+- OpenSpec proposal, design, specifications, and tasks
+- Any partial combination of these artifacts
 
-    <workflow>
+## Owning Agent
+
+`@robot-business-analyst`
+
+## Associated Capabilities
+
+- Requirement and acceptance-criteria traceability
+- Plan and OpenSpec consistency review
+- ADR and design alignment review
+- Readiness assessment
+]]></goal>
+
+    <steps>
         <step number="1">Inventory the provided artifacts and identify their authority.</step>
         <step number="2">Trace requirements, decisions, planned work, and verification across the available set.</step>
         <step number="3">Detect contradictions, scope drift, gaps, unresolved blockers, and stale derivations.</step>
         <step number="4">Rank findings by severity and recommend explicit corrections.</step>
         <step number="5">Report readiness as `READY`, `READY WITH WARNINGS`, or `NOT READY`.</step>
-    </workflow>
+    </steps>
 
-    <output>
-        <item>Aligned areas</item>
-        <item>Severity-ranked findings</item>
-        <item>Open questions and recommended corrections</item>
-        <item>Readiness result</item>
-    </output>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Aligned areas</output-format-item>
+            <output-format-item>Severity-ranked findings</output-format-item>
+            <output-format-item>Open questions and recommended corrections</output-format-item>
+            <output-format-item>Readiness result</output-format-item>
+        </output-format-list>
+    </output-format>
 
     <safeguards>
-        <item>Accept partial artifact sets without requiring every artifact type.</item>
-        <item>Keep the review read-only.</item>
-        <item>Do not modify artifacts or resolve conflicts without explicit user approval.</item>
+        <safeguards-list>
+            <safeguards-item>Accept partial artifact sets without requiring every artifact type.</safeguards-item>
+            <safeguards-item>Keep the review read-only.</safeguards-item>
+            <safeguards-item>Do not modify artifacts or resolve conflicts without explicit user approval.</safeguards-item>
+        </safeguards-list>
     </safeguards>
 </command>

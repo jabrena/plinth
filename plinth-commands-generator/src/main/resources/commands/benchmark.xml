@@ -1,53 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="benchmark"
-         kind="performance"
-         slash="/benchmark"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
-    <purpose>Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.</purpose>
+    <goal><![CDATA[
+Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.
 
-    <usage><![CDATA[/benchmark <target> [objective-or-threshold] [workload] [environment] [preferred-tool]]]></usage>
+## Usage
 
-    <accepted-inputs heading="Accepted inputs">
-        <input>Target application, endpoint, workflow, method, or component</input>
-        <input>Performance objective or threshold</input>
-        <input>Expected workload and environment</input>
-        <input>Optional preferred tool</input>
-    </accepted-inputs>
+```text
+/benchmark <target> [objective-or-threshold] [workload] [environment] [preferred-tool]
+```
 
-    <ownership heading="Owner and skills">
-        <item>Owner: `@robot-java-performance`</item>
-        <item>Associated skills: `@151-java-performance-jmeter`, `@152-java-performance-gatling`, and existing Maven/JMH guidance</item>
-    </ownership>
+## Accepted inputs
 
-    <tool-selection heading="Tool selection"><![CDATA[| Need | Tool |
+- Target application, endpoint, workflow, method, or component
+- Performance objective or threshold
+- Expected workload and environment
+- Optional preferred tool
+
+## Owner and skills
+
+- Owner: `@robot-java-performance`
+- Associated skills: `@151-java-performance-jmeter`, `@152-java-performance-gatling`, and existing Maven/JMH guidance
+
+## Tool selection
+
+| Need | Tool |
 | --- | --- |
 | HTTP/API load and performance test | JMeter or Gatling |
 | Scenario-oriented load model and reports | Gatling |
-| Isolated JVM method or component microbenchmark | JMH |]]></tool-selection>
+| Isolated JVM method or component microbenchmark | JMH |
+]]></goal>
 
-    <workflow>
+    <steps>
         <step number="1">Clarify target boundary, objective, thresholds, workload, and environment.</step>
         <step number="2">Select JMeter, Gatling, or JMH and record the rationale.</step>
         <step number="3">Define warm-up, duration, concurrency, data setup, and result artifacts.</step>
         <step number="4">Generate or coordinate the reproducible performance workflow using the selected skill or Maven/JMH guidance.</step>
         <step number="5">Evaluate results against explicit thresholds.</step>
         <step number="6">Report limitations, environment metadata, and whether results are comparable.</step>
-    </workflow>
+    </steps>
 
-    <output>
-        <item>Selected tool and rationale</item>
-        <item>Reproducible test configuration</item>
-        <item>Baseline or result artifacts</item>
-        <item>Threshold assessment</item>
-        <item>Limitations and environment metadata</item>
-    </output>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Selected tool and rationale</output-format-item>
+            <output-format-item>Reproducible test configuration</output-format-item>
+            <output-format-item>Baseline or result artifacts</output-format-item>
+            <output-format-item>Threshold assessment</output-format-item>
+            <output-format-item>Limitations and environment metadata</output-format-item>
+        </output-format-list>
+    </output-format>
 
     <safeguards>
-        <item>Do not present non-equivalent runs as valid before/after comparisons.</item>
-        <item>Do not use JMeter or Gatling for isolated JVM microbenchmarks when JMH is the correct boundary.</item>
-        <item>Do not use JMH for end-to-end load behavior.</item>
-        <item>Keep workload, environment, and threshold assumptions explicit.</item>
+        <safeguards-list>
+            <safeguards-item>Do not present non-equivalent runs as valid before/after comparisons.</safeguards-item>
+            <safeguards-item>Do not use JMeter or Gatling for isolated JVM microbenchmarks when JMH is the correct boundary.</safeguards-item>
+            <safeguards-item>Do not use JMH for end-to-end load behavior.</safeguards-item>
+            <safeguards-item>Keep workload, environment, and threshold assumptions explicit.</safeguards-item>
+        </safeguards-list>
     </safeguards>
 </command>

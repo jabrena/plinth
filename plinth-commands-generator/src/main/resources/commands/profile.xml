@@ -1,27 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="profile"
-         kind="performance"
-         slash="/profile"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
-    <purpose>Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.</purpose>
+    <goal><![CDATA[
+Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.
 
-    <usage><![CDATA[/profile <application-or-module> [issue|plan|openspec-change|suspected-problem] [runtime-command] [workload]]]></usage>
+## Usage
 
-    <accepted-inputs heading="Accepted inputs">
-        <input>Application, module, or repository path</input>
-        <input>Optional issue, implementation plan, OpenSpec change, or suspected performance problem</input>
-        <input>Runtime command and representative workload</input>
-        <input>Optional existing baseline or profiling artifacts</input>
-    </accepted-inputs>
+```text
+/profile <application-or-module> [issue|plan|openspec-change|suspected-problem] [runtime-command] [workload]
+```
 
-    <ownership heading="Owner and skills">
-        <item>Owner: `@robot-java-performance`</item>
-        <item>Associated skills: `@161-java-profiling-detect`, `@162-java-profiling-analyze`, `@163-java-profiling-refactor`, and `@164-java-profiling-verify`</item>
-    </ownership>
+## Accepted inputs
 
-    <workflow>
+- Application, module, or repository path
+- Optional issue, implementation plan, OpenSpec change, or suspected performance problem
+- Runtime command and representative workload
+- Optional existing baseline or profiling artifacts
+
+## Owner and skills
+
+- Owner: `@robot-java-performance`
+- Associated skills: `@161-java-profiling-detect`, `@162-java-profiling-analyze`, `@163-java-profiling-refactor`, and `@164-java-profiling-verify`
+]]></goal>
+
+    <steps>
         <step number="1">Record runtime, environment, workload, and baseline metadata.</step>
         <step number="2">Use profiling detection to collect reproducible evidence.</step>
         <step number="3">Analyze hotspots and rank findings by impact, confidence, and risk.</step>
@@ -29,21 +33,25 @@
         <step number="5">Delegate application-code changes to the appropriate Java/framework coder agent.</step>
         <step number="6">Repeat an equivalent measurement and compare against the baseline.</step>
         <step number="7">Report the outcome as verified, inconclusive, or regressed with evidence.</step>
-    </workflow>
+    </steps>
 
-    <output>
-        <item>Baseline metadata</item>
-        <item>Profiling artifacts and findings</item>
-        <item>Prioritized optimization recommendation</item>
-        <item>Delegation record</item>
-        <item>Before/after comparison</item>
-        <item>Verified, inconclusive, or regressed outcome</item>
-    </output>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Baseline metadata</output-format-item>
+            <output-format-item>Profiling artifacts and findings</output-format-item>
+            <output-format-item>Prioritized optimization recommendation</output-format-item>
+            <output-format-item>Delegation record</output-format-item>
+            <output-format-item>Before/after comparison</output-format-item>
+            <output-format-item>Verified, inconclusive, or regressed outcome</output-format-item>
+        </output-format-list>
+    </output-format>
 
     <safeguards>
-        <item>Do not optimize without user approval.</item>
-        <item>Do not claim improvement from non-equivalent measurements.</item>
-        <item>Do not let `@robot-java-performance` implement application-code changes directly.</item>
-        <item>Keep baseline, evidence, delegation, and verification artifacts traceable.</item>
+        <safeguards-list>
+            <safeguards-item>Do not optimize without user approval.</safeguards-item>
+            <safeguards-item>Do not claim improvement from non-equivalent measurements.</safeguards-item>
+            <safeguards-item>Do not let `@robot-java-performance` implement application-code changes directly.</safeguards-item>
+            <safeguards-item>Keep baseline, evidence, delegation, and verification artifacts traceable.</safeguards-item>
+        </safeguards-list>
     </safeguards>
 </command>

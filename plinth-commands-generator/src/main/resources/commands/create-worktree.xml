@@ -1,30 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="create-worktree"
-         kind="standard"
-         slash="/create-worktree"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
-    <purpose>Create a new branch and linked Git worktree for isolated or parallel work without changing the current checkout.</purpose>
+    <goal><![CDATA[
+Create a new branch and linked Git worktree for isolated or parallel work without changing the current checkout.
 
-    <usage><![CDATA[/create-worktree <issue-or-change|type description> [<target-path>] [<base-reference>]]]></usage>
+## Usage
 
-    <accepted-inputs heading="Accepted Inputs">
-        <input>An issue/change identifier, or an explicit branch type and description</input>
-        <input>Optional target path</input>
-        <input>Optional base reference</input>
-        <input>Supported branch types: `feat`, `fix`, `docs`, `refactor`, and `chore`</input>
-    </accepted-inputs>
+```text
+/create-worktree <issue-or-change|type description> [<target-path>] [<base-reference>]
+```
 
-    <owning-agent>robot-tech-lead</owning-agent>
+## Accepted Inputs
 
-    <associations heading="Associated Capabilities">
-        <association refkind="capability">Git branch naming and validation</association>
-        <association refkind="capability">Git linked worktrees</association>
-        <association refkind="capability">Parallel OpenSpec child-change coordination</association>
-    </associations>
+- An issue/change identifier, or an explicit branch type and description
+- Optional target path
+- Optional base reference
+- Supported branch types: `feat`, `fix`, `docs`, `refactor`, and `chore`
 
-    <workflow>
+## Owning Agent
+
+`@robot-tech-lead`
+
+## Associated Capabilities
+
+- Git branch naming and validation
+- Git linked worktrees
+- Parallel OpenSpec child-change coordination
+]]></goal>
+
+    <steps>
         <step number="1">Resolve the branch name from the issue/change identifier or explicit branch details.</step>
         <step number="2">Resolve an absolute target path and the base reference.</step>
         <step number="3">Resolve the repository default branch and the current branch.</step>
@@ -34,19 +40,23 @@
         <step number="7">Verify the branch is not already checked out in another worktree.</step>
         <step number="8"><![CDATA[Run the equivalent of `git worktree add -b <branch> <target-path> <base-reference>`.]]></step>
         <step number="9">Report the created branch, absolute worktree path, and base reference.</step>
-    </workflow>
+    </steps>
 
-    <output>
-        <item>Created local branch</item>
-        <item>Created linked worktree</item>
-        <item>Exact branch name, absolute path, and base reference</item>
-    </output>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Created local branch</output-format-item>
+            <output-format-item>Created linked worktree</output-format-item>
+            <output-format-item>Exact branch name, absolute path, and base reference</output-format-item>
+        </output-format-list>
+    </output-format>
 
     <safeguards>
-        <item>Stop if the branch exists, is already checked out, or the target path exists.</item>
-        <item>Stop and ask when the current branch is not `main` or the repository default branch.</item>
-        <item>Stop if the base reference is invalid.</item>
-        <item>Leave existing branches, worktrees, directories, and files unchanged on conflict.</item>
-        <item>Do not commit, push, remove worktrees, delete branches, or use force.</item>
+        <safeguards-list>
+            <safeguards-item>Stop if the branch exists, is already checked out, or the target path exists.</safeguards-item>
+            <safeguards-item>Stop and ask when the current branch is not `main` or the repository default branch.</safeguards-item>
+            <safeguards-item>Stop if the base reference is invalid.</safeguards-item>
+            <safeguards-item>Leave existing branches, worktrees, directories, and files unchanged on conflict.</safeguards-item>
+            <safeguards-item>Do not commit, push, remove worktrees, delete branches, or use force.</safeguards-item>
+        </safeguards-list>
     </safeguards>
 </command>

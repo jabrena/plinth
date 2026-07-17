@@ -2,154 +2,60 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            elementFormDefault="qualified">
 
-    <!-- Root element for a single command definition document (inventory stays in commands.xml). -->
+    <!-- Root element for a single command definition document (inventory stays in commands.xml).
+         Sequence aligned with agents.xsd: goal → constraints → steps → output-format → safeguards -->
     <xs:element name="command">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="purpose"/>
-                <xs:element ref="usage"/>
-                <xs:element ref="accepted-inputs"/>
-                <xs:element ref="owning-agent" minOccurs="0"/>
-                <xs:element ref="delegation" minOccurs="0"/>
-                <xs:element ref="ownership" minOccurs="0"/>
-                <xs:element ref="associations" minOccurs="0"/>
-                <xs:element ref="tool-selection" minOccurs="0"/>
-                <xs:element ref="workflow-position" minOccurs="0"/>
-                <xs:element ref="execution-contract" minOccurs="0"/>
-                <xs:element ref="branch-worktree-gate" minOccurs="0"/>
-                <xs:element ref="workflow"/>
-                <xs:element ref="output" minOccurs="0"/>
-                <xs:element ref="safeguards"/>
+                <xs:element ref="goal"/>
+                <xs:element ref="constraints" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="steps"/>
+                <xs:element ref="output-format" minOccurs="0"/>
+                <xs:element ref="safeguards" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
-            <xs:attribute name="kind" use="optional">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="standard"/>
-                        <xs:enumeration value="delivery"/>
-                        <xs:enumeration value="performance"/>
-                        <xs:enumeration value="cli"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="slash" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
-    <!-- Mixed text blocks for Markdown-heavy sections -->
+    <!-- Mixed text blocks for Markdown-heavy sections (agents-style goal CDATA) -->
     <xs:complexType name="MixedText" mixed="true">
         <xs:sequence>
             <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 
-    <xs:complexType name="MixedTextWithHeading" mixed="true">
-        <xs:sequence>
-            <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
-        </xs:sequence>
-        <xs:attribute name="heading" type="xs:string" use="optional"/>
-    </xs:complexType>
-
-    <xs:element name="purpose" type="MixedText"/>
-    <xs:element name="usage" type="MixedText"/>
-    <xs:element name="workflow-position" type="MixedText"/>
-    <xs:element name="tool-selection" type="MixedTextWithHeading"/>
-
-    <xs:element name="accepted-inputs">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="input" minOccurs="0" maxOccurs="unbounded"/>
-                <xs:element ref="note" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="input">
+    <!-- Goal holds the short purpose sentence plus narrative contract sections as Markdown -->
+    <xs:element name="goal">
         <xs:complexType mixed="true">
             <xs:sequence>
                 <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
-            <xs:attribute name="optional" type="xs:boolean" use="optional"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="note" type="MixedText"/>
-
-    <xs:element name="owning-agent">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="heading" type="xs:string" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="delegation">
+    <!-- Aligned with agents.xsd constraints shape -->
+    <xs:element name="constraints">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="constraints-description" minOccurs="0"/>
+                <xs:element ref="constraint-list"/>
             </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="ownership">
+    <xs:element name="constraints-description" type="xs:string"/>
+
+    <xs:element name="constraint-list">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="associations">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="association" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
-        </xs:complexType>
-    </xs:element>
+    <xs:element name="constraint" type="MixedText"/>
 
-    <xs:element name="association">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="refkind" use="optional">
-                        <xs:simpleType>
-                            <xs:restriction base="xs:string">
-                                <xs:enumeration value="skill"/>
-                                <xs:enumeration value="capability"/>
-                            </xs:restriction>
-                        </xs:simpleType>
-                    </xs:attribute>
-                    <xs:attribute name="when" type="xs:string" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="execution-contract">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="branch-worktree-gate">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="workflow">
+    <xs:element name="steps">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="step" minOccurs="0" maxOccurs="unbounded"/>
@@ -167,23 +73,43 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="output">
+    <!-- Aligned with agents.xsd output-format shape -->
+    <xs:element name="output-format">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="output-format-list" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="heading" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
+    <xs:element name="output-format-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-item" type="MixedText"/>
+
+    <!-- Aligned with agents.xsd safeguards shape -->
     <xs:element name="safeguards">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="safeguards-list" minOccurs="0"/>
             </xs:sequence>
-            <xs:attribute name="heading" type="xs:string" use="optional"/>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="item" type="MixedText"/>
+    <xs:element name="safeguards-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-item" type="MixedText"/>
+
 </xs:schema>

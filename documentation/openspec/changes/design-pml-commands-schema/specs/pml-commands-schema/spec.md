@@ -8,8 +8,9 @@ The commands generator SHALL validate individual command contracts with a single
 
 - **GIVEN** a command definition document with required `@id` and optional `@kind` (`standard`, `delivery`, `performance`, `cli`) and `@slash`
 - **WHEN** `commands.xsd` is applied
-- **THEN** the schema requires core sections `purpose`, `usage`, `accepted-inputs`, `workflow`, and `safeguards`
-- **AND** optional kind extras (`associations`, `output`, `delegation`, `ownership`, `tool-selection`, `workflow-position`, `execution-contract`, `branch-worktree-gate`) are expressible in the structural superset
+- **THEN** the schema requires core sections `goal` and `steps`, with optional `constraints`, `output-format`, and `safeguards` in agents order
+- **AND** optional `output-format` is expressible in the structural sequence
+- **AND** narrative contract content (Usage, Accepted Inputs, owner, associations, delegation, ownership, tool selection, workflow position, execution contract, branch/worktree gate) is authored as Markdown inside `goal` CDATA
 - **AND** documents missing a required core section fail XSD validation
 - **AND** documents declare `xsi:noNamespaceSchemaLocation` pointing at `commands.xsd`
 
@@ -17,7 +18,7 @@ The commands generator SHALL validate individual command contracts with a single
 
 - **GIVEN** OpenSpec `analysis-design-commands` requires purpose, accepted inputs, owning agent, associated skills or capabilities, workflow, outputs, and safeguards
 - **WHEN** the command body XSD and XSLT are designed
-- **THEN** each behavioral field maps to an explicit XML element or kind-specific profile
+- **THEN** workflow, outputs, and safeguards map to structured XML elements; purpose and remaining narrative fields map to Markdown inside `goal` CDATA
 - **AND** kind-specific required/forbidden sections remain enforced by `analysis-design-commands`, `CommandIndexesTest`, and Gherkin — not by Schematron
 - **AND** body `@id` / `@slash` match the generated Markdown H1 / usage line identity
 
@@ -70,18 +71,17 @@ The schema design SHALL document that command schemas are a parallel, agents-sty
 - **AND** the design states command schemas are not a replacement for skill `<prompt>` documents
 - **AND** the design references ADR-001 and the shipped agents generator as the parity target
 
-### Requirement: Representative XML examples
+### Requirement: Authoritative command XML sources
 
-The change SHALL provide representative valid and invalid XML examples for the no-namespace `commands.xsd`.
+The change SHALL treat production command XML under `plinth-commands-generator` as the authoritative examples for `commands.xsd`.
 
-#### Scenario: update-issue and CLI examples
+#### Scenario: Production sources and XSD mirror
 
-- **GIVEN** shipped command XML sources
-- **WHEN** OpenSpec examples are authored
-- **THEN** at least one valid body example covers `kind="standard"` (`update-issue`)
-- **AND** at least one valid body example covers `kind="cli"` (`close-spec`)
-- **AND** at least one invalid body example demonstrates a documented `commands.xsd` failure (missing `workflow`)
+- **GIVEN** twelve command XML sources under `plinth-commands-generator/src/main/resources/commands/`
+- **WHEN** the schema design is published
+- **THEN** those documents validate against `commands.xsd`
 - **AND** the OpenSpec XSD mirror lives at `examples/xsd/pml/0.9.0/commands.xsd`
+- **AND** separate OpenSpec valid/invalid XML fixture trees are not required
 
 ### Requirement: Migration notes
 

@@ -22,10 +22,10 @@ Four Markdown shapes remain expressible via a structural XSD superset plus `@kin
 
 | `@kind` | Commands | Notable sections |
 |---------|----------|------------------|
-| `standard` | eight workflow commands | Purpose, Usage, Accepted Inputs, Owning Agent, associations, Workflow, Output, Safeguards; optional Workflow position |
-| `delivery` | `implement-spec` | Owner and delegation, Mandatory execution contract, Branch/worktree gate |
-| `performance` | `profile`, `benchmark` | Owner and skills; `benchmark` Tool selection |
-| `cli` | `close-spec` | Inputs / Owner; no associations or output |
+| `standard` | eight workflow commands | Goal CDATA (purpose, Usage, Accepted Inputs, Owning Agent, associations; optional Workflow position), Workflow, Output, Safeguards |
+| `delivery` | `implement-spec` | Goal CDATA extras: Owner and delegation, Mandatory execution contract, Branch/worktree gate |
+| `performance` | `profile`, `benchmark` | Goal CDATA: Owner and skills; `benchmark` Tool selection |
+| `cli` | `close-spec` | Goal CDATA: Inputs / Owner; no associations or output |
 
 ## Goals / Non-Goals
 
@@ -65,12 +65,12 @@ Four Markdown shapes remain expressible via a structural XSD superset plus `@kin
 
 | Layer | Tool | Responsibility |
 |-------|------|----------------|
-| 1 — Structure | `commands.xsd` | Core sequence (`purpose`, `usage`, `accepted-inputs`, `workflow`, `safeguards`) plus optional kind extras |
+| 1 — Structure | `commands.xsd` | Core sequence (`goal`, optional `constraints`, `steps`, optional `output-format`, optional `safeguards`); narrative contract in goal CDATA |
 | 2 — Behavior | `CommandIndexesTest`, Gherkin, `analysis-design-commands` | Kind profiles, routing strings, explore-design exclusions, implement-spec gates |
 
 ### Markdown generation
 
-One stylesheet `command-to-markdown.xsl` with optional `@heading` overrides for kind-specific titles (`Owner and delegation`, `Accepted inputs`, `Associated Skill`, etc.). Delivery/performance/cli extras map to dedicated elements (`delegation`, `ownership`, `execution-contract`, `branch-worktree-gate`, `tool-selection`).
+One stylesheet `command-to-markdown.xsl`: emit `# @id`, then trimmed `goal` Markdown as-is, then `constraints` / `steps` / `output-format` / `safeguards`. Kind-specific narrative headings live in goal CDATA (agents parity), not as separate XSD children.
 
 ## Component Boundaries
 

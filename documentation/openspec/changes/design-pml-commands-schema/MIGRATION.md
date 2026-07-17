@@ -28,23 +28,15 @@ Kind-profile section rules remain in `analysis-design-commands` and `CommandInde
 
 ## Section mapping
 
+Narrative contract sections (Usage, Accepted Inputs, Owning Agent, associations, delegation, ownership, tool selection, workflow position, execution contract, branch/worktree gate) live as **Markdown inside `<goal><![CDATA[...]]></goal>`**, after the short purpose sentence (agents-style). XSLT emits `trim(goal)` with no `## Goal` wrapper.
+
 | Markdown heading | XML |
 |------------------|-----|
 | `# command-name` | `@id` |
-| `## Purpose` | `<purpose>` |
-| `## Usage` | `<usage>` (fenced in XSLT) |
-| `## Accepted Inputs` / `## Inputs` / `## Accepted inputs` | `<accepted-inputs @heading>` |
-| `## Owning Agent` / `## Owner` | `<owning-agent @heading>` |
-| `## Associated Skills` / `## Associated Skill` / `## Associated Capabilities` | `<associations @heading>` |
-| `## Owner and delegation` | `<delegation>` |
-| `## Owner and skills` | `<ownership>` |
-| `## Tool selection` | `<tool-selection>` |
-| `## Workflow position` | `<workflow-position>` |
-| `## Mandatory execution contract` | `<execution-contract>` |
-| `## Branch/worktree gate` | `<branch-worktree-gate>` |
-| `## Workflow` | `<workflow>` / `<step>` |
-| `## Output` | `<output>` |
-| `## Safeguards` | `<safeguards>` |
+| Purpose + narrative sections | `<goal>` CDATA (includes `## Usage`, `## Accepted Inputs`, owner/associations, etc.) |
+| `## Workflow` | `<steps>` / `<step>` |
+| `## Output` | `<output-format>` |
+| `## Safeguards` | `<safeguards>` (`safeguards-list` / `safeguards-item`) |
 
 ## Validation layers
 
