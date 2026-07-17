@@ -42,6 +42,7 @@ Every completed run MUST persist one JSON file under `results/` with the minimal
 - Efficiency: `wall_clock_s`, `tokens_total`, `cost_usd`
 - Outcome: `acceptance_pass`, `rework_turns`
 - Labels: `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`
+- Plinth usage: `skills_count`, `agents_count`, `skills`, `agents`
 
 How to measure each field, file naming, and operator checklist: [results/README.md](results/README.md).
 

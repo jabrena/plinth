@@ -50,6 +50,7 @@ Case 1 (`scenario1`) SHALL use only `benchmarks/scenario1/specs/functional-requi
 - **THEN** a result JSON file exists under `benchmarks/scenario1/results/`
 - **AND** the result JSON includes `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, and `rework_turns`
 - **AND** the result JSON includes labels `scenario`, `case_id`, `tool`, `model`, `plinth_config`, and `commit`
+- **AND** the result JSON includes `skills_count`, `agents_count`, `skills`, and `agents`
 - **AND** `scenario` equals `scenario1`
 - **AND** `case_id` equals `case-1-readme-only`
 
@@ -118,6 +119,7 @@ The harness README SHALL define efficiency, outcome-quality, and process metrics
 - **WHEN** a maintainer prepares a scenario execution record
 - **THEN** the documented required fields include `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`
 - **AND** labels include `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`
+- **AND** Plinth usage fields include `skills_count`, `agents_count`, `skills`, and `agents`
 
 ### Requirement: Out of scope boundaries
 

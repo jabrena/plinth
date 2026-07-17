@@ -71,7 +71,8 @@ Canonical definitions live in `benchmarks/README.md`:
 - Efficiency: `wall_clock_s`, `active_agent_s`, token fields, `cost_usd`.
 - Outcome: `acceptance_pass`, `acceptance_coverage`, `rework_turns`, `artifact_completeness`.
 - Protocol labels: `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`, `retry_count`, `human_intervention_min`.
-- Minimal v1 required fields: `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`, plus labels.
+- Plinth usage: `skills_count`, `agents_count`, `skills`, `agents`.
+- Minimal v1 required fields: `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`, plus labels and Plinth usage fields (`skills_count`, `agents_count`, `skills`, `agents`).
 - Rank cost/tokens among `acceptance_pass = true` runs; failures separate; exclude Case 3 until defined.
 - Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 4 richness steps.
 

@@ -51,6 +51,15 @@ Do not commit secrets. Token/cost values may be estimates when the tool only exp
 | `retry_count` | Optional. Number of aborted/restarted attempts before the recorded run |
 | `human_intervention_min` | Optional. Minutes the human spent steering, answering prompts, or fixing outside agent turns |
 
+### Plinth usage
+
+| Field | How to measure |
+| --- | --- |
+| `skills_count` | Required non-negative integer. Count distinct skills read or invoked during the run; MUST equal the length of `skills`. |
+| `agents_count` | Required non-negative integer. Count distinct agents or subagents invoked during the run; MUST equal the length of `agents`. |
+| `skills` | Required JSON array of skill ids or names used during the run. Use `[]` when none. |
+| `agents` | Required JSON array of agent ids or names invoked during the run. |
+
 ## Minimal v1 JSON shape
 
 ```json
@@ -65,7 +74,15 @@ Do not commit secrets. Token/cost values may be estimates when the tool only exp
   "tool": "cursor",
   "model": "example-model-id",
   "plinth_config": "full-plinth",
-  "commit": "0123456789abcdef0123456789abcdef01234567"
+  "commit": "0123456789abcdef0123456789abcdef01234567",
+  "skills_count": 3,
+  "agents_count": 2,
+  "skills": [
+    "042-planning-openspec",
+    "301-frameworks-spring-boot-core",
+    "323-frameworks-spring-boot-testing-acceptance-tests"
+  ],
+  "agents": ["robot-tech-lead", "robot-java-spring-boot-coder"]
 }
 ```
 
@@ -91,7 +108,7 @@ Optional fields may be added without removing required ones:
 3. Start timer (`wall_clock_s`).
 4. Run the agent against `benchmarks/scenario4/demo/` using Case 4 FR + OpenSpec inputs.
 5. Track `rework_turns` and optional human minutes.
-6. Stop timer when done; capture tokens and cost from the tool.
+6. Stop timer when done; capture tokens, cost, `skills_count`, `agents_count`, `skills`, and `agents` from the tool or operator tally.
 7. Set `acceptance_pass` from product + harness checks.
 8. Write `benchmarks/scenario4/results/<run-id>.json` with all required fields.
 9. Rank later using `benchmarks/README.md` rules (`acceptance_pass = true` only).

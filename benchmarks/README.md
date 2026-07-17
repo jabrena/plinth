@@ -92,12 +92,22 @@ Canonical field definitions for every scenario execution record.
 | `retry_count` | Number of retries for this run |
 | `human_intervention_min` | Minutes of human intervention |
 
+### Plinth usage
+
+| Field | Meaning |
+| --- | --- |
+| `skills_count` | Number of distinct skills read or invoked during the run (must equal the length of `skills`; 0 for bare-agent / skill-agnostic runs) |
+| `agents_count` | Number of distinct agents or subagents invoked during the run (must equal the length of `agents`; primary agent counts as 1 when no subagents are used) |
+| `skills` | Required array of skill ids or names used during the run (empty array when none) |
+| `agents` | Required array of agent ids or names invoked during the run (for example primary agent or subagent slugs) |
+
 ### Minimal v1 required fields
 
 Every run record MUST include:
 
 - Efficiency / outcome: `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`
 - Labels: `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`
+- Plinth usage: `skills_count`, `agents_count`, `skills`, `agents`
 
 Optional but recommended when available: `active_agent_s`, `acceptance_coverage`, `artifact_completeness`, `retry_count`, `human_intervention_min`.
 

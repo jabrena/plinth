@@ -26,8 +26,16 @@ Feature: Scenario 2 — Case 2 full functional requirements package
     Then a result JSON file exists under "benchmarks/scenario2/results/"
     And the result JSON includes required efficiency fields "wall_clock_s", "tokens_total", and "cost_usd"
     And the result JSON includes required outcome fields "acceptance_pass" and "rework_turns"
+    And the result JSON includes required Plinth usage fields "skills_count", "agents_count", "skills", and "agents"
     And the result JSON includes required labels "scenario", "case_id", "tool", "model", "plinth_config", and "commit"
     And the result JSON field "scenario" equals "scenario2"
     And the result JSON field "case_id" equals "case-2-all-problem1-requirements"
     And the result JSON field "acceptance_pass" is a boolean
+    And the result JSON field "skills_count" is a non-negative integer
+    And the result JSON field "agents_count" is a non-negative integer
+    And the result JSON field "skills" is a JSON array
+    And the result JSON field "agents" is a JSON array
+    And the length of "agents" equals the value of "agents_count"
+    And the length of "skills" equals the value of "skills_count"
     And optional fields "active_agent_s", "tokens_in", "tokens_out", "acceptance_coverage", "artifact_completeness", "retry_count", and "human_intervention_min" may be present
+    And "benchmarks/scenario2/demo/" is restored to empty with only ".gitkeep"

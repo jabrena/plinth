@@ -9,5 +9,9 @@
   "tool": "cursor",
   "model": "replace-me",
   "plinth_config": "full-plinth",
-  "commit": "replace-with-git-rev-parse-HEAD"
+  "commit": "replace-with-git-rev-parse-HEAD",
+  "skills_count": 0,
+  "agents_count": 1,
+  "skills": [],
+  "agents": ["replace-me"]
 }
