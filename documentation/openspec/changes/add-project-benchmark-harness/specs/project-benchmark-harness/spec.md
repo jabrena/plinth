@@ -10,6 +10,7 @@ The repository SHALL provide a project benchmark harness at `plinth-benchmark/` 
 - **WHEN** a maintainer inspects the repository root
 - **THEN** `plinth-benchmark/README.md` exists
 - **AND** it describes scenarios `scenario1` through `scenario4`
+- **AND** it documents that Case 3 is pending
 - **AND** it documents the minimal v1 metrics scorecard fields
 
 ### Requirement: Four scenario folders with specs and Gherkin
@@ -24,56 +25,68 @@ The harness SHALL provide `plinth-benchmark/scenario1/` through `plinth-benchmar
 - **AND** `gherkin/` contains at least one `.feature` file
 - **AND** that feature includes exactly one scenario tagged `@acceptance-test`
 
-### Requirement: Scenario 1 README-only input boundary
+### Requirement: Case 1 README-only input boundary
 
-Scenario 1 SHALL use only `examples/openspec/god-analysis-api/requirements/problem1/README.md` as requirements input and SHALL label runs `case-1-readme-only`.
+Case 1 (`scenario1`) SHALL use only `examples/openspec/god-analysis-api/requirements/problem1/README.md` as requirements input and SHALL label runs `case-1-readme-only`.
 
-#### Scenario: Scenario 1 excludes richer notes and OpenSpec
+#### Scenario: Case 1 excludes richer notes and OpenSpec
 
-- **GIVEN** a Scenario 1 benchmark run
+- **GIVEN** a Case 1 benchmark run
 - **WHEN** requirements input is prepared
 - **THEN** other files under `examples/openspec/god-analysis-api/requirements/problem1/` are not provided
 - **AND** `examples/openspec/god-analysis-api/openspec/changes/` is not provided
 - **AND** the run case id is `case-1-readme-only`
 
-### Requirement: Scenario 2 full requirements notes
+### Requirement: Case 2 all problem1 requirements files
 
-Scenario 2 SHALL use the full directory `examples/openspec/god-analysis-api/requirements/problem1/` without the OpenSpec changes tree and SHALL label runs `case-2-all-requirements-notes`.
+Case 2 (`scenario2`) SHALL use all files under `examples/openspec/god-analysis-api/requirements/problem1/` without the OpenSpec changes tree and SHALL label runs `case-2-all-problem1-requirements`.
 
-#### Scenario: Scenario 2 excludes OpenSpec changes tree
+Case 2 MUST include at least these files:
 
-- **GIVEN** a Scenario 2 benchmark run
+- `examples/openspec/god-analysis-api/requirements/problem1/README.md`
+- `examples/openspec/god-analysis-api/requirements/problem1/US-001_God_Analysis_API.md`
+- `examples/openspec/god-analysis-api/requirements/problem1/US-001_god_analysis_api.feature`
+- `examples/openspec/god-analysis-api/requirements/problem1/US-001-god-analysis-api.openapi.yaml`
+- `examples/openspec/god-analysis-api/requirements/problem1/my-json-server-oas.yaml`
+- `examples/openspec/god-analysis-api/requirements/problem1/ADR-001-God-Analysis-API-Functional-Requirements.md`
+- `examples/openspec/god-analysis-api/requirements/problem1/ADR-002-God-Analysis-API-Non-Functional-Requirements.md`
+- `examples/openspec/god-analysis-api/requirements/problem1/ADR-003-God-Analysis-API-Technology-Stack.md`
+
+#### Scenario: Case 2 excludes OpenSpec changes tree
+
+- **GIVEN** a Case 2 benchmark run
 - **WHEN** requirements input is prepared
-- **THEN** `examples/openspec/god-analysis-api/openspec/changes/` is not provided
-- **AND** the run case id is `case-2-all-requirements-notes`
+- **THEN** all listed problem1 requirement files are provided
+- **AND** `examples/openspec/god-analysis-api/openspec/changes/` is not provided
+- **AND** the run case id is `case-2-all-problem1-requirements`
 
-### Requirement: Scenario 3 raw OpenSpec with official skill
+### Requirement: Case 3 pending
 
-Scenario 3 SHALL use `examples/openspec/god-analysis-api/openspec/changes/` as primary input, implement with the official OpenSpec skill or OPSX workflow, MUST NOT use Plinth `/create-spec`, `/implement-spec`, or `@042-planning-openspec`, and SHALL label runs `case-3-raw-openspec-official-skill`.
+Case 3 (`scenario3`) SHALL exist as a harness placeholder with case id `case-3-pending` and MUST document that its input and workflow are pending definition.
 
-#### Scenario: Scenario 3 forbids Plinth OpenSpec command path
+#### Scenario: Case 3 is not runnable yet
 
-- **GIVEN** a Scenario 3 benchmark run
-- **WHEN** the agent implements from the raw OpenSpec change
-- **THEN** Plinth `/create-spec` and `/implement-spec` are not used
-- **AND** Plinth `@042-planning-openspec` is not used
-- **AND** the run case id is `case-3-raw-openspec-official-skill`
+- **GIVEN** the Case 3 harness folder
+- **WHEN** a maintainer reviews Case 3 specs and Gherkin
+- **THEN** the case is labeled `case-3-pending`
+- **AND** the documentation states that the input/workflow contract is TBD
+- **AND** Case 3 is excluded from campaign ranking until the contract is defined
 
-### Requirement: Scenario 4 Plinth refinement path
+### Requirement: Case 4 current OpenSpec for problem1
 
-Scenario 4 SHALL require Full Plinth, seed from `examples/openspec/god-analysis-api/requirements/problem1/README.md`, MUST NOT use `examples/openspec/god-analysis-api/openspec/changes/` as input, follow `/update-issue` → `/create-spec` → `/implement-spec` (optional `/explore-design`, `/create-adr`, `/review-alignment`), and SHALL label runs `case-4-plinth-commands-openspec-refinement`.
+Case 4 (`scenario4`) SHALL use the current checked-in OpenSpec change under `examples/openspec/god-analysis-api/openspec/changes/` (problem1-derived change, for example `add-god-analysis-api/`) as primary input and SHALL label runs `case-4-current-openspec-problem1`.
 
-#### Scenario: Scenario 4 generates OpenSpec separately from checked-in tree
+#### Scenario: Case 4 uses examples OpenSpec changes tree
 
-- **GIVEN** a Scenario 4 benchmark run
-- **WHEN** OpenSpec artifacts are created and implementation completes
-- **THEN** a generated OpenSpec change exists as a run artifact
-- **AND** that artifact is separate from `examples/openspec/god-analysis-api/openspec/changes/`
-- **AND** the run case id is `case-4-plinth-commands-openspec-refinement`
+- **GIVEN** a Case 4 benchmark run
+- **WHEN** implementation input is prepared
+- **THEN** the primary input is `examples/openspec/god-analysis-api/openspec/changes/`
+- **AND** outcome assessment uses the OpenSpec proposal, design, tasks, and specs in that change tree
+- **AND** the run case id is `case-4-current-openspec-problem1`
 
 ### Requirement: Metrics scorecard
 
-The harness README SHALL define efficiency, outcome-quality, and process metrics, including the minimal v1 required fields, and MUST instruct operators to rank cost or tokens among runs where `acceptance_pass` is true.
+The harness README SHALL define efficiency, outcome-quality, and process metrics, including the minimal v1 required fields, and MUST instruct operators to rank cost or tokens among runs where `acceptance_pass` is true, excluding pending Case 3 until defined.
 
 #### Scenario: Minimal v1 fields are documented
 
