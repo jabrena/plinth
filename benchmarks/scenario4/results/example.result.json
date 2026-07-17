@@ -1,0 +1,13 @@
+{
+  "wall_clock_s": 0,
+  "tokens_total": 0,
+  "cost_usd": 0,
+  "acceptance_pass": false,
+  "rework_turns": 0,
+  "scenario": "scenario4",
+  "case_id": "case-4-current-openspec-problem1",
+  "tool": "cursor",
+  "model": "replace-me",
+  "plinth_config": "full-plinth",
+  "commit": "replace-with-git-rev-parse-HEAD"
+}

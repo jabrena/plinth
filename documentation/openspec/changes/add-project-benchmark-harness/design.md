@@ -1,15 +1,15 @@
 ## Context
 
-Issue #1012 defines a Plinth **project effectiveness** benchmark on the God Analysis API problem. This change records the harness layout, metrics scorecard, and the clarified case input contracts so `/implement-spec` has an executable task list.
+Issue #1012 defines a Plinth **project effectiveness** benchmark on the God Analysis API problem. Scenarios form an **increasing-information ladder**: minimal functional notes → full functional requirements → (pending Case 3) → functional requirements plus linked OpenSpec technical requirements. This change records that progression so `/implement-spec` and campaign operators share one contract.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Establish `plinth-benchmark/` with four scenario folders, each owning `specs/` and `gherkin/`.
-- Document the canonical metrics scorecard in `plinth-benchmark/README.md`.
-- Bind Cases 1, 2, and 4 to explicit repo-relative inputs under `examples/openspec/god-analysis-api/`.
-- Leave Case 3 as an explicit **pending** placeholder until its input/workflow is defined.
+- Establish `benchmarks/` with four scenario folders, each owning `specs/` and `gherkin/`.
+- Document the richness progression and metrics scorecard in `benchmarks/README.md`.
+- Bind Cases 1, 2, and 4 to harness-local functional (and for Case 4, technical) trees.
+- Leave Case 3 as an explicit **pending** placeholder between Case 2 and Case 4 richness.
 
 **Non-Goals:**
 
@@ -19,7 +19,7 @@ Issue #1012 defines a Plinth **project effectiveness** benchmark on the God Anal
 - Expanding beyond the God Analysis API example in this change.
 - Implementing a full automated multi-tool campaign runner.
 - Sealing the model catalog (TBD / follow-up ADR).
-- Editing or regenerating `examples/openspec/god-analysis-api/` requirement or OpenSpec trees as part of harness creation.
+- Rewriting upstream `examples/openspec/god-analysis-api/` trees as part of harness creation (mirroring into harness `specs/` is allowed).
 
 ## Decisions
 
@@ -29,20 +29,20 @@ Deliver the harness as a single reviewable change (`add-project-benchmark-harnes
 
 ### Harness location and packaging
 
-Place the harness at repository root `plinth-benchmark/`. Do **not** add it to the Maven reactor in this change; it is a documentation/protocol package (Markdown + Gherkin), not a Java module.
+Place the harness at repository root `benchmarks/`. Do **not** add it to the Maven reactor in this change; it is a documentation/protocol package (Markdown + Gherkin), not a Java module.
 
-### Scenario / case contracts
+### Information richness progression
 
-| Scenario | Case id | Input authority |
-| --- | --- | --- |
-| `scenario1` | `case-1-readme-only` | Only `examples/openspec/god-analysis-api/requirements/problem1/README.md` |
-| `scenario2` | `case-2-all-problem1-requirements` | All files under `examples/openspec/god-analysis-api/requirements/problem1/` (listed below); no OpenSpec changes tree |
-| `scenario3` | `case-3-pending` | **Pending** — folder exists with placeholder specs/Gherkin stating TBD; no runnable input contract yet |
-| `scenario4` | `case-4-current-openspec-problem1` | Current OpenSpec for problem1 at `examples/openspec/god-analysis-api/openspec/changes/` (for example `add-god-analysis-api/`) |
+| Scenario | Case id | Richness | Input authority |
+| --- | --- | --- | --- |
+| `scenario1` | `case-1-readme-only` | Minimal | Only `benchmarks/scenario1/specs/functional-requirements/README.md`; no `.agents/skills`; no `.cursor/skills`; results JSON under `benchmarks/scenario1/results/` |
+| `scenario2` | `case-2-all-problem1-requirements` | Full functional package | `benchmarks/scenario2/specs/functional-requirements/problem1/` (inventory below); no technical OpenSpec |
+| `scenario3` | `case-3-pending` | TBD | Pending placeholder between Case 2 and Case 4 |
+| `scenario4` | `case-4-current-openspec-problem1` | Functional + technical | Case 2-equivalent FR tree **plus** `specs/technical-requirements/openspec/` with derivation links into FR |
 
-#### Case 2 file inventory (copy of requirements)
+#### Case 2 file inventory (functional requirements)
 
-Case 2 MUST provide all of the following files from `examples/openspec/god-analysis-api/requirements/problem1/`:
+Case 2 MUST provide all of the following under `benchmarks/scenario2/specs/functional-requirements/problem1/`:
 
 - `README.md`
 - `US-001_God_Analysis_API.md`
@@ -53,26 +53,31 @@ Case 2 MUST provide all of the following files from `examples/openspec/god-analy
 - `ADR-002-God-Analysis-API-Non-Functional-Requirements.md`
 - `ADR-003-God-Analysis-API-Technology-Stack.md`
 
-#### Case 4 OpenSpec inventory
+#### Case 4 functional + technical requirements layout
 
-Case 4 MUST use the checked-in OpenSpec change tree under `examples/openspec/god-analysis-api/openspec/changes/` (current problem1-derived change, including proposal, design, tasks, and specs).
+Case 4 MUST materialize two co-located trees under `benchmarks/scenario4/specs/`:
 
-Each scenario folder MUST contain `README.md`, `specs/` (at least one scenario spec Markdown), and `gherkin/` (at least one `.feature` with exactly one `@acceptance-test` scenario). For Case 3, the `@acceptance-test` scenario documents that the case is pending and is not executable until the contract is filled in.
+1. **Functional requirements:** `functional-requirements/problem1/` (same inventory as Case 2)
+2. **Technical requirements (OpenSpec):** `technical-requirements/openspec/` (`config.yaml`, README, `changes/add-god-analysis-api/` with proposal, design, tasks, specs)
+
+OpenSpec **Source and Derivation** entries MUST link to co-located FR files (relative paths such as `../../../../functional-requirements/problem1/...` from `changes/add-god-analysis-api/`).
+
+Each scenario folder MUST contain `README.md`, `specs/`, and `gherkin/` (exactly one `@acceptance-test` scenario). Case 3 documents pending status only.
 
 ### Metrics scorecard
 
-Canonical definitions live in `plinth-benchmark/README.md`, matching issue #1012:
+Canonical definitions live in `benchmarks/README.md`:
 
 - Efficiency: `wall_clock_s`, `active_agent_s`, token fields, `cost_usd`.
 - Outcome: `acceptance_pass`, `acceptance_coverage`, `rework_turns`, `artifact_completeness`.
 - Protocol labels: `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`, `retry_count`, `human_intervention_min`.
 - Minimal v1 required fields: `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`, plus labels.
-- Rank cost/tokens among `acceptance_pass = true` runs; failures separate.
-- Case 3 runs are out of campaign ranking until the pending contract is defined.
+- Rank cost/tokens among `acceptance_pass = true` runs; failures separate; exclude Case 3 until defined.
+- Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 4 richness steps.
 
 ### Configuration levels and tools
 
-Recorded for campaign protocol only in this change (harness docs / scenario READMEs), not as automation code:
+Recorded for campaign protocol only (not automation code):
 
 - Plinth configs: Full Plinth; No OpenSpec; Bare agent.
 - Tools: Cursor, Codex, GitHub Copilot, Claude Code.
@@ -85,11 +90,11 @@ Recorded for campaign protocol only in this change (harness docs / scenario READ
 
 ### Verification strategy
 
-- Confirm `plinth-benchmark/` layout and required files exist.
-- Confirm Cases 1, 2, and 4 Gherkin features encode the case ids and input boundaries above.
-- Confirm Case 3 is explicitly marked pending in README, specs, and Gherkin.
+- Confirm `benchmarks/` layout and required files exist.
+- Confirm Case 1 uses only FR README; Case 2 uses full FR `problem1/`; Case 4 adds linked technical OpenSpec.
+- Confirm Case 3 is explicitly pending.
 - Run `openspec validate --all` for this change.
-- Markdown link sanity for new Markdown under `plinth-benchmark/` when validating documentation.
+- Markdown link sanity for new harness Markdown when validating documentation.
 
 ## Risks / Trade-offs
 
@@ -99,5 +104,5 @@ Recorded for campaign protocol only in this change (harness docs / scenario READ
 
 ## Open Questions
 
-- What input and workflow define Case 3? **Pending** — must be filled before Case 3 is runnable.
+- What input and workflow define Case 3 (the richness step between Case 2 and Case 4)? **Pending**.
 - Where should durable campaign result reports live (docs vs CI artifact)? Deferred.
