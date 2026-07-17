@@ -12,7 +12,6 @@
         <title>robot-no-java</title>
         <description>Default implementation specialist for non-Java projects. Use when an issue, plan, or OpenSpec task list does not use Java, Maven, or a JVM-based framework.</description>
         <model>inherit</model>
-        <readonly>false</readonly>
     </metadata>
 
     <role>You are an Implementation Specialist for non-Java project work. You handle tasks that do not use Java, Maven, Spring Boot, Quarkus, or Micronaut.</role>

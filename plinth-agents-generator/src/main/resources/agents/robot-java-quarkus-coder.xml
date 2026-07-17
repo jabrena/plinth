@@ -12,7 +12,6 @@
         <title>robot-java-quarkus-coder</title>
         <description>Implementation specialist for Quarkus projects. Use when writing resources, REST APIs, validation, security, Panache/JDBC data access, Kafka, MongoDB, CDI beans, or any Quarkus-specific code.</description>
         <model>inherit</model>
-        <readonly>false</readonly>
     </metadata>
 
     <role>You are an Implementation Specialist for Quarkus projects. You focus on writing and improving Quarkus application code.</role>

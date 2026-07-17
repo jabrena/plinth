@@ -28,7 +28,6 @@
                 <xs:element ref="title"/>
                 <xs:element ref="description"/>
                 <xs:element ref="model" minOccurs="0"/>
-                <xs:element ref="readonly" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -46,7 +45,6 @@
     <xs:element name="title" type="xs:string"/>
     <xs:element name="description" type="xs:string"/>
     <xs:element name="model" type="xs:string"/>
-    <xs:element name="readonly" type="xs:boolean"/>
 
     <!-- System role -->
     <xs:element name="role" type="xs:string"/>
