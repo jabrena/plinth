@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         id="update-issue">
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>update-issue</title>
+        <description>Update an existing project issue description with structured, evidence-backed content.</description>
+    </metadata>
+    <goal><![CDATA[
+Update an existing project issue description with structured, evidence-backed content.
+
+## Usage
+
+/update-issue <issue> [<source>] [<tracker>]
+
+## Accepted Inputs
+
+- Existing GitHub or Jira issue number, key, or URL
+- Optional source notes, supporting discussion, user story, acceptance criteria, or file path
+- Optional tracker selection: GitHub or Jira
+
+## Owning Agent
+
+@robot-business-analyst
+
+## Associated Skills
+
+- `043-planning-github-issues`
+- `044-planning-jira`
+- `045-planning-azure-devops`
+- `014-agile-user-story` when user-story refinement is required
+]]></goal>
+    <steps>
+        <step number="1">
+            <step-title>Load issue context</step-title>
+            <step-content>Load the current issue description and relevant discussion before drafting changes.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Confirm update scope</step-title>
+            <step-content>Confirm the requested update scope and the source material authority.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Draft updated body</step-title>
+            <step-content>Draft the updated issue body without inventing requirements.</step-content>
+        </step>
+        <step number="4">
+            <step-title>Present proposed body</step-title>
+            <step-content>Present the proposed body before overwriting the existing issue description.</step-content>
+        </step>
+        <step number="5">
+            <step-title>Update tracker issue</step-title>
+            <step-content>Update the issue in the selected tracker after approval and report the result.</step-content>
+        </step>
+    </steps>
+    <output-format>
+        <output-format-list>
+        <output-format-item>Updated structured issue description</output-format-item>
+        <output-format-item>Acceptance criteria or user-story scenario when applicable</output-format-item>
+        <output-format-item>Updated GitHub/Jira issue reference</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+        <safeguards-item>Do not invent requirements, acceptance criteria, or comments.</safeguards-item>
+        <safeguards-item>Do not expose tracker credentials or tokens.</safeguards-item>
+        <safeguards-item>Do not overwrite an issue body without showing the proposed replacement.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

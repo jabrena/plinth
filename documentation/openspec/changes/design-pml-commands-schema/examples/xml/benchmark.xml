@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         id="benchmark">
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>benchmark</title>
+        <description>Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.</description>
+    </metadata>
+    <goal><![CDATA[
+Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.
+
+## Usage
+
+/benchmark <target> [objective-or-threshold] [workload] [environment] [preferred-tool]
+
+## Accepted inputs
+
+- Target application, endpoint, workflow, method, or component
+- Performance objective or threshold
+- Expected workload and environment
+- Optional preferred tool
+
+## Owner and skills
+
+- Owner: `@robot-java-performance`
+- Associated skills: `@151-java-performance-jmeter`, `@152-java-performance-gatling`, and existing Maven/JMH guidance
+
+## Tool selection
+
+| Need | Tool |
+| --- | --- |
+| HTTP/API load and performance test | JMeter or Gatling |
+| Scenario-oriented load model and reports | Gatling |
+| Isolated JVM method or component microbenchmark | JMH |
+]]></goal>
+    <steps>
+        <step number="1">
+            <step-title>Clarify benchmark scope</step-title>
+            <step-content>Clarify target boundary, objective, thresholds, workload, and environment.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Select benchmark tool</step-title>
+            <step-content>Select JMeter, Gatling, or JMH and record rationale.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Evaluate thresholds</step-title>
+            <step-content>Define reproducible configuration and evaluate thresholds.</step-content>
+        </step>
+    </steps>
+    <output-format>
+        <output-format-list>
+        <output-format-item>Selected tool and rationale</output-format-item>
+        <output-format-item>Reproducible test configuration and artifacts</output-format-item>
+        <output-format-item>Threshold assessment and limitations</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+        <safeguards-item>Do not present non-equivalent runs as before/after comparisons.</safeguards-item>
+        <safeguards-item>Do not use JMeter/Gatling for JVM microbenchmarks when JMH is required.</safeguards-item>
+        <safeguards-item>Do not use JMH for end-to-end load behavior.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

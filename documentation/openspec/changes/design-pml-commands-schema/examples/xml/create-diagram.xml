@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         id="create-diagram">
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>create-diagram</title>
+        <description>Create an architecture or design diagram that explains a selected system view.</description>
+    </metadata>
+    <goal><![CDATA[
+Create an architecture or design diagram that explains a selected system view.
+
+## Usage
+
+/create-diagram <source-artifact> [<diagram-type>]
+
+## Accepted Inputs
+
+- Issue, approved design, ADR, specification, plan, or repository architecture
+- Optional diagram type: sequence, class, state machine, ER, or C4
+- Desired audience and level of detail
+
+## Owning Agent
+
+@robot-architect
+
+## Associated Skill
+
+`033-architecture-diagrams`
+]]></goal>
+    <steps>
+        <step number="1">
+            <step-title>Confirm diagram scope</step-title>
+            <step-content>Confirm purpose, audience, type, and scope.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Generate diagram source</step-title>
+            <step-content>Generate diagram source using repository conventions.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Validate diagram content</step-title>
+            <step-content>Check names and relationships against source artifacts.</step-content>
+        </step>
+    </steps>
+    <output-format>
+        <output-format-list>
+        <output-format-item>Diagram source for selected architecture view</output-format-item>
+        <output-format-item>Scope, assumptions, and source references</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+        <safeguards-item>Do not invent components or interactions.</safeguards-item>
+        <safeguards-item>Do not replace an existing diagram without review.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

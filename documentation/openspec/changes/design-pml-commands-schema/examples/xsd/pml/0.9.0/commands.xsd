@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  OpenSpec simulation for a consolidated commands schema.
+  Pattern adapted from plinth-agents-generator/src/main/resources/agents.xsd:
+  root element first, then named child elements referenced from the root.
+-->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="https://jabrena.github.io/pml/schemas/command/1.0.0"
+           xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <!-- Root element for a command definition document -->
+    <xs:element name="command">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="metadata"/>
+                <xs:element ref="goal"/>
+                <xs:element ref="steps" minOccurs="0"/>
+                <xs:element ref="output-format" minOccurs="0"/>
+                <xs:element ref="safeguards" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="commandIdType" use="required"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Metadata section (aligned with PML pml.xsd and agents.xsd) -->
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="authors" minOccurs="0"/>
+                <xs:element ref="version" minOccurs="0"/>
+                <xs:element ref="license" minOccurs="0"/>
+                <xs:element ref="title"/>
+                <xs:element ref="description"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="author" type="xs:string"/>
+    <xs:element name="authors">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="author" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="version" type="xs:string"/>
+    <xs:element name="license" type="xs:string"/>
+    <xs:element name="title" type="xs:string"/>
+    <xs:element name="description" type="xs:string"/>
+
+    <!-- Goal statement (aligned with PML pml.xsd and agents.xsd) -->
+    <xs:element name="goal">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Steps container (aligned with PML pml.xsd and agents.xsd) -->
+    <xs:element name="steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Individual step -->
+    <xs:element name="step">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-title"/>
+                <xs:element ref="step-content"/>
+                <xs:element ref="step-constraints" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-title" type="xs:string"/>
+    <xs:element name="step-content">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Step constraints -->
+    <xs:element name="step-constraints">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint" type="xs:string"/>
+
+    <!-- Output format section (aligned with PML pml.xsd and agents.xsd) -->
+    <xs:element name="output-format">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-list" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-format-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-format-item" type="xs:string"/>
+
+    <!-- Safeguards section (aligned with PML pml.xsd and agents.xsd) -->
+    <xs:element name="safeguards">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-list" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-item" type="xs:string"/>
+
+    <!-- Inventory discovery summary -->
+    <xs:element name="summary" type="xs:string"/>
+
+    <!-- Root element for command inventory manifest -->
+    <xs:element name="command-inventory">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="metadata" minOccurs="0"/>
+                <xs:element name="command" type="commandRefType" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="version" type="xs:string" use="optional"/>
+        </xs:complexType>
+        <xs:unique name="uniqueCommandId">
+            <xs:selector xpath="command"/>
+            <xs:field xpath="@id"/>
+        </xs:unique>
+    </xs:element>
+
+    <!-- Shared identifier and inventory entry types -->
+    <xs:simpleType name="commandIdType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[a-z][a-z0-9-]*"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="commandRefType">
+        <xs:sequence>
+            <xs:element ref="summary" minOccurs="0"/>
+        </xs:sequence>
+        <xs:attribute name="id" type="commandIdType" use="required"/>
+        <xs:attribute name="file" type="xs:string" use="required"/>
+    </xs:complexType>
+
+</xs:schema>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         id="create-spec">
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>create-spec</title>
+        <description>Create or update one or more OpenSpec changes from issue, design, ADR, plan, or existing OpenSpec artifacts.</description>
+    </metadata>
+    <goal><![CDATA[
+Create or update one or more OpenSpec changes from the available issue, design, ADR, plan, or existing OpenSpec artifacts.
+
+## Usage
+
+/create-spec <issue|design|adr|plan|existing-change>
+
+## Accepted Inputs
+
+- Issue or user story
+- Approved design and ADRs
+- Implementation plan
+- Existing OpenSpec change
+- Any valid combination of these artifacts
+
+## Owning Agent
+
+@robot-architect
+
+## Associated Skills
+
+- `042-planning-openspec`
+
+## Workflow position
+
+Runs first to create the initial OpenSpec proposal, design, specification, and task artifacts. Use `/explore-design` afterward when technical approach refinement is still needed.
+]]></goal>
+    <steps>
+        <step number="1">
+            <step-title>Identify source artifacts</step-title>
+            <step-content>Identify source artifacts and authority.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Create OpenSpec artifacts</step-title>
+            <step-content>Create or update proposal, design, specifications, and tasks.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Validate OpenSpec changes</step-title>
+            <step-content>Validate resulting OpenSpec changes.</step-content>
+        </step>
+    </steps>
+    <output-format>
+        <output-format-list>
+        <output-format-item>OpenSpec change or approved map of multiple changes</output-format-item>
+        <output-format-item>Proposal, design, specifications, and task artifacts</output-format-item>
+        <output-format-item>Validation and traceability report</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+        <safeguards-item>Do not invent requirements.</safeguards-item>
+        <safeguards-item>Do not apply design skills that belong to /explore-design.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>

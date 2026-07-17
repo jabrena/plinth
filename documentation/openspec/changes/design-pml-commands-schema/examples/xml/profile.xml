@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<command xmlns="https://jabrena.github.io/pml/schemas/command/1.0.0"
+         id="profile">
+    <metadata>
+        <authors>
+            <author>Juan Antonio Breña Moral</author>
+        </authors>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>profile</title>
+        <description>Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.</description>
+    </metadata>
+    <goal><![CDATA[
+Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.
+
+## Usage
+
+/profile <application-or-module> [issue|plan|openspec-change|suspected-problem] [runtime-command] [workload]
+
+## Accepted inputs
+
+- Application, module, or repository path
+- Optional issue, implementation plan, OpenSpec change, or suspected performance problem
+- Runtime command and representative workload
+- Optional existing baseline or profiling artifacts
+
+## Owner and skills
+
+- Owner: `@robot-java-performance`
+- Associated skills: `@161-java-profiling-detect`, `@162-java-profiling-analyze`, `@163-java-profiling-refactor`, and `@164-java-profiling-verify`
+]]></goal>
+    <steps>
+        <step number="1">
+            <step-title>Record baseline metadata</step-title>
+            <step-content>Record baseline metadata and workload.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Collect profiling evidence</step-title>
+            <step-content>Collect profiling evidence and analyze hotspots.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Request optimization approval</step-title>
+            <step-content>Ask approval before selecting optimization target.</step-content>
+        </step>
+        <step number="4">
+            <step-title>Verify optimization result</step-title>
+            <step-content>Delegate implementation and verify equivalent measurements.</step-content>
+        </step>
+    </steps>
+    <output-format>
+        <output-format-list>
+        <output-format-item>Baseline and profiling artifacts</output-format-item>
+        <output-format-item>Prioritized optimization recommendation</output-format-item>
+        <output-format-item>Verified/inconclusive/regressed outcome</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+        <safeguards-item>Do not optimize without user approval.</safeguards-item>
+        <safeguards-item>Do not claim improvement from non-equivalent measurements.</safeguards-item>
+        <safeguards-item>Do not let robot-java-performance implement application code changes directly.</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</command>
