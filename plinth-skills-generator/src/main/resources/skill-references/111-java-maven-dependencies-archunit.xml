@@ -28,31 +28,18 @@ Add ArchUnit only when the user selects architecture testing support in the SKIL
 
     <steps>
         <step number="1">
-            <step-title>Add selected version property</step-title>
+            <step-title>Add ArchUnit JUnit 5 dependency with the Maven dependency plugin</step-title>
             <step-content><![CDATA[
-```xml
-<archunit.version>1.4.1</archunit.version>
+```bash
+./mvnw dependency:add -Dgav=com.tngtech.archunit:archunit-junit5:1.4.1 -Dscope=test
 ```
+
+This adds the dependency directly to `pom.xml` with `test` scope and creates a matching `archunit.version` property when the project already follows a `${x.version}` property convention. Requires `maven-dependency-plugin` 3.11.0 or newer; pin the plugin version in `pluginManagement` if it is not already pinned.
 
 
 ]]></step-content>
         </step>
         <step number="2">
-            <step-title>Add ArchUnit JUnit 5 dependency</step-title>
-            <step-content><![CDATA[
-```xml
-<dependency>
-    <groupId>com.tngtech.archunit</groupId>
-    <artifactId>archunit-junit5</artifactId>
-    <version>${archunit.version}</version>
-    <scope>test</scope>
-</dependency>
-```
-
-
-]]></step-content>
-        </step>
-        <step number="3">
             <step-title>Validate architecture tests</step-title>
             <step-content><![CDATA[
 After adding ArchUnit, recommend running:
