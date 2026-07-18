@@ -12,7 +12,8 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
   # - Derive ALL implementation requirements ONLY from that OpenSpec change (tasks.md, design.md, spec.md).
   # - Do NOT read benchmarks/scenario4/specs/functional-requirements/problem1/ directly as agent input
   #   (those files exist only so OpenSpec derivation links resolve within the harness).
-  # - Do NOT read benchmarks/scenario4/results/ during the run (prior run JSON, example.result.json, README).
+  # - Under benchmarks/scenario4/results/, read ONLY README.md and example.result.json (operator/metrics template).
+  # - Do NOT read prior run JSON files under benchmarks/scenario4/results/.
   # - Do NOT use examples/openspec/god-analysis-api/ or other scenarios as input authority.
 
   Background:
@@ -26,6 +27,10 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
       | benchmarks/scenario4/README.md |
       | benchmarks/metrics-v1.schema.json |
       | benchmarks/metrics-v1.example.json |
+    And the Case 4 results allowlist is the only authorized reading set under "benchmarks/scenario4/results/":
+      | path |
+      | benchmarks/scenario4/results/README.md |
+      | benchmarks/scenario4/results/example.result.json |
     And the Case 4 Plinth tooling allowlist is the authorized reading set for commands, agents, and skills:
       | path |
       | .cursor/commands/implement-spec.md |
@@ -39,9 +44,10 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
     And the command prompt source ".cursor/commands/implement-spec.md" is read before execution
     And Plinth agents under ".cursor/agents/" and skills under ".agents/skills/" or "skills/" may be read and invoked for orchestration only
     And only files on the Case 4 allowlist are read for requirements, design, or acceptance criteria
+    And only files on the Case 4 results allowlist are read under "benchmarks/scenario4/results/"
     And only files on the Case 4 Plinth tooling allowlist are read for commands, agents, and skills
-    And "benchmarks/scenario4/results/" must not be read for prior run results, templates, or operator guidance
-    And the agent must not read, open, grep, or search for requirements under any path outside "benchmarks/scenario4/" except harness metrics files on the Case 4 allowlist under "benchmarks/"
+    And no file under "benchmarks/scenario4/results/" outside the Case 4 results allowlist may be read during the run
+    And the agent must not read, open, grep, or search under any path outside "benchmarks/scenario4/" except harness metrics files on the Case 4 allowlist under "benchmarks/" and Plinth tooling on the Case 4 Plinth tooling allowlist
     And "benchmarks/scenario4/specs/functional-requirements/problem1/" must not be read directly for requirements or technology choices
     And "benchmarks/scenario1/" must not be read or used as scenario input
     And "benchmarks/scenario2/" must not be read or used as scenario input
