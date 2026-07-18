@@ -32,7 +32,7 @@ Set `outcome_quality.acceptance_pass` to `true` only when the OpenSpec happy pat
 
 ## Operator checklist (measure → store)
 
-1. Confirm Case 4 setup (OpenSpec-only implementation input; `042-planning-openspec` skill available) before starting.
+1. Confirm Case 4 setup (OpenSpec-only implementation input; `/implement-spec`; `.cursor/agents/` and `042-planning-openspec` under `.agents/skills/` or `skills/`) before starting.
 2. Note `protocol_labels.commit`, `protocol_labels.tool`, `protocol_labels.model`, `protocol_labels.plinth_config`.
 3. Start timer (`efficiency.wall_clock_s`).
 4. Run the agent against `benchmarks/scenario4/demo/` using only the Case 4 OpenSpec technical requirements input.

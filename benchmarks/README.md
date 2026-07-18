@@ -14,7 +14,8 @@ Each runnable scenario adds structured inputs so agents have more to build from 
 | **Case id** | `case-1-readme-only` | `case-2-all-problem1-requirements` | `case-3-current-openspec-problem1` | `case-4-current-openspec-problem1` |
 | **Functional input** | `specs/functional-requirements/README.md` only | `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | — | — |
 | **Implementation input** | — | — | `specs/technical-requirements/openspec/` | `specs/technical-requirements/openspec/` |
-| **Bundled Plinth skills** | — | — | `openspec-propose` under `.agents/skills/` | `@skills/042-planning-openspec/` |
+| **Bundled Plinth skills** | — | — | `openspec-propose` under `.agents/skills/` | `@042-planning-openspec/` under `.agents/skills/` or `skills/` |
+| **Plinth agents** | — | — | — | `@robot-tech-lead` → `@robot-java-spring-boot-coder` via `/implement-spec` |
 | **Runnable** | Yes | Yes | Yes | Yes |
 | **Delta vs previous scenario** | Baseline: sparse functional notes only | Adds full `problem1/` inventory; still no OpenSpec | Adds OpenSpec implementation input **plus** bundled propose skill | Same OpenSpec input shape as Case 3; canonical reference run for the richest step |
 | **Intent** | Measure baseline with minimal notes | Measure rich FR without OpenSpec | Measure implementation from OpenSpec with propose-workflow support | Measure implementation from pre-linked OpenSpec technical plan |

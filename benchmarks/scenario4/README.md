@@ -29,7 +29,7 @@ Do **not** provide:
 
 ## Purpose
 
-Measure how agents perform when implementation input is OpenSpec technical requirements that are explicitly derived from and linked to co-located functional requirements — the canonical reference run for the richest step, with `@skills/042-planning-openspec/` bundled.
+Measure how agents perform when implementation input is OpenSpec technical requirements that are explicitly derived from and linked to co-located functional requirements — the canonical reference run for the richest step, executing `/implement-spec` with `@robot-tech-lead` delegation, `@robot-java-spring-boot-coder` implementation, and `@042-planning-openspec` from `.agents/skills/` or `skills/`.
 
 ## Artifacts
 
