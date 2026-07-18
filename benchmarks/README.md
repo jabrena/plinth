@@ -62,7 +62,7 @@ Canonical field definitions and JSON Schema for every scenario execution record:
 - Schema: [metrics-v1.schema.json](metrics-v1.schema.json)
 - Example: [metrics-v1.example.json](metrics-v1.example.json)
 
-Each run record is a JSON object with up to four top-level groups (`efficiency`, `outcome_quality`, `protocol_labels`, `plinth_usage`). **All groups and fields are optional in the schema.** Each scenario Gherkin feature (`scenarioN/gherkin/scenarioN.feature`) defines which fields MUST be populated for completed runs in that case (currently: all fields in every scenario).
+Each run record is a JSON object with up to five top-level groups (`efficiency`, `outcome_quality`, `protocol_labels`, `plinth_usage`, `solution_snapshot`). **All groups and fields are optional in the schema.** Each scenario Gherkin feature (`scenarioN/gherkin/scenarioN.feature`) defines which fields MUST be populated for completed runs in that case (currently: all fields in every scenario).
 
 ### `efficiency`
 
@@ -106,6 +106,16 @@ Each run record is a JSON object with up to four top-level groups (`efficiency`,
 | `plinth_usage.skills` | Skill ids used during the run |
 | `plinth_usage.commands` | Plinth command ids from `.cursor/commands/` used during the run (for example `implement-spec`) |
 | `plinth_usage.agents` | Plinth agent ids from `.cursor/agents/` invoked during the run (for example `robot-tech-lead`); not the host tool model |
+
+### `solution_snapshot`
+
+| Field | Meaning |
+| --- | --- |
+| `solution_snapshot.demo_root` | Repository-relative demo path snapshotted (for example `benchmarks/scenario1/demo/`) |
+| `solution_snapshot.tree_format` | Format of the decoded tree payload (currently `unix-tree`) |
+| `solution_snapshot.tree_encoding` | Encoding of the tree payload (currently `base64`) |
+| `solution_snapshot.tree_b64` | Base64-encoded directory tree of `demo_root` at run completion; capture before restoring `demo/` |
+| `solution_snapshot.file_count` | Number of files under `demo_root` excluding `.gitkeep` when the snapshot was taken |
 
 ### Schema vs scenario requirements
 

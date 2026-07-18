@@ -51,8 +51,10 @@ Feature: Scenario 2 — Case 2 full functional requirements package
     And the result JSON includes populated group "outcome_quality" with fields "acceptance_pass", "acceptance_coverage", "rework_turns", and "artifact_completeness"
     And the result JSON includes populated group "protocol_labels" with fields "scenario", "case_id", "tool", "model", "plinth_config", "commit", "retry_count", and "human_intervention_min"
     And the result JSON includes populated group "plinth_usage" with fields "skills_count", "commands_count", "agents_count", "skills", "commands", and "agents"
+    And the result JSON includes populated group "solution_snapshot" with fields "demo_root", "tree_format", "tree_encoding", "tree_b64", and "file_count"
     And the result JSON field "protocol_labels.scenario" equals "scenario2"
     And the result JSON field "protocol_labels.case_id" equals "case-2-all-problem1-requirements"
+    And the result JSON field "solution_snapshot.demo_root" equals "benchmarks/scenario2/demo/"
     And the result JSON field "outcome_quality.acceptance_pass" is true only when the product @acceptance-test scenario and this scenario pass
     And the length of "plinth_usage.agents" equals the value of "plinth_usage.agents_count"
     And the length of "plinth_usage.commands" equals the value of "plinth_usage.commands_count"

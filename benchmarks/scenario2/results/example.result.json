@@ -30,5 +30,12 @@
     "skills": [],
     "commands": [],
     "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario2/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "",
+    "file_count": 0
   }
 }

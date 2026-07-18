@@ -30,5 +30,12 @@
     "skills": [],
     "commands": ["implement-spec"],
     "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "YmVuY2htYXJrcy9zY2VuYXJpbzEvZGVtby8K4pSc4pSA4pSAIHBvbS54bWwK4pSU4pSA4pSAIHNyYwogICAg4pSU4pSA4pSAIG1haW4KICAgICAgICDilJTilIDilIAgamF2YQogICAgICAgICAgICDilJTilIDilIAgaW5mbwogICAgICAgICAgICAgICAg4pSU4pSA4pSAIGphYgogICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBtcwogICAgICAgICAgICAgICAgICAgICAgICDilJTilIDilIAgR29kQW5hbHlzaXNBcHBsaWNhdGlvbi5qYXZh",
+    "file_count": 2
   }
 }

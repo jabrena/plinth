@@ -39,8 +39,9 @@ Set `outcome_quality.acceptance_pass` to `true` only when the `@acceptance-test`
 5. Track `outcome_quality.rework_turns` and optional `protocol_labels.human_intervention_min`.
 6. Stop timer when done; capture tokens, cost, and `plinth_usage` from the tool or operator tally.
 7. Set `outcome_quality.acceptance_pass` from product + harness checks.
-8. Write `benchmarks/scenario2/results/<run-id>.json` conforming to [metrics-v1.schema.json](../../metrics-v1.schema.json).
-9. Restore `benchmarks/scenario2/demo/` to empty (only `.gitkeep`).
-10. Rank later using [benchmarks/README.md](../../README.md) rules (`outcome_quality.acceptance_pass = true` only).
+8. Capture `solution_snapshot` from `benchmarks/scenario2/demo/` before restore (for example `tree -a -I '.git' benchmarks/scenario2/demo/ | base64`) and set `solution_snapshot.file_count`.
+9. Write `benchmarks/scenario2/results/<run-id>.json` conforming to [metrics-v1.schema.json](../../metrics-v1.schema.json).
+10. Restore `benchmarks/scenario2/demo/` to empty (only `.gitkeep`).
+11. Rank later using [benchmarks/README.md](../../README.md) rules (`outcome_quality.acceptance_pass = true` only).
 
 See also: [scenario2.feature](../gherkin/scenario2.feature).

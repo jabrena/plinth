@@ -123,6 +123,37 @@
         }
       }
     },
+    "solution_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "Durable snapshot of the implementation tree under demo/ before the folder is restored. Captures how each run structured files for cross-scenario comparison.",
+      "properties": {
+        "demo_root": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Repository-relative path to the demo implementation root (for example benchmarks/scenario1/demo/)."
+        },
+        "tree_format": {
+          "type": "string",
+          "enum": ["unix-tree"],
+          "description": "Format of the decoded tree_b64 payload."
+        },
+        "tree_encoding": {
+          "type": "string",
+          "enum": ["base64"],
+          "description": "Encoding of the tree payload."
+        },
+        "tree_b64": {
+          "type": "string",
+          "description": "Base64-encoded directory tree of demo_root at run completion. Empty string only for placeholder result templates."
+        },
+        "file_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of files under demo_root excluding .gitkeep when the snapshot was taken."
+        }
+      }
+    },
     "plinth_usage": {
       "type": "object",
       "additionalProperties": false,
