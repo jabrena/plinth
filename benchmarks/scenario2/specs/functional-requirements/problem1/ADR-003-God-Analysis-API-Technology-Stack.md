@@ -4,6 +4,8 @@
 **Date:** Sat Mar 21 10:12:00 CET 2026
 **Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient` with **configured connect/read timeouts** in `application.yml`), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** (or Testcontainers-hosted WireMock) so **timeout** and partial-result scenarios run in **isolation** with deterministic delay simulation. **Automatic HTTP retries are out of scope** for this user story—no Resilience4j Retry (or equivalent) required.
 
+**Amendment (2026-07-18):** Upgrade to **Spring Boot 4.1.0** and adopt **`StructuredTaskScope`** (structured concurrency on **Java 25** with **`--enable-preview`**) for parallel outbound fetches, superseding the earlier **`CompletableFuture`** + virtual-thread approach.
+
 **Amendment (2026-03-22):** **Rest Assured** was superseded for **HTTP-level acceptance tests** by **Spring Framework `RestClient`**. Rationale: Rest Assured relies on Groovy internals (`RequestSpecificationImpl.applyProxySettings`); on **Java 21+** this path can throw `NullPointerException` (`ConcurrentHashMap` does not permit null keys) during proxy/meta-property handling—making the stack brittle on current LTS/JDK feature releases. **`RestClient`** is already on the classpath (`spring-web`), matches the **same client API** used for outbound calls, and works with **AssertJ** for assertions—no separate acceptance-test HTTP stack required.
 
 ## Context
@@ -38,7 +40,7 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 
 ### Relationship to ADR-002
 
-[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) binds **bounded per-source connect/read waits**, **parallel fetch** of selected pantheons, **partial aggregation** when a source times out or fails, and **no automatic retry policy**. This ADR implements those outcomes with **RestClient** (connect/read timeouts in `application.yml`), **CompletableFuture** with virtual threads for parallel outbound calls, and **one attempt per source** per request.
+[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) binds **bounded per-source connect/read waits**, **parallel fetch** of selected pantheons, **partial aggregation** when a source times out or fails, and **no automatic retry policy**. This ADR implements those outcomes with **RestClient** (connect/read timeouts in `application.yml`), **structured concurrency** (`StructuredTaskScope` on **Java 25** with **`--enable-preview`**) for parallel outbound calls on virtual threads, and **one attempt per source** per request.
 
 ## Decision Drivers
 
@@ -55,7 +57,7 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 
 ## Considered Options (Runtime Platform)
 
-### Option A: Spring Boot 4.0.4 with Spring MVC (SELECTED)
+### Option A: Spring Boot 4.1.0 with Spring MVC (SELECTED)
 
 **Architecture Decision: Traditional Servlet Stack (Spring MVC) - No Reactive Dependencies**
 
@@ -65,7 +67,7 @@ This implementation uses **Spring MVC (traditional servlet-based)** architecture
 
 - **Mature REST Support**: Spring Web MVC provides comprehensive REST API development with `@RestController`, automatic JSON serialization, and query parameter binding
 - **Synchronous HTTP Client**: `RestClient` (synchronous) aligns with servlet-based architecture - **no reactive WebClient dependency**
-- **Parallel Processing**: `CompletableFuture` with virtual threads for concurrent processing within traditional thread-per-request model
+- **Parallel Processing**: **Structured concurrency** (`StructuredTaskScope`) on virtual threads within the servlet thread-per-request model (**Java 25** preview APIs enabled with **`--enable-preview`**)
 - **Testing Excellence**: Spring Boot Test provides `@SpringBootTest`, `@WebMvcTest`, `MockMvc`; integrates with Testcontainers
 - **Auto-Configuration**: Zero-config setup for common patterns (JSON processing, HTTP clients, error handling)
 - **Operational Features**: Built-in actuator endpoints for health checks, metrics, and monitoring
@@ -100,7 +102,7 @@ These decisions apply **within** the chosen Spring Boot stack. They align with A
 
 ### 1. Outbound HTTP client: `RestClient` (SELECTED)
 
-**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` with virtual threads around per-source calls) with **connect/read timeouts** on each call. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
+**Context:** The service performs **blocking** parallel fetches (one **`StructuredTaskScope`** subtask per selected source on virtual threads) with **connect/read timeouts** on each call. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
 
 **Reactive Programming Exclusion:** This implementation explicitly **excludes WebClient and reactive dependencies** to maintain consistency with the Spring MVC servlet-based approach.
 
@@ -121,7 +123,7 @@ These decisions apply **within** the chosen Spring Boot stack. They align with A
 - **Team Expertise**: Existing knowledge of Spring MVC reduces learning curve
 - **Dependency Management**: Avoids potential conflicts between servlet and reactive stacks
 - **Testing**: MockMvc and servlet-based testing tools are mature and well-documented
-- **Performance**: Thread-per-request model with `CompletableFuture` and virtual threads parallelism meets performance requirements
+- **Performance**: Thread-per-request model with **`StructuredTaskScope`** and virtual-thread subtasks meets performance requirements
 
 **Excluded Dependencies:**
 - `spring-boot-starter-webflux`
@@ -135,25 +137,29 @@ These decisions apply **within** the chosen Spring Boot stack. They align with A
 - Non-blocking I/O patterns
 - Reactive HTTP clients (`WebClient`)
 - Reactive database drivers
-- Structured concurrency (not required for this use case)
 
-### Virtual Threads (INCLUDED)
+### Structured Concurrency (INCLUDED)
 
-**Decision:** Use **virtual threads** with `CompletableFuture` for parallel processing of external API calls.
+**Decision:** Use **structured concurrency** with **`StructuredTaskScope`** for parallel processing of external API calls on **Java 25**, with **`--enable-preview`** enabled on compile, test, and run classpaths.
 
 **Rationale:**
-- **Lightweight Concurrency**: Virtual threads provide efficient concurrent execution without the overhead of platform threads
-- **Simplified Model**: Works seamlessly with existing `CompletableFuture` patterns and blocking I/O operations
-- **Resource Efficiency**: Allows handling many concurrent API calls without thread pool exhaustion
-- **Compatibility**: Integrates well with Spring MVC servlet-based architecture and `RestClient`
+- **Structured lifetimes**: Subtasks for each selected pantheon share one scope; failures and cancellation propagate predictably (aligned with ADR-002 partial/all-fail outcomes)
+- **Virtual threads**: Each source fetch runs blocking `RestClient` I/O on a virtual thread inside the scope
+- **Resource efficiency**: Lightweight concurrency without platform-thread pool exhaustion
+- **Compatibility**: Integrates with Spring MVC servlet-based architecture; one scope per inbound request
+- **Preview on Java 25**: Structured Concurrency APIs require JVM preview flags until finalized
 
 **Implementation Approach:**
-- Configure `CompletableFuture.supplyAsync()` to use virtual thread executor for parallel god API fetches
-- Maintain blocking I/O model with `RestClient` while benefiting from virtual thread scalability
-- **No structured concurrency**: Standard `CompletableFuture` composition is sufficient for this use case
+- Open a **`StructuredTaskScope`** per request and fork **one subtask per selected source**
+- Each subtask performs a single blocking **`RestClient`** call with configured connect/read timeouts
+- Join subtasks and merge results; **one attempt per source** per request
+- Enable preview in Maven:
+  - `maven-compiler-plugin`: `<compilerArgs><arg>--enable-preview</arg></compilerArgs>`
+  - `maven-surefire-plugin` / `spring-boot-maven-plugin`: `<argLine>--enable-preview</argLine>`
 
 **Excluded:**
-- Structured concurrency APIs (not required for simple parallel fetch patterns)
+- Ad hoc **`CompletableFuture`** composition without structured scope boundaries (superseded by this decision)
+- Raw **`parallelStream()`** over the common fork-join pool
 
 ### 2. Acceptance tests: Spring `RestClient` (SELECTED)
 
@@ -276,7 +282,7 @@ src/test/resources/
 
 ## Decision Outcome
 
-**Chosen platform: Spring Boot 4.0.4 with Spring MVC and Java 25**.
+**Chosen platform: Spring Boot 4.1.0 with Spring MVC and Java 25**.
 
 **Architecture: Traditional Servlet Stack Only** - No reactive programming dependencies.
 
@@ -294,7 +300,7 @@ src/test/resources/
 - **Architecture**: **Spring MVC servlet-based** - traditional thread-per-request model, **no reactive programming**
 - **REST Controller**: `@RestController`, `GET /api/v1/gods/stats/sum`
 - **HTTP Client**: **RestClient** (synchronous) with **connect/read timeouts** from configuration (e.g. 5s defaults)
-- **Parallelism**: `CompletableFuture` with virtual threads within servlet thread model per source; **one attempt per source** per request
+- **Parallelism**: **`StructuredTaskScope`** with virtual-thread subtasks within the servlet thread model; **one attempt per source** per request; **`--enable-preview`** on Java 25
 - **Retries**: **None** for US-001 (see §3 above)
 - **Configuration**: **Single default configuration** provides production-ready settings with environment variable overrides
 - **Error handling**: `@ControllerAdvice` where needed; partial aggregation per feature
@@ -334,7 +340,7 @@ src/test/resources/
 
 ### Neutral
 
-- **Java 25** is the baseline JDK for this module (see Decision Outcome)
+- **Java 25** is the baseline JDK for this module (see Decision Outcome); enable **`--enable-preview`** for structured concurrency APIs
 - **In-process WireMock** is the default; Testcontainers-hosted WireMock remains optional if a team adopts it later
 
 ## Follow-up Actions
@@ -346,6 +352,7 @@ src/test/resources/
 5. Register **RestClient** with production connect/read timeouts; override URLs only in tests
 6. Keep the **`RestClient`-based** acceptance suite small and Gherkin-aligned; **do not** introduce Rest Assured for this module unless a future ADR revisits the trade-off after Groovy/JVM fixes land upstream
 7. Document WireMock setup, file structure, and stub reset patterns in module README
+8. Configure Maven **`--enable-preview`** on compiler, Surefire, and Spring Boot run goals for **`StructuredTaskScope`**
 
 ## Appendix: Rest Assured — issues observed and why it is discarded (2026-03-22)
 
@@ -400,6 +407,6 @@ If a future Rest Assured + Groovy release **demonstrably** fixes `applyProxySett
 - [ADR-002: God Analysis API Non-Functional Requirements](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)
 - [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
 - [Feature Specification](US-001_god_analysis_api.feature)
-- [Spring Boot 4.0.4 Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
+- [Spring Boot 4.1.0 Documentation](https://docs.spring.io/spring-boot/docs/4.1.0/reference/htmlsingle/)
 - [Spring Framework — RestClient](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-restclient) (outbound HTTP and **acceptance tests** in this ADR)
 - [WireMock](https://wiremock.org/) — including Testcontainers integration where applicable

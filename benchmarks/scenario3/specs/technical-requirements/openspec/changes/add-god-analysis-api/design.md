@@ -12,7 +12,7 @@ WireMock-backed tests for timeout behavior.
 
 - Expose one REST endpoint that aggregates filtered god names across selected pantheons.
 - Keep partial-result behavior predictable when individual sources time out or fail.
-- Align implementation with Spring Boot 4.0.x, Spring MVC, and `RestClient`.
+- Align implementation with Spring Boot 4.1.0, Spring MVC, and `RestClient`.
 - Provide deterministic WireMock-backed tests for happy path and timeout scenarios.
 
 **Non-Goals:**
@@ -63,14 +63,17 @@ out of scope.
 
 ### Resilience Behavior
 
-Fetch selected sources in parallel. If a source times out or fails, treat that
-source as empty for the current aggregation and continue with successful
-sources. Do not fail the whole request solely because one selected source failed.
+Fetch selected sources in parallel using **`StructuredTaskScope`** on virtual
+threads (**Java 25** preview; enable **`--enable-preview`** on compile, test,
+and run). If a source times out or fails, treat that source as empty for the
+current aggregation and continue with successful sources. Do not fail the whole
+request solely because one selected source failed.
 
 ### Technology Stack
 
-Use Spring Boot with Spring MVC, base package `info.jab.ms`, Spring `RestClient`
-for both production outbound calls and HTTP-level acceptance tests, and WireMock
+Use Spring Boot 4.1.0 with Spring MVC, base package `info.jab.ms`, Spring `RestClient`
+for both production outbound calls and HTTP-level acceptance tests, **`StructuredTaskScope`**
+for parallel source fetches (Java 25 preview with **`--enable-preview`**), and WireMock
 for deterministic source fixtures and timeout simulation. Do not add WebFlux,
 `WebClient`, reactive streams, Rest Assured, or retry libraries for this user
 story.
