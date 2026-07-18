@@ -14,6 +14,8 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
   #   skills are relevant and the result JSON records only skills actually read
   #   or invoked during the run.
   # - Derive ALL implementation requirements ONLY from that OpenSpec change (tasks.md, design.md, spec.md).
+  # - Capture the OpenSpec change state before execution and restore it after metrics are written;
+  #   /implement-spec may update tasks.md, but benchmark inputs must remain reusable.
   # - Do NOT read benchmarks/scenario4/specs/functional-requirements/problem1/ directly as agent input
   #   (those files exist only so OpenSpec derivation links resolve within the harness).
   # - Under benchmarks/scenario4/results/, read ONLY README.md and example.result.json (operator/metrics template).
@@ -90,3 +92,4 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
     And "plinth_usage.agents" includes "robot-java-spring-boot-coder"
     And "plinth_usage.skills" includes "042-planning-openspec"
     And "benchmarks/scenario4/demo/" is restored to empty with only ".gitkeep"
+    And the OpenSpec change path "benchmarks/scenario4/specs/technical-requirements/openspec/changes/add-god-analysis-api" is restored to its pre-run contents, including "tasks.md"
