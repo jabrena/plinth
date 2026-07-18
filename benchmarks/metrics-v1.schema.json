@@ -126,17 +126,22 @@
     "plinth_usage": {
       "type": "object",
       "additionalProperties": false,
-      "description": "Plinth skills and agents used during the run.",
+      "description": "Plinth skills, commands, and agents used during the run.",
       "properties": {
         "skills_count": {
           "type": "integer",
           "minimum": 0,
           "description": "Number of distinct skills read or invoked; MUST equal the length of skills when both are present."
         },
+        "commands_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of distinct Plinth commands read or invoked; MUST equal the length of commands when both are present."
+        },
         "agents_count": {
           "type": "integer",
           "minimum": 0,
-          "description": "Number of distinct agents or subagents invoked; MUST equal the length of agents when both are present."
+          "description": "Number of distinct Plinth agents invoked from .cursor/agents/; MUST equal the length of agents when both are present."
         },
         "skills": {
           "type": "array",
@@ -144,7 +149,15 @@
             "type": "string",
             "minLength": 1
           },
-          "description": "Skill ids or names used during the run; empty array when none."
+          "description": "Skill ids used during the run (for example 042-planning-openspec); empty array when none."
+        },
+        "commands": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "description": "Plinth command ids from .cursor/commands/ used during the run (for example implement-spec); empty array when none."
         },
         "agents": {
           "type": "array",
@@ -152,7 +165,7 @@
             "type": "string",
             "minLength": 1
           },
-          "description": "Agent ids or names invoked during the run."
+          "description": "Plinth agent ids from .cursor/agents/ invoked during the run (for example robot-tech-lead); empty array when none. Does not include the host tool model (record that under protocol_labels.model)."
         }
       }
     }

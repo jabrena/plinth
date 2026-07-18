@@ -25,8 +25,10 @@
   },
   "plinth_usage": {
     "skills_count": 1,
-    "agents_count": 1,
+    "commands_count": 0,
+    "agents_count": 0,
     "skills": ["300-frameworks-spring-boot-create-project"],
-    "agents": ["composer"]
+    "commands": [],
+    "agents": []
   }
 }

@@ -101,9 +101,11 @@ Each run record is a JSON object with up to four top-level groups (`efficiency`,
 | Field | Meaning |
 | --- | --- |
 | `plinth_usage.skills_count` | Number of distinct skills read or invoked (must equal the length of `plinth_usage.skills` when both are present) |
-| `plinth_usage.agents_count` | Number of distinct agents or subagents invoked (must equal the length of `plinth_usage.agents` when both are present) |
-| `plinth_usage.skills` | Skill ids or names used during the run |
-| `plinth_usage.agents` | Agent ids or names invoked during the run |
+| `plinth_usage.commands_count` | Number of distinct Plinth commands read or invoked from `.cursor/commands/` (must equal the length of `plinth_usage.commands` when both are present) |
+| `plinth_usage.agents_count` | Number of distinct Plinth agents invoked from `.cursor/agents/` (must equal the length of `plinth_usage.agents` when both are present) |
+| `plinth_usage.skills` | Skill ids used during the run |
+| `plinth_usage.commands` | Plinth command ids from `.cursor/commands/` used during the run (for example `implement-spec`) |
+| `plinth_usage.agents` | Plinth agent ids from `.cursor/agents/` invoked during the run (for example `robot-tech-lead`); not the host tool model |
 
 ### Schema vs scenario requirements
 
