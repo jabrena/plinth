@@ -46,7 +46,7 @@ Do not commit secrets. Token/cost values may be estimates when the tool only exp
 | `case_id` | Constant: `"case-1-readme-only"` |
 | `tool` | Agent product used: `cursor`, `codex`, `github-copilot`, or `claude-code` |
 | `model` | Exact model id/name shown by the tool for the run |
-| `plinth_config` | For Case 1 skill-agnostic baseline use `bare-agent` (no `.agents/skills`, no `.cursor/skills`). Use other values only if the campaign protocol explicitly allows them. |
+| `plinth_config` | Configuration level used for the run (for example `bare-agent`, `no-openspec`, or `full-plinth` per campaign protocol). |
 | `commit` | `git rev-parse HEAD` of the workspace under test when the run starts |
 | `retry_count` | Optional. Number of aborted/restarted attempts before the recorded run |
 | `human_intervention_min` | Optional. Minutes the human spent steering, answering prompts, or fixing outside agent turns |
@@ -55,7 +55,7 @@ Do not commit secrets. Token/cost values may be estimates when the tool only exp
 
 | Field | How to measure |
 | --- | --- |
-| `skills_count` | Required non-negative integer. Count distinct skills read or invoked during the run; MUST equal the length of `skills`. For Case 1 bare-agent runs (no `.agents/skills`, no `.cursor/skills`), record `0` with `"skills": []`. |
+| `skills_count` | Required non-negative integer. Count distinct skills read or invoked during the run; MUST equal the length of `skills`. |
 | `agents_count` | Required non-negative integer. Count distinct agents or subagents invoked during the run; MUST equal the length of `agents`. Record `1` with a one-element `agents` array when only the primary agent runs. |
 | `skills` | Required JSON array of skill ids or names used during the run (for example `323-frameworks-spring-boot-testing-acceptance-tests`). Use `[]` when none. |
 | `agents` | Required JSON array of agent ids or names invoked during the run (for example `composer` or `robot-java-spring-boot-coder`). |
@@ -99,8 +99,8 @@ Optional fields may be added without removing required ones:
 
 ## Operator checklist (measure → store)
 
-1. Confirm Case 1 setup (README-only FR) before starting. If `.agents/skills` or `.cursor/skills` exist, remove them.
-2. Note `commit`, `tool`, `model`, `plinth_config=bare-agent`.
+1. Confirm Case 1 setup (README-only FR) before starting.
+2. Note `commit`, `tool`, `model`, `plinth_config`.
 3. Start timer (`wall_clock_s`).
 4. Run the agent against `benchmarks/scenario1/demo/` using only the Case 1 README input.
 5. Track `rework_turns` and optional human minutes.
@@ -108,7 +108,6 @@ Optional fields may be added without removing required ones:
 7. Set `acceptance_pass` from product + harness checks.
 8. Write `benchmarks/scenario1/results/<run-id>.json` with all required fields.
 9. Restore `benchmarks/scenario1/demo/` to empty (only `.gitkeep`).
-10. Restore skills with `npx skills add jabrena/plinth --skill '*' --agent cursor -y`.
-11. Rank later using `benchmarks/README.md` rules (`acceptance_pass = true` only).
+10. Rank later using `benchmarks/README.md` rules (`acceptance_pass = true` only).
 
 See also: [scenario1.feature](../gherkin/scenario1.feature), [../README.md](../README.md) metrics scorecard.

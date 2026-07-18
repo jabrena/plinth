@@ -10,9 +10,9 @@ Each runnable scenario adds structured inputs so agents have more to build from 
 
 | Level | Scenario | What the agent gets | Intent |
 | --- | --- | --- | --- |
-| Minimal | `scenario1` | Only a problem README under `specs/functional-requirements/`; no `.agents/skills`; no `.cursor/skills` | Baseline with sparse notes, skill-agnostic |
+| Minimal | `scenario1` | Only a problem README under `specs/functional-requirements/` | Baseline with sparse functional notes |
 | Functional package | `scenario2` | Full `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | Rich functional requirements, still no OpenSpec |
-| TBD | `scenario3` | **Pending** | Reserved for the next richness step |
+| Functional + technical | `scenario3` | Same functional package **plus** `specs/technical-requirements/openspec/` linked to those FR files | OpenSpec technical plan derived from co-located FR |
 | Functional + technical | `scenario4` | Same functional package **plus** `specs/technical-requirements/openspec/` linked to those FR files | OpenSpec technical plan derived from co-located FR |
 
 Campaigns SHOULD compare cost/tokens/quality across this ladder for the same product acceptance outcome.
@@ -30,9 +30,11 @@ benchmarks/
 │   ├── README.md
 │   ├── specs/functional-requirements/problem1/
 │   └── gherkin/scenario2.feature
-├── scenario3/                # pending
+├── scenario3/                # functional + technical (OpenSpec)
 │   ├── README.md
-│   ├── specs/scenario3.md
+│   ├── specs/
+│   │   ├── functional-requirements/problem1/
+│   │   └── technical-requirements/openspec/
 │   └── gherkin/scenario3.feature
 └── scenario4/                # functional + technical (OpenSpec)
     ├── README.md
@@ -50,12 +52,10 @@ Each scenario folder owns its input contract (`README.md`), requirements under `
 | --- | --- | --- | --- |
 | `scenario1` | `case-1-readme-only` | `benchmarks/scenario1/specs/functional-requirements/README.md` only | Yes |
 | `scenario2` | `case-2-all-problem1-requirements` | `benchmarks/scenario2/specs/functional-requirements/problem1/` (full inventory) | Yes |
-| `scenario3` | `case-3-pending` | **Pending** — input and workflow TBD | No |
+| `scenario3` | `case-3-current-openspec-problem1` | `specs/functional-requirements/problem1/` + `specs/technical-requirements/openspec/` (OpenSpec links to FR) | Yes |
 | `scenario4` | `case-4-current-openspec-problem1` | `specs/functional-requirements/problem1/` + `specs/technical-requirements/openspec/` (OpenSpec links to FR) | Yes |
 
 Upstream provenance may originate from `examples/openspec/god-analysis-api/`. Runnable scenario authority is the harness-local `specs/` trees above. Do not rewrite the upstream example trees as part of a campaign run.
-
-**Case 3** is an explicit pending placeholder. Do not invent an input contract. Exclude Case 3 from campaign ranking until the contract is defined.
 
 ## Metrics scorecard
 
@@ -115,8 +115,7 @@ Optional but recommended when available: `active_agent_s`, `acceptance_coverage`
 
 1. Rank by `cost_usd` and/or `tokens_total` only among runs where `acceptance_pass = true`.
 2. Keep `acceptance_pass = false` runs in a separate failure cohort; do not mix them into the cost/token leaderboard.
-3. Exclude Case 3 (`case-3-pending`) from campaign ranking until its input/workflow contract is defined.
-4. Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 4 richness steps.
+3. Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 3 → 4 richness steps.
 
 ## Out of scope
 

@@ -28,18 +28,15 @@ The harness SHALL provide `benchmarks/scenario1/` through `benchmarks/scenario4/
 
 ### Requirement: Case 1 minimal functional notes
 
-Case 1 (`scenario1`) SHALL use only `benchmarks/scenario1/specs/functional-requirements/README.md` as requirements input, MUST run in a skill-agnostic workspace without `.agents/skills` and without `.cursor/skills` (including skill references under `.cursor/skills`), SHALL label runs `case-1-readme-only`, and MUST persist a result JSON under `benchmarks/scenario1/results/` with the minimal v1 metrics fields.
+Case 1 (`scenario1`) SHALL use only `benchmarks/scenario1/specs/functional-requirements/README.md` as requirements input, SHALL label runs `case-1-readme-only`, and MUST persist a result JSON under `benchmarks/scenario1/results/` with the minimal v1 metrics fields.
 
-#### Scenario: Case 1 excludes full FR package, OpenSpec, and skills
+#### Scenario: Case 1 excludes full FR package and OpenSpec
 
 - **GIVEN** a Case 1 benchmark run
 - **WHEN** requirements input is prepared
 - **THEN** only `benchmarks/scenario1/specs/functional-requirements/README.md` is provided
 - **AND** a full `functional-requirements/problem1/` package is not provided
 - **AND** `technical-requirements/openspec/` is not provided
-- **AND** `.agents/skills` is not present or is empty
-- **AND** `.cursor/skills` is not present or is empty
-- **AND** no skill references under `.cursor/skills` are provided to the agent
 - **AND** the run case id is `case-1-readme-only`
 
 #### Scenario: Case 1 run records minimal v1 metrics as JSON
@@ -80,14 +77,15 @@ Case 2 MUST include at least these files under that `problem1/` directory:
 
 ### Requirement: Case 3 pending richness step
 
-Case 3 (`scenario3`) SHALL exist as a harness placeholder with case id `case-3-pending`, MUST document that its input and workflow are pending definition, and MUST be positioned as the reserved richness step between Case 2 and Case 4.
+Case 3 (`scenario3`) SHALL exist as a harness placeholder with case id `case-3-pending`, MUST document that its functional requirements input and workflow are pending definition, MUST provide the official Fission-AI OpenSpec skill `openspec-propose` under `benchmarks/scenario3/.agents/skills/`, and MUST be positioned as the reserved richness step between Case 2 and Case 4.
 
 #### Scenario: Case 3 is not runnable yet
 
 - **GIVEN** the Case 3 harness folder
 - **WHEN** a maintainer reviews Case 3 specs and Gherkin
 - **THEN** the case is labeled `case-3-pending`
-- **AND** the documentation states that the input/workflow contract is TBD
+- **AND** `benchmarks/scenario3/.agents/skills/openspec-propose/SKILL.md` is present
+- **AND** the documentation states that the functional requirements input/workflow contract is TBD
 - **AND** Case 3 is excluded from campaign ranking until the contract is defined
 
 ### Requirement: Case 4 functional and technical requirements

@@ -21,7 +21,6 @@ technical-requirements/openspec/
 ├── README.md
 └── changes/
     └── add-god-analysis-api/
-        ├── .openspec.yaml
         ├── proposal.md
         ├── design.md
         ├── tasks.md
