@@ -1,0 +1,44 @@
+{
+  "efficiency": {
+    "wall_clock_s": 100.0,
+    "active_agent_s": 95.0,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0.0
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1.0,
+    "rework_turns": 1,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario1",
+    "case_id": "case-1-readme-only",
+    "tool": "cursor",
+    "model": "composer",
+    "plinth_config": "full-plinth",
+    "commit": "7bcfeae8c77fce073520f7479c381b5d52c3c6d8",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 2,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [
+      "300-frameworks-spring-boot-create-project",
+      "302-frameworks-spring-boot-rest"
+    ],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "L1VzZXJzL2phYnJlbmEvSWRlYVByb2plY3RzL3BsaW50aC9iZW5jaG1hcmtzL3NjZW5hcmlvMS9kZW1vCuKUnOKUgOKUgCAuZ2l0YXR0cmlidXRlcwrilJzilIDilIAgLmdpdGlnbm9yZQrilJzilIDilIAgLmdpdGtlZXAK4pSc4pSA4pSAIC5tdm4K4pSCwqDCoCDilJTilIDilIAgd3JhcHBlcgrilILCoMKgICAgICDilJTilIDilIAgbWF2ZW4td3JhcHBlci5wcm9wZXJ0aWVzCuKUnOKUgOKUgCBtdm53CuKUnOKUgOKUgCBtdm53LmNtZArilJzilIDilIAgcG9tLnhtbArilJTilIDilIAgc3JjCiAgICDilJzilIDilIAgbWFpbgogICAg4pSCwqDCoCDilJzilIDilIAgamF2YQogICAg4pSCwqDCoCDilILCoMKgIOKUlOKUgOKUgCBpbmZvCiAgICDilILCoMKgIOKUgsKgwqAgICAgIOKUlOKUgOKUgCBqYWIKICAgIOKUgsKgwqAg4pSCwqDCoCAgICAgICAgIOKUlOKUgOKUgCBtcwogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgIOKUnOKUgOKUgCBHb2RBbmFseXNpc0FwaUFwcGxpY2F0aW9uLmphdmEKICAgIOKUgsKgwqAg4pSCwqDCoCAgICAgICAgICAgICDilJTilIDilIAgZ29kcwogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgICAgICDilJzilIDilIAgR29kQW5hbHlzaXNTZXJ2aWNlLmphdmEKICAgIOKUgsKgwqAg4pSCwqDCoCAgICAgICAgICAgICAgICAg4pSc4pSA4pSAIEdvZHNTdGF0c0NvbnRyb2xsZXIuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgICAgICDilJzilIDilIAgSHR0cENsaWVudENvbmZpZy5qYXZhCiAgICDilILCoMKgIOKUgsKgwqAgICAgICAgICAgICAgICAgIOKUnOKUgOKUgCBNeXRob2xvZ3lTb3VyY2VDbGllbnQuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgICAgICDilJTilIDilIAgU3VtUmVzcG9uc2UuamF2YQogICAg4pSCwqDCoCDilJTilIDilIAgcmVzb3VyY2VzCiAgICDilILCoMKgICAgICDilJzilIDilIAgYXBwbGljYXRpb24ucHJvcGVydGllcwogICAg4pSCwqDCoCAgICAg4pSc4pSA4pSAIHN0YXRpYwogICAg4pSCwqDCoCAgICAg4pSU4pSA4pSAIHRlbXBsYXRlcwogICAg4pSU4pSA4pSAIHRlc3QKICAgICAgICDilJTilIDilIAgamF2YQogICAgICAgICAgICDilJTilIDilIAgaW5mbwogICAgICAgICAgICAgICAg4pSU4pSA4pSAIGphYgogICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBtcwogICAgICAgICAgICAgICAgICAgICAgICDilJzilIDilIAgR29kQW5hbHlzaXNBcGlBcHBsaWNhdGlvblRlc3RzLmphdmEKICAgICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSAIGdvZHMKICAgICAgICAgICAgICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBHb2RBbmFseXNpc1NlcnZpY2VUZXN0LmphdmEKCjE5IGRpcmVjdG9yaWVzLCAxNiBmaWxlcwo=",
+    "file_count": 15
+  }
+}

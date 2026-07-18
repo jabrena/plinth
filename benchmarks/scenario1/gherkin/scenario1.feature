@@ -8,6 +8,10 @@ Feature: Scenario 1 — Case 1 minimal functional notes
   # - Derive ALL product requirements ONLY from benchmarks/scenario1/specs/functional-requirements/README.md.
   # - Do NOT search the repository for "God Analysis API", ADR, OpenSpec, or problem1 artifacts outside benchmarks/scenario1/.
   # - Other scenarios and examples/openspec/ are out of scope for this run even if they describe the same product.
+  # - Under benchmarks/scenario1/results/, read ONLY README.md and example.result.json (operator/metrics template).
+  # - Do NOT read prior run JSON files under benchmarks/scenario1/results/.
+  # - Skill discovery is allowed: skills under .agents/skills/ or skills/ may be read; the model decides
+  #   which skills are relevant and the result JSON records only skills actually read or invoked.
 
   Background:
     Given a Case 1 benchmark run for scenario "scenario1"
@@ -17,16 +21,32 @@ Feature: Scenario 1 — Case 1 minimal functional notes
       | path |
       | benchmarks/scenario1/specs/functional-requirements/README.md |
       | benchmarks/scenario1/gherkin/scenario1.feature |
-      | benchmarks/scenario1/results/README.md |
       | benchmarks/scenario1/README.md |
       | benchmarks/metrics-v1.schema.json |
       | benchmarks/metrics-v1.example.json |
+    And the Case 1 results allowlist is the only authorized reading set under "benchmarks/scenario1/results/":
+      | path |
+      | benchmarks/scenario1/results/README.md |
+      | benchmarks/scenario1/results/example.result.json |
+    And the Case 1 Plinth tooling allowlist is the authorized reading set for skills:
+      | path |
+      | .agents/skills/ |
+      | skills/ |
+    And the Case 1 skill discovery allowlist permits any skill under the Plinth tooling skill roots:
+      | path |
+      | .agents/skills/ |
+      | skills/ |
 
   @acceptance-test
   Scenario: Case 1 run records minimal v1 metrics as JSON
     Given "benchmarks/scenario1/specs/functional-requirements/README.md" is the sole product specification
     And only files on the Case 1 allowlist are read for requirements, design, or acceptance criteria
-    And the agent must not read, open, grep, or search for requirements under any path outside "benchmarks/scenario1/" except harness metrics files on the Case 1 allowlist under "benchmarks/"
+    And only files on the Case 1 results allowlist are read under "benchmarks/scenario1/results/"
+    And only files on the Case 1 Plinth tooling allowlist are read for skills
+    And skills under ".agents/skills/" or "skills/" may be read and invoked for implementation guidance only
+    And skills read or invoked from the Case 1 skill discovery allowlist are recorded in "plinth_usage.skills"
+    And no file under "benchmarks/scenario1/results/" outside the Case 1 results allowlist may be read during the run
+    And the agent must not read, open, grep, or search under any path outside "benchmarks/scenario1/" except harness metrics files on the Case 1 allowlist under "benchmarks/" and Plinth tooling on the Case 1 Plinth tooling allowlist
     And a full "benchmarks/scenario1/specs/functional-requirements/problem1/" package is not provided
     And "benchmarks/scenario1/specs/technical-requirements/" is not provided
     And "benchmarks/scenario2/" must not be read or used as scenario input
@@ -52,4 +72,5 @@ Feature: Scenario 1 — Case 1 minimal functional notes
     And the length of "plinth_usage.agents" equals the value of "plinth_usage.agents_count"
     And the length of "plinth_usage.commands" equals the value of "plinth_usage.commands_count"
     And the length of "plinth_usage.skills" equals the value of "plinth_usage.skills_count"
+    And every entry in "plinth_usage.skills" is a skill read or invoked during the run
     And "benchmarks/scenario1/demo/" is restored to empty with only ".gitkeep"
