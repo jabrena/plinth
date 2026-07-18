@@ -130,6 +130,16 @@ or fail.
 - **THEN** that source contributes no names to the current aggregation
 - **AND** no second outbound attempt is made for that source during the same API request
 
+#### Scenario: All selected sources time out return zero sum
+
+- **GIVEN** the Greek API is configured to respond after the timeout threshold
+- **AND** the Roman API is configured to respond after the timeout threshold
+- **AND** the Nordic API is configured to respond after the timeout threshold
+- **WHEN** a client sends `GET /gods/stats/sum?filter=N&sources=greek,roman,nordic`
+- **THEN** the response status is `200`
+- **AND** the response body contains JSON field `sum`
+- **AND** `sum` is `0`
+
 ### Requirement: Technology constraints
 
 The implementation MUST use Spring Boot with Spring MVC, Spring `RestClient`,

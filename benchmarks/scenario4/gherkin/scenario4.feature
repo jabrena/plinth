@@ -5,7 +5,9 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
   So that we can compare OpenSpec-driven implementation against Scenario 1 and Scenario 2 with measurable cost and quality
 
   # Agent protocol (Case 4):
-  # - Derive ALL implementation requirements ONLY from benchmarks/scenario4/specs/technical-requirements/openspec/.
+  # - Execute /implement-spec with benchmarks/scenario4/specs/technical-requirements/openspec/changes/add-god-analysis-api
+  #   and implement in benchmarks/scenario4/demo/.
+  # - Derive ALL implementation requirements ONLY from that OpenSpec change (tasks.md, design.md, spec.md).
   # - Do NOT read benchmarks/scenario4/specs/functional-requirements/problem1/ directly as agent input
   #   (those files exist only so OpenSpec derivation links resolve within the harness).
   # - Do NOT use examples/openspec/god-analysis-api/ or other scenarios as input authority.
@@ -20,13 +22,16 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
       | benchmarks/scenario4/gherkin/scenario4.feature |
       | benchmarks/scenario4/results/README.md |
       | benchmarks/scenario4/README.md |
+      | .cursor/commands/implement-spec.md |
       | skills/042-planning-openspec/ |
       | benchmarks/metrics-v1.schema.json |
       | benchmarks/metrics-v1.example.json |
 
   @acceptance-test
   Scenario: Case 4 run records minimal v1 metrics as JSON
-    Given "benchmarks/scenario4/specs/technical-requirements/openspec/" is the sole implementation specification
+    Given the OpenSpec change path "benchmarks/scenario4/specs/technical-requirements/openspec/changes/add-god-analysis-api"
+    And the OpenSpec change "add-god-analysis-api" contains "proposal.md", "design.md", "tasks.md", and "specs/god-analysis-api/spec.md"
+    And the command prompt source ".cursor/commands/implement-spec.md" is read before execution
     And only files on the Case 4 allowlist are read for requirements, design, or acceptance criteria
     And the agent must not read, open, grep, or search for requirements under any path outside "benchmarks/scenario4/" except harness metrics files on the Case 4 allowlist under "benchmarks/"
     And "benchmarks/scenario4/specs/functional-requirements/problem1/" must not be read directly for requirements or technology choices
@@ -36,7 +41,7 @@ Feature: Scenario 4 — Case 4 OpenSpec technical requirements
     And "examples/openspec/god-analysis-api/" must not be read or used as scenario input
     And no "ADR-*" file outside "benchmarks/scenario4/" may be read for requirements or technology choices
     And no "openspec/changes/" design, tasks, or spec files outside "benchmarks/scenario4/" may be read for requirements
-    When the agent implements the product behavior documented in "benchmarks/scenario4/specs/technical-requirements/openspec/" in "benchmarks/scenario4/demo/"
+    When the user executes the prompt "/implement-spec benchmarks/scenario4/specs/technical-requirements/openspec/changes/add-god-analysis-api implement in benchmarks/scenario4/demo/"
     And the run completes
     Then the happy path in "benchmarks/scenario4/specs/technical-requirements/openspec/changes/add-god-analysis-api/specs/god-analysis-api/spec.md" passes
     And a result JSON file exists under "benchmarks/scenario4/results/"
