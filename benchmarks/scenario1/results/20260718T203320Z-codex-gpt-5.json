@@ -1,0 +1,41 @@
+{
+  "efficiency": {
+    "wall_clock_s": 180,
+    "active_agent_s": 180,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1,
+    "rework_turns": 0,
+    "artifact_completeness": 1
+  },
+  "protocol_labels": {
+    "scenario": "scenario1",
+    "case_id": "case-1-readme-only",
+    "tool": "codex",
+    "model": "gpt-5",
+    "plinth_config": "bare-agent",
+    "commit": "210a9abb0e4568e5c9b3050c371a8a5404efa057",
+    "retry_count": 1,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 0,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "c2NlbmFyaW8xL2RlbW8KfC0tIC5naXRrZWVwCnwtLSBzcmMKfCAgIHwtLSBtYWluCnwgICB8ICAgYC0tIGphdmEKfCAgIHwgICAgICAgYC0tIGNvbQp8ICAgfCAgICAgICAgICAgYC0tIGV4YW1wbGUKfCAgIHwgICAgICAgICAgICAgICBgLS0gZ29kcwp8ICAgfCAgICAgICAgICAgICAgICAgICBgLS0gR29kQW5hbHlzaXNBcGkuamF2YQp8ICAgYC0tIHRlc3QKfCAgICAgICBgLS0gamF2YQp8ICAgICAgICAgICBgLS0gY29tCnwgICAgICAgICAgICAgICBgLS0gZXhhbXBsZQp8ICAgICAgICAgICAgICAgICAgIGAtLSBnb2RzCnwgICAgICAgICAgICAgICAgICAgICAgIGAtLSBHb2RBbmFseXNpc0FwaUFjY2VwdGFuY2VUZXN0LmphdmEKYC0tIHRhcmdldAogICAgfC0tIGNsYXNzZXMKICAgIHwgICBgLS0gY29tCiAgICB8ICAgICAgIGAtLSBleGFtcGxlCiAgICB8ICAgICAgICAgICBgLS0gZ29kcwogICAgfCAgICAgICAgICAgICAgIHwtLSBHb2RBbmFseXNpc0FwaSRHb2RBbmFseXNpc1NlcnZpY2UuY2xhc3MKICAgIHwgICAgICAgICAgICAgICBgLS0gR29kQW5hbHlzaXNBcGkuY2xhc3MKICAgIGAtLSB0ZXN0LWNsYXNzZXMKICAgICAgICBgLS0gY29tCiAgICAgICAgICAgIGAtLSBleGFtcGxlCiAgICAgICAgICAgICAgICBgLS0gZ29kcwogICAgICAgICAgICAgICAgICAgIGAtLSBHb2RBbmFseXNpc0FwaUFjY2VwdGFuY2VUZXN0LmNsYXNzCgoyMSBkaXJlY3RvcmllcywgNiBmaWxlcwo=",
+    "file_count": 5
+  }
+}

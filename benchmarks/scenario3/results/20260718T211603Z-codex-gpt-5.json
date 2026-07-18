@@ -1,0 +1,41 @@
+{
+  "efficiency": {
+    "wall_clock_s": 930,
+    "active_agent_s": 870,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0
+  },
+  "outcome_quality": {
+    "acceptance_pass": false,
+    "acceptance_coverage": 0.95,
+    "rework_turns": 2,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario3",
+    "case_id": "case-3-current-openspec-problem1",
+    "tool": "codex",
+    "model": "gpt-5",
+    "plinth_config": "bundled-openspec-propose",
+    "commit": "183e4123be67589b3e0766a3b7632740c7442771",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 1,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": ["openspec-propose"],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario3/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "c2NlbmFyaW8zL2RlbW8KfC0tIC5naXRrZWVwCnwtLSBwb20ueG1sCmAtLSBzcmMKICAgIHwtLSBtYWluCiAgICB8ICAgfC0tIGphdmEKICAgIHwgICB8ICAgYC0tIGluZm8KICAgIHwgICB8ICAgICAgIGAtLSBqYWIKICAgIHwgICB8ICAgICAgICAgICBgLS0gbXMKICAgIHwgICB8ICAgICAgICAgICAgICAgfC0tIEdvZEFnZ3JlZ2F0aW9uU2VydmljZS5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgIHwtLSBHb2RBbmFseXNpc0FwcGxpY2F0aW9uLmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgfC0tIEdvZFNvdXJjZUNsaWVudC5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgIHwtLSBHb2RTb3VyY2VzUHJvcGVydGllcy5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgIHwtLSBHb2RTdGF0c0NvbnRyb2xsZXIuamF2YQogICAgfCAgIHwgICAgICAgICAgICAgICB8LS0gSHR0cENsaWVudENvbmZpZ3VyYXRpb24uamF2YQogICAgfCAgIHwgICAgICAgICAgICAgICB8LS0gUmVzdEdvZFNvdXJjZUNsaWVudC5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgIGAtLSBTb3VyY2VLZXkuamF2YQogICAgfCAgIGAtLSByZXNvdXJjZXMKICAgIHwgICAgICAgfC0tIGFwcGxpY2F0aW9uLnlhbWwKICAgIHwgICAgICAgYC0tIG9wZW5hcGkKICAgIHwgICAgICAgICAgIGAtLSBnb2QtYW5hbHlzaXMtYXBpLnlhbWwKICAgIGAtLSB0ZXN0CiAgICAgICAgYC0tIGphdmEKICAgICAgICAgICAgYC0tIGluZm8KICAgICAgICAgICAgICAgIGAtLSBqYWIKICAgICAgICAgICAgICAgICAgICBgLS0gbXMKICAgICAgICAgICAgICAgICAgICAgICAgfC0tIEdvZEFnZ3JlZ2F0aW9uU2VydmljZVRlc3QuamF2YQogICAgICAgICAgICAgICAgICAgICAgICB8LS0gR29kU3RhdHNDb250cm9sbGVyVGVzdC5qYXZhCiAgICAgICAgICAgICAgICAgICAgICAgIGAtLSBSZXN0R29kU291cmNlQ2xpZW50V2lyZU1vY2tUZXN0LmphdmEKCjE0IGRpcmVjdG9yaWVzLCAxNSBmaWxlcwo=",
+    "file_count": 14
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "efficiency": {
+    "wall_clock_s": 248,
+    "active_agent_s": 220,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1.0,
+    "rework_turns": 5,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario1",
+    "case_id": "case-1-readme-only",
+    "tool": "codex",
+    "model": "gpt-5",
+    "plinth_config": "bare-agent",
+    "commit": "183e4123be67589b3e0766a3b7632740c7442771",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 0,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "YmVuY2htYXJrcy9zY2VuYXJpbzEvZGVtbwp8LS0gLmdpdGtlZXAKfC0tIHBvbS54bWwKYC0tIHNyYwogICAgfC0tIG1haW4KICAgIHwgICBgLS0gamF2YQogICAgfCAgICAgICBgLS0gaW5mbwogICAgfCAgICAgICAgICAgYC0tIGphYgogICAgfCAgICAgICAgICAgICAgIGAtLSBnb2RzCiAgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBHb2RBbmFseXNpc0FwcGxpY2F0aW9uLmphdmEKICAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZFNvdXJjZS5qYXZhCiAgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBHb2RTb3VyY2VDbGllbnQuamF2YQogICAgfCAgICAgICAgICAgICAgICAgICB8LS0gR29kU3RhdHNDb250cm9sbGVyLmphdmEKICAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZFN0YXRzU2VydmljZS5qYXZhCiAgICB8ICAgICAgICAgICAgICAgICAgIGAtLSBIdHRwR29kU291cmNlQ2xpZW50LmphdmEKICAgIGAtLSB0ZXN0CiAgICAgICAgYC0tIGphdmEKICAgICAgICAgICAgYC0tIGluZm8KICAgICAgICAgICAgICAgIGAtLSBqYWIKICAgICAgICAgICAgICAgICAgICBgLS0gZ29kcwogICAgICAgICAgICAgICAgICAgICAgICB8LS0gR29kQW5hbHlzaXNBcHBsaWNhdGlvblRlc3QuamF2YQogICAgICAgICAgICAgICAgICAgICAgICB8LS0gR29kU3RhdHNDb250cm9sbGVyVGVzdC5qYXZhCiAgICAgICAgICAgICAgICAgICAgICAgIGAtLSBHb2RTdGF0c1NlcnZpY2VUZXN0LmphdmEK",
+    "file_count": 10
+  }
+}

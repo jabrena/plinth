@@ -1,0 +1,44 @@
+{
+  "efficiency": {
+    "wall_clock_s": 240,
+    "active_agent_s": 230,
+    "tokens_in": 95000,
+    "tokens_out": 14000,
+    "tokens_total": 109000,
+    "cost_usd": 1.35
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1.0,
+    "rework_turns": 0,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario2",
+    "case_id": "case-2-all-problem1-requirements",
+    "tool": "claude-code",
+    "model": "claude-sonnet-5",
+    "plinth_config": "no-openspec",
+    "commit": "183e4123be67589b3e0766a3b7632740c7442771",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 2,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [
+      "300-frameworks-spring-boot-create-project",
+      "323-frameworks-spring-boot-testing-acceptance-tests"
+    ],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario2/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "YmVuY2htYXJrcy9zY2VuYXJpbzIvZGVtby8K4pSc4pSA4pSAIC5naXRrZWVwCuKUnOKUgOKUgCBwb20ueG1sCuKUlOKUgOKUgCBzcmMKICAgIOKUnOKUgOKUgCBtYWluCiAgICDilILCoMKgIOKUnOKUgOKUgCBqYXZhCiAgICDilILCoMKgIOKUgsKgwqAg4pSU4pSA4pSAIGluZm8KICAgIOKUgsKgwqAg4pSCwqDCoCAgICAg4pSU4pSA4pSAIGphYgogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAg4pSU4pSA4pSAIG1zCiAgICDilILCoMKgIOKUgsKgwqAgICAgICAgICAgICAg4pSc4pSA4pSAIEVycm9yUmVzcG9uc2UuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgIOKUnOKUgOKUgCBHbG9iYWxFeGNlcHRpb25IYW5kbGVyLmphdmEKICAgIOKUgsKgwqAg4pSCwqDCoCAgICAgICAgICAgICDilJzilIDilIAgR29kQW5hbHlzaXNBcHBsaWNhdGlvbi5qYXZhCiAgICDilILCoMKgIOKUgsKgwqAgICAgICAgICAgICAg4pSc4pSA4pSAIEdvZFNvdXJjZVByb3BlcnRpZXMuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgIOKUnOKUgOKUgCBHb2RTdGF0c1NlcnZpY2UuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgIOKUnOKUgOKUgCBHb2RTdGF0c1N1bVJlc3BvbnNlLmphdmEKICAgIOKUgsKgwqAg4pSCwqDCoCAgICAgICAgICAgICDilJzilIDilIAgR29kc0NvbnRyb2xsZXIuamF2YQogICAg4pSCwqDCoCDilILCoMKgICAgICAgICAgICAgIOKUlOKUgOKUgCBJbnZhbGlkUmVxdWVzdEV4Y2VwdGlvbi5qYXZhCiAgICDilILCoMKgIOKUlOKUgOKUgCByZXNvdXJjZXMKICAgIOKUgsKgwqAgICAgIOKUlOKUgOKUgCBhcHBsaWNhdGlvbi55bWwKICAgIOKUlOKUgOKUgCB0ZXN0CiAgICAgICAg4pSU4pSA4pSAIGphdmEKICAgICAgICAgICAg4pSU4pSA4pSAIGluZm8KICAgICAgICAgICAgICAgIOKUlOKUgOKUgCBqYWIKICAgICAgICAgICAgICAgICAgICDilJTilIDilIAgbXMKICAgICAgICAgICAgICAgICAgICAgICAg4pSU4pSA4pSAIEdvZFN0YXRzU3VtQVQuamF2YQoKMTMgZGlyZWN0b3JpZXMsIDEyIGZpbGVzCg==",
+    "file_count": 11
+  }
+}

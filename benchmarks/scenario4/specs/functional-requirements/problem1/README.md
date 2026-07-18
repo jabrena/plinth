@@ -10,8 +10,7 @@
 
 - Decimal conversion: For each god name, each character is converted to its Unicode integer value and those integers are concatenated as strings (for example, `Zeus` -> `90101117115`). The final result is the numeric sum of all per-name string representations.
 - Case sensitivity: The `filter` parameter accepts exactly one Unicode code point and matching is case-sensitive. The documented source data returns god names with uppercase initial letters, such as `Nike`, `Nemesis`, `Neptun`, and `Njord`, so `filter=N` is the meaningful value for the documented aggregate examples. A lowercase `filter=n` is valid but returns no matches for the current documented data.
-- HTTP timeouts: Outbound source calls use bounded connect and read timeouts with one attempt per source and no automatic retries; aggregation continues with the sources that return in time. When every selected source times out or fails, the response is HTTP 200 with `sum` `"0"`. See [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) and [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature).
-- Operational configuration (timeout values, source URLs): see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md).
+- HTTP timeouts: Outbound source calls use bounded connect and read timeouts with one attempt per source and no automatic retries; aggregation continues with the sources that return in time. When every selected source times out or fails, the response is HTTP 200 with `sum` `"0"`.
 - Data sources:
   - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
   - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
