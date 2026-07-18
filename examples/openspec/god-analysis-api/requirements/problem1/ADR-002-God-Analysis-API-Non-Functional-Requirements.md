@@ -1,6 +1,6 @@
 # ADR-002: God Analysis API - Non-Functional Requirements
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** Sat Mar 21 09:39:29 CET 2026
 **ISO 25010:2023 Focus:** Reliability (Fault Tolerance, Availability)
 
@@ -10,7 +10,7 @@ The God Analysis API serves educational and research consumers by aggregating my
 
 The primary quality challenge is ensuring reliable service delivery despite the inherent unreliability of external API dependencies. The external mythology APIs (hosted on my-json-server.typicode.com) exhibit variable response times and occasional failures that could impact the availability and reliability of the public educational/research API.
 
-**Scope alignment:** This ADR intentionally does **not** require automatic HTTP retries. Outbound calls use Spring `RestClient` with configured connect/read timeouts (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)). That keeps implementation and operations simpler than introducing a retry library and backoff policy.
+**Scope alignment:** This ADR intentionally does **not** require automatic HTTP retries. Outbound calls use bounded connect/read timeouts with **one attempt per source** (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) for client and configuration). That keeps implementation and operations simpler than introducing a retry library and backoff policy.
 
 ## Non-Functional Requirements
 
@@ -33,31 +33,17 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 ### Secondary Quality Characteristics
 
 **Performance Efficiency:**
-- Parallel execution to minimize overall response time
-- Timeout controls on `RestClient` (connect + read) to prevent indefinite blocking
+- Parallel execution of all **selected** pantheon sources per request to minimize overall response time
+- Per-source bounded connect and read waits; no indefinite blocking on a single upstream call
 - No retry loops—worst-case latency is bounded by parallel timeouts, not multiplied by retry counts
 
 **Functional Suitability:**
 - Correctness of partial results when some sources fail or time out
-- Appropriate handling when all selected sources fail (still a coherent API outcome as defined in the feature file)
+- When **all** selected sources time out or fail on the single attempt, return HTTP **200** with `sum` **`"0"`** — the same empty-aggregate contract as when no retrieved name matches the filter (see [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature) integration scenario)
 
-## Technical Decisions
+## Implementation boundary
 
-**Timeout Strategy:**
-- Configure `RestClient` (via `ClientHttpRequestFactory` or Spring Boot–supported properties) with explicit **connect** and **read** timeouts; document defaults in `application.yml` (for example 5000 ms each unless overridden)
-- One HTTP attempt per source; on timeout or transport error, treat that source as absent for aggregation and continue with others
-
-**Configuration Management:**
-- Single default configuration provides production-ready settings
-- Environment variables allow runtime customization of URLs and timeout values without profile complexity
-
-**Execution Model:**
-- Parallel calls to all three external APIs when selected (Greek, Roman, Nordic)
-- Wait until each parallel call completes successfully or times out; then merge lists and compute the aggregate
-
-**Error Handling:**
-- Graceful degradation with partial results when some sources fail or time out
-- Consistent JSON response format regardless of data completeness (public contract: `sum` field; optional structured logging for diagnostics)
+Non-functional outcomes above are binding. How they are realized—HTTP client, timeout configuration, parallel execution model, health endpoints, and test isolation—is specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md). Do not restate stack or configuration choices in this ADR.
 
 ## Alternatives Considered
 
@@ -65,16 +51,13 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Rejected due to poor performance characteristics (additive latency across sources)
 
 **Automatic Retries (e.g. Resilience4j, Spring Retry):**
-- **Deferred / out of scope for this user story.** Adds dependency surface, configuration, and test complexity beyond the original problem statement. Bounded `RestClient` timeouts plus partial aggregation are sufficient for v1.
+- **Deferred / out of scope for this user story.** Adds dependency surface, configuration, and test complexity beyond the original problem statement. Bounded per-source timeouts plus partial aggregation are sufficient for v1.
 
 **Circuit Breaker Pattern:**
 - Not implemented in v1 because external APIs are not under our control and temporary failures are expected behavior
 - Will be reconsidered if monitoring reveals persistent failure patterns indicating systematic issues
 
-**Caching Strategy:**
-- Considered but rejected for initial implementation
-- Data freshness requirements and filtering complexity make caching less beneficial
-- May be evaluated in future iterations based on usage patterns
+Response caching is out of scope for v1; see [ADR-001](ADR-001-God-Analysis-API-Functional-Requirements.md) (*Scope and Product Decisions* and *Alternatives Considered*).
 
 ## Quality Metrics & Success Criteria
 
@@ -90,7 +73,7 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 **Monitoring Approach:**
 - Log external API call outcomes (success, timeout, failure) with structured logging
 - Track response completeness (full vs. partial results) via application logs where useful
-- Basic health checks via Spring Boot Actuator endpoints
+- Basic health checks via a dedicated health endpoint (see ADR-003)
 - Logging-based monitoring is sufficient for this User Story scope (educational/research API)
 - Advanced observability stacks (Prometheus, Grafana, ELK) are not required for initial implementation
 
@@ -108,14 +91,13 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Partial results require consuming services to tolerate variable logical completeness (still one consistent JSON contract)
 
 **Follow-up Work:**
-- Evaluate caching strategies based on usage patterns and performance requirements
 - Establish SLA agreements with external API providers if possible
 - Revisit automatic retries only if product scope explicitly requires them
 
 ## References
 
 - [ADR-001: God Analysis API Functional Requirements](ADR-001-God-Analysis-API-Functional-Requirements.md)
-- [ADR-003: God Analysis API — Technology Stack](ADR-003-God-Analysis-API-Technology-Stack.md) — `RestClient` timeouts and testing
+- [ADR-003: God Analysis API — Technology Stack](ADR-003-God-Analysis-API-Technology-Stack.md) — stack, configuration, and test harness implementing these NFRs
 - [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
 - [Feature Specification](US-001_god_analysis_api.feature)
 - ISO/IEC 25010:2023 Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE)
