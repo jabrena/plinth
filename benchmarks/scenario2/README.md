@@ -63,12 +63,6 @@ Use this prompt to run Scenario 2 against the Gherkin feature:
 ```bash
 execute @benchmarks/scenario2/gherkin/scenario2.feature
 and verify that acceptance-tests passes.
-
-Constraints for this run:
-- Use the full benchmarks/scenario2/specs/functional-requirements/problem1/ package as requirements input
-- Do not use technical-requirements/openspec/
-- Implement in benchmarks/scenario2/demo/
-- When the run completes, write metrics to benchmarks/scenario2/results/<run-id>.json
-  using the minimal v1 fields documented in benchmarks/scenario2/results/README.md
-- case_id must be case-2-all-problem1-requirements and scenario must be scenario2
 ```
+
+Run constraints are defined in the feature file.

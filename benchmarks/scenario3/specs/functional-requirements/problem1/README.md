@@ -10,8 +10,8 @@
 
 - Decimal conversion: For each god name, each character is converted to its Unicode integer value and those integers are concatenated as strings (for example, `Zeus` -> `90101117115`). The final result is the numeric sum of all per-name string representations.
 - Case sensitivity: The `filter` parameter accepts exactly one Unicode code point and matching is case-sensitive. The documented source data returns god names with uppercase initial letters, such as `Nike`, `Nemesis`, `Neptun`, and `Njord`, so `filter=N` is the meaningful value for the documented aggregate examples. A lowercase `filter=n` is valid but returns no matches for the current documented data.
-- HTTP timeouts: Outbound calls use Spring `RestClient` with connect/read timeouts set once in configuration (defaults in `application.yml`; optional environment variable overrides). There is no automatic retry of failed or timed-out requests; aggregation continues with the sources that return in time.
-- Configuration: Single default configuration with environment variable overrides for operational flexibility.
+- HTTP timeouts: Outbound source calls use bounded connect and read timeouts with one attempt per source and no automatic retries; aggregation continues with the sources that return in time. When every selected source times out or fails, the response is HTTP 200 with `sum` `"0"`. See [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) and [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature).
+- Operational configuration (timeout values, source URLs): see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md).
 - Data sources:
   - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
   - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
@@ -25,8 +25,8 @@ Feature: God Analysis API
 # Notes:
 # - Decimal Conversion Rule: For each name, convert each char to its Unicode int value,
 #   then concatenate those ints as strings (e.g., "Zeus" -> Z(90)e(101)u(117)s(115) -> "90101117115").
-# - Outbound HTTP uses Spring RestClient with connect/read timeouts from application configuration (defaults in application.yml).
-# - If a source request hits the configured timeout, aggregation continues with the other sources (partial result).
+# - If a selected source times out or fails on the single outbound attempt, aggregation continues with the remaining sources (no retries).
+# - If every selected source times out or fails, the response is still HTTP 200 with sum "0" (no contributing names).
 # - Filtering is case-sensitive. The documented source data uses uppercase initials, so "N" matches
 #   Nike, Nemesis, Neptun, and Njord; lowercase "n" is valid but returns no matches for that data.
 # - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
@@ -35,7 +35,7 @@ Feature: God Analysis API
 
 Background:
     Given the God Analysis API is available at "/api/v1"
-    And the system is configured with HTTP connect and read timeouts for outbound RestClient calls (default 5 seconds in application configuration)
+    And the system is configured with bounded HTTP connect and read timeouts for outbound source calls
 
 Scenario: Happy path - Get sum with explicit sources
     When the client sends a GET request to "/gods/stats/sum" with query parameters "filter" = "N" and "sources" = "greek,roman,nordic"

@@ -71,7 +71,8 @@ paths:
         "200":
           description: |
             Successful computation. When no names match the filter, `sum` is `"0"`.
-            When a source times out, the service still responds with 200 and `sum` reflects only data from sources that responded in time.
+            When a source times out or fails, the service still responds with 200 and `sum` reflects only data from sources that responded in time.
+            When **all** selected sources time out or fail, the service still responds with 200 and `sum` is `"0"`.
           content:
             application/json:
               schema:

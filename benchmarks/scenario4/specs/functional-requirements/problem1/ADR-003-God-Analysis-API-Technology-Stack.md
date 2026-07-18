@@ -38,7 +38,7 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 
 ### Relationship to ADR-002
 
-[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) specifies **bounded waits** via **RestClient** connect/read timeouts, **parallel calls**, and **partial results** when a source times out—**without** a separate retry policy. Implementation uses **one attempt per source** per request.
+[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) binds **bounded per-source connect/read waits**, **parallel fetch** of selected pantheons, **partial aggregation** when a source times out or fails, and **no automatic retry policy**. This ADR implements those outcomes with **RestClient** (connect/read timeouts in `application.yml`), **CompletableFuture** with virtual threads for parallel outbound calls, and **one attempt per source** per request.
 
 ## Decision Drivers
 
@@ -50,7 +50,7 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 - **Operational Readiness**: Production monitoring and health check capabilities
 - **Community Support**: Active community and extensive documentation
 - **Dependency Management**: Mature ecosystem with curated dependencies
-- **Requirement traceability**: Timeout and partial-result behavior must remain visible and testable (see implementation plan)
+- **Requirement traceability**: Timeout and partial-result behavior must remain visible and testable (see [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature) and ADR-002)
 - **Test isolation**: Timeout tests must not depend on execution order or shared mutable stub state
 
 ## Considered Options (Runtime Platform)
@@ -324,19 +324,18 @@ src/test/resources/
 
 - Timeout behavior validated with **deterministic delay simulation** and **per-test isolation**
 - **WireMock** provides both **response stubs** and **fault simulation** (delays, failures) in one lightweight tool
-- Spring stack + optional Testcontainers is a well-documented industry pattern
+- **Fast test execution** for timeout scenarios using **in-process WireMock**—no Docker overhead on the primary integration path
 - **Single configuration file** provides consistent baseline with environment variable flexibility
 
 ### Negative
 
-- **Fast test execution** when using in-process WireMock—no Docker overhead
 - Transient upstream failures are **not** retried (by design); operators rely on timeouts and partial results
-- Higher memory use on developer laptops when running full integration suite with containers
+- **Heavier footprint** than a minimal HTTP-only library stack (Spring Boot plus test dependencies on developer machines)
 
 ### Neutral
 
-- Java version should match org standard (25 vs 26)
-- Local runs may use Testcontainers reuse / Ryuk as per team policy
+- **Java 25** is the baseline JDK for this module (see Decision Outcome)
+- **In-process WireMock** is the default; Testcontainers-hosted WireMock remains optional if a team adopts it later
 
 ## Follow-up Actions
 
@@ -401,7 +400,6 @@ If a future Rest Assured + Groovy release **demonstrably** fixes `applyProxySett
 - [ADR-002: God Analysis API Non-Functional Requirements](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)
 - [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
 - [Feature Specification](US-001_god_analysis_api.feature)
-- [US-001-plan-analysis.plan.md](US-001-plan-analysis.plan.md)
 - [Spring Boot 4.0.4 Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
 - [Spring Framework — RestClient](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-restclient) (outbound HTTP and **acceptance tests** in this ADR)
 - [WireMock](https://wiremock.org/) — including Testcontainers integration where applicable

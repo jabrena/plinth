@@ -12,11 +12,10 @@ Feature: Scenario 1 — Case 1 minimal functional notes
   @acceptance-test
   Scenario: Case 1 run records minimal v1 metrics as JSON
     Given only "benchmarks/scenario1/specs/functional-requirements/README.md" is provided as requirements input
-    And a full "benchmarks/scenario1/specs/functional-requirements/problem1/" package is not provided
-    And "benchmarks/scenario1/specs/technical-requirements/openspec/" is not provided
     When the agent implements the God Analysis API in "benchmarks/scenario1/demo/"
     And the run completes
     Then a result JSON file exists under "benchmarks/scenario1/results/"
+    And the result JSON follows the minimal v1 fields documented in "benchmarks/scenario1/results/README.md"
     And the result JSON includes required efficiency fields "wall_clock_s", "tokens_total", and "cost_usd"
     And the result JSON includes required outcome fields "acceptance_pass" and "rework_turns"
     And the result JSON includes required Plinth usage fields "skills_count", "agents_count", "skills", and "agents"

@@ -24,6 +24,7 @@ Feature: Scenario 2 — Case 2 full functional requirements package
     When the agent implements the God Analysis API in "benchmarks/scenario2/demo/"
     And the run completes
     Then a result JSON file exists under "benchmarks/scenario2/results/"
+    And the result JSON follows the minimal v1 fields documented in "benchmarks/scenario2/results/README.md"
     And the result JSON includes required efficiency fields "wall_clock_s", "tokens_total", and "cost_usd"
     And the result JSON includes required outcome fields "acceptance_pass" and "rework_turns"
     And the result JSON includes required Plinth usage fields "skills_count", "agents_count", "skills", and "agents"

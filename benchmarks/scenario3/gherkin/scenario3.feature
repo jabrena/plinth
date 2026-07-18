@@ -1,8 +1,8 @@
-Feature: Scenario 3 — Case 3 functional and technical OpenSpec requirements
+Feature: Scenario 3 — Case 3 OpenSpec technical requirements
   As a Plinth maintainer running the project benchmark harness
-  I want Case 3 runs to use co-located functional requirements and OpenSpec technical requirements,
-  keep derivation links inside the scenario specs tree, and persist a metrics result JSON under results/
-  So that we can compare the richest packaging step against Scenario 1 and Scenario 2 with measurable cost and quality
+  I want Case 3 runs to use OpenSpec technical requirements as the implementation input
+  and persist a metrics result JSON under results/
+  So that we can compare OpenSpec-driven implementation against Scenario 1 and Scenario 2 with measurable cost and quality
 
   Background:
     Given a Case 3 benchmark run for scenario "scenario3"
@@ -11,20 +11,12 @@ Feature: Scenario 3 — Case 3 functional and technical OpenSpec requirements
 
   @acceptance-test
   Scenario: Case 3 run records minimal v1 metrics as JSON
-    Given the functional requirements input is "benchmarks/scenario3/specs/functional-requirements/problem1/"
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/README.md" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/US-001_God_Analysis_API.md" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/US-001_god_analysis_api.feature" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/US-001-god-analysis-api.openapi.yaml" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/my-json-server-oas.yaml" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/ADR-001-God-Analysis-API-Functional-Requirements.md" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/ADR-002-God-Analysis-API-Non-Functional-Requirements.md" is provided
-    And "benchmarks/scenario3/specs/functional-requirements/problem1/ADR-003-God-Analysis-API-Technology-Stack.md" is provided
-    And the technical requirements input is "benchmarks/scenario3/specs/technical-requirements/openspec/"
-    And OpenSpec source links resolve under functional-requirements/problem1/
+    Given the technical requirements input is "benchmarks/scenario3/specs/technical-requirements/openspec/"
+    And "examples/openspec/god-analysis-api/" is not used as scenario input authority
     When the agent implements the God Analysis API in "benchmarks/scenario3/demo/"
     And the run completes
     Then a result JSON file exists under "benchmarks/scenario3/results/"
+    And the result JSON follows the minimal v1 fields documented in "benchmarks/README.md"
     And the result JSON includes required efficiency fields "wall_clock_s", "tokens_total", and "cost_usd"
     And the result JSON includes required outcome fields "acceptance_pass" and "rework_turns"
     And the result JSON includes required Plinth usage fields "skills_count", "agents_count", "skills", and "agents"

@@ -1,6 +1,6 @@
 # ADR-001: God Analysis API Functional Requirements
 
-**Status:** Proposed
+**Status:** Accepted
 **Date:** Fri Mar 20 20:23:52 CET 2026
 **Decisions:** REST API for cross-pantheon mythology data analysis with Unicode-based name conversion and aggregation
 **Primary interface(s):** REST/HTTP API
@@ -21,12 +21,12 @@ The primary consumers are educational and research platforms with moderately tec
 - **Response format:** JSON object containing a `sum` field with the calculated aggregate value
 
 ### Data Processing Workflow
-1. **Source Integration:** Consume data from three external god APIs:
+1. **Source Integration:** Consume data concurrently from each **selected** external god API (parallel fetch; see [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)):
    - Greek API: `https://my-json-server.typicode.com/jabrena/latency-problems/greek`
    - Roman API: `https://my-json-server.typicode.com/jabrena/latency-problems/roman`
    - Nordic API: `https://my-json-server.typicode.com/jabrena/latency-problems/nordic`
 
-2. **Name Filtering:** Apply case-sensitive filtering based on the first character of god names
+2. **Name Filtering:** Apply case-sensitive filtering based on the first Unicode code point of god names
 
 3. **Decimal Conversion:** Transform each filtered god name using Unicode-based algorithm:
    - Convert each character to its Unicode integer value
@@ -34,42 +34,20 @@ The primary consumers are educational and research platforms with moderately tec
    - Sum all converted name values to produce final result
 
 ### Error Handling and Resilience
-- **Timeout Management:** Outbound HTTP uses Spring `RestClient` with connect/read timeouts defined in `application.yml` (e.g. 5 seconds per call unless overridden by environment variables). This is **client configuration only**—no separate retry library or retry policy is required for this user story.
+- **Timeout Management:** Outbound calls use bounded connect/read timeouts with **one attempt per source** and **no automatic retry policy** (see [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md))
 - **Graceful Degradation:** Continue processing with partial results when individual sources timeout or fail on the single attempt
 - **Invalid Parameters:** Return HTTP 400 with error messages for malformed requests (missing parameters, invalid filter length, invalid source names)
 - **Source Unavailability:** Process available sources when others are unreachable or time out
+- **All sources unavailable:** When every selected source times out or fails on the single attempt, return HTTP 200 with `sum` `"0"` (no contributing names; see ADR-002 and the feature file)
 
-## Technical Decisions
+## Scope and Product Decisions
 
-### Language & Framework
-**Decision:** Java 25 with Spring Boot 4.0.4
-**Rationale:** Leverages team expertise with modern Java features and mature Spring ecosystem for REST API development.
+- **Service shape:** Monolithic REST service with a single focused endpoint (`GET /api/v1/gods/stats/sum`)
+- **Access model:** Public API with no authentication or rate limiting for educational and research use
+- **Data freshness:** No response caching from external god APIs; each request fetches current upstream data subject to timeout and partial-aggregation rules in ADR-002
+- **Integration:** Direct HTTP consumption of the three documented external god APIs
 
-### REST/HTTP API
-
-#### API Design & Architecture
-**Decision:** Monolithic REST service with single focused endpoint
-**Rationale:** Simple, targeted use case doesn't warrant microservices complexity. Single endpoint design aligns with specific customer requirement for god statistics aggregation.
-
-#### Authentication & Security
-**Decision:** Public API with no authentication or rate limiting
-**Rationale:** Educational and research use case benefits from open access. No sensitive data handling or commercial concerns requiring access controls.
-
-#### Data & Persistence
-**Decision:** No caching, direct calls to external APIs with `RestClient` timeouts configured once in application configuration
-**Rationale:** Simplifies architecture and ensures real-time data access. Bounded waits and partial aggregation provide enough resilience for this scope without caching or outbound retries.
-
-#### Integration & Infrastructure
-**Decision:** Direct HTTP client integration with external god APIs, no specific deployment requirements
-**Rationale:** Straightforward integration pattern sufficient for three well-defined external endpoints. Deployment flexibility maintained for various environments.
-
-**Implementation note:** Outbound HTTP and test clients are specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (**RestClient** only). Non-functional expectations for timeouts and partial results are summarized in [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md); there is **no** separate retry policy.
-
-#### Testing & Monitoring
-**Decision:** Acceptance and integration testing as defined in feature file with fast execution requirements, basic monitoring approach
-**Rationale:** Test scenarios cover critical paths including timeout and filtering behavior. Tests must run fast to support rapid development cycles—timeout scenarios use deterministic stub delays (for example WireMock) rather than real network waits. Basic observability sufficient for educational use case.
-
-**HTTP-level acceptance tests:** Use **Spring Framework `RestClient`** against the application bound to a random port (`@SpringBootTest(webEnvironment = RANDOM_PORT)`), as decided in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (supersedes Rest Assured for this module to avoid Groovy/JVM compatibility issues on Java 21+).
+Implementation technology (framework, HTTP client, configuration layout, and test stack) is recorded in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md).
 
 ## Alternatives Considered
 
@@ -85,24 +63,13 @@ The primary consumers are educational and research platforms with moderately tec
 **Rejected:** Separate services for each pantheon or processing step
 **Reason:** Single focused use case doesn't justify distributed system complexity. Monolithic approach provides simpler deployment and maintenance.
 
-## Configuration Strategy
-
-**Single Default Profile Approach:**
-- All configuration in `application.yml` with production-ready defaults
-- External API URLs configurable via environment variables with sensible defaults
-- `RestClient` connect/read timeouts externalized (defaults sufficient for local and CI; overrides via environment variables when needed)
-- No profile-specific configuration files - single source of truth
-
-**Rationale:** Simplified configuration management with single default profile reduces complexity while maintaining operational flexibility through environment variables. Outbound retries are intentionally out of scope to avoid extra libraries and policy tuning.
-
 ## Consequences
 
 ### Positive Impacts
-- **Simplicity:** Straightforward architecture reduces development and maintenance overhead
+- **Simplicity:** Focused functional scope reduces ambiguity for implementers and consumers
 - **Accessibility:** Public API enables easy integration for educational platforms
-- **Resilience:** Timeout handling ensures partial results even with external API issues
-- **Testability:** Well-defined scenarios enable comprehensive testing coverage
-- **Configurability:** Single configuration file with environment variable overrides supports multiple deployment scenarios
+- **Resilience:** Partial aggregation when upstream sources fail keeps the service usable
+- **Testability:** Acceptance criteria in the feature file cover happy path, validation, and timeout behavior
 
 ### Trade-offs
 - **Performance:** No caching may result in slower responses and higher external API load
@@ -111,12 +78,13 @@ The primary consumers are educational and research platforms with moderately tec
 
 ### Follow-up Work
 - Implement comprehensive error logging for external API failures
-- Consider adding API documentation (OpenAPI/Swagger) for educational platform integration
 - Monitor external API reliability and consider fallback strategies if needed
 - Evaluate need for basic usage metrics collection
 
 ## References
 
+- [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) - Reliability, timeouts, and partial results
+- [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) - Framework, HTTP client, configuration, and test stack
 - [US-001_God_Analysis_API.md](US-001_God_Analysis_API.md) - User story and requirements
 - [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature) - Acceptance criteria and test scenarios
 - External God APIs:

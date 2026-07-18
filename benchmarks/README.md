@@ -10,14 +10,14 @@ Each runnable scenario adds structured inputs so agents have more to build from 
 
 | | `scenario1` | `scenario2` | `scenario3` | `scenario4` |
 | --- | --- | --- | --- | --- |
-| **Richness level** | Minimal | Full functional package | Functional + technical (OpenSpec) | Functional + technical (OpenSpec) |
+| **Richness level** | Minimal | Full functional package | OpenSpec technical requirements | OpenSpec technical requirements |
 | **Case id** | `case-1-readme-only` | `case-2-all-problem1-requirements` | `case-3-current-openspec-problem1` | `case-4-current-openspec-problem1` |
-| **Functional input** | `specs/functional-requirements/README.md` only | `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | Same functional package as Case 2 | Same functional package as Case 2 |
-| **Technical input** | — | — | `specs/technical-requirements/openspec/` linked to co-located FR | `specs/technical-requirements/openspec/` linked to co-located FR |
+| **Functional input** | `specs/functional-requirements/README.md` only | `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | — | — |
+| **Implementation input** | — | — | `specs/technical-requirements/openspec/` | `specs/technical-requirements/openspec/` |
 | **Bundled Plinth skills** | — | — | `openspec-propose` under `.agents/skills/` | `@skills/042-planning-openspec/` |
 | **Runnable** | Yes | Yes | Yes | Yes |
-| **Delta vs previous scenario** | Baseline: sparse functional notes only | Adds full `problem1/` inventory; still no OpenSpec | Adds OpenSpec technical plan **plus** bundled propose skill | Same input shape as Case 3; canonical reference run for the richest step |
-| **Intent** | Measure baseline with minimal notes | Measure rich FR without OpenSpec | Measure FR + OpenSpec with propose-workflow support | Measure FR + pre-linked OpenSpec technical plan |
+| **Delta vs previous scenario** | Baseline: sparse functional notes only | Adds full `problem1/` inventory; still no OpenSpec | Adds OpenSpec implementation input **plus** bundled propose skill | Same OpenSpec input shape as Case 3; canonical reference run for the richest step |
+| **Intent** | Measure baseline with minimal notes | Measure rich FR without OpenSpec | Measure implementation from OpenSpec with propose-workflow support | Measure implementation from pre-linked OpenSpec technical plan |
 
 Campaigns SHOULD compare cost/tokens/quality across this ladder for the same product acceptance outcome.
 
@@ -34,13 +34,13 @@ benchmarks/
 │   ├── README.md
 │   ├── specs/functional-requirements/problem1/
 │   └── gherkin/scenario2.feature
-├── scenario3/                # functional + technical (OpenSpec)
+├── scenario3/                # OpenSpec technical requirements
 │   ├── README.md
 │   ├── specs/
 │   │   ├── functional-requirements/problem1/
 │   │   └── technical-requirements/openspec/
 │   └── gherkin/scenario3.feature
-└── scenario4/                # functional + technical (OpenSpec)
+└── scenario4/                # OpenSpec technical requirements
     ├── README.md
     ├── specs/
     │   ├── functional-requirements/problem1/
@@ -111,28 +111,3 @@ Optional but recommended when available: `active_agent_s`, `acceptance_coverage`
 1. Rank by `cost_usd` and/or `tokens_total` only among runs where `acceptance_pass = true`.
 2. Keep `acceptance_pass = false` runs in a separate failure cohort; do not mix them into the cost/token leaderboard.
 3. Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 3 → 4 richness steps.
-
-## Out of scope
-
-This harness does **not** define JVM `/benchmark` workloads. JMeter, Gatling, and JMH application performance testing remain out of scope for `benchmarks/`.
-
-## Optional campaign protocol notes
-
-Recorded for operator guidance in this change; not automation code.
-
-### Plinth configurations
-
-- **Full Plinth** — full Plinth agents, skills, and OpenSpec workflow
-- **No OpenSpec** — Plinth without OpenSpec change management
-- **Bare agent** — agent without Plinth project scaffolding
-
-### Tools
-
-- Cursor
-- Codex
-- GitHub Copilot
-- Claude Code
-
-### Models
-
-Model catalog is deferred (TBD / follow-up ADR). Early campaigns MUST pin the model explicitly in each run record via the `model` label.

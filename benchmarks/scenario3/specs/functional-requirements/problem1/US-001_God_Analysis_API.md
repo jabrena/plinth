@@ -12,8 +12,8 @@ See: [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature)
 
 - **Decimal Conversion Rule:** For each god name, each character is converted to its Unicode integer value and those integers are concatenated as strings (e.g., "Zeus" → Z(90)e(101)u(117)s(115) → "90101117115"). The final result is the numeric sum of all per-name string representations.
 - **Case sensitivity:** The `filter` parameter accepts exactly one Unicode code point and matching is case-sensitive. The documented source data returns god names with uppercase initial letters, such as `Nike`, `Nemesis`, `Neptun`, and `Njord`, so `filter=N` is the meaningful value for the documented aggregate examples. A lowercase `filter=n` is valid but returns no matches for the current documented data.
-- **HTTP timeouts:** Outbound calls use Spring `RestClient` with connect/read timeouts set once in configuration (defaults in `application.yml`; optional environment variable overrides). There is **no** automatic retry of failed or timed-out requests—scope stays limited to sensible client timeouts and partial aggregation when a source does not return in time.
-- **Configuration:** Single default configuration with environment variable overrides for operational flexibility.
+- **HTTP timeouts:** Outbound source calls use bounded connect and read timeouts with **one attempt per source** and **no automatic retries**; aggregation continues with the sources that return in time. When every selected source times out or fails, the response is HTTP 200 with `sum` `"0"`. See [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) and [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature).
+- **Operational configuration** (timeout values, source URLs): see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md).
 - **Data sources:**
   - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
   - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
