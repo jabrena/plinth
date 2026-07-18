@@ -4,16 +4,20 @@ Reproducible **project effectiveness** benchmark for comparing agent outcomes on
 
 This harness is documentation and campaign protocol only (Markdown + Gherkin). It is **not** a Maven module and is **not** part of the JVM `/benchmark` command.
 
-## Information richness progression
+## Scenarios (Cases 1–4)
 
-Each runnable scenario adds structured inputs so agents have more to build from than the previous case:
+Each runnable scenario adds structured inputs so agents have more to build from than the previous case. Scenarios are columns; each row explains one dimension of the information-richness ladder.
 
-| Level | Scenario | What the agent gets | Intent |
-| --- | --- | --- | --- |
-| Minimal | `scenario1` | Only a problem README under `specs/functional-requirements/` | Baseline with sparse functional notes |
-| Functional package | `scenario2` | Full `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | Rich functional requirements, still no OpenSpec |
-| Functional + technical | `scenario3` | Same functional package **plus** `specs/technical-requirements/openspec/` linked to those FR files | OpenSpec technical plan derived from co-located FR |
-| Functional + technical | `scenario4` | Same functional package **plus** `specs/technical-requirements/openspec/` linked to those FR files | OpenSpec technical plan derived from co-located FR |
+| | `scenario1` | `scenario2` | `scenario3` | `scenario4` |
+| --- | --- | --- | --- | --- |
+| **Richness level** | Minimal | Full functional package | Functional + technical (OpenSpec) | Functional + technical (OpenSpec) |
+| **Case id** | `case-1-readme-only` | `case-2-all-problem1-requirements` | `case-3-current-openspec-problem1` | `case-4-current-openspec-problem1` |
+| **Functional input** | `specs/functional-requirements/README.md` only | `specs/functional-requirements/problem1/` (user story, Gherkin, OpenAPI, ADRs) | Same functional package as Case 2 | Same functional package as Case 2 |
+| **Technical input** | — | — | `specs/technical-requirements/openspec/` linked to co-located FR | `specs/technical-requirements/openspec/` linked to co-located FR |
+| **Bundled Plinth skills** | — | — | `openspec-propose` under `.agents/skills/` | `@skills/042-planning-openspec/` |
+| **Runnable** | Yes | Yes | Yes | Yes |
+| **Delta vs previous scenario** | Baseline: sparse functional notes only | Adds full `problem1/` inventory; still no OpenSpec | Adds OpenSpec technical plan **plus** bundled propose skill | Same input shape as Case 3; canonical reference run for the richest step |
+| **Intent** | Measure baseline with minimal notes | Measure rich FR without OpenSpec | Measure FR + OpenSpec with propose-workflow support | Measure FR + pre-linked OpenSpec technical plan |
 
 Campaigns SHOULD compare cost/tokens/quality across this ladder for the same product acceptance outcome.
 
@@ -46,16 +50,7 @@ benchmarks/
 
 Each scenario folder owns its input contract (`README.md`), requirements under `specs/`, acceptance criteria (`gherkin/` with exactly one `@acceptance-test` scenario), and run records under `results/` (JSON per completed run).
 
-## Scenario table (Cases 1–4)
-
-| Scenario | Case id | Input | Runnable |
-| --- | --- | --- | --- |
-| `scenario1` | `case-1-readme-only` | `benchmarks/scenario1/specs/functional-requirements/README.md` only | Yes |
-| `scenario2` | `case-2-all-problem1-requirements` | `benchmarks/scenario2/specs/functional-requirements/problem1/` (full inventory) | Yes |
-| `scenario3` | `case-3-current-openspec-problem1` | `specs/functional-requirements/problem1/` + `specs/technical-requirements/openspec/` (OpenSpec links to FR) | Yes |
-| `scenario4` | `case-4-current-openspec-problem1` | `specs/functional-requirements/problem1/` + `specs/technical-requirements/openspec/` (OpenSpec links to FR) | Yes |
-
-Upstream provenance may originate from `examples/openspec/god-analysis-api/`. Runnable scenario authority is the harness-local `specs/` trees above. Do not rewrite the upstream example trees as part of a campaign run.
+Input paths above are relative to each scenario folder (for example `benchmarks/scenario2/specs/functional-requirements/problem1/`). Upstream provenance may originate from `examples/openspec/god-analysis-api/`. Runnable scenario authority is the harness-local `specs/` trees. Do not rewrite the upstream example trees as part of a campaign run.
 
 ## Metrics scorecard
 
