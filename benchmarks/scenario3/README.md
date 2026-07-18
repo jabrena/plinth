@@ -36,6 +36,18 @@ Measure how agents perform when implementation input is OpenSpec technical requi
 - Technical requirements (OpenSpec): [specs/technical-requirements/openspec/](specs/technical-requirements/openspec/)
 - Co-located functional requirements (derivation links only): [specs/functional-requirements/problem1/](specs/functional-requirements/problem1/)
 - Acceptance: [gherkin/scenario3.feature](gherkin/scenario3.feature)
+- Results guide: [results/README.md](results/README.md)
+- Example result JSON: [results/example.result.json](results/example.result.json)
+
+## Metrics and results JSON
+
+Every completed run MUST persist one JSON file under `results/` conforming to [metrics-v1.schema.json](../metrics-v1.schema.json):
+
+- Schema: [../metrics-v1.schema.json](../metrics-v1.schema.json)
+- Example: [../metrics-v1.example.json](../metrics-v1.example.json)
+- Case template: [results/example.result.json](results/example.result.json)
+
+Canonical definitions for all scenarios: [../README.md](../README.md).
 
 ## Execution prompt
 

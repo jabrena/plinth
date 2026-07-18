@@ -1,34 +1,53 @@
 Feature: Scenario 3 — Case 3 OpenSpec technical requirements
   As a Plinth maintainer running the project benchmark harness
-  I want Case 3 runs to use OpenSpec technical requirements as the implementation input
+  I want Case 3 runs to use OpenSpec technical requirements from scenario3 only as the implementation input
   and persist a metrics result JSON under results/
   So that we can compare OpenSpec-driven implementation against Scenario 1 and Scenario 2 with measurable cost and quality
+
+  # Agent protocol (Case 3):
+  # - Derive ALL implementation requirements ONLY from benchmarks/scenario3/specs/technical-requirements/openspec/.
+  # - Do NOT read benchmarks/scenario3/specs/functional-requirements/problem1/ directly as agent input
+  #   (those files exist only so OpenSpec derivation links resolve within the harness).
+  # - Do NOT use examples/openspec/god-analysis-api/ or other scenarios as input authority.
 
   Background:
     Given a Case 3 benchmark run for scenario "scenario3"
     And the run case id is "case-3-current-openspec-problem1"
     And results are stored under "benchmarks/scenario3/results/"
+    And the Case 3 allowlist is the only authorized reading set for requirements and product behavior:
+      | path |
+      | benchmarks/scenario3/specs/technical-requirements/openspec/ |
+      | benchmarks/scenario3/gherkin/scenario3.feature |
+      | benchmarks/scenario3/results/README.md |
+      | benchmarks/scenario3/README.md |
+      | benchmarks/scenario3/.agents/skills/openspec-propose/SKILL.md |
+      | benchmarks/metrics-v1.schema.json |
+      | benchmarks/metrics-v1.example.json |
 
   @acceptance-test
   Scenario: Case 3 run records minimal v1 metrics as JSON
-    Given the technical requirements input is "benchmarks/scenario3/specs/technical-requirements/openspec/"
-    And "examples/openspec/god-analysis-api/" is not used as scenario input authority
-    When the agent implements the God Analysis API in "benchmarks/scenario3/demo/"
+    Given "benchmarks/scenario3/specs/technical-requirements/openspec/" is the sole implementation specification
+    And only files on the Case 3 allowlist are read for requirements, design, or acceptance criteria
+    And the agent must not read, open, grep, or search for requirements under any path outside "benchmarks/scenario3/" except harness metrics files on the Case 3 allowlist under "benchmarks/"
+    And "benchmarks/scenario3/specs/functional-requirements/problem1/" must not be read directly for requirements or technology choices
+    And "benchmarks/scenario1/" must not be read or used as scenario input
+    And "benchmarks/scenario2/" must not be read or used as scenario input
+    And "benchmarks/scenario4/" must not be read or used as scenario input
+    And "examples/openspec/god-analysis-api/" must not be read or used as scenario input
+    And no "ADR-*" file outside "benchmarks/scenario3/" may be read for requirements or technology choices
+    And no "openspec/changes/" design, tasks, or spec files outside "benchmarks/scenario3/" may be read for requirements
+    When the agent implements the product behavior documented in "benchmarks/scenario3/specs/technical-requirements/openspec/" in "benchmarks/scenario3/demo/"
     And the run completes
-    Then a result JSON file exists under "benchmarks/scenario3/results/"
-    And the result JSON follows the minimal v1 fields documented in "benchmarks/README.md"
-    And the result JSON includes required efficiency fields "wall_clock_s", "tokens_total", and "cost_usd"
-    And the result JSON includes required outcome fields "acceptance_pass" and "rework_turns"
-    And the result JSON includes required Plinth usage fields "skills_count", "agents_count", "skills", and "agents"
-    And the result JSON includes required labels "scenario", "case_id", "tool", "model", "plinth_config", and "commit"
-    And the result JSON field "scenario" equals "scenario3"
-    And the result JSON field "case_id" equals "case-3-current-openspec-problem1"
-    And the result JSON field "acceptance_pass" is a boolean
-    And the result JSON field "skills_count" is a non-negative integer
-    And the result JSON field "agents_count" is a non-negative integer
-    And the result JSON field "skills" is a JSON array
-    And the result JSON field "agents" is a JSON array
-    And the length of "agents" equals the value of "agents_count"
-    And the length of "skills" equals the value of "skills_count"
-    And optional fields "active_agent_s", "tokens_in", "tokens_out", "acceptance_coverage", "artifact_completeness", "retry_count", and "human_intervention_min" may be present
+    Then the happy path in "benchmarks/scenario3/specs/technical-requirements/openspec/changes/add-god-analysis-api/specs/god-analysis-api/spec.md" passes
+    And a result JSON file exists under "benchmarks/scenario3/results/"
+    And the result JSON conforms to "benchmarks/metrics-v1.schema.json"
+    And the result JSON includes populated group "efficiency" with fields "wall_clock_s", "active_agent_s", "tokens_in", "tokens_out", "tokens_total", and "cost_usd"
+    And the result JSON includes populated group "outcome_quality" with fields "acceptance_pass", "acceptance_coverage", "rework_turns", and "artifact_completeness"
+    And the result JSON includes populated group "protocol_labels" with fields "scenario", "case_id", "tool", "model", "plinth_config", "commit", "retry_count", and "human_intervention_min"
+    And the result JSON includes populated group "plinth_usage" with fields "skills_count", "agents_count", "skills", and "agents"
+    And the result JSON field "protocol_labels.scenario" equals "scenario3"
+    And the result JSON field "protocol_labels.case_id" equals "case-3-current-openspec-problem1"
+    And the result JSON field "outcome_quality.acceptance_pass" is true only when the OpenSpec happy path and this scenario pass
+    And the length of "plinth_usage.agents" equals the value of "plinth_usage.agents_count"
+    And the length of "plinth_usage.skills" equals the value of "plinth_usage.skills_count"
     And "benchmarks/scenario3/demo/" is restored to empty with only ".gitkeep"

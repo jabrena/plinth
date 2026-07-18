@@ -26,6 +26,9 @@ Campaigns SHOULD compare cost/tokens/quality across this ladder for the same pro
 ```text
 benchmarks/
 ├── README.md
+├── metrics-v1.schema.json    # canonical run metrics JSON Schema
+├── metrics-v1.example.json   # fully populated example; scenarios require all fields
+├── acceptance-tests-prompts.md
 ├── scenario1/                # minimal functional notes
 │   ├── README.md
 │   ├── specs/functional-requirements/README.md
@@ -48,66 +51,69 @@ benchmarks/
     └── gherkin/scenario4.feature
 ```
 
-Each scenario folder owns its input contract (`README.md`), requirements under `specs/`, acceptance criteria (`gherkin/` with exactly one `@acceptance-test` scenario), and run records under `results/` (JSON per completed run).
+Each scenario folder owns its input contract (`README.md`), requirements under `specs/`, acceptance criteria (`gherkin/` with exactly one `@acceptance-test` scenario), and run records under `results/` (JSON per completed run conforming to [metrics-v1.schema.json](metrics-v1.schema.json)).
 
 Input paths above are relative to each scenario folder (for example `benchmarks/scenario2/specs/functional-requirements/problem1/`). Upstream provenance may originate from `examples/openspec/god-analysis-api/`. Runnable scenario authority is the harness-local `specs/` trees. Do not rewrite the upstream example trees as part of a campaign run.
 
 ## Metrics scorecard
 
-Canonical field definitions for every scenario execution record.
+Canonical field definitions and JSON Schema for every scenario execution record:
 
-### Efficiency
+- Schema: [metrics-v1.schema.json](metrics-v1.schema.json)
+- Example: [metrics-v1.example.json](metrics-v1.example.json)
 
-| Field | Meaning |
-| --- | --- |
-| `wall_clock_s` | Elapsed wall-clock seconds for the run |
-| `active_agent_s` | Seconds the agent was actively working (excludes idle wait where measurable) |
-| Token fields | Include at least `tokens_total`; record prompt/completion breakdown when available |
-| `cost_usd` | Estimated or billed USD cost for the run |
+Each run record is a JSON object with up to four top-level groups (`efficiency`, `outcome_quality`, `protocol_labels`, `plinth_usage`). **All groups and fields are optional in the schema.** Each scenario Gherkin feature (`scenarioN/gherkin/scenarioN.feature`) defines which fields MUST be populated for completed runs in that case (currently: all fields in every scenario).
 
-### Outcome quality
+### `efficiency`
 
 | Field | Meaning |
 | --- | --- |
-| `acceptance_pass` | Boolean: whether the run met the scenario `@acceptance-test` outcome |
-| `acceptance_coverage` | Share of acceptance criteria satisfied (when measurable) |
-| `rework_turns` | Number of human or agent rework turns after the first attempt |
-| `artifact_completeness` | Whether required deliverables for the case were produced |
+| `efficiency.wall_clock_s` | Elapsed wall-clock seconds for the run |
+| `efficiency.active_agent_s` | Seconds the agent was actively working (excludes idle wait where measurable) |
+| `efficiency.tokens_in` / `efficiency.tokens_out` | Prompt/completion token breakdown |
+| `efficiency.tokens_total` | Total tokens for the run |
+| `efficiency.cost_usd` | Estimated or billed USD cost for the run |
 
-### Protocol labels
-
-| Field | Meaning |
-| --- | --- |
-| `scenario` | Folder id: `scenario1` … `scenario4` |
-| `case_id` | Stable case id (for example `case-1-readme-only`) |
-| `tool` | Agent tool used for the run |
-| `model` | Model identifier used for the run |
-| `plinth_config` | Plinth configuration level |
-| `commit` | Git commit SHA of the workspace under test |
-| `retry_count` | Number of retries for this run |
-| `human_intervention_min` | Minutes of human intervention |
-
-### Plinth usage
+### `outcome_quality`
 
 | Field | Meaning |
 | --- | --- |
-| `skills_count` | Number of distinct skills read or invoked during the run (must equal the length of `skills`; 0 for bare-agent / skill-agnostic runs) |
-| `agents_count` | Number of distinct agents or subagents invoked during the run (must equal the length of `agents`; primary agent counts as 1 when no subagents are used) |
-| `skills` | Required array of skill ids or names used during the run (empty array when none) |
-| `agents` | Required array of agent ids or names invoked during the run (for example primary agent or subagent slugs) |
+| `outcome_quality.acceptance_pass` | Boolean: whether the run met the scenario `@acceptance-test` outcome |
+| `outcome_quality.acceptance_coverage` | Share of acceptance criteria satisfied |
+| `outcome_quality.rework_turns` | Number of human or agent rework turns after the first attempt |
+| `outcome_quality.artifact_completeness` | Whether required deliverables for the case were produced |
 
-### Minimal v1 required fields
+### `protocol_labels`
 
-Every run record MUST include:
+| Field | Meaning |
+| --- | --- |
+| `protocol_labels.scenario` | Folder id: `scenario1` … `scenario4` |
+| `protocol_labels.case_id` | Stable case id (for example `case-1-readme-only`) |
+| `protocol_labels.tool` | Agent tool used for the run |
+| `protocol_labels.model` | Model identifier used for the run |
+| `protocol_labels.plinth_config` | Plinth configuration level |
+| `protocol_labels.commit` | Git commit SHA of the workspace under test |
+| `protocol_labels.retry_count` | Number of retries for this run |
+| `protocol_labels.human_intervention_min` | Minutes of human intervention |
 
-- Efficiency / outcome: `wall_clock_s`, `tokens_total`, `cost_usd`, `acceptance_pass`, `rework_turns`
-- Labels: `scenario`, `case_id`, `tool`, `model`, `plinth_config`, `commit`
-- Plinth usage: `skills_count`, `agents_count`, `skills`, `agents`
+### `plinth_usage`
 
-Optional but recommended when available: `active_agent_s`, `acceptance_coverage`, `artifact_completeness`, `retry_count`, `human_intervention_min`.
+| Field | Meaning |
+| --- | --- |
+| `plinth_usage.skills_count` | Number of distinct skills read or invoked (must equal the length of `plinth_usage.skills` when both are present) |
+| `plinth_usage.agents_count` | Number of distinct agents or subagents invoked (must equal the length of `plinth_usage.agents` when both are present) |
+| `plinth_usage.skills` | Skill ids or names used during the run |
+| `plinth_usage.agents` | Agent ids or names invoked during the run |
+
+### Schema vs scenario requirements
+
+- **Schema** ([metrics-v1.schema.json](metrics-v1.schema.json)): defines allowed shape and types only; nothing is required at validation time.
+- **Scenario Gherkin**: defines mandatory population for completed runs. Cases 1–4 currently require every group and every field listed above.
+
+See the `@acceptance-test` scenario in each `scenarioN/gherkin/scenarioN.feature` for the authoritative population checklist.
 
 ### Ranking rules
 
-1. Rank by `cost_usd` and/or `tokens_total` only among runs where `acceptance_pass = true`.
-2. Keep `acceptance_pass = false` runs in a separate failure cohort; do not mix them into the cost/token leaderboard.
+1. Rank by `efficiency.cost_usd` and/or `efficiency.tokens_total` only among runs where `outcome_quality.acceptance_pass = true`.
+2. Keep `outcome_quality.acceptance_pass = false` runs in a separate failure cohort; do not mix them into the cost/token leaderboard.
 3. Prefer same-tool/same-model cells when comparing Scenario 1 → 2 → 3 → 4 richness steps.

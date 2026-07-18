@@ -1,39 +1,31 @@
-# Scenario 3 specification — Case 3 pending
+# Scenario 3 specification — Case 3 OpenSpec technical requirements
 
 ## Case identity
 
 - **Scenario:** `scenario3`
-- **Case id:** `case-3-pending`
+- **Case id:** `case-3-current-openspec-problem1`
 
 ## Status
 
-**Pending.** This specification is a placeholder only.
+**Runnable.** Case 3 uses OpenSpec technical requirements as the sole implementation input.
 
-Reserved as the richness step between Scenario 2 (full functional requirements) and Scenario 4 (functional + technical OpenSpec).
+## Input contract
 
-## Requirements
+- **Implementation input:** `benchmarks/scenario3/specs/technical-requirements/openspec/`
+- **Co-located functional requirements:** `benchmarks/scenario3/specs/functional-requirements/problem1/` exists only for OpenSpec derivation links; agents MUST NOT read it directly as input.
+- **Bundled skill:** `benchmarks/scenario3/.agents/skills/openspec-propose/SKILL.md`
 
-### Input / workflow
+## Exclusions
 
-Case 3 MUST document that:
+- `examples/openspec/god-analysis-api/` as scenario input authority
+- Other benchmark scenarios (`scenario1`, `scenario2`, `scenario4`)
+- Direct reads of the co-located functional-requirements package for requirements or technology choices
 
-- The requirements **input** contract is **TBD**
-- The **workflow** is **TBD**
-- There is **no runnable input contract** in this change
+## Acceptance
 
-Do not invent Case 3 inputs. Operators MUST NOT execute Case 3 as a campaign scenario until a follow-up change defines the contract.
+- Harness: [gherkin/scenario3.feature](../gherkin/scenario3.feature) (`@acceptance-test`)
+- Product happy path: OpenSpec spec at `specs/technical-requirements/openspec/changes/add-god-analysis-api/specs/god-analysis-api/spec.md`
 
-### Run labeling
+## Results
 
-When referring to this placeholder, use:
-
-- `scenario` = `scenario3`
-- `case_id` = `case-3-pending`
-
-### Ranking
-
-Case 3 is **excluded** from campaign ranking until the pending contract is defined.
-
-### Acceptance
-
-The Gherkin feature in `gherkin/scenario3.feature` contains exactly one `@acceptance-test` scenario documenting that Case 3 is pending and not executable yet.
+Each completed run MUST write one JSON file under `benchmarks/scenario3/results/` conforming to [metrics-v1.schema.json](../../metrics-v1.schema.json). See [results/README.md](../results/README.md).
