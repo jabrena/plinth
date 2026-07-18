@@ -1,0 +1,45 @@
+{
+  "efficiency": {
+    "wall_clock_s": 720,
+    "active_agent_s": 720,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1.0,
+    "rework_turns": 2,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario3",
+    "case_id": "case-3-current-openspec-problem1",
+    "tool": "codex",
+    "model": "gpt-5",
+    "plinth_config": "full-plinth",
+    "commit": "183e4123be67589b3e0766a3b7632740c7442771",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 3,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [
+      "300-frameworks-spring-boot-create-project",
+      "302-frameworks-spring-boot-rest",
+      "322-frameworks-spring-boot-testing-integration-tests"
+    ],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario3/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "c2NlbmFyaW8zL2RlbW8KfC0tIC5naXRrZWVwCnwtLSBwb20ueG1sCmAtLSBzcmMKICAgIHwtLSBtYWluCiAgICB8ICAgfC0tIGphdmEKICAgIHwgICB8ICAgYC0tIGluZm8KICAgIHwgICB8ICAgICAgIGAtLSBqYWIKICAgIHwgICB8ICAgICAgICAgICBgLS0gbXMKICAgIHwgICB8ICAgICAgICAgICAgICAgfC0tIEdvZEFuYWx5c2lzQXBwbGljYXRpb24uamF2YQogICAgfCAgIHwgICAgICAgICAgICAgICBgLS0gZ29kcwogICAgfCAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZEFuYWx5c2lzUHJvcGVydGllcy5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgICAgICB8LS0gR29kU291cmNlQ2xpZW50LmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBHb2RTdGF0c0NvbnRyb2xsZXIuamF2YQogICAgfCAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZFN0YXRzRXhjZXB0aW9uSGFuZGxlci5qYXZhCiAgICB8ICAgfCAgICAgICAgICAgICAgICAgICB8LS0gR29kU3RhdHNTZXJ2aWNlLmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBJbnZhbGlkR29kU3RhdHNSZXF1ZXN0RXhjZXB0aW9uLmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBSZXN0Q2xpZW50Q29uZmlnLmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBSZXN0R29kU291cmNlQ2xpZW50LmphdmEKICAgIHwgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBTb3VyY2VLZXkuamF2YQogICAgfCAgIHwgICAgICAgICAgICAgICAgICAgYC0tIFN1bVJlc3BvbnNlLmphdmEKICAgIHwgICBgLS0gcmVzb3VyY2VzCiAgICB8ICAgICAgIHwtLSBhcHBsaWNhdGlvbi55bWwKICAgIHwgICAgICAgYC0tIG9wZW5hcGkKICAgIHwgICAgICAgICAgIGAtLSBnb2QtYW5hbHlzaXMtYXBpLnlhbWwKICAgIGAtLSB0ZXN0CiAgICAgICAgYC0tIGphdmEKICAgICAgICAgICAgYC0tIGluZm8KICAgICAgICAgICAgICAgIGAtLSBqYWIKICAgICAgICAgICAgICAgICAgICBgLS0gbXMKICAgICAgICAgICAgICAgICAgICAgICAgYC0tIGdvZHMKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHwtLSBHb2RTdGF0c0FjY2VwdGFuY2VBVC5qYXZhCiAgICAgICAgICAgICAgICAgICAgICAgICAgICBgLS0gR29kU3RhdHNTZXJ2aWNlVGVzdC5qYXZhCgoxNiBkaXJlY3RvcmllcywgMTcgZmlsZXMK",
+    "file_count": 16
+  }
+}

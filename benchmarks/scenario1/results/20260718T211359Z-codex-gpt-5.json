@@ -1,0 +1,41 @@
+{
+  "efficiency": {
+    "wall_clock_s": 300,
+    "active_agent_s": 300,
+    "tokens_in": 0,
+    "tokens_out": 0,
+    "tokens_total": 0,
+    "cost_usd": 0
+  },
+  "outcome_quality": {
+    "acceptance_pass": false,
+    "acceptance_coverage": 0.95,
+    "rework_turns": 1,
+    "artifact_completeness": 1
+  },
+  "protocol_labels": {
+    "scenario": "scenario1",
+    "case_id": "case-1-readme-only",
+    "tool": "codex",
+    "model": "gpt-5",
+    "plinth_config": "full-plinth",
+    "commit": "unavailable",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 1,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": ["133-java-testing-acceptance-tests"],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "Lgp8LS0gLmdpdGtlZXAKfC0tIEdvZEFuYWx5c2lzLmphdmEKYC0tIEhhcHB5UGF0aFRlc3QuamF2YQoKMSBkaXJlY3RvcnksIDMgZmlsZXMK",
+    "file_count": 2
+  }
+}
