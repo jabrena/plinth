@@ -199,6 +199,28 @@ class AgentIndexesTest {
     }
 
     @Test
+    @DisplayName("Tech lead and coders must share bounded layered skill discovery")
+    void should_shareBoundedSkillDiscovery_when_techLeadDelegatesToCoders() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+
+        assertThat(techLead)
+            .contains("`proposal.md`, `design.md`, and affected `specs/**/spec.md`")
+            .contains("Skill catalog review")
+            .contains("Do not recursively read every available `SKILL.md`")
+            .contains("Hardcoded routing baseline")
+            .contains("Record the artifact path and concern")
+            .contains("The implementation coder owns final framework-specific discovery")
+            .contains("Discovery evidence");
+
+        IMPLEMENTATION_AGENTS.forEach(implementationAgent ->
+            assertThat(loadClasspathResource("agents/" + implementationAgent))
+                .contains("Discovery ownership")
+                .contains("delegated candidate list is a baseline, not a ceiling")
+                .contains("without broadening the approved scope")
+        );
+    }
+
+    @Test
     @DisplayName("Framework coders must prefer JDBC for relational persistence")
     void should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence() {
         assertThat(loadClasspathResource("agents/robot-java-spring-boot-coder.md"))

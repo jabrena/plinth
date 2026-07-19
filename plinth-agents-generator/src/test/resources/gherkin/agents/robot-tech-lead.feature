@@ -18,11 +18,15 @@ Scenario: Coordinate God Analysis API implementation from a validated OpenSpec c
   And the implementation target directory starts empty except for ".gitkeep"
   When the agent "robot-tech-lead" is applied to the request
   Then the agent loads the selected OpenSpec "tasks.md" as the execution contract
+  And the agent reads the proposal, design, and affected specs as bounded read-only skill-discovery context
+  And the agent reviews the available skill catalog without recursively reading every skill body
+  And the agent records concrete OpenSpec evidence for every dynamically discovered candidate skill
   And the agent confirms the selected OpenSpec change is current, validated, and internally consistent
   And the agent identifies the implementation as a Spring Boot MVC Java service from the OpenSpec design and technology constraints
   And the agent reads the complete 042-planning-openspec SKILL.md and its required reference before delegating
   And the agent delegates every implementation, test, and verification step to "@robot-java-spring-boot-coder"
   And every implementation handoff requires the complete SKILL.md and every task-relevant referenced resource to be read before editing
+  And the Spring Boot coder treats delegated candidates as a baseline and owns final framework-specific skill discovery
   And the agent does not implement code, edit tests, or run the build as a substitute for developers
   And the agent does not create or refine OpenSpec proposal, design, or specification artifacts as a primary mission
   And all generated implementation files are created under "examples/openspec/god-analysis-api/demo"
