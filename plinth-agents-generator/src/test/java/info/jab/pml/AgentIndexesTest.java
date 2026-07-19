@@ -20,6 +20,14 @@ class AgentIndexesTest {
         "robot-java-micronaut-coder.md"
     );
 
+    private static final List<String> IMPLEMENTATION_AGENTS = List.of(
+        "robot-java-coder.md",
+        "robot-java-spring-boot-coder.md",
+        "robot-java-quarkus-coder.md",
+        "robot-java-micronaut-coder.md",
+        "robot-no-java.md"
+    );
+
     @Test
     @DisplayName("Agent inventory XML must list XML sources and map to Markdown assets")
     void should_loadAgentFiles_when_agentInventoryIsParsed() {
@@ -165,6 +173,51 @@ class AgentIndexesTest {
                 .contains("`@705-technologies-nosql-mongodb`")
                 .contains("`@706-technologies-containers-docker`");
         });
+    }
+
+    @Test
+    @DisplayName("Implementation agents must read task-relevant skill references")
+    void should_requireTaskRelevantReferences_when_implementationAgentsApplySkills() {
+        IMPLEMENTATION_AGENTS.forEach(implementationAgent -> {
+            String agent = loadClasspathResource("agents/" + implementationAgent);
+
+            assertThat(agent)
+                .contains("Opening only `SKILL.md` is not sufficient")
+                .contains("every task-relevant referenced resource")
+                .contains("do not bulk-read unrelated references")
+                .contains("`References read`")
+                .contains("exact relative path");
+        });
+
+        assertThat(loadClasspathResource("agents/robot-tech-lead.md"))
+            .contains("Opening only a skill's `SKILL.md` is not sufficient")
+            .contains("including you when reading a planning anchor")
+            .contains("`references/042-planning-openspec.md`")
+            .contains("Reference-reading requirement")
+            .contains("exact skill ids and reference paths")
+            .contains("Reject an applied-skill report that lists only `SKILL.md`");
+    }
+
+    @Test
+    @DisplayName("Tech lead and coders must share bounded layered skill discovery")
+    void should_shareBoundedSkillDiscovery_when_techLeadDelegatesToCoders() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+
+        assertThat(techLead)
+            .contains("`proposal.md`, `design.md`, and affected `specs/**/spec.md`")
+            .contains("Skill catalog review")
+            .contains("Do not recursively read every available `SKILL.md`")
+            .contains("Hardcoded routing baseline")
+            .contains("Record the artifact path and concern")
+            .contains("The implementation coder owns final framework-specific discovery")
+            .contains("Discovery evidence");
+
+        IMPLEMENTATION_AGENTS.forEach(implementationAgent ->
+            assertThat(loadClasspathResource("agents/" + implementationAgent))
+                .contains("Discovery ownership")
+                .contains("delegated candidate list is a baseline, not a ceiling")
+                .contains("without broadening the approved scope")
+        );
     }
 
     @Test

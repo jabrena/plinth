@@ -105,7 +105,11 @@ class CommandIndexesTest {
             .contains("Resolve the repository default branch and the current branch")
             .contains("current checkout is `main` or the repository default branch")
             .contains("stop and ask whether to switch to the default branch")
+            .contains("Fresh-name rule")
+            .contains("derive the next unused suffix")
+            .contains("Never reuse the current checkout or an existing worktree")
             .contains("git worktree add -b")
+            .contains("Cleanup command: `git worktree remove <absolute-worktree-path>`")
             .contains("Leave existing branches, worktrees, directories, and files unchanged on conflict");
     }
 
@@ -137,6 +141,13 @@ class CommandIndexesTest {
             .contains("execute `/create-feature-branch`")
             .contains("`/create-worktree`")
             .contains("Do not start implementation before the feature-branch or worktree gate has passed")
+            .contains("Skill discovery gate")
+            .contains("Skill discovery brief")
+            .contains("`@042-planning-openspec`")
+            .contains("candidate skills to read")
+            .contains("Skills applied and skills skipped")
+            .contains("Do not record an agent in benchmark metrics unless that agent was actually invoked")
+            .contains("Do not record a skill in benchmark metrics unless its SKILL file was read")
             .contains("request `/review-alignment`")
             .contains("MUST NOT implement application code directly");
     }
