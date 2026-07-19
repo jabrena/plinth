@@ -141,6 +141,13 @@ class CommandIndexesTest {
             .contains("execute `/create-feature-branch`")
             .contains("`/create-worktree`")
             .contains("Do not start implementation before the feature-branch or worktree gate has passed")
+            .contains("Skill discovery gate")
+            .contains("Skill discovery brief")
+            .contains("`@042-planning-openspec`")
+            .contains("candidate skills to read")
+            .contains("Skills applied and skills skipped")
+            .contains("Do not record an agent in benchmark metrics unless that agent was actually invoked")
+            .contains("Do not record a skill in benchmark metrics unless its SKILL file was read")
             .contains("request `/review-alignment`")
             .contains("MUST NOT implement application code directly");
     }

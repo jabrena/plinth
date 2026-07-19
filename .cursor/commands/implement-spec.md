@@ -1,7 +1,5 @@
 # implement-spec
 
-## Purpose
-
 Deliver an approved implementation plan or validated OpenSpec task list through controlled implementation.
 
 ## Usage
@@ -30,6 +28,18 @@ A bare issue is context, not an execution contract. When repository policy requi
 - `@robot-tech-lead` MUST invoke the selected implementation agent for implementation, test, and verification work; naming an agent in the response is not delegation.
 - If agent invocation is unavailable in the current environment, stop and report that `/implement-spec` cannot proceed instead of implementing directly.
 - Before any implementation agent starts, pass the branch/worktree gate below and report the selected isolation strategy.
+- Before any implementation agent starts, `@robot-tech-lead` MUST publish a **Skill discovery brief** and pass an ordered **candidate skills to read** list in every implementation handoff.
+
+## Skill discovery gate
+
+- `@robot-tech-lead` MUST build the **Skill discovery brief** before the first implementation handoff, following **Skill discovery before delegation** in `@robot-tech-lead`.
+- OpenSpec execution artifacts MUST include `@042-planning-openspec` as the planning anchor skill.
+- The tech lead MUST read `@042-planning-openspec` from `.agents/skills/` or `skills/` when the selected artifact is OpenSpec before delegating implementation.
+- Every implementation handoff MUST include **candidate skills to read**, **required skill report**, and a **telemetry reminder** so benchmark metrics can record exact skill ids.
+- The selected implementation agent MUST read each candidate skill from `.agents/skills/<skill-id>/SKILL.md` or `skills/<skill-id>/` before editing owned files, unless it returns a one-line skip reason in **Skills skipped**.
+- Benchmark and metrics runs MUST record in `plinth_usage.skills` only skill ids whose SKILL files were actually read or invoked during the run.
+- Reading `.cursor/agents/*.md` or mentioning `@skill-id` in prose does **not** count as reading or invoking a skill.
+- Naming `@robot-tech-lead` or an implementation agent in the response does **not** count as invoking that agent; use the environment's agent or subagent invocation mechanism when available.
 
 ## Branch/worktree gate
 
@@ -48,13 +58,14 @@ A bare issue is context, not an execution contract. When repository policy requi
 2. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
 3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.
 4. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
-5. Complete the branch/worktree gate: use `/create-feature-branch` for serial work in the current checkout, or `/create-worktree` when independent groups can run safely in parallel.
-6. Report the selected feature branch or worktree paths before delegating implementation.
-7. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
-8. Invoke the selected implementation agent for each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.
-9. Integrate delegated results and require changed-file, test, build, risk, and blocker evidence.
-10. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
-11. Report completion against the selected artifact.
+5. Build the Skill discovery brief per `@robot-tech-lead`; when the artifact is OpenSpec, read `@042-planning-openspec` and select framework-specific candidate skills for the routed implementation agent.
+6. Complete the branch/worktree gate: use `/create-feature-branch` for serial work in the current checkout, or `/create-worktree` when independent groups can run safely in parallel.
+7. Report the selected feature branch or worktree paths before delegating implementation.
+8. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
+9. Invoke the selected implementation agent for each group with task IDs, owned files, acceptance criteria, blocked-by relationships, focused validation commands, candidate skills to read, required skill report, and telemetry reminder.
+10. Integrate delegated results and require changed-file, test, build, risk, blocker, skills applied, and skills skipped evidence.
+11. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
+12. Report completion against the selected artifact.
 
 ## Output
 
@@ -62,7 +73,9 @@ A bare issue is context, not an execution contract. When repository policy requi
 - Framework decision and coder routing rationale
 - Feature-branch or worktree gate result, branch names, worktree paths, and rationale
 - Serial/parallel execution map with dependencies and file ownership
+- Skill discovery brief and candidate skills passed to implementation agents
 - Results and changed files by task or group
+- Skills applied and skills skipped reported by each implementation agent
 - Test and build evidence
 - Updated OpenSpec task status, when applicable
 - Remaining blockers, risks, and follow-up work
@@ -72,6 +85,9 @@ A bare issue is context, not an execution contract. When repository policy requi
 - Do not implement from a stale, unapproved, missing, or conflicting execution artifact.
 - Do not continue in the original command runner when `@robot-tech-lead` has not accepted the orchestration handoff.
 - Do not start implementation before the feature-branch or worktree gate has passed.
+- Do not start implementation before the Skill discovery brief is published and candidate skills are included in the handoff.
+- Do not record an agent in benchmark metrics unless that agent was actually invoked, not merely referenced or read from `.cursor/agents/`.
+- Do not record a skill in benchmark metrics unless its SKILL file was read or the skill was invoked.
 - Do not bypass a dirty workspace by asking for approval to continue; stop and resume only after the workspace is clean.
 - Do not treat a written plan to delegate as delegation; invoke the selected implementation agent.
 - Do not silently change issue scope, requirements, ADR decisions, or plan approach.
