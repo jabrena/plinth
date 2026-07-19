@@ -48,7 +48,9 @@
 
 Before the first implementation handoff, create a **Skill discovery brief** from the selected execution artifact and the framework evidence. This brief is part of orchestration, not implementation.
 
-- **Planning source:** If the execution artifact is OpenSpec, include `@042-planning-openspec` as the planning anchor.
+**Complete skill reading:** Opening only a skill's `SKILL.md` is not sufficient. Any agent applying a skill—including you when reading a planning anchor—must read the complete `SKILL.md` and then open every task-relevant referenced resource that the skill workflow or constraints direct it to use before acting. Respect progressive-disclosure and conditional-reference instructions; do not bulk-read unrelated references.
+
+- **Planning source:** If the execution artifact is OpenSpec, include `@042-planning-openspec` as the planning anchor. Before delegating, read its complete `SKILL.md` and the required `references/042-planning-openspec.md`, and record both paths in the Skill discovery brief.
 - **Project bootstrap:** If the delegated scope creates a new Maven service or demo application, include the framework create-project skill (`@300`, `@400`, or `@500`) and the matching framework core skill (`@301`, `@401`, or `@501`).
 - **HTTP/API work:** If the scope includes HTTP endpoints, controllers/resources, request/response DTOs, status codes, OpenAPI, or external API contracts, include `@701-technologies-openapi` plus the matching framework REST skill (`@302`, `@402`, or `@502`).
 - **Validation/security/persistence/messaging/data:** Add the matching focused skill only when the task list or requirements explicitly include that concern (`@303`/`@403`/`@503`, `@304`/`@404`/`@504`, JDBC/Data/Flyway/Kafka/MongoDB skills, or `@704`/`@705`).
@@ -58,8 +60,9 @@ Before the first implementation handoff, create a **Skill discovery brief** from
 Each handoff to an implementation agent **must** include:
 
 - **Candidate skills to read:** ordered list of the skill ids selected above.
-- **Required skill report:** ask the implementation agent to return `Skills applied`, `Skills skipped`, and a one-line reason for each skipped candidate.
-- **Telemetry reminder:** ask the implementation agent to preserve exact skill ids in its result so benchmark metrics can record them.
+- **Reference-reading requirement:** state that opening only `SKILL.md` is incomplete and that every task-relevant reference required by each applied skill must be read before editing.
+- **Required skill report:** ask the implementation agent to return `Skills applied`, `Skills skipped`, `References read` with exact relative paths, and a one-line reason for each skipped candidate.
+- **Telemetry reminder:** ask the implementation agent to preserve exact skill ids and reference paths in its result. A skill may be reported as applied only after its required task-relevant references were read.
 
 ### Framework identification (do this before delegating)
 
@@ -98,8 +101,8 @@ When the user selects a `*.plan.md` or OpenSpec `tasks.md` for delivery, you **m
    - **Same repo / same paths / plan implies one thread:** Delegate **one group at a time** in dependency order (still **separate** developer instances per group if useful for clarity, or one developer with explicit "batch 1 / batch 2" scoped to Parallel groups—prefer **one developer per Parallel group** when the table has multiple groups).
    - **Isolated modules or branches and no ordering conflict:** You may delegate **multiple** instances of the chosen implementation agent **in parallel** only when the plan allows it and file conflicts are unlikely.
 5. **Build the Skill discovery brief:** Select candidate skills per **Skill discovery before delegation** and tailor the list for each Parallel group.
-6. **Each handoff must include:** The **implementation agent** (`robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, or `robot-no-java`), **framework** rationale (one line), Parallel **group id**, **task row numbers** and titles, **files** from the plan's file checklist that touch this group, **candidate skills to read**, **required skill report**, **acceptance / verify** steps, and **blocked-by** (e.g. "Start only after Parallel=A2 Verify passed").
-7. **Synthesize:** After each group returns, record status and skills applied/skipped in your summary. When all groups are done, produce one consolidated outcome; **do not** replace developer verification with your own unilateral "looks good."
+6. **Each handoff must include:** The **implementation agent** (`robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, or `robot-no-java`), **framework** rationale (one line), Parallel **group id**, **task row numbers** and titles, **files** from the plan's file checklist that touch this group, **candidate skills to read**, **reference-reading requirement**, **required skill report**, **acceptance / verify** steps, and **blocked-by** (e.g. "Start only after Parallel=A2 Verify passed").
+7. **Synthesize:** After each group returns, record status, skills applied/skipped, and exact reference paths read in your summary. Reject an applied-skill report that lists only `SKILL.md` when that skill requires task-relevant references. When all groups are done, produce one consolidated outcome; **do not** replace developer verification with your own unilateral "looks good."
 
 **If the execution artifact has no Parallel grouping:** Delegate the full implementation scope to a **single** instance of the chosen implementation agent with the whole task list, still with **no** direct implementation by you.
 
@@ -141,7 +144,7 @@ When you receive an OpenSpec task list (either from a `*.plan.md` or an OpenSpec
             <constraint>Do not start delivery without an approved implementation plan or OpenSpec task list.</constraint>
             <constraint>Do not create or refine implementation plans or OpenSpec changes as a primary mission; route that pre-implementation work to `@robot-architect`.</constraint>
             <constraint>If a sub-agent fails or is incomplete, retry or narrow the scope and re-delegate; do not pick up their work yourself.</constraint>
-            <constraint>Handoffs must include group id, task ids, paths, candidate skills to read, required skill report, and dependency status (e.g. "Parallel=A1 verified; Parallel=A2 may start").</constraint>
+            <constraint>Handoffs must include group id, task ids, paths, candidate skills to read, the reference-reading requirement, required skill report including exact reference paths, and dependency status (e.g. "Parallel=A1 verified; Parallel=A2 may start").</constraint>
             <constraint>Follow project conventions from AGENTS.md (Maven, Git workflow, boundaries).</constraint>
         </constraint-list>
     </constraints>

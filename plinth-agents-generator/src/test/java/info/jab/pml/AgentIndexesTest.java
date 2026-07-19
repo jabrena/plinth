@@ -20,6 +20,14 @@ class AgentIndexesTest {
         "robot-java-micronaut-coder.md"
     );
 
+    private static final List<String> IMPLEMENTATION_AGENTS = List.of(
+        "robot-java-coder.md",
+        "robot-java-spring-boot-coder.md",
+        "robot-java-quarkus-coder.md",
+        "robot-java-micronaut-coder.md",
+        "robot-no-java.md"
+    );
+
     @Test
     @DisplayName("Agent inventory XML must list XML sources and map to Markdown assets")
     void should_loadAgentFiles_when_agentInventoryIsParsed() {
@@ -165,6 +173,29 @@ class AgentIndexesTest {
                 .contains("`@705-technologies-nosql-mongodb`")
                 .contains("`@706-technologies-containers-docker`");
         });
+    }
+
+    @Test
+    @DisplayName("Implementation agents must read task-relevant skill references")
+    void should_requireTaskRelevantReferences_when_implementationAgentsApplySkills() {
+        IMPLEMENTATION_AGENTS.forEach(implementationAgent -> {
+            String agent = loadClasspathResource("agents/" + implementationAgent);
+
+            assertThat(agent)
+                .contains("Opening only `SKILL.md` is not sufficient")
+                .contains("every task-relevant referenced resource")
+                .contains("do not bulk-read unrelated references")
+                .contains("`References read`")
+                .contains("exact relative path");
+        });
+
+        assertThat(loadClasspathResource("agents/robot-tech-lead.md"))
+            .contains("Opening only a skill's `SKILL.md` is not sufficient")
+            .contains("including you when reading a planning anchor")
+            .contains("`references/042-planning-openspec.md`")
+            .contains("Reference-reading requirement")
+            .contains("exact skill ids and reference paths")
+            .contains("Reject an applied-skill report that lists only `SKILL.md`");
     }
 
     @Test
