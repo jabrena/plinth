@@ -65,20 +65,27 @@ The existing `/create-feature-branch` command SHALL support the optional transit
 
 ### Requirement: Isolated worktree creation
 
-`/create-worktree` SHALL create a new branch and linked Git worktree for isolated or parallel work without changing the user's current checkout.
+`/create-worktree` SHALL always create a new branch and linked Git worktree for isolated or parallel work without changing the user's current checkout.
 
 #### Scenario: Create a worktree for a child change
 
 - **WHEN** a user invokes `/create-worktree` with an issue/change identifier or explicit branch details and an optional target path and base reference
-- **THEN** the command verifies that the target branch and path are available
+- **THEN** the command verifies or derives a fresh target branch and path
 - **AND** it verifies that the selected base reference exists
+- **AND** it does not reuse the current checkout or an existing worktree for the requested work
 - **AND** it creates the branch and linked checkout using a non-destructive Git worktree operation
-- **AND** it reports the created branch, absolute path, and base reference
+- **AND** it reports the created branch, absolute path, base reference, and cleanup command
 - **AND** it does not commit, push, remove a worktree, delete a branch, or use force
 
 #### Scenario: Requested worktree conflicts with existing state
 
-- **WHEN** the requested branch is already checked out, the target path exists, or the base reference is invalid
+- **WHEN** the requested branch is already checked out or the target path exists
+- **THEN** the command derives the next unused branch name or target path
+- **AND** it leaves existing branches, worktrees, and files unchanged
+
+#### Scenario: Requested worktree has invalid base
+
+- **WHEN** the base reference is invalid
 - **THEN** the command stops and reports the conflict
 - **AND** it leaves existing branches, worktrees, and files unchanged
 
@@ -126,4 +133,3 @@ The existing `/create-feature-branch` command SHALL support the optional transit
 - **THEN** the command accepts the available artifacts
 - **AND** it requests aligned areas, severity-ranked issues, open questions, recommended corrections, and readiness
 - **AND** it does not request automatic artifact modification
-
