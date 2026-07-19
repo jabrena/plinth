@@ -21,6 +21,11 @@ is the meaningful filter for the documented aggregate examples; lowercase
 - Convert each included name by concatenating decimal Unicode code point values,
   parse that concatenated value as a number, and sum all included names.
 - Return the aggregate as JSON `{ "sum": "<decimal-string>" }`.
+- Structure the implementation as a small package-level Hexagonal architecture:
+  `domain` and `application` core packages with inbound/outbound ports, plus
+  REST and HTTP adapters outside the core.
+- Add ArchUnit as a Maven test dependency and enforce the Hexagonal package
+  boundaries with an executable architecture test.
 - Configure outbound Spring `RestClient` connect and read timeouts.
 - Continue with partial aggregation when an individual source times out or fails
   on its single outbound attempt.
@@ -58,7 +63,9 @@ testing constraints are part of the same deployable outcome.
 ## Impact
 
 An implementation would affect the application REST controller, domain service,
-outbound source client, configuration, error handling, OpenAPI documentation,
-and unit, integration, and acceptance tests. The OpenSpec change records the
-capability without rewriting the source requirements in
+application use case, inbound and outbound ports, outbound source client,
+configuration, error handling, OpenAPI documentation, the demo module Maven test
+dependencies, ArchUnit architecture verification, and unit, integration, and
+acceptance tests. The OpenSpec change records the capability without rewriting
+the source requirements in
 `../../../../functional-requirements/problem1`.

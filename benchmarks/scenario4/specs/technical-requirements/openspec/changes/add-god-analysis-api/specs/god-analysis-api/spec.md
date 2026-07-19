@@ -144,7 +144,13 @@ or fail.
 
 The implementation MUST use Spring Boot with Spring MVC, Spring `RestClient`,
 base package `info.jab.ms`, and WireMock-backed deterministic tests for source
-fixtures and timeout behavior.
+fixtures and timeout behavior. The implementation MUST use package-level
+Hexagonal architecture with framework-free `domain` and `application` core
+packages, inbound and outbound ports under `application.port`, a REST driving
+adapter under `adapter.in.rest`, and an HTTP driven adapter under
+`adapter.out.http`. The demo Maven module MUST include ArchUnit JUnit 5 as a
+test-scoped dependency and MUST execute a clear architecture test for these
+package boundaries in the normal Maven verification lifecycle.
 
 #### Scenario: Servlet stack is used
 
@@ -156,3 +162,13 @@ fixtures and timeout behavior.
 - **WHEN** acceptance or integration tests simulate timeout behavior
 - **THEN** WireMock stubs are reset between tests
 - **AND** timeout scenarios do not depend on test execution order
+
+#### Scenario: Hexagonal dependency direction is preserved
+
+- **GIVEN** ArchUnit JUnit 5 is available as a test-scoped Maven dependency
+- **WHEN** `HexagonalArchitectureTest` is executed
+- **THEN** `domain` and `application` packages do not depend on `adapter..`
+- **AND** `domain` does not depend on `application..`
+- **AND** `adapter.in..` and `adapter.out..` do not depend on each other
+- **AND** Spring MVC and `RestClient` dependencies stay outside `domain` and `application`
+- **AND** the top-level implementation packages under `info.jab.ms` are limited to `adapter`, `application`, and `domain`
