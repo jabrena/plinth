@@ -33,6 +33,10 @@ Scenario: Create Gherkin acceptance criteria for summing two integers
   And the guidance distinguishes Feature, Rule, Scenario or Example, Background, Scenario Outline, Examples, and step keywords from Doc Strings, Data Tables, tags, and comments
   And the detailed reference explains Gherkin with valid and invalid feature examples instead of duplicating the skill workflow as procedural steps
   And the syntax examples cover document structure, step semantics, Background, Scenario Outline and Examples, Data Tables, Doc Strings, tags, comments, and localization
+  And the syntax examples call `@...` markers Gherkin tags rather than Java annotations
+  And the syntax examples demonstrate `@acceptance-test` at Feature level and supported behavioral tags at Scenario level
+  And the syntax examples include `@error` and `@integration-test` when supported by trusted behavior and project execution conventions
+  And the guidance does not place tags on steps or infer `@integration-test` from alternative or error behavior
   And the guidance explains that syntactically valid Gherkin is not sufficient evidence of good BDD
   And the guidance does not require every discovered example to become an automated Cucumber test
   And the guidance completes BDD discovery and scenario formulation without requiring or invoking another skill

@@ -66,6 +66,8 @@ The generated detailed reference MUST contain guidance derived from the official
 
 The reference MUST teach these constructs through example syntax, including contrasts that expose invalid keyword, colon, placeholder, argument, tag, comment, or localization usage.
 
+Tag examples distinguish Gherkin tags from Java annotations, demonstrate inherited `@acceptance-test` classification at Feature level and supported behavioral tags such as `@error` at Scenario level, include `@integration-test` when a trusted project execution convention supports it, prohibit tags on steps, and avoid inferring `@integration-test` from alternative or error behavior alone.
+
 The skill MUST use only the bundled reference during execution and MUST NOT search, browse, open, or fetch the external upstream reference. Upstream refresh is a separate maintainer activity outside skill execution. The skill must not imply that syntactically valid Gherkin is automatically good BDD or require every discovered example to become an automated Cucumber test.
 
 ### Trust and authority boundary

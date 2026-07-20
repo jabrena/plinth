@@ -27,6 +27,9 @@
             <constraint>**KEYWORD ROLES**: Distinguish `Feature`, `Rule`, `Example`/`Scenario`, `Background`, `Scenario Outline`, `Examples`, and step keywords</constraint>
             <constraint>**STEP MEANING**: Use `Given` for context, `When` for an event, and `Then` for an observable outcome; use `And`, `But`, or `*` only when they improve readability</constraint>
             <constraint>**SECONDARY SYNTAX**: Explain Doc Strings, Data Tables, tags, and comments as syntax supporting scenarios rather than primary document elements</constraint>
+            <constraint>**TAG TERMINOLOGY**: Call `@...` markers Gherkin tags, not annotations or Java annotations</constraint>
+            <constraint>**TAG SCOPE**: Place tags before taggable elements, explain that a `Feature` tag applies to its child scenarios, and never attach a tag to a step</constraint>
+            <constraint>**TAG MEANING**: Use `@acceptance-test` and behavioral tags only when supported by the trusted context; do not infer `@integration-test` from alternative or error behavior</constraint>
             <constraint>**LOCALIZATION**: Respect the declared Gherkin language and its localized keywords</constraint>
             <constraint>**BDD BOUNDARY**: Do not claim that syntactically valid Gherkin is automatically good BDD or that every example requires Cucumber automation</constraint>
         </constraint-list>
@@ -230,6 +233,62 @@ Feature: Mixed language keywords
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="7" id="acceptance-and-behavior-tags">
+            <example-header>
+                <example-title>Acceptance and behavior tags</example-title>
+                <example-subtitle>Classify a Feature and its scenarios without confusing behavior with test implementation level</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Gherkin `@...` markers are tags, not Java annotations. A tag before `Feature` applies to the scenarios below it, so `@acceptance-test` can classify the whole feature. Add scenario-level behavioral tags such as `@happy-path`, `@business-rule`, `@idempotency`, `@authorization`, or `@error` only when the trusted context supports those meanings. The valid example assumes a trusted project convention that the non-happy cancellation scenarios execute as integration tests, which supports their `@integration-test` tags. Do not infer that tag merely because a scenario is an alternative or error case. Tags cannot decorate individual steps.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[@acceptance-test
+Feature: Cancel an order
+
+  @happy-path
+  Scenario: Cancel a paid order before shipment
+    Given a registered customer owns a paid order awaiting shipment
+    When the customer cancels the order
+    Then the order status becomes cancelled
+    And a refund is initiated for the complete amount paid
+
+  @integration-test @business-rule @error
+  Scenario: Reject cancellation after shipment
+    Given a registered customer owns a shipped order
+    When the customer tries to cancel the order
+    Then the order remains shipped
+
+  @integration-test @idempotency
+  Scenario: Avoid another refund for an already cancelled order
+    Given a registered customer owns an already cancelled order
+    When the customer tries to cancel the order again
+    Then another refund is not initiated
+
+  @integration-test @authorization @error
+  Scenario: Reject cancellation of another customer's order
+    Given an order belongs to another customer
+    When the customer tries to cancel the order
+    Then the cancellation request is rejected]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Feature: Cancel an order
+
+  Scenario: Cancel a paid order before shipment
+    @happy-path
+    Given a registered customer owns a paid order awaiting shipment
+    When the customer cancels the order
+    Then the order status becomes cancelled
+
+  @integration-test
+  Scenario: Reject cancellation after shipment
+    Given a shipped order
+    When cancellation is requested
+    Then the order remains shipped]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
@@ -247,6 +306,7 @@ Feature: Mixed language keywords
             <safeguards-item>Do not turn this reference into a duplicate step-by-step BDD workflow</safeguards-item>
             <safeguards-item>Do not search, browse, open, or fetch the external Cucumber Gherkin Reference during skill execution</safeguards-item>
             <safeguards-item>Do not place colons after `Given`, `When`, `Then`, `And`, or `But`</safeguards-item>
+            <safeguards-item>Do not call Gherkin tags Java annotations, place tags on steps, or infer `@integration-test` from non-happy-path behavior</safeguards-item>
             <safeguards-item>Do not mix localized keyword languages unless the official localization supports the combination</safeguards-item>
             <safeguards-item>Do not present procedural or implementation-coupled scenarios as good examples of observable behavior</safeguards-item>
             <safeguards-item>Do not claim syntactic validity proves shared understanding or requires Cucumber automation</safeguards-item>

@@ -1,5 +1,8 @@
-## ADDED Requirements
+# bdd-design-skill-reference Specification
 
+## Purpose
+TBD - created by archiving change add-bdd-design-skill. Update Purpose after archive.
+## Requirements
 ### Requirement: BDD design skill
 
 The repository MUST define `058-design-bdd` as a generated, interactive design skill for independently guiding Behavior-Driven Development from trusted behavior facts through concrete examples to a self-contained set of observable scenarios.
@@ -41,6 +44,7 @@ The repository MUST define `058-design-bdd` as a generated, interactive design s
 - **AND** the generated runtime guidance contains no external Gherkin reference URL
 - **AND** it does not search, browse, open, or fetch the external upstream reference during skill execution
 - **AND** it distinguishes primary keywords from secondary syntax such as Doc Strings, Data Tables, tags, and comments
+- **AND** its examples distinguish Gherkin tags from Java annotations, demonstrate Feature-level `@acceptance-test`, supported Scenario-level behavioral tags including `@error`, and `@integration-test` backed by a trusted project execution convention, prohibit tags on steps, and do not infer `@integration-test` from alternative or error behavior alone
 - **AND** `plinth-skills-generator/src/main/resources/skill-references/058-design-bdd.xml` explains the syntax through PML `<examples>` containing valid and invalid `.feature` examples
 - **AND** the detailed reference does not define procedural PML `<steps>` that duplicate the interactive workflow in `058-skill.xml`
 - **AND** it does not present syntactic validity as sufficient evidence of good BDD
