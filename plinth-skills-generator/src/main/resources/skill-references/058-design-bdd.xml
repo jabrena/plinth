@@ -1,0 +1,315 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.18.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Behavior-Driven Development Design</title>
+        <description>Example-driven reference for explaining and reviewing Gherkin document structure, keywords, scenarios, outlines, arguments, tags, comments, and localization.</description>
+    </metadata>
+
+    <role>You are a senior Java Enterprise engineer who explains Gherkin syntax through concise, valid examples grounded in observable behavior.</role>
+
+    <tone>Be precise, example-driven, and concise. Explain the syntax visible in each example and distinguish parser rules from BDD quality.</tone>
+
+    <goal>
+        Explain Gherkin syntax through the bundled valid and invalid examples. Cover document structure, keyword roles, scenario composition, reusable context, data-driven scenarios, multiline arguments, tags, comments, and localization without accessing any external upstream source or turning this reference into a procedural BDD workflow.
+    </goal>
+
+    <constraints>
+        <constraints-description>Keep Gherkin syntax accurate, readable, observable, and distinct from the wider BDD workflow owned by the generated skill index.</constraints-description>
+        <constraint-list>
+            <constraint>**BUNDLED RUNTIME SOURCE**: Use this bundled reference as the complete runtime authority for Gherkin syntax and keyword behavior</constraint>
+            <constraint>**NO EXTERNAL ACCESS**: Never search, browse, open, or fetch the external Cucumber Gherkin Reference during skill execution</constraint>
+            <constraint>**EXAMPLES FIRST**: Explain syntax through concrete `.feature` examples rather than procedural steps</constraint>
+            <constraint>**DOCUMENT STRUCTURE**: Use one `Feature` per file and apply colons only to keywords whose syntax requires them</constraint>
+            <constraint>**KEYWORD ROLES**: Distinguish `Feature`, `Rule`, `Example`/`Scenario`, `Background`, `Scenario Outline`, `Examples`, and step keywords</constraint>
+            <constraint>**STEP MEANING**: Use `Given` for context, `When` for an event, and `Then` for an observable outcome; use `And`, `But`, or `*` only when they improve readability</constraint>
+            <constraint>**SECONDARY SYNTAX**: Explain Doc Strings, Data Tables, tags, and comments as syntax supporting scenarios rather than primary document elements</constraint>
+            <constraint>**TAG TERMINOLOGY**: Call `@...` markers Gherkin tags, not annotations or Java annotations</constraint>
+            <constraint>**TAG SCOPE**: Place tags before taggable elements, explain that a `Feature` tag applies to its child scenarios, and never attach a tag to a step</constraint>
+            <constraint>**TAG MEANING**: Use `@acceptance-test` and behavioral tags only when supported by the trusted context; do not infer `@integration-test` from alternative or error behavior</constraint>
+            <constraint>**LOCALIZATION**: Respect the declared Gherkin language and its localized keywords</constraint>
+            <constraint>**BDD BOUNDARY**: Do not claim that syntactically valid Gherkin is automatically good BDD or that every example requires Cucumber automation</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="feature-rule-and-example-structure">
+            <example-header>
+                <example-title>Feature, Rule, and Example structure</example-title>
+                <example-subtitle>Organize one feature around business rules and concrete examples</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                A `.feature` file contains one `Feature`. Optional `Rule` sections group examples that illustrate a business rule. `Scenario` is a synonym for `Example`. These structural keywords require a trailing colon.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[Feature: Order payment
+  Registered buyers can pay for an order.
+
+  Rule: Approved payments confirm the order
+
+    Example: Approved card payment
+      Given a registered buyer has an order ready for payment
+      When the buyer pays with an approved card
+      Then the buyer receives an order confirmation]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Feature Order payment
+  Rule Approved payments confirm the order
+    Scenario: Approved card payment
+      Given: an order ready for payment
+      When: the buyer pays
+      Then: the order is confirmed
+
+Feature: A second feature in the same file]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="given-when-then-step-semantics">
+            <example-header>
+                <example-title>Given, When, and Then step semantics</example-title>
+                <example-subtitle>Describe context, one event, and an observable outcome</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Step keywords do not take colons. Use `Given` for relevant context, `When` for the event, and `Then` for an observable outcome. `And` and `But` inherit meaning from the preceding step keyword; `*` is available for list-like steps.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[Scenario: Declined payment leaves the order unpaid
+  Given a registered buyer has an unpaid order
+  And the selected card will be declined
+  When the buyer submits the payment
+  Then the order remains unpaid
+  But the buyer can choose another payment method]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Scenario: Payment implementation
+  Given: the controller receives request 42
+  When: PaymentServiceImpl calls the gateway
+  Then: OrderRepository.save is invoked once]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="background-shared-context">
+            <example-header>
+                <example-title>Background for shared context</example-title>
+                <example-subtitle>Share short, readable context within a Feature or Rule</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                A `Background` runs before each example in its `Feature` or `Rule`. Use at most one background for each scope and keep it short enough that readers can understand scenarios without scrolling.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[Feature: Saved payment methods
+
+  Background:
+    Given a registered buyer has an active account
+
+  Scenario: Save an approved card
+    When the buyer saves an approved card
+    Then the card is available for later orders
+
+  Scenario: Reject an expired card
+    When the buyer tries to save an expired card
+    Then the card is not saved]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Feature: Saved payment methods
+
+  Background:
+    Given a registered buyer has an active account
+
+  Background:
+    Given the database contains payment rows]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="scenario-outline-and-examples">
+            <example-header>
+                <example-title>Scenario Outline and Examples</example-title>
+                <example-subtitle>Run one scenario template with multiple concrete value sets</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                A `Scenario Outline` uses angle-bracket placeholders. One or more `Examples` tables provide a header matching those placeholders and a row for every concrete example.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[Scenario Outline: Payment outcome
+  Given an order total of <total>
+  When the payment result is <result>
+  Then the order status is <status>
+
+  Examples:
+    | total | result   | status    |
+    | 25.00 | approved | confirmed |
+    | 25.00 | declined | unpaid    |
+    |  0.00 | skipped  | confirmed |]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Scenario Outline: Payment outcome
+  Given an order total of <amount>
+  When the payment result is <result>
+  Then the order status is <status>
+
+  Examples:
+    | total | result   |
+    | 25.00 | approved |]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="data-tables-and-doc-strings">
+            <example-header>
+                <example-title>Data Tables and Doc Strings</example-title>
+                <example-subtitle>Pass structured rows or multiline text to the preceding step</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                A Data Table starts each row with `|` and belongs to the step immediately above it. A Doc String is delimited by triple quotes or backticks on their own lines and may declare a media type.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[Scenario: Submit an order with payment details
+  Given the order contains:
+    | product | quantity |
+    | book    | 2        |
+    | pen     | 1        |
+  When the buyer submits this payment request:
+    """json
+    {"method":"card","currency":"EUR"}
+    """
+  Then the buyer receives an order confirmation]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Scenario: Detached arguments
+  | product | quantity |
+  | book    | 2        |
+  Given the order contains products
+  """json
+  {"method":"card"}
+  """
+  When the buyer submits the order]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="tags-comments-and-localization">
+            <example-header>
+                <example-title>Tags, comments, and localization</example-title>
+                <example-subtitle>Attach metadata, document intent, and use one declared language</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Tags begin with `@` and precede taggable elements such as `Feature`, `Rule`, `Scenario`, or `Examples`. Comments begin with `#` on a new line. A `# language:` header selects localized keywords for the file.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[# language: es
+@pagos
+Característica: Pago de pedidos
+
+  # Regla comercial ilustrada por el ejemplo
+  Regla: Los pagos aprobados confirman el pedido
+
+    @caso-feliz
+    Ejemplo: Tarjeta aprobada
+      Dado que una persona compradora tiene un pedido pendiente
+      Cuando paga con una tarjeta aprobada
+      Entonces recibe una confirmación del pedido]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[# language: es
+Feature: Mixed language keywords
+  Scenario: Payment
+    @tag-on-a-step
+    Given an unpaid order
+    /* block comments are not Gherkin syntax */]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="acceptance-and-behavior-tags">
+            <example-header>
+                <example-title>Acceptance and behavior tags</example-title>
+                <example-subtitle>Classify a Feature and its scenarios without confusing behavior with test implementation level</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Gherkin `@...` markers are tags, not Java annotations. A tag before `Feature` applies to the scenarios below it, so `@acceptance-test` can classify the whole feature. Add scenario-level behavioral tags such as `@happy-path`, `@business-rule`, `@idempotency`, `@authorization`, or `@error` only when the trusted context supports those meanings. The valid example assumes a trusted project convention that the non-happy cancellation scenarios execute as integration tests, which supports their `@integration-test` tags. Do not infer that tag merely because a scenario is an alternative or error case. Tags cannot decorate individual steps.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="gherkin"><![CDATA[@acceptance-test
+Feature: Cancel an order
+
+  @happy-path
+  Scenario: Cancel a paid order before shipment
+    Given a registered customer owns a paid order awaiting shipment
+    When the customer cancels the order
+    Then the order status becomes cancelled
+    And a refund is initiated for the complete amount paid
+
+  @integration-test @business-rule @error
+  Scenario: Reject cancellation after shipment
+    Given a registered customer owns a shipped order
+    When the customer tries to cancel the order
+    Then the order remains shipped
+
+  @integration-test @idempotency
+  Scenario: Avoid another refund for an already cancelled order
+    Given a registered customer owns an already cancelled order
+    When the customer tries to cancel the order again
+    Then another refund is not initiated
+
+  @integration-test @authorization @error
+  Scenario: Reject cancellation of another customer's order
+    Given an order belongs to another customer
+    When the customer tries to cancel the order
+    Then the cancellation request is rejected]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="gherkin"><![CDATA[Feature: Cancel an order
+
+  Scenario: Cancel a paid order before shipment
+    @happy-path
+    Given a registered customer owns a paid order awaiting shipment
+    When the customer cancels the order
+    Then the order status becomes cancelled
+
+  @integration-test
+  Scenario: Reject cancellation after shipment
+    Given a shipped order
+    When cancellation is requested
+    Then the order remains shipped]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>Identify the Gherkin construct or syntax question being explained</output-format-item>
+            <output-format-item>Show a concise valid `.feature` example using observable domain language</output-format-item>
+            <output-format-item>When useful, contrast it with an invalid or misleading example and name the syntax error</output-format-item>
+            <output-format-item>Base syntax claims on this bundled reference without external lookup</output-format-item>
+            <output-format-item>Separate parser correctness from BDD quality and automation decisions</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not turn this reference into a duplicate step-by-step BDD workflow</safeguards-item>
+            <safeguards-item>Do not search, browse, open, or fetch the external Cucumber Gherkin Reference during skill execution</safeguards-item>
+            <safeguards-item>Do not place colons after `Given`, `When`, `Then`, `And`, or `But`</safeguards-item>
+            <safeguards-item>Do not call Gherkin tags Java annotations, place tags on steps, or infer `@integration-test` from non-happy-path behavior</safeguards-item>
+            <safeguards-item>Do not mix localized keyword languages unless the official localization supports the combination</safeguards-item>
+            <safeguards-item>Do not present procedural or implementation-coupled scenarios as good examples of observable behavior</safeguards-item>
+            <safeguards-item>Do not claim syntactic validity proves shared understanding or requires Cucumber automation</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
