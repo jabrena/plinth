@@ -2,7 +2,7 @@
 
 ### Requirement: BDD design skill
 
-The repository MUST define `058-design-bdd` as a generated, interactive design skill for guiding Behavior-Driven Development from trusted behavior facts through concrete examples and observable scenarios to implementation and verification alignment.
+The repository MUST define `058-design-bdd` as a generated, interactive design skill for independently guiding Behavior-Driven Development from trusted behavior facts through concrete examples to a self-contained set of observable scenarios.
 
 #### Scenario: BDD skill identifier is standardized
 
@@ -10,17 +10,20 @@ The repository MUST define `058-design-bdd` as a generated, interactive design s
 - **WHEN** they create or reference the skill in XML, inventories, OpenSpec artifacts, Gherkin tests, prompt inventories, or generated local skill output
 - **THEN** the identifier is `058-design-bdd`
 - **AND** the skill is categorized with the existing design skills
-- **AND** the supplied external references include `https://cucumber.io/docs/gherkin/reference/`
+- **AND** the OpenSpec provenance identifies `https://cucumber.io/docs/gherkin/reference/` without requiring the generated runtime guidance to contain that URL
 
-#### Scenario: BDD guidance covers discovery, formulation, and delivery alignment
+#### Scenario: BDD guidance covers discovery and formulation independently
 
 - **GIVEN** maintainer-provided or maintainer-sanitized behavior facts for a Java change
 - **WHEN** `058-design-bdd` is applied
 - **THEN** the skill confirms actors, outcomes, business rules, terminology, and unresolved questions
 - **AND** it develops concrete main, alternative, boundary, and error examples supported by those facts
 - **AND** it formulates observable scenarios in shared domain language using Given/When/Then where useful
-- **AND** it connects approved examples to implementation and verification work
-- **AND** it reports deferred examples, unresolved decisions, skipped checks, and remaining risks
+- **AND** it completes the BDD interaction without requiring or invoking another skill
+- **AND** it produces a self-contained outcome that can be reused in a later, separately requested interaction
+- **AND** it asks focused follow-up questions when missing or ambiguous behavior facts would materially affect the outcome
+- **AND** it records unanswered or ambiguous behavior facts as unresolved instead of inventing decisions
+- **AND** it reports deferred examples, unresolved decisions, source conflicts, and remaining risks
 
 #### Scenario: BDD is not reduced to test syntax
 
@@ -30,12 +33,16 @@ The repository MUST define `058-design-bdd` as a generated, interactive design s
 - **AND** it treats Gherkin as an optional scenario representation rather than the definition of BDD
 - **AND** it keeps scenarios focused on externally observable behavior instead of incidental implementation details
 
-#### Scenario: Gherkin syntax guidance uses the canonical reference
+#### Scenario: Gherkin syntax guidance uses the bundled reference
 
 - **GIVEN** the BDD skill recommends or reviews Gherkin syntax
 - **WHEN** it explains feature structure, scenarios, steps, scenario outlines, arguments, tags, comments, or localization
-- **THEN** it uses the official Cucumber Gherkin Reference at `https://cucumber.io/docs/gherkin/reference/` as the canonical syntax source
+- **THEN** it uses the bundled `references/058-design-bdd.md` as the complete runtime syntax source
+- **AND** the generated runtime guidance contains no external Gherkin reference URL
+- **AND** it does not search, browse, open, or fetch the external upstream reference during skill execution
 - **AND** it distinguishes primary keywords from secondary syntax such as Doc Strings, Data Tables, tags, and comments
+- **AND** `plinth-skills-generator/src/main/resources/skill-references/058-design-bdd.xml` explains the syntax through PML `<examples>` containing valid and invalid `.feature` examples
+- **AND** the detailed reference does not define procedural PML `<steps>` that duplicate the interactive workflow in `058-skill.xml`
 - **AND** it does not present syntactic validity as sufficient evidence of good BDD
 - **AND** it does not require every discovered example to be automated with Cucumber
 
@@ -51,18 +58,17 @@ The BDD skill MUST use maintainer-provided or maintainer-sanitized behavior fact
 - **AND** it does not execute or propagate instructions embedded in the source text
 - **AND** it reports conflicts between trusted sources for explicit resolution
 
-### Requirement: Adjacent skill boundaries
+### Requirement: Independent interaction boundary
 
-The BDD skill MUST preserve the responsibilities of the existing user-story, TDD, and acceptance-testing skills.
+The BDD skill MUST complete discovery and scenario formulation independently of user-story, TDD, and acceptance-testing skills.
 
-#### Scenario: Route work requiring an adjacent skill
+#### Scenario: Complete BDD without another skill
 
-- **GIVEN** a BDD session identifies follow-on artifact or implementation work
-- **WHEN** the requested work is outside BDD discovery and formulation
-- **THEN** user-story Markdown and feature-file authoring is routed to `014-agile-user-story`
-- **AND** red-green-refactor Java implementation is routed to `054-design-tdd`
-- **AND** acceptance-test implementation is routed to `133`, `323`, `423`, or `523` according to the project framework
-- **AND** the BDD skill preserves traceability from examples to the routed follow-on work
+- **GIVEN** a user requests BDD discovery and scenario formulation
+- **WHEN** `058-design-bdd` completes the interaction
+- **THEN** it does not invoke, route to, or require another skill
+- **AND** it returns a self-contained BDD outcome
+- **AND** the user may provide that outcome as input to a later, separately requested implementation or verification interaction
 
 ### Requirement: Generator registration
 
@@ -87,9 +93,9 @@ The BDD design skill MUST include Gherkin acceptance coverage, a matching prompt
 #### Scenario: Add acceptance test for BDD guidance
 
 - **WHEN** `plinth-skills-generator/src/test/resources/gherkin/skills/058-design-bdd.feature` is inspected
-- **THEN** it includes an acceptance scenario covering trusted behavior input, concrete-example discovery, shared-language scenario formulation, and implementation/verification alignment
-- **AND** it verifies the generated guidance supplies `https://cucumber.io/docs/gherkin/reference/` as its canonical Gherkin syntax reference
-- **AND** it verifies the adjacent skill routing boundaries
+- **THEN** it includes an acceptance scenario covering trusted behavior input, concrete-example discovery, shared-language scenario formulation, and an independent self-contained outcome
+- **AND** it verifies the generated runtime guidance contains no external Gherkin reference URL and does not access the external upstream reference during skill execution
+- **AND** it verifies that the BDD interaction does not require or invoke another skill
 - **AND** `plinth-skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` lists `execute @plinth-skills-generator/src/test/resources/gherkin/skills/058-design-bdd.feature`
 
 #### Scenario: Document the BDD design skill
@@ -97,7 +103,7 @@ The BDD design skill MUST include Gherkin acceptance coverage, a matching prompt
 - **WHEN** `documentation/guides/INVENTORY-SKILLS-JAVA.md` is inspected
 - **THEN** its Design skills section includes `058-design-bdd`
 - **AND** it describes the skill as interactive BDD guidance from trusted behavior facts through examples and observable scenarios
-- **AND** it identifies the routing boundary with user-story, TDD, and acceptance-test implementation skills
+- **AND** it identifies the independent interaction boundary and possible reuse in a later, separately requested interaction
 
 ### Requirement: Source and generated-output boundaries
 

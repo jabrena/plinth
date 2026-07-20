@@ -176,6 +176,13 @@ execute @plinth-skills-generator/src/test/resources/gherkin/skills/057-design-fe
 and verify that acceptance-tests passes.
 ```
 
+## 058-design-bdd
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/058-design-bdd.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash

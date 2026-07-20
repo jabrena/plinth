@@ -184,6 +184,11 @@
             <reference>057-design-feature-toggles</reference>
         </reference-list>
     </skill>
+    <skill id="058" skillId="058-design-bdd">
+        <reference-list>
+            <reference>058-design-bdd</reference>
+        </reference-list>
+    </skill>
     <skill id="110">
         <reference-list>
             <reference>110-java-maven-best-practices</reference>
