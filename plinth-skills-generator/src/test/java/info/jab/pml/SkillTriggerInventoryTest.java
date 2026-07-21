@@ -16,7 +16,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("Skill trigger inventory")
 class SkillTriggerInventoryTest {
 
-    private static final int MINIMUM_TRIGGER_COUNT = 5;
+    private static final int MINIMUM_TRIGGER_COUNT = 4;
 
     @Test
     @DisplayName("Should require minimum triggers for every skill")

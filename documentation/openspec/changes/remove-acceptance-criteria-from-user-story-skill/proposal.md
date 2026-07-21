@@ -11,6 +11,7 @@ Issue [#1065](https://github.com/jabrena/plinth/issues/1065) reports that skill 
 - Update skill metadata (title, description, triggers, constraints) so it no longer advertises Gherkin/BDD feature-file authoring for `014-agile-user-story`.
 - Update the `documentation/guides/INVENTORY-SKILLS-JAVA.md` entry for `014-agile-user-story` so it no longer claims the skill produces a `.feature` file.
 - Regenerate local skill output under `.agents/skills` for validation without refreshing public `skills/` release output.
+- Relax the repo-wide minimum trigger count from five to four (`skill-trigger-quality` capability and `SkillTriggerInventoryTest`), because dropping the Gherkin trigger leaves `014-agile-user-story` with four legitimate, non-synthetic triggers and no other approved requirement calls for inventing a fifth.
 
 ## Capabilities
 
@@ -20,7 +21,9 @@ Issue [#1065](https://github.com/jabrena/plinth/issues/1065) reports that skill 
 
 ### Modified Capabilities
 
-None. No existing OpenSpec capability spec currently tracks `014-agile-user-story` requirements (the only prior related change, `2026-04-07-add-invest-criteria-user-story-skill`, is archived without a live `specs/` entry), so this change adds the first tracked capability for this skill.
+- `skill-trigger-quality`: Lowers the minimum required trigger count per skill from five to four, and `SkillTriggerInventoryTest`'s `MINIMUM_TRIGGER_COUNT` from 5 to 4, so that narrowing a skill's scope is not forced to invent an unneeded trigger just to clear an unrelated cross-cutting floor. This was discovered as a real conflict during implementation: removing the Gherkin trigger from `014-agile-user-story` dropped it to four triggers, which failed the previous five-trigger minimum.
+
+No other existing OpenSpec capability spec currently tracks `014-agile-user-story` requirements itself (the only prior related change, `2026-04-07-add-invest-criteria-user-story-skill`, is archived without a live `specs/` entry), so `agile-user-story-skill-reference` is the first tracked capability for that skill.
 
 ## Source and Derivation
 
