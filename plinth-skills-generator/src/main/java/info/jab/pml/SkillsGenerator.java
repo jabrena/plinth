@@ -41,7 +41,6 @@ public final class SkillsGenerator {
 
     /**
      * Generates SKILL.md and reference content for all skills in the inventory.
-     * Skills with {@code requiresSystemPrompt=false} get SKILL.md only (no reference content).
      *
      * @return stream of generated skill outputs
      */

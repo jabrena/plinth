@@ -1,0 +1,5 @@
+# OpenSpec project configuration for the calculator alignment example.
+schemaVersion: 1
+project:
+  name: calculator-openspec-example
+  description: Aligned OpenSpec fixture for the 059-design-atdd skill.

@@ -183,6 +183,13 @@ execute @plinth-skills-generator/src/test/resources/gherkin/skills/058-design-bd
 and verify that acceptance-tests passes.
 ```
 
+## 059-design-atdd
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/059-design-atdd.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash

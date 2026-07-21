@@ -78,7 +78,6 @@ class SkillsGeneratorTest {
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
         void should_generateValidSkill_when_skillIdProvided(SkillIndexes.SkillDescriptor descriptor) throws Exception {
             String skillId = descriptor.skillId();
-            boolean requiresSystemPrompt = descriptor.requiresSystemPrompt();
             boolean useXml = descriptor.useXml();
 
             // Given - skill file in resources/skill-indexes/ is the source of truth (.md or .xml when useXml)
@@ -88,7 +87,7 @@ class SkillsGeneratorTest {
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
-            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId, requiresSystemPrompt, useXml);
+            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId, true, useXml);
 
             // Then - Generated SKILL.md must exactly match the skill source (user-editable)
             assertThat(output.skillMd())
@@ -97,20 +96,16 @@ class SkillsGeneratorTest {
                     numericId(skillId), useXml ? "xml" : "md")
                 .isEqualTo(expectedSkillMd);
 
-            // Then - Validate reference content (only for skills with system prompt)
-            if (requiresSystemPrompt) {
-                assertThat(output.referenceMds())
-                    .containsOnlyKeys(descriptor.references().toArray(String[]::new));
-                assertThat(output.referenceMds().values())
-                    .allSatisfy(referenceMd -> assertThat(referenceMd)
-                        .startsWith("---")
-                        .contains("## Role")
-                        .contains("## Goal")
-                        .contains("name:")
-                        .contains("description:"));
-            } else {
-                assertThat(output.referenceMds()).isEmpty();
-            }
+            // Then - Validate reference content
+            assertThat(output.referenceMds())
+                .containsOnlyKeys(descriptor.references().toArray(String[]::new));
+            assertThat(output.referenceMds().values())
+                .allSatisfy(referenceMd -> assertThat(referenceMd)
+                    .startsWith("---")
+                    .contains("## Role")
+                    .contains("## Goal")
+                    .contains("name:")
+                    .contains("description:"));
 
             Map<String, String> expectedResources = descriptor.resources().stream()
                 .collect(Collectors.toMap(
@@ -234,8 +229,7 @@ class SkillsGeneratorTest {
     class TitleConsistencyTests {
 
         private static Stream<SkillIndexes.SkillDescriptor> provideSkillDescriptorsWithSystemPrompt() {
-            return SkillIndexes.skillDescriptors()
-                .filter(SkillIndexes.SkillDescriptor::requiresSystemPrompt);
+            return SkillIndexes.skillDescriptors();
         }
 
         @ParameterizedTest
