@@ -33,6 +33,20 @@ The OpenSpec skill SHALL create or update proposal, specification, design, and t
 - **AND** it records the issue as the source
 - **AND** it does not invent absent requirements
 
+#### Scenario: Scaffold a new change via the OpenSpec CLI
+
+- **WHEN** the approved change ID does not already exist under `openspec/changes/`
+- **THEN** the workflow runs `openspec new change <change-id>` to scaffold the change directory before authoring any artifact
+- **AND** the scaffolded directory includes a CLI-generated `.openspec.yaml` metadata file
+- **AND** the workflow authors `proposal.md`, `design.md`, spec deltas, and `tasks.md` into the scaffolded directory using sanitized source facts
+- **AND** the workflow removes the CLI-generated placeholder `README.md` once `proposal.md` is authored
+
+#### Scenario: Skip re-scaffolding an existing change
+
+- **WHEN** the approved change ID already exists under `openspec/changes/`
+- **THEN** the workflow does not run `openspec new change <change-id>` again
+- **AND** it edits the existing proposal, design, spec, or tasks artifacts directly
+
 ### Requirement: Change scope assessment
 
 The OpenSpec skill MUST assess whether inputs represent one reviewable change or multiple independently valuable or deployable changes.
