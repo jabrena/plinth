@@ -32,6 +32,7 @@ Create or update OpenSpec proposal, design, specification, and task artifacts fr
       <constraint>**MUST**: Accept issue, plan, approved design, ADR, existing OpenSpec, or combined inputs</constraint>
       <constraint>**MUST**: Check CLI availability with `openspec --version` before OpenSpec operations</constraint>
       <constraint>**MUST**: Use a stable change ID without date prefix/suffix when creating a new change; dates are only used as a prefix when archiving changes</constraint>
+      <constraint>**MUST**: Scaffold a new change with `openspec new change &lt;change-id&gt;` before authoring artifacts, and never re-run it for an existing change</constraint>
       <constraint>**MUST**: Assess one reviewable change versus multiple independently valuable or deployable changes</constraint>
       <constraint>**MUST**: Obtain user approval for a multiple-change map before creating changes</constraint>
       <constraint>**MUST**: Record source artifacts and derivation direction</constraint>
@@ -66,11 +67,11 @@ Create or update OpenSpec proposal, design, specification, and task artifacts fr
     </step>
     <step number="3">
       <step-title>Check OpenSpec tooling and project</step-title>
-      <step-content>Run `openspec --version`, initialize with plain `openspec init` when approved and needed, and inspect existing changes from the parent directory containing `openspec/`.</step-content>
+      <step-content>Run `openspec --version`, initialize with plain `openspec init` when approved and needed, and inspect existing changes from the parent directory containing `openspec/`. Scaffold a change that does not yet exist with `openspec new change &lt;change-id&gt;`; skip this for a change that already exists.</step-content>
     </step>
     <step number="4">
       <step-title>Create or update approved changes</step-title>
-      <step-content>Create or update proposal, design, specification deltas, and tasks for each approved change. Keep one atomic outcome together even when it updates several capability specifications.</step-content>
+      <step-content>Create or update proposal, design, specification deltas, and tasks for each approved change, removing the CLI-generated placeholder `README.md` once `proposal.md` is authored for a newly scaffolded change. Keep one atomic outcome together even when it updates several capability specifications.</step-content>
     </step>
     <step number="5">
       <step-title>Validate authority and alignment</step-title>
