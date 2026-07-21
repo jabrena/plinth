@@ -22,6 +22,7 @@ Scenario: Install embedded commands into the GitHub commands destination
   And the target directory contains exactly these command files:
     | fileName                 |
     | update-issue.md          |
+    | explore-problem.md       |
     | create-feature-branch.md |
     | create-worktree.md       |
     | explore-design.md        |

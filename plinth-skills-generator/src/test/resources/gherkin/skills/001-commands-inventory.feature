@@ -21,6 +21,7 @@ Scenario: Generate embedded commands inventory with every command asset
   And the generated inventory file includes exactly one row for each embedded command asset:
     | assetFile                | command                  |
     | update-issue.md          | /update-issue            |
+    | explore-problem.md       | /explore-problem         |
     | create-feature-branch.md | /create-feature-branch   |
     | create-worktree.md       | /create-worktree         |
     | explore-design.md        | /explore-design          |

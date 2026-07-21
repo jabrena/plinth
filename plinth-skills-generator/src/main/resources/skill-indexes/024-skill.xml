@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd"
+      id="024-context-mapping"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.18.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when a problem under exploration needs its surrounding system context identified before design begins: Existing systems, Integrations, Ownership, and External dependencies. This should trigger when `/explore-problem` evaluates an issue's Context Mapping point of view, or when a maintainer directly asks to map the systems, integrations, owners, and external dependencies relevant to a problem.</description>
+  </metadata>
+
+  <title>Context Mapping</title>
+  <goal><![CDATA[
+Guide identification of Existing systems, Integrations, Ownership, and External dependencies relevant to a problem under exploration. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- Identifying existing systems that already touch the problem area
+- Mapping integrations and data flows between those systems
+- Naming ownership: who operates, maintains, or is accountable for each system or integration
+- Identifying external dependencies (third-party services, other teams, contracts) outside the team's direct control
+- Feeding context-mapping findings into `025-quality-attribute-discovery` and the remaining Functional Specification lenses
+]]></goal>
+
+  <constraints>
+    <constraints-description>Map the surrounding context before any design decision assumes a system boundary. When this technique is orchestrated by `/explore-problem`, the orchestrating command owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** read `references/024-context-mapping.md` before applying Context Mapping guidance</constraint>
+      <constraint>**MUST** identify existing systems that already touch the problem area, not only the system expected to change</constraint>
+      <constraint>**MUST** identify integrations and data flows between the identified systems</constraint>
+      <constraint>**MUST** name an owner (team or role) for each identified system or integration when known</constraint>
+      <constraint>**MUST** identify external dependencies outside the team's direct control, such as third-party services, other teams, or contracts</constraint>
+      <constraint>**MUST NOT** invent a system, integration, owner, or external dependency when the available content is vague or ambiguous; flag the gap for a clarifying question instead</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Map the systems and integrations around this problem</trigger>
+      <trigger>Identify ownership for these systems</trigger>
+      <trigger>List the external dependencies for this issue</trigger>
+      <trigger>Apply context mapping before design begins</trigger>
+      <trigger>Draft the Context Mapping section of a Functional Specification</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Read the Reference</step-title>
+      <step-content>Read `references/024-context-mapping.md`, then review the problem frame for systems already implicated by the problem.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Identify Existing Systems</step-title>
+      <step-content>List existing systems that already touch the problem area, including systems that are affected but not expected to change.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Map Integrations</step-title>
+      <step-content>Identify integrations and data flows between the identified systems.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Name Ownership</step-title>
+      <step-content>Name an owning team or role for each identified system or integration when known.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Identify External Dependencies</step-title>
+      <step-content>Identify third-party services, other teams, or contracts outside the team's direct control that the problem or its resolution depends on.</step-content>
+    </step>
+    <step number="6">
+      <step-title>Report the Context Map</step-title>
+      <step-content>Report Existing systems, Integrations, Ownership, and External dependencies, and flag any item left open pending a clarifying answer.</step-content>
+    </step>
+  </steps>
+</prompt>
