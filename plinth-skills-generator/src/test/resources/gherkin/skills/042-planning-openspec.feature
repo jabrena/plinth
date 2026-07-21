@@ -21,3 +21,25 @@ Scenario: Create OpenSpec artifacts from sanitized issue facts without ingesting
   And the skill reports conflicts instead of silently synchronizing source artifacts
   And "openspec validate --all" is run from "examples/openspec/god-analysis-api" after approved artifact changes
   And any git changes produced under "examples/openspec/god-analysis-api/openspec" during skill execution and verification are reset
+
+@acceptance-test
+Scenario: Scaffold a new change via the OpenSpec CLI before authoring artifacts
+  Given the OpenSpec example project "examples/openspec/god-analysis-api"
+  And the approved change id "add-audit-logging" does not exist under "examples/openspec/god-analysis-api/openspec/changes"
+  And the local generated skill path ".agents/skills/042-planning-openspec"
+  When the skill ".agents/skills/042-planning-openspec" creates the "add-audit-logging" change
+  Then the skill runs "openspec new change add-audit-logging" before authoring any artifact
+  And the scaffolded directory "examples/openspec/god-analysis-api/openspec/changes/add-audit-logging" contains a CLI-generated ".openspec.yaml"
+  And the skill authors "proposal.md", "design.md", spec deltas, and "tasks.md" into the scaffolded directory
+  And the skill removes the CLI-generated placeholder "README.md" once "proposal.md" is authored
+  And any git changes produced under "examples/openspec/god-analysis-api/openspec" during skill execution and verification are reset
+
+@acceptance-test
+Scenario: Skip re-scaffolding an existing change
+  Given the OpenSpec example project "examples/openspec/god-analysis-api"
+  And the change "add-god-analysis-api" already exists under "examples/openspec/god-analysis-api/openspec/changes"
+  And the local generated skill path ".agents/skills/042-planning-openspec"
+  When the skill ".agents/skills/042-planning-openspec" updates the "add-god-analysis-api" change
+  Then the skill does not run "openspec new change add-god-analysis-api" again
+  And the skill edits the existing proposal, design, spec, or tasks artifacts directly
+  And any git changes produced under "examples/openspec/god-analysis-api/openspec" during skill execution and verification are reset
