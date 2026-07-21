@@ -1,0 +1,41 @@
+{
+  "efficiency": {
+    "wall_clock_s": 620,
+    "active_agent_s": 580,
+    "tokens_in": 15000,
+    "tokens_out": 6000,
+    "tokens_total": 21000,
+    "cost_usd": 0.15
+  },
+  "outcome_quality": {
+    "acceptance_pass": true,
+    "acceptance_coverage": 1.0,
+    "rework_turns": 0,
+    "artifact_completeness": 1.0
+  },
+  "protocol_labels": {
+    "scenario": "scenario1",
+    "case_id": "case-1-readme-only",
+    "tool": "claude-code",
+    "model": "claude-sonnet-5",
+    "plinth_config": "bare-agent",
+    "commit": "73f54e44f62ddfd6889196d0e48bacb5c7a5cdcb",
+    "retry_count": 0,
+    "human_intervention_min": 0
+  },
+  "plinth_usage": {
+    "skills_count": 0,
+    "commands_count": 0,
+    "agents_count": 0,
+    "skills": [],
+    "commands": [],
+    "agents": []
+  },
+  "solution_snapshot": {
+    "demo_root": "benchmarks/scenario1/demo/",
+    "tree_format": "unix-tree",
+    "tree_encoding": "base64",
+    "tree_b64": "YmVuY2htYXJrcy9zY2VuYXJpbzEvZGVtby8KfC0tIC5naXRrZWVwCnwtLSBwb20ueG1sCmAtLSBzcmMKICAgIHwtLSBtYWluCiAgICB8ICAgYC0tIGphdmEKICAgIHwgICAgICAgYC0tIGluZm8KICAgIHwgICAgICAgICAgIGAtLSBqYWIKICAgIHwgICAgICAgICAgICAgICBgLS0gbXMKICAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZEFuYWx5c2lzQXBwbGljYXRpb24uamF2YQogICAgfCAgICAgICAgICAgICAgICAgICB8LS0gR29kU291cmNlLmphdmEKICAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZFNvdXJjZUNsaWVudC5qYXZhCiAgICB8ICAgICAgICAgICAgICAgICAgIHwtLSBHb2RTb3VyY2VDbGllbnRDb25maWcuamF2YQogICAgfCAgICAgICAgICAgICAgICAgICB8LS0gR29kU3RhdHNDb250cm9sbGVyLmphdmEKICAgIHwgICAgICAgICAgICAgICAgICAgfC0tIEdvZFN0YXRzU2VydmljZS5qYXZhCiAgICB8ICAgICAgICAgICAgICAgICAgIGAtLSBHb2RTdGF0c1N1bVJlc3BvbnNlLmphdmEKICAgIGAtLSB0ZXN0CiAgICAgICAgYC0tIGphdmEKICAgICAgICAgICAgYC0tIGluZm8KICAgICAgICAgICAgICAgIGAtLSBqYWIKICAgICAgICAgICAgICAgICAgICBgLS0gbXMKICAgICAgICAgICAgICAgICAgICAgICAgYC0tIEdvZFN0YXRzQWNjZXB0YW5jZVRlc3QuamF2YQoKMTIgZGlyZWN0b3JpZXMsIDEwIGZpbGVzCg==",
+    "file_count": 9
+  }
+}
