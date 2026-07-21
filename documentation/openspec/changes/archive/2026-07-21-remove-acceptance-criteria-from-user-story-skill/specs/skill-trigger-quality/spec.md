@@ -1,9 +1,6 @@
-# skill-trigger-quality Specification
+## MODIFIED Requirements
 
-## Purpose
-Define the quality requirements that keep generated skills discoverable through meaningful trigger phrases and enforce a minimum trigger inventory in the skills generator.
-## Requirements
-### Requirement: Generated skills expose at least four meaningful triggers
+### Requirement: Generated skills expose at least five meaningful triggers
 
 Every generated skill MUST define at least four meaningful trigger phrases in its source skill index XML.
 
@@ -43,23 +40,3 @@ The `plinth-skills-generator` module MUST include focused validation that detect
 - **WHEN** all affected skill sources have at least four meaningful triggers
 - **AND** `./mvnw -pl plinth-skills-generator -Dtest=SkillTriggerInventoryTest test` is run
 - **THEN** the trigger inventory validation passes
-
-### Requirement: Source and generated-output boundaries are preserved
-
-The implementation MUST update XML sources and regenerate local skill output without directly editing generated legacy or release artifacts.
-
-#### Scenario: Preserve generated-output ownership
-
-- **WHEN** implementation files are reviewed
-- **THEN** `.cursor/rules/` is not edited directly
-- **AND** `.agents/skills/` is not edited manually
-- **AND** public `skills/` release output is not edited manually
-- **AND** public `skills/` is refreshed only through the release profile when release output is intentionally in scope
-- **AND** local `.agents/skills` output is refreshed only by running the documented generator command
-
-#### Scenario: Local generated output reflects trigger changes
-
-- **WHEN** `./mvnw clean install -pl plinth-skills-generator` is run after XML trigger updates
-- **THEN** representative generated `.agents/skills/*/SKILL.md` files include descriptions derived from the updated trigger phrases
-- **AND** generated references contain no unresolved include markers or broken local reference paths
-
