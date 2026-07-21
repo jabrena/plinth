@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when a problem under exploration needs its surrounding system context identified before design begins: Existing systems, Integrations, Ownership, and External dependencies. This should trigger when `/explore-problem` evaluates an issue's Context Mapping point of view, or when a maintainer directly asks to map the systems, integrations, owners, and external dependencies relevant to a problem.</description>
+    <description>Use when a problem under exploration needs its surrounding system context identified before design begins — Existing systems, Integrations, Ownership, and External dependencies. This should trigger when `/explore-problem` evaluates an issue's Context Mapping point of view, or when a maintainer directly asks to map the systems, integrations, owners, and external dependencies relevant to a problem.</description>
   </metadata>
 
   <title>Context Mapping</title>
