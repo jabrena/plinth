@@ -67,14 +67,21 @@ install @004-commands-installation github-copilot
 
 ## 4. 当工具支持时安装项目 agents
 
-Commands 和 skills 已足够开始使用。如果你还想使用预定义的 robot agents，请告诉你的 agent 你使用的 AI agent harness 工具：`cursor` 或 `claude-code`。
+Commands 和 skills 已足够开始使用。如果你还想使用预定义的 robot agents，请告诉你的 agent 你使用的 AI agent harness 工具：`cursor`、`claude-code`、`codex` 或 `github-copilot`。
 
 ```text
 install @005-agents-installation cursor
 install @005-agents-installation claude-code
+install @005-agents-installation codex
+install @005-agents-installation github-copilot
 ```
 
-安装器支持 `.cursor/agents` 和 `.claude/agents`。
+常见的 agent 目标目录包括：
+
+- `.cursor/agents`
+- `.claude/agents`
+- `.codex/agents`
+- `.github/agents`
 
 ## 5. 使用 workflow
 

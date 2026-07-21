@@ -67,14 +67,21 @@ Los destinos habituales para commands son:
 
 ## 4. Instala los agents del proyecto cuando tu herramienta los soporte
 
-Commands y skills son suficientes para empezar. Si también quieres usar los robot agents predefinidos, indica a tu agente qué AI agent harness usas: `cursor` o `claude-code`.
+Commands y skills son suficientes para empezar. Si también quieres usar los robot agents predefinidos, indica a tu agente qué AI agent harness usas: `cursor`, `claude-code`, `codex` o `github-copilot`.
 
 ```text
 install @005-agents-installation cursor
 install @005-agents-installation claude-code
+install @005-agents-installation codex
+install @005-agents-installation github-copilot
 ```
 
-El instalador soporta `.cursor/agents` y `.claude/agents`.
+Los destinos habituales para agents son:
+
+- `.cursor/agents`
+- `.claude/agents`
+- `.codex/agents`
+- `.github/agents`
 
 ## 5. Usa el workflow
 

@@ -67,14 +67,21 @@ Typical command destinations are:
 
 ## 4. Install the project agents when your tool supports them
 
-Commands and skills are enough to start. If you also want the predefined robot agents, tell your agent which AI agent harness tool you use: `cursor` or `claude-code`.
+Commands and skills are enough to start. If you also want the predefined robot agents, tell your agent which AI agent harness tool you use: `cursor`, `claude-code`, `codex`, or `github-copilot`.
 
 ```text
 install @005-agents-installation cursor
 install @005-agents-installation claude-code
+install @005-agents-installation codex
+install @005-agents-installation github-copilot
 ```
 
-The installer supports `.cursor/agents` and `.claude/agents`.
+Typical agent destinations are:
+
+- `.cursor/agents`
+- `.claude/agents`
+- `.codex/agents`
+- `.github/agents`
 
 ## 5. Use the workflow
 
