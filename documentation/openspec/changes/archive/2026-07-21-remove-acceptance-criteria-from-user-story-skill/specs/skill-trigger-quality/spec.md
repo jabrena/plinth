@@ -1,6 +1,6 @@
 ## MODIFIED Requirements
 
-### Requirement: Generated skills expose at least four meaningful triggers
+### Requirement: Generated skills expose at least five meaningful triggers
 
 Every generated skill MUST define at least four meaningful trigger phrases in its source skill index XML.
 
