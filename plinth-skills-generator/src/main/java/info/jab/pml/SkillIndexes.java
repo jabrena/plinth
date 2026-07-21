@@ -3,7 +3,6 @@ package info.jab.pml;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 import java.util.Objects;
 import java.util.stream.Stream;
 import org.jspecify.annotations.Nullable;
@@ -14,10 +13,8 @@ import org.w3c.dom.NodeList;
 /**
  * Inventory of skills to generate, loaded from {@code skills.xml}.
  * <p>
- * Each entry has an {@code id} (numeric or string like "010"). When {@code requiresSystemPrompt}
- * is true (default), the skillId is derived from the first item in {@code references/reference-list/reference}
- * unless {@code skillId} is explicitly set. When false, the entry must specify {@code skillId}
- * and no reference is required.
+ * Each entry has an {@code id} (numeric or string like "010"). The skillId is derived from the
+ * first item in {@code references/reference-list/reference} unless {@code skillId} is explicitly set.
  * Optional {@code resource-list/resource} entries declare classpath sources and
  * skill-root-relative targets for standalone generated files.
  * Each skill must have a summary in {@code skill-indexes/{id}-skill.md} or
@@ -30,8 +27,7 @@ public final class SkillIndexes {
 
     /**
      * Returns the skill IDs from the inventory. For each entry, validates the skill summary
-     * exists. When {@code requiresSystemPrompt} is true, resolves skillId from skill-references;
-     * when false, uses the provided {@code skillId}.
+     * exists and resolves the skillId.
      *
      * @return stream of skill IDs (e.g. 110-java-maven-best-practices)
      * @throws RuntimeException if the inventory cannot be loaded or validation fails
@@ -43,9 +39,7 @@ public final class SkillIndexes {
         for (InventoryEntry entry : entries) {
             String numericId = entry.numericId();
             validateSkillSummaryExists(numericId, entry.useXml());
-            String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillId(entry)
-                : requireConfiguredSkillId(entry);
+            String skillId = resolveSkillId(entry);
             skillIds.add(skillId);
         }
 
@@ -53,7 +47,7 @@ public final class SkillIndexes {
     }
 
     /**
-     * Returns skill descriptors (skillId + requiresSystemPrompt + useXml) for generator use.
+     * Returns skill descriptors for generator use.
      */
     public static Stream<SkillDescriptor> skillDescriptors() {
         List<InventoryEntry> entries = loadInventory();
@@ -61,9 +55,7 @@ public final class SkillIndexes {
         for (InventoryEntry entry : entries) {
             String numericId = entry.numericId();
             validateSkillSummaryExists(numericId, entry.useXml());
-            String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillId(entry)
-                : requireConfiguredSkillId(entry);
+            String skillId = resolveSkillId(entry);
             descriptors.add(new SkillDescriptor(
                 skillId,
                 entry.requiresSystemPrompt(),
@@ -76,7 +68,8 @@ public final class SkillIndexes {
     }
 
     /**
-     * Skill ID, whether it requires a system prompt for reference generation, and whether to use XML source.
+     * Skill ID, reference-generation behavior, whether to use an XML source, references, and resource files.
+     * Inventory-loaded descriptors always require reference generation; the boolean component remains for API compatibility.
      */
     public record SkillDescriptor(
         String skillId,
@@ -107,14 +100,6 @@ public final class SkillIndexes {
                 + ". Add at least one reference-list/reference entry in skills.xml.");
         }
         return entry.references().getFirst();
-    }
-
-    private static String requireConfiguredSkillId(InventoryEntry entry) {
-        if (entry.skillId() == null || entry.skillId().isBlank()) {
-            throw new RuntimeException("Entry with id " + entry.numericId()
-                + " has requiresSystemPrompt=false but no skillId specified.");
-        }
-        return entry.skillId();
     }
 
     /**
@@ -151,7 +136,6 @@ public final class SkillIndexes {
                 if (numericId == null || numericId.isBlank()) {
                     throw new RuntimeException("skill-inventory entry missing id attribute");
                 }
-                boolean requiresSystemPrompt = parseBooleanAttribute(skillEl, "requiresSystemPrompt", true);
                 String skillId = skillEl.hasAttribute("skillId")
                     ? skillEl.getAttribute("skillId").trim()
                     : null;
@@ -159,20 +143,16 @@ public final class SkillIndexes {
                     skillId = null;
                 }
 
-                if (!requiresSystemPrompt && (skillId == null || skillId.isBlank())) {
-                    throw new RuntimeException("Entry with id " + numericId
-                        + " has requiresSystemPrompt=false but no skillId specified.");
-                }
                 boolean useXml = detectXmlSummary(numericId);
                 List<String> references = parseReferences(skillEl);
                 List<SkillResource> resources = parseResources(skillEl, numericId);
-                if (requiresSystemPrompt && references.isEmpty() && (skillId == null || skillId.isBlank())) {
+                if (references.isEmpty() && (skillId == null || skillId.isBlank())) {
                     throw new RuntimeException("Entry with id " + numericId
-                        + " requires a system prompt but has no reference-list/reference and no skillId.");
+                        + " has no reference-list/reference and no skillId.");
                 }
                 entries.add(new InventoryEntry(
                     numericId,
-                    requiresSystemPrompt,
+                    true,
                     skillId,
                     useXml,
                     references,
@@ -188,14 +168,6 @@ public final class SkillIndexes {
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse skill inventory", e);
         }
-    }
-
-    private static boolean parseBooleanAttribute(Element el, String name, boolean defaultValue) {
-        if (!el.hasAttribute(name)) {
-            return defaultValue;
-        }
-        String v = el.getAttribute(name).trim().toLowerCase(Locale.ROOT);
-        return "true".equals(v) || "yes".equals(v) || "1".equals(v);
     }
 
     private static boolean detectXmlSummary(String numericId) {
@@ -288,9 +260,10 @@ public final class SkillIndexes {
     }
 
     /**
-     * Single entry from skills.xml. When requiresSystemPrompt is true,
-     * skillId is derived from the first reference entry when not explicitly provided.
-     * When false, skillId must be provided and no skill-reference is required.
+     * Single entry from skills.xml. The skillId is derived from the first reference entry when
+     * not explicitly provided.
+     * The {@code requiresSystemPrompt} component remains for API compatibility and is always true
+     * for inventory-loaded entries.
      * Resources declare classpath sources and skill-root-relative output targets.
      * When useXml is true, skill summary is loaded from skill-indexes/{numericId}-skill.xml
      * and transformed via schema validation and XSLT; otherwise from skill-indexes/{numericId}-skill.md.

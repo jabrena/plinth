@@ -69,7 +69,6 @@ class SkillReferenceExampleInventoryTest {
     @DisplayName("Should require minimum examples for every skill reference")
     void should_requireMinimumExamplesForEverySkillReference() throws Exception {
         List<ReferenceExampleCount> counts = SkillIndexes.skillDescriptors()
-            .filter(SkillIndexes.SkillDescriptor::requiresSystemPrompt)
             .flatMap(descriptor -> descriptor.references().stream()
                 .map(reference -> countExamples(descriptor.skillId(), reference)))
             .sorted(Comparator
