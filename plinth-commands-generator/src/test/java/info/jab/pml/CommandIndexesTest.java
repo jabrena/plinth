@@ -187,16 +187,21 @@ class CommandIndexesTest {
             .contains("Mandatory execution contract")
             .contains("If the command runner is not `@robot-tech-lead`")
             .contains("MUST invoke the selected implementation agent")
+            .contains("Before any implementation agent starts, pass the branch/worktree gate below")
             .contains("Branch/worktree gate")
+            .contains("inspect the workspace with `git status --short`")
             .contains("Complete the branch/worktree gate")
             .contains("If the workspace is dirty, stop immediately")
             .contains("Continue only after the user cleans, commits, or stashes the workspace")
             .contains("Do not bypass a dirty workspace by asking for approval to continue")
             .contains("execute `/create-feature-branch`")
             .contains("`/create-worktree`")
+            .contains("Do not start implementation on `main` or the repository default branch unless the user explicitly approves")
+            .contains("Report the selected feature branch or worktree paths before delegating implementation")
             .contains("Do not start implementation before the feature-branch or worktree gate has passed")
             .contains("Skill discovery gate")
             .contains("Skill discovery brief")
+            .contains("before the first implementation handoff")
             .contains("`@042-planning-openspec`")
             .contains("candidate skills to read")
             .contains("Skills applied and skills skipped")
@@ -204,6 +209,39 @@ class CommandIndexesTest {
             .contains("Do not record a skill in benchmark metrics unless its SKILL file was read")
             .contains("request `/review-alignment`")
             .contains("MUST NOT implement application code directly");
+    }
+
+    @Test
+    @DisplayName("Implement spec command must stop when selected OpenSpec scope lacks bidirectional traceability")
+    void should_stopBeforeSideEffects_when_openSpecAcceptanceEvidenceIsIncomplete() {
+        String command = loadClasspathResource("commands/implement-spec.md");
+
+        assertThat(command)
+            .contains("OpenSpec readiness gate")
+            .contains("selected execution scope")
+            .contains("bidirectional traceability")
+            .contains("absent, ambiguous, placeholder, completed-only, partial, or divergent")
+            .contains("each unsupported scenario or task")
+            .contains("before skill discovery, Git-location changes, or implementation delegation")
+            .contains("update the OpenSpec change and rerun `/implement-spec`")
+            .contains("must not invent acceptance criteria or tasks");
+    }
+
+    @Test
+    @DisplayName("Implement spec command must resolve an explicit location before preserving Git safeguards")
+    void should_resolveLocationByPrecedence_when_openSpecIsReady() {
+        String command = loadClasspathResource("commands/implement-spec.md");
+
+        assertThat(command)
+            .contains("Implementation location precedence")
+            .contains("invocation constraints take precedence")
+            .contains("## Implementation Location")
+            .contains("Strategy: `main` | `feature-branch` | `worktree`")
+            .contains("missing, blank, or unsupported `Strategy`")
+            .contains("ask the contributor to choose `main`, a feature branch, or a worktree")
+            .contains("wait for the answer before creating or selecting a location")
+            .contains("separate explicit approval")
+            .contains("dirty-workspace stop remains non-bypassable");
     }
 
     @Test

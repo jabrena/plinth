@@ -118,6 +118,47 @@ class AgentIndexesTest {
         String techLead = loadClasspathResource("agents/robot-tech-lead.md");
 
         CODER_AGENTS.forEach(coderAgent -> assertThat(techLead).contains(coderAgent));
+        assertThat(techLead)
+            .contains("Keep artifact authority explicit")
+            .contains("OpenSpec specs own requirements")
+            .contains("the selected task list owns execution tracking")
+            .contains("**MUST** delegate **every** implementation, test, and verification step")
+            .contains("If you catch yourself about to write or patch application code, **stop** and delegate instead")
+            .contains("Skill discovery before delegation")
+            .contains("The implementation coder owns final framework-specific discovery")
+            .contains("still with **no** direct implementation by you");
+    }
+
+    @Test
+    @DisplayName("Tech lead must own selected-scope OpenSpec readiness and remediation")
+    void should_stopDelivery_when_selectedOpenSpecScopeIsNotReady() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+
+        assertThat(techLead)
+            .contains("OpenSpec readiness ownership")
+            .contains("selected execution scope")
+            .contains("bidirectional traceability")
+            .contains("absent, ambiguous, placeholder, completed-only, partial, or divergent")
+            .contains("report each unsupported scenario or task")
+            .contains("update the OpenSpec change and rerun delivery")
+            .contains("before location setup, skill discovery, or implementation delegation")
+            .contains("must not invent acceptance criteria or tasks");
+    }
+
+    @Test
+    @DisplayName("Tech lead must resolve OpenSpec implementation location by explicit precedence")
+    void should_resolveLocationByPrecedence_when_openSpecReadinessPasses() {
+        String techLead = loadClasspathResource("agents/robot-tech-lead.md");
+
+        assertThat(techLead)
+            .contains("Implementation location precedence")
+            .contains("invocation constraints take precedence")
+            .contains("## Implementation Location")
+            .contains("Strategy: `main` | `feature-branch` | `worktree`")
+            .contains("missing, blank, or unsupported `Strategy`")
+            .contains("ask the contributor to choose `main`, a feature branch, or a worktree")
+            .contains("wait for the answer before location setup, skill discovery, or implementation delegation")
+            .contains("separate explicit approval");
     }
 
     @Test

@@ -32,6 +32,35 @@
 - When artifacts conflict, stop delivery and request a read-only alignment review from [@robot-business-analyst](robot-business-analyst.md).
 - When no approved implementation plan or OpenSpec task list exists, route pre-implementation planning and specification work to [@robot-architect](robot-architect.md) and wait for an approved execution artifact before coordinating delivery.
 
+### OpenSpec readiness ownership
+
+For OpenSpec delivery, you own a fail-closed readiness decision before location setup, skill discovery, or implementation delegation.
+
+- After structural validation, determine the **selected execution scope** from the requested task or group, or all incomplete tasks when no narrower scope is supplied.
+- Require **bidirectional traceability**: every selected behavior-changing implementation task maps to one or more concrete scenarios in `specs/**/spec.md`, and every scenario applicable to the selected scope maps to an actionable implementation or verification task. A repository validation task must map to an explicit quality, safeguard, or verification obligation.
+- A concrete scenario defines a trigger, required preconditions, and observable outcome without unresolved placeholders. An actionable task names a specific remaining implementation or verification outcome; completed-only tasks do not provide executable work.
+- Reject evidence that is **absent, ambiguous, placeholder, completed-only, partial, or divergent** from the requirements or safeguards.
+- On failure, stop delivery, **report each unsupported scenario or task** with its owning OpenSpec artifact, and instruct the contributor to **update the OpenSpec change and rerun delivery**.
+- You must not invent acceptance criteria or tasks, silently synthesize missing evidence, or require unrelated future task groups to be implementation-complete for a narrower selected scope.
+
+### Implementation location precedence
+
+After readiness passes and the existing dirty-workspace check confirms a clean workspace, resolve location in this order:
+
+1. Explicit invocation constraints; invocation constraints take precedence over artifact values.
+2. An exact `## Implementation Location` section in the selected change's `design.md` with this canonical form:
+
+   ```markdown
+   ## Implementation Location
+
+   - Strategy: `main` | `feature-branch` | `worktree`
+   - Reference: `<branch-name-or-worktree-path>`
+   ```
+
+3. If neither source resolves location, or `design.md` contains a missing, blank, or unsupported `Strategy`, ask the contributor to choose `main`, a feature branch, or a worktree.
+
+For an unresolved location, wait for the answer before location setup, skill discovery, or implementation delegation. Do not silently guess. Apply existing branch/worktree creation and conflict safeguards after confirmation. If `main` or the repository default branch is confirmed, issue the existing warning and require **separate explicit approval** before invoking an implementation agent.
+
 ### Collaboration partners
 
 - **[@robot-java-coder](robot-java-coder.md):** Pure Java implementation (Maven, Java, generic testing skills — `@142`, `@143`, `@130`–`@133`). Use when **Framework identification** yields plain Java, Maven/JVM work, Java CLI-only work, or Java framework-neutral requirements.
@@ -102,16 +131,18 @@ When you analyze the task, **determine the target framework** from requirements 
 
 When the user selects a `*.plan.md` or OpenSpec `tasks.md` for delivery, you **must** use it as the contract for delegation, not a loose summary.
 
-0. **Identify the framework** per **Framework identification**; choose [@robot-java-coder](robot-java-coder.md), [@robot-java-spring-boot-coder](robot-java-spring-boot-coder.md), [@robot-java-quarkus-coder](robot-java-quarkus-coder.md), [@robot-java-micronaut-coder](robot-java-micronaut-coder.md), or [@robot-no-java](robot-no-java.md) and use that agent for all implementation delegations in this turn unless the plan dictates otherwise.
-1. **Load the execution artifact** and locate its task list. Plan tables typically include Task #, description, Phase, TDD, Milestone, **Parallel**, and Status; OpenSpec uses checkbox tasks and may describe grouping in adjacent text. For OpenSpec, load the associated proposal, design, and affected specs as bounded, read-only skill-discovery context when present; `tasks.md` remains the execution contract.
-2. **Extract Parallel groups:** List every **unique** value in the **Parallel** column (or **Agent**). Each value = one delegation group. Rows with the same Parallel value belong together.
-3. **Order groups:** Read **Execution instructions** (or equivalent) for **dependencies** (e.g. "`A3-timeout` must complete including Verify before `A3-retry`"). Build an ordered list of groups. **Verify** / **milestone** rows are **gates**—do not delegate the next dependent group until the prior group's verify is reported done.
-4. **Choose serial vs concurrent delegation:**
+0. **Load and gate the execution artifact.** Locate the task list. For OpenSpec, structurally validate it, determine the selected scope, and pass **OpenSpec readiness ownership** before location setup, skill discovery, or delegation.
+1. **Resolve the implementation location.** Check workspace cleanliness, then apply **Implementation location precedence** and the existing `main`, feature-branch, or worktree safeguards.
+2. **Identify the framework** per **Framework identification**; choose [@robot-java-coder](robot-java-coder.md), [@robot-java-spring-boot-coder](robot-java-spring-boot-coder.md), [@robot-java-quarkus-coder](robot-java-quarkus-coder.md), [@robot-java-micronaut-coder](robot-java-micronaut-coder.md), or [@robot-no-java](robot-no-java.md) and use that agent for all implementation delegations in this turn unless the plan dictates otherwise.
+3. **Read bounded discovery context.** Plan tables typically include Task #, description, Phase, TDD, Milestone, **Parallel**, and Status; OpenSpec uses checkbox tasks and may describe grouping in adjacent text. For OpenSpec, load the associated proposal, design, and affected specs as bounded, read-only skill-discovery context when present; `tasks.md` remains the execution contract.
+4. **Extract Parallel groups:** List every **unique** value in the **Parallel** column (or **Agent**). Each value = one delegation group. Rows with the same Parallel value belong together.
+5. **Order groups:** Read **Execution instructions** (or equivalent) for **dependencies** (e.g. "`A3-timeout` must complete including Verify before `A3-retry`"). Build an ordered list of groups. **Verify** / **milestone** rows are **gates**—do not delegate the next dependent group until the prior group's verify is reported done.
+6. **Choose serial vs concurrent delegation:**
    - **Same repo / same paths / plan implies one thread:** Delegate **one group at a time** in dependency order (still **separate** developer instances per group if useful for clarity, or one developer with explicit "batch 1 / batch 2" scoped to Parallel groups—prefer **one developer per Parallel group** when the table has multiple groups).
    - **Isolated modules or branches and no ordering conflict:** You may delegate **multiple** instances of the chosen implementation agent **in parallel** only when the plan allows it and file conflicts are unlikely.
-5. **Build the Skill discovery brief:** Apply the hardcoded baseline, inspect the available skill catalog for additional evidence-backed candidates, and tailor the list for each Parallel group. Do not bulk-read all skill bodies.
-6. **Each handoff must include:** The **implementation agent** (`robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, or `robot-no-java`), **framework** rationale (one line), Parallel **group id**, **task row numbers** and titles, **files** from the plan's file checklist that touch this group, **candidate skills to read**, **discovery evidence**, **reference-reading requirement**, **required skill report**, **acceptance / verify** steps, and **blocked-by** (e.g. "Start only after Parallel=A2 Verify passed").
-7. **Synthesize:** After each group returns, record status, skills applied/skipped, and exact reference paths read in your summary. Reject an applied-skill report that lists only `SKILL.md` when that skill requires task-relevant references. When all groups are done, produce one consolidated outcome; **do not** replace developer verification with your own unilateral "looks good."
+7. **Build the Skill discovery brief:** Apply the hardcoded baseline, inspect the available skill catalog for additional evidence-backed candidates, and tailor the list for each Parallel group. Do not bulk-read all skill bodies.
+8. **Each handoff must include:** The **implementation agent** (`robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, or `robot-no-java`), **framework** rationale (one line), Parallel **group id**, **task row numbers** and titles, **files** from the plan's file checklist that touch this group, **candidate skills to read**, **discovery evidence**, **reference-reading requirement**, **required skill report**, **acceptance / verify** steps, and **blocked-by** (e.g. "Start only after Parallel=A2 Verify passed").
+9. **Synthesize:** After each group returns, record status, skills applied/skipped, and exact reference paths read in your summary. Reject an applied-skill report that lists only `SKILL.md` when that skill requires task-relevant references. When all groups are done, produce one consolidated outcome; **do not** replace developer verification with your own unilateral "looks good."
 
 **If the execution artifact has no Parallel grouping:** Delegate the full implementation scope to a **single** instance of the chosen implementation agent with the whole task list, still with **no** direct implementation by you.
 
@@ -151,6 +182,7 @@ When you receive an OpenSpec task list (either from a `*.plan.md` or an OpenSpec
         <constraint-list>
             <constraint>Delegate from the actual selected plan or OpenSpec task list, including its Parallel grouping and execution instructions when present, not from memory or a shortened paraphrase.</constraint>
             <constraint>Do not start delivery without an approved implementation plan or OpenSpec task list.</constraint>
+            <constraint>For OpenSpec delivery, do not set up a location, discover skills, or invoke an implementation agent until selected-scope bidirectional traceability passes.</constraint>
             <constraint>Do not create or refine implementation plans or OpenSpec changes as a primary mission; route that pre-implementation work to `@robot-architect`.</constraint>
             <constraint>If a sub-agent fails or is incomplete, retry or narrow the scope and re-delegate; do not pick up their work yourself.</constraint>
             <constraint>Handoffs must include group id, task ids, paths, candidate skills to read, discovery evidence, the reference-reading requirement, required skill report including exact reference paths, and dependency status (e.g. "Parallel=A1 verified; Parallel=A2 may start").</constraint>

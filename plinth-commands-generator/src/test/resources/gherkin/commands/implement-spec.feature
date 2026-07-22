@@ -7,6 +7,37 @@ Background:
   And the implementation target directory "examples/openspec/god-analysis-api/demo"
   And the implementation target directory starts empty except for ".gitkeep"
 
+Scenario: Stop before side effects when selected-scope acceptance evidence is incomplete
+  Given the selected OpenSpec scope has absent, ambiguous, placeholder, completed-only, partial, or divergent scenario-to-task evidence
+  When the user executes the implement-spec command
+  Then the command reports every unsupported scenario or task
+  And the command instructs the contributor to update the OpenSpec change and rerun implement-spec
+  And the command does not perform skill discovery, change a Git location, or delegate implementation
+
+Scenario: Continue when selected-scope acceptance evidence is complete
+  Given every selected behavior-changing task maps to at least one concrete scenario
+  And every applicable concrete scenario maps to an actionable implementation or verification task
+  When the user executes the implement-spec command
+  Then the command continues to workspace and implementation-location checks
+  And unrelated future task groups remain outside the current readiness decision
+
+Scenario: Resolve implementation location by explicit precedence
+  Given the OpenSpec readiness gate has passed
+  When invocation constraints provide an implementation location
+  Then the command uses the invocation location instead of the design location
+  When invocation constraints omit the location and design.md has a valid Implementation Location section
+  Then the command uses the design strategy and optional reference
+  When both sources omit a valid location or the design strategy is invalid
+  Then the command asks the contributor to choose main, a feature branch, or a worktree
+  And the command waits before creating or selecting a location and before delegation
+
+Scenario: Preserve default-branch approval after location resolution
+  Given the OpenSpec readiness gate has passed
+  And the confirmed implementation location is main or the repository default branch
+  When the command prepares implementation
+  Then the command warns about direct implementation on the default branch
+  And the command requires separate explicit approval before implementation starts
+
 @acceptance-test
 Scenario: Implement God Analysis API from a validated OpenSpec change
   Remark: Acceptance execution must use the implement-spec command contract and must not implement outside the requested demo directory.
