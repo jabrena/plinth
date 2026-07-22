@@ -237,6 +237,9 @@ class CommandIndexesTest {
             .contains("`042-planning-openspec`")
             .contains("Runs first to create the initial OpenSpec proposal")
             .contains("Use `/explore-design` afterward")
+            .contains("read the issue description and every comment")
+            .contains("complete paginated comment thread cannot be read")
+            .contains("requirements evidence")
             .doesNotContain("`056-design-avoid-breaking-changes`");
     }
 
