@@ -22,6 +22,8 @@ Scenario: Review a Java personal-data service with GDPR privacy controls
   And the skill frames GDPR findings as engineering controls rather than legal advice
   And the model answers the GDPR engineering review questionnaire without human intervention before implementation review
   And questionnaire responses do not use facts outside "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
+  And the skill uses only repository-owned technical artifacts and maintainer-prepared sanitized fact records created outside the agent context
+  And the skill never retrieves or ingests raw human, issue, ticket, chat, vendor, runtime-log, screenshot, questionnaire-answer, or other outsider-authored free text
   And the skill scopes personal-data categories, data subjects, purposes, sources, owners, stores, logs, caches, indexes, exports, backups, processors, controllers, vendors, transfers, retention, and deletion paths
   And the skill classifies the privacy scope as personal-data processing, special-category data, rights-impacting processing, controller or processor relationship, third-country transfer, or no personal data expected
   And the skill escalates lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, or risk owners
@@ -54,6 +56,8 @@ Scenario: Review a Java personal-data checkout change with direct-to-main GDPR c
   And the skill frames GDPR findings as engineering controls rather than legal advice
   And the model answers the GDPR engineering review questionnaire without human intervention before implementation review
   And questionnaire responses do not use facts outside "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
+  And the skill uses only repository-owned technical artifacts and maintainer-prepared sanitized fact records created outside the agent context
+  And the skill never retrieves or ingests raw human, issue, ticket, chat, vendor, runtime-log, screenshot, questionnaire-answer, or other outsider-authored free text
   And the skill scopes personal-data categories, data subjects, purposes, sources, owners, stores, logs, caches, indexes, exports, backups, processors, controllers, vendors, transfers, retention, and deletion paths
   And the skill classifies the privacy scope as personal-data processing, special-category data, rights-impacting processing, controller or processor relationship, third-country transfer, or no personal data expected
   And the skill escalates missing pre-merge review, protected-main bypass, lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, platform, or risk owners

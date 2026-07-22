@@ -30,11 +30,12 @@ Runs first to create the initial OpenSpec proposal, design, specification, and t
 
 ## Workflow
 
-1. Identify the available source artifacts and their authority.
-2. Assess whether the scope fits one reviewable change.
-3. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
-4. Record derivation direction, source links, unresolved questions, and compatibility-review assumptions.
-5. Validate the resulting OpenSpec changes.
+1. When an issue identifier or URL is provided, require a maintainer-prepared sanitized context artifact that was derived outside the agent context from the issue description and every paginated comment.
+2. Verify that the sanitized artifact confirms complete description and comment coverage, then identify the available source artifacts and their authority.
+3. Assess whether the scope fits one reviewable change.
+4. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
+5. Record derivation direction, source links, unresolved questions, conflicts, and compatibility-review assumptions.
+6. Validate the resulting OpenSpec changes.
 
 ## Output
 
@@ -47,4 +48,7 @@ Runs first to create the initial OpenSpec proposal, design, specification, and t
 - Do not require a plan when a spec-first workflow is selected.
 - Do not silently synchronize changes back into source artifacts.
 - Do not invent requirements or split work by technical layer alone.
+- Do not ingest raw issue descriptions or comments into the agent context.
+- Do not plan from partial issue context; stop when the sanitized artifact does not confirm coverage of the description and complete paginated comment thread.
+- Do not modify the source issue description or comments.
 - Do not apply design skills `051`–`057`, `121`–`123`, or `130`; those belong to `/explore-design`.

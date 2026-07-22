@@ -23,6 +23,16 @@ Scenario: Create OpenSpec artifacts from sanitized issue facts without ingesting
   And any git changes produced under "examples/openspec/god-analysis-api/openspec" during skill execution and verification are reset
 
 @acceptance-test
+Scenario: Use sanitized complete issue context when invoked through create-spec
+  Given the skill "042-planning-openspec" is invoked through "/create-spec"
+  And a maintainer-prepared sanitized artifact was derived outside the agent context from the issue description and paginated comment thread
+  And the sanitized artifact confirms coverage of the description and every comment
+  When the skill creates or updates an OpenSpec change from the issue
+  Then the skill uses only the sanitized artifact before deriving OpenSpec artifacts
+  And the skill never retrieves or ingests the raw issue description or comments
+  And the skill stops when the sanitized artifact does not confirm complete description and comment coverage
+
+@acceptance-test
 Scenario: Scaffold a new change via the OpenSpec CLI before authoring artifacts
   Given the OpenSpec example project "examples/openspec/god-analysis-api"
   And the approved change id "add-audit-logging" does not exist under "examples/openspec/god-analysis-api/openspec/changes"
