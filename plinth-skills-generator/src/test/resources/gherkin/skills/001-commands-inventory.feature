@@ -22,6 +22,7 @@ Scenario: Generate embedded commands inventory with every command asset
     | assetFile                | command                  |
     | update-issue.md          | /update-issue            |
     | explore-problem.md       | /explore-problem         |
+    | create-acceptance-criteria.md | /create-acceptance-criteria |
     | create-feature-branch.md | /create-feature-branch   |
     | create-worktree.md       | /create-worktree         |
     | explore-design.md        | /explore-design          |

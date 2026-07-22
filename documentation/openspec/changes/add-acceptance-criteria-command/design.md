@@ -5,7 +5,7 @@ The Functional Specification pipeline separates three concerns:
 ```text
 /update-issue -> User Story in the issue description
 /explore-problem -> Functional Specification in a new issue comment
-/add-acceptance-criteria -> Gherkin acceptance criteria in another new issue comment
+/create-acceptance-criteria -> Gherkin acceptance criteria in another new issue comment
 ```
 
 Issue #1063 and its confirmed Functional Specification establish that Gherkin is the verification artifact for determining whether an asset achieved its goal. The new command must work from the analysis already produced by `/explore-problem`, preserve that analysis unchanged, and publish a separate acceptance artifact with the same Markdown representation across GitHub, Jira, and Azure DevOps.
@@ -16,7 +16,7 @@ Issue #1063 and its confirmed Functional Specification establish that Gherkin is
 
 **Goals:**
 
-- Add `/add-acceptance-criteria <issue-url>` as the acceptance-criteria stage after `/explore-problem`.
+- Add `/create-acceptance-criteria <issue-url>` as the acceptance-criteria stage after `/explore-problem`.
 - Use the maintainer-confirmed Functional Specification comment as the behavior source for `058-design-bdd`.
 - Generate observable Gherkin scenarios without inventing missing behavior.
 - Publish the same Markdown comment structure on GitHub, Jira, and Azure DevOps.
@@ -40,7 +40,7 @@ This is one atomic OpenSpec change. The command, inventory registration, propaga
 
 ### Command ownership and workflow position
 
-`/add-acceptance-criteria` is owned by `@robot-business-analyst`. It operates in the Functional Specification phase, converts confirmed behavioral analysis into acceptance scenarios, and does not make technical architecture or implementation decisions.
+`/create-acceptance-criteria` is owned by `@robot-business-analyst`. It operates in the Functional Specification phase, converts confirmed behavioral analysis into acceptance scenarios, and does not make technical architecture or implementation decisions.
 
 ### Functional Specification comment as the sole behavior source
 

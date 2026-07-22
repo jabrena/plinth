@@ -7,6 +7,13 @@ execute @plinth-commands-generator/src/test/resources/gherkin/commands/benchmark
 and verify that acceptance-tests passes.
 ```
 
+## /create-acceptance-criteria
+
+```bash
+execute @plinth-commands-generator/src/test/resources/gherkin/commands/create-acceptance-criteria.feature
+and verify that acceptance-tests passes.
+```
+
 ## /create-adr
 
 ```bash

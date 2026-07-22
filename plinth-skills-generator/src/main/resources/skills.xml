@@ -36,6 +36,8 @@
                 target="assets/commands/update-issue.md" />
             <resource source="skill-references/assets/commands/explore-problem.md"
                 target="assets/commands/explore-problem.md" />
+            <resource source="skill-references/assets/commands/create-acceptance-criteria.md"
+                target="assets/commands/create-acceptance-criteria.md" />
             <resource source="skill-references/assets/commands/create-feature-branch.md"
                 target="assets/commands/create-feature-branch.md" />
             <resource source="skill-references/assets/commands/create-worktree.md"

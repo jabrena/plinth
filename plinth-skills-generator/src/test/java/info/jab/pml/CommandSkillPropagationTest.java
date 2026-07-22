@@ -19,6 +19,7 @@ class CommandSkillPropagationTest {
         assertThat(reference)
             .contains("assets/commands/")
             .contains("](../assets/commands/update-issue.md)")
+            .contains("](../assets/commands/create-acceptance-criteria.md)")
             .contains("](../assets/commands/benchmark.md)")
             .doesNotContain("/update-issue <issue>")
             .doesNotContain("# update-issue");

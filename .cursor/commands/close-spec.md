@@ -1,7 +1,5 @@
 # close-spec
 
-## Purpose
-
 Archive an OpenSpec change by name, using the OpenSpec CLI, so completed changes can be reconciled and removed from the active change list.
 
 ## Usage

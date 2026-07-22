@@ -10,6 +10,7 @@ Provide a quick checklist of the embedded commands available for installation in
 | --- | --- | --- |
 | `/update-issue` | Analysis / Design | Update existing GitHub or Jira issues with structured user story, acceptance criteria, and resource content. |
 | `/explore-problem` | Analysis / Design | Evaluate an issue through five points of view and post a Functional Specification comment on the issue. |
+| `/create-acceptance-criteria` | Analysis / Design | Derive Gherkin acceptance criteria from a Functional Specification comment and post them as a separate issue comment. |
 | `/create-feature-branch` | Analysis / Design to Implementation | Create and switch to a conventionally named branch for repository-backed analysis, design, or implementation. |
 | `/create-worktree` | Analysis / Design to Implementation | Create an isolated branch and linked worktree for parallel work. |
 | `/explore-design` | Design | Compare technical approaches and obtain an approved design direction. |

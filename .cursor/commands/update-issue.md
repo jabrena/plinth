@@ -1,7 +1,5 @@
 # update-issue
 
-## Purpose
-
 Update an existing project issue description with structured, evidence-backed content.
 
 ## Usage

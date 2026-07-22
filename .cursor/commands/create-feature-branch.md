@@ -1,7 +1,5 @@
 # create-feature-branch
 
-## Purpose
-
 Create and switch the current checkout to a conventionally named local branch for GitHub issue, OpenSpec, analysis, design, documentation, or implementation work.
 
 ## Usage

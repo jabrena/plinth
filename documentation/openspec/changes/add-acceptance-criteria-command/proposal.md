@@ -1,12 +1,12 @@
 ## Why
 
-GitHub issue [#1063](https://github.com/jabrena/plinth/issues/1063) requests a dedicated `/add-acceptance-criteria <issue-url>` command for the Functional Specification pipeline. `/explore-problem` can already post a maintainer-confirmed Functional Specification as an issue comment, but the pipeline has no subsequent step that turns that analysis into Gherkin acceptance criteria. Without those observable scenarios, contributors and reviewers cannot verify consistently that an asset achieved its stated goal.
+GitHub issue [#1063](https://github.com/jabrena/plinth/issues/1063) requests a dedicated `/create-acceptance-criteria <issue-url>` command for the Functional Specification pipeline. `/explore-problem` can already post a maintainer-confirmed Functional Specification as an issue comment, but the pipeline has no subsequent step that turns that analysis into Gherkin acceptance criteria. Without those observable scenarios, contributors and reviewers cannot verify consistently that an asset achieved its stated goal.
 
 The new command closes that verification gap. It locates the Functional Specification comment produced by `/explore-problem`, applies `058-design-bdd` to derive acceptance scenarios, presents the result for confirmation, and posts a second, separate comment containing the same Markdown and fenced Gherkin structure on GitHub, Jira, or Azure DevOps.
 
 ## What Changes
 
-- Add `/add-acceptance-criteria <issue-url>` to the embedded command bundle, owned by `@robot-business-analyst`.
+- Add `/create-acceptance-criteria <issue-url>` to the embedded command bundle, owned by `@robot-business-analyst`.
 - Detect GitHub, Jira, or Azure DevOps from the issue URL and reuse `043-planning-github-issues`, `044-planning-jira`, or `045-planning-azure-devops` for tracker access and authentication.
 - Locate the Functional Specification comment produced by `/explore-problem` and use that maintainer-confirmed analysis as the trusted behavior input to `058-design-bdd`.
 - Ask focused clarification questions when the Functional Specification lacks behavior facts needed to create correct scenarios, rather than inventing acceptance behavior.
@@ -17,7 +17,7 @@ The new command closes that verification gap. It locates the Functional Specific
 
 ### New Capabilities
 
-- `add-acceptance-criteria-command`: Defines the command input, Functional Specification lookup, BDD interaction, common Markdown/Gherkin output, cross-tracker publication, confirmation, and failure behavior.
+- `create-acceptance-criteria-command`: Defines the command input, Functional Specification lookup, BDD interaction, common Markdown/Gherkin output, cross-tracker publication, confirmation, and failure behavior.
 
 ### Modified Capabilities
 
