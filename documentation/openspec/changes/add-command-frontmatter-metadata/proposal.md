@@ -8,8 +8,9 @@ Generated Plinth command Markdown currently begins with the command heading and 
 - Emit valid YAML frontmatter before the existing Markdown heading for every command declared by the command inventory.
 - Preserve the existing Markdown command content after the generated frontmatter.
 - Propagate the generated command files through the existing Maven bridge into `.agents/skills/004-commands-installation/assets/commands`.
-- Add schema, rendering, inventory-coverage, propagation, and content-preservation verification.
-- No breaking consumer change is intended: the command body and file names remain stable, while metadata is prepended for Cursor compatibility.
+- Add schema, rendering, approved-metadata, inventory-coverage, propagation, and byte-for-byte body-preservation verification.
+- Preserve XML tool-list order in the generated YAML sequence and validate the resulting frontmatter with a test-scoped YAML 1.2 parser.
+- No command-body or file-name breaking change is intended; the prepended metadata is guaranteed for Cursor compatibility only.
 
 ## Capabilities
 
@@ -47,4 +48,5 @@ This is one-way derivation. This change does not update or synchronize the sourc
 - The issue shows all frontmatter fields, while the Functional Specification leaves XML required/optional/default cardinalities unresolved. The design resolves this by requiring the complete frontmatter subtree for every command so partial metadata cannot pass schema validation.
 - The Functional Specification mentions direct `.cursor/commands` consumption, while the later approved acceptance criteria establishes the build boundary at `.agents/skills/004-commands-installation/assets/commands`. The later acceptance criteria governs this change; installation into a selected tool directory remains the installer skill's responsibility.
 - The Functional Specification leaves global versus command-specific tool values unresolved. The design resolves this by requiring each command source to declare its own repeatable `tools/list-tools/tool` entries without assuming that all commands use different values.
-- Exact per-command descriptions, argument hints, and tool values, plus the test-scope YAML validation mechanism, remain open for implementation review and are tracked in `design.md` and `tasks.md`.
+- Exact per-command descriptions, argument hints, model, agent, and ordered tool values require maintainer approval during migration and are verified against each command source.
+- Generated frontmatter is parsed in tests with a test-scoped YAML 1.2 parser; this introduces no production runtime dependency.

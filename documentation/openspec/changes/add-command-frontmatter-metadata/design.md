@@ -11,7 +11,9 @@ Issue [#1075](https://github.com/jabrena/plinth/issues/1075), its complete Funct
 - Represent `description`, `argument-hint`, `model`, `agent`, and a repeatable tool list in every authoritative command XML document.
 - Render valid YAML frontmatter before the existing Markdown heading.
 - Map XML `tools/list-tools/tool` entries to YAML `tools` sequence entries.
-- Preserve every command's existing Markdown content after the frontmatter.
+- Preserve XML tool order in the generated YAML sequence.
+- Preserve every command's existing Markdown content byte-for-byte after the frontmatter.
+- Verify that every generated command contains the maintainer-approved metadata declared by its XML source.
 - Package one frontmatter-enabled asset for every inventoried command in the generated `004-commands-installation` skill.
 - Verify schema validity, rendering, inventory coverage, propagation, and body preservation through the existing Maven reactor build.
 
@@ -62,7 +64,9 @@ Alternative considered: define one global tool list in the inventory or styleshe
 
 The root XSLT template will render an opening delimiter, metadata keys and tool sequence, a closing delimiter, and then the existing heading/body templates. The established rendering of `goal`, `constraints`, `steps`, `output-format`, and `safeguards` remains unchanged.
 
-Generated scalar values must be emitted in a YAML-safe representation. Verification will parse or otherwise validate the complete frontmatter rather than relying only on delimiter checks.
+One named XSLT template will emit metadata scalars in a YAML-safe single-quoted representation and escape embedded apostrophes by doubling them. The stylesheet will iterate over `tools/list-tools/tool` in document order so the YAML sequence is deterministic and preserves the XML order. Tests will cover YAML-significant punctuation and whitespace boundaries instead of relying only on simple values.
+
+Generated frontmatter will be parsed as YAML 1.2 with SnakeYAML Engine in test scope. Tests will assert the parsed keys and values against the XML source, including the ordered tools sequence. The parser is verification infrastructure only and adds no production runtime responsibility.
 
 Alternative considered: embed raw YAML in `goal` CDATA. Rejected because metadata would not be schema-validated, would duplicate formatting across fourteen sources, and would make the tools list opaque to XML processing.
 
@@ -78,8 +82,9 @@ Verification will cover:
 
 - all command XML sources validate against the updated XSD;
 - every inventoried generated Markdown file starts with valid frontmatter;
-- each XML tool value appears in the corresponding YAML `tools` sequence;
-- the Markdown following the closing delimiter preserves the previous command content;
+- every parsed metadata value matches the maintainer-approved value in the corresponding XML source;
+- each XML tool value appears in the corresponding YAML `tools` sequence in the same order;
+- the bytes following the closing delimiter and its required separator match the previous generated command Markdown byte-for-byte;
 - `004-commands-installation/assets/commands` contains exactly one corresponding asset for every inventory entry; and
 - `./mvnw clean verify -pl plinth-skills-generator -am` exercises the integrated path.
 
@@ -96,10 +101,10 @@ Later approved acceptance criteria supersede the earlier direct `.cursor/command
 
 ## Risks / Trade-offs
 
-- **Incorrect YAML escaping could create frontmatter that looks plausible but is invalid** → validate generated metadata as YAML and include representative punctuation in renderer tests.
+- **Incorrect YAML escaping could create frontmatter that looks plausible but is invalid** → parse generated metadata with a test-scoped YAML 1.2 parser and include apostrophes, colons, hashes, brackets, backslashes, and whitespace boundaries in renderer tests.
 - **Command-specific metadata may drift from command behavior** → keep metadata in the same XML source and add per-command contract assertions where routing or tool access matters.
 - **A partial migration could leave installer output inconsistent** → require frontmatter in the XSD and verify every inventory entry.
-- **Prepending metadata could alter existing command bodies through whitespace changes** → compare the content after the closing delimiter with the previous generated body.
+- **Prepending metadata could alter existing command bodies through whitespace changes** → compare the content after the closing delimiter and required separator with the previous generated body byte-for-byte.
 - **Cursor-compatible metadata may be ignored or interpreted differently by other installer destinations** → preserve the body and document that this change guarantees the approved Cursor format only.
 
 ## Migration Plan
@@ -107,7 +112,7 @@ Later approved acceptance criteria supersede the earlier direct `.cursor/command
 1. Extend `commands.xsd` with the required frontmatter subtree and repeatable tool representation.
 2. Add reviewed metadata to every XML source declared by `commands.xml`.
 3. Update the XSLT to prepend YAML frontmatter while preserving the existing body templates.
-4. Add focused schema, renderer, inventory, bridge, and installer-asset tests.
+4. Add focused schema, YAML parsing, approved-metadata, ordered-tool, body-parity, inventory, bridge, and installer-asset tests.
 5. Run XML validation and `./mvnw clean verify -pl plinth-skills-generator -am`.
 6. Inspect `.agents/skills/004-commands-installation/assets/commands` for complete, valid output.
 
@@ -115,5 +120,4 @@ Rollback removes the frontmatter subtree, renderer prefix, migrated metadata, an
 
 ## Open Questions
 
-- Which exact description, argument hint, and tool list is approved for each of the fourteen commands? Implementation must review these values command by command rather than copy one example blindly.
-- Which test-scope YAML validation mechanism best proves syntactic validity without adding a production runtime dependency? This is an implementation choice; the requirement to validate generated YAML is fixed.
+There are no remaining design questions. The maintainer will approve the exact metadata values for each of the fourteen commands during migration, and generated YAML will be verified with SnakeYAML Engine in test scope.

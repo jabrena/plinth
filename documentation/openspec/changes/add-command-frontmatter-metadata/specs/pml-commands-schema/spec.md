@@ -52,10 +52,19 @@ Command contracts SHALL be authored as XML under `commands/` and transformed to 
 - **WHEN** the command Markdown is generated
 - **THEN** its frontmatter contains a YAML `tools` sequence
 - **AND** every declared XML tool appears as a corresponding YAML sequence entry
+- **AND** the YAML sequence preserves the XML `tool` document order
+
+#### Scenario: Render approved command-specific metadata
+
+- **GIVEN** the maintainer-approved frontmatter values are recorded in each inventoried command XML source
+- **WHEN** the generated frontmatter is parsed as YAML 1.2
+- **THEN** `description`, `argument-hint`, `model`, and `agent` equal the corresponding XML values
+- **AND** `tools` equals the complete ordered `tools/list-tools/tool` sequence from that command source
+- **AND** YAML-significant punctuation in scalar values remains valid and retains its parsed meaning
 
 #### Scenario: Preserve existing Markdown after frontmatter
 
 - **GIVEN** a command has an existing generated Markdown heading and body
 - **WHEN** frontmatter generation is enabled
 - **THEN** the heading and body follow the closing YAML delimiter
-- **AND** their semantic content remains unchanged
+- **AND** after removing the frontmatter and its required separator, the remaining Markdown matches the previous generated command Markdown byte-for-byte
