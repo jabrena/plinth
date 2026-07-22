@@ -71,6 +71,41 @@ execute @plinth-skills-generator/src/test/resources/gherkin/skills/014-agile-use
 and verify that acceptance-tests passes.
 ```
 
+## 021-problem-framing
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/021-problem-framing.feature
+and verify that acceptance-tests passes.
+```
+
+## 022-root-cause-analysis
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/022-root-cause-analysis.feature
+and verify that acceptance-tests passes.
+```
+
+## 023-assumption-analysis
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/023-assumption-analysis.feature
+and verify that acceptance-tests passes.
+```
+
+## 024-context-mapping
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/024-context-mapping.feature
+and verify that acceptance-tests passes.
+```
+
+## 025-quality-attribute-discovery
+
+```bash
+execute @plinth-skills-generator/src/test/resources/gherkin/skills/025-quality-attribute-discovery.feature
+and verify that acceptance-tests passes.
+```
+
 ## 030-architecture-adr-general
 
 ```bash

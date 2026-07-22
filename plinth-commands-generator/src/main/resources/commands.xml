@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command-inventory>
     <command file="update-issue.xml"/>
+    <command file="explore-problem.xml"/>
     <command file="create-feature-branch.xml"/>
     <command file="create-worktree.xml"/>
     <command file="explore-design.xml"/>

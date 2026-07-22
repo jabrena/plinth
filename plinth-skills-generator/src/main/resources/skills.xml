@@ -34,6 +34,8 @@
         <resource-list>
             <resource source="skill-references/assets/commands/update-issue.md"
                 target="assets/commands/update-issue.md" />
+            <resource source="skill-references/assets/commands/explore-problem.md"
+                target="assets/commands/explore-problem.md" />
             <resource source="skill-references/assets/commands/create-feature-branch.md"
                 target="assets/commands/create-feature-branch.md" />
             <resource source="skill-references/assets/commands/create-worktree.md"
@@ -96,6 +98,31 @@
     <skill id="014">
         <reference-list>
             <reference>014-agile-user-story</reference>
+        </reference-list>
+    </skill>
+    <skill id="021">
+        <reference-list>
+            <reference>021-problem-framing</reference>
+        </reference-list>
+    </skill>
+    <skill id="022">
+        <reference-list>
+            <reference>022-root-cause-analysis</reference>
+        </reference-list>
+    </skill>
+    <skill id="023">
+        <reference-list>
+            <reference>023-assumption-analysis</reference>
+        </reference-list>
+    </skill>
+    <skill id="024">
+        <reference-list>
+            <reference>024-context-mapping</reference>
+        </reference-list>
+    </skill>
+    <skill id="025">
+        <reference-list>
+            <reference>025-quality-attribute-discovery</reference>
         </reference-list>
     </skill>
     <skill id="030">

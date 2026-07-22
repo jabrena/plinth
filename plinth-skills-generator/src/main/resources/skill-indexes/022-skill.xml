@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd"
+      id="022-root-cause-analysis"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.18.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when a framed problem needs root-cause investigation rather than a symptom-level fix, applying Five Whys, Fishbone (Ishikawa), Current Reality Tree, and constraint identification. This should trigger when an issue's Root Cause Analysis point of view needs evaluation, or when a maintainer directly asks to find the root cause of a problem before proposing a fix.</description>
+  </metadata>
+
+  <title>Root Cause Analysis</title>
+  <goal><![CDATA[
+Guide the identification of root causes, not symptoms, for a framed problem, using Five Whys, Fishbone (Ishikawa), Current Reality Tree, and constraint identification. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- Five Whys for a linear causal chain from a symptom to a root cause
+- Fishbone (Ishikawa) for categorized candidate causes across multiple dimensions
+- Current Reality Tree for interconnected causes and effects with a small number of core problems
+- Constraint identification for the limiting factor holding the current state in place
+- Choosing the technique(s) proportionate to the problem's complexity
+- Feeding root-cause findings into `023-assumption-analysis` and the remaining Functional Specification lenses
+]]></goal>
+
+  <constraints>
+    <constraints-description>Distinguish root causes from symptoms before recommending a fix. When this technique is orchestrated by another workflow, the orchestrator owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** read `references/022-root-cause-analysis.md` before applying Root Cause Analysis guidance</constraint>
+      <constraint>**MUST** distinguish a symptom (an observed effect) from a root cause (the condition that produces it)</constraint>
+      <constraint>**MUST** apply Five Whys as a chain of "why" questions grounded in evidence from the problem frame, not assumption</constraint>
+      <constraint>**MUST** apply Fishbone to organize candidate causes into categories (for example people, process, technology, environment) when more than one causal dimension is plausible</constraint>
+      <constraint>**MUST** apply Current Reality Tree when multiple symptoms may share one or a small number of core problems connected by cause-effect relationships</constraint>
+      <constraint>**MUST** identify the constraint limiting the current state, not only the most visible cause</constraint>
+      <constraint>**MUST NOT** invent a root cause when the available evidence is vague or ambiguous; flag the gap for a clarifying question instead</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Find the root cause of this problem</trigger>
+      <trigger>Apply Five Whys to this issue</trigger>
+      <trigger>Build a Fishbone diagram for this problem</trigger>
+      <trigger>Use Current Reality Tree to connect these symptoms</trigger>
+      <trigger>Identify the constraint limiting the current state</trigger>
+      <trigger>Draft the Root Cause Analysis section of a Functional Specification</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Read the Reference</step-title>
+      <step-content>Read `references/022-root-cause-analysis.md`, then identify the symptom(s) evidenced by the problem frame.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Apply Five Whys</step-title>
+      <step-content>Chain "why" questions from the symptom toward an evidenced root cause, stopping when further "why" steps would require guessing.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply Fishbone When Multiple Dimensions Are Plausible</step-title>
+      <step-content>Organize candidate causes into categories when more than one causal dimension (people, process, technology, environment) is plausible.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Apply Current Reality Tree When Symptoms Interconnect</step-title>
+      <step-content>Connect multiple symptoms to a small number of shared core problems through cause-effect relationships when the symptoms appear related.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Identify the Constraint</step-title>
+      <step-content>Name the constraint limiting the current state, distinct from the most visible or most recently reported cause.</step-content>
+    </step>
+    <step number="6">
+      <step-title>Report the Root Cause Findings</step-title>
+      <step-content>Report findings using Five Whys, Fishbone, Current Reality Tree, and the identified constraint, and flag any finding left open pending a clarifying answer.</step-content>
+    </step>
+  </steps>
+</prompt>
