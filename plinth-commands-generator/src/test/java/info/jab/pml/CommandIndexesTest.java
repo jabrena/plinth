@@ -253,6 +253,10 @@ class CommandIndexesTest {
             .contains("`@robot-architect`")
             .contains("`056-design-avoid-breaking-changes`")
             .contains("`057-design-feature-toggles`")
+            .contains("`059-design-atdd`")
+            .contains("evidence-backed `ready` or `changes-requested` outcome")
+            .contains("Do not report a design direction or OpenSpec change as approved while `059-design-atdd` has unresolved")
+            .contains("apply only maintainer-approved revisions and rerun the review")
             .contains("Runs after `/create-spec`")
             .contains("Do not apply `042-planning-openspec`")
             .doesNotContain("`034-architecture-design-exploration`");
