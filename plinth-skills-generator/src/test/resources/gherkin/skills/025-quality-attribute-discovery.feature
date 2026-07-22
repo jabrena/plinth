@@ -14,13 +14,13 @@ Scenario: Ground candidate quality attributes in upstream evidence and prioritiz
   And the recommendation avoids an unmotivated, generic non-functional-requirements checklist
 
 @acceptance-test
-Scenario: Stop at the discovery list and hand off the architecture decision
+Scenario: Stop at the discovery list without deciding the architecture
   Given the user request is "Identify quality attributes before we decide on an architecture for this order-status problem using @025-quality-attribute-discovery"
   And the local generated skill path ".agents/skills/025-quality-attribute-discovery"
   When the skill ".agents/skills/025-quality-attribute-discovery" reviews the request
   Then the skill reads "references/025-quality-attribute-discovery.md"
   And the recommendation stops at a prioritized discovery list without selecting an architecture approach
-  And the recommendation states that "030-architecture-adr-general", "031-architecture-adr-functional-requirements", "032-architecture-adr-non-functional-requirements", or "/explore-design" own the resulting architecture decisions
+  And the recommendation states explicitly that it does not select or record an architecture decision
   And the recommendation does not duplicate ADR or design-direction content
 
 @acceptance-test

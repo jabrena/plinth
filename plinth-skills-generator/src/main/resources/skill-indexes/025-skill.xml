@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when a problem under exploration needs its quality attributes (non-functional requirements) identified and prioritized before architecture and design begin. This should trigger when `/explore-problem` evaluates an issue's Quality Attribute Discovery point of view, or when a maintainer directly asks to discover and prioritize candidate quality attributes for a problem, before any ADR or design work starts.</description>
+    <description>Use when a problem under exploration needs its quality attributes (non-functional requirements) identified and prioritized before architecture and design begin. This should trigger when an issue's Quality Attribute Discovery point of view needs evaluation, or when a maintainer directly asks to discover and prioritize candidate quality attributes for a problem, before any ADR or design work starts.</description>
   </metadata>
 
   <title>Quality Attribute Discovery</title>
@@ -19,17 +19,17 @@ Guide identification and prioritization of the quality attributes a future solut
 - Identifying candidate quality attributes (for example performance, security, availability, maintainability, scalability, usability, observability) relevant to the problem
 - Grounding each candidate in evidence from the problem frame, root causes, assumptions, and context map, not a generic checklist
 - Prioritizing candidate quality attributes by stakeholder impact and risk
-- Stopping at a prioritized discovery list: this skill precedes and feeds `030-architecture-adr-general`, `031-architecture-adr-functional-requirements`, `032-architecture-adr-non-functional-requirements`, and `/explore-design`, which make and record the architectural decisions that satisfy the discovered attributes
+- Stopping at a prioritized discovery list rather than selecting or recording an architectural decision
 - Explicitly not producing ADRs or an architecture direction itself
 ]]></goal>
 
   <constraints>
-    <constraints-description>Discover and prioritize candidate quality attributes as input to later architecture work; do not make or record the architecture decision here. When this technique is orchestrated by `/explore-problem`, the orchestrating command owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraints-description>Discover and prioritize candidate quality attributes as input to later architecture work; do not make or record the architecture decision here. When this technique is orchestrated by another workflow, the orchestrator owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
     <constraint-list>
       <constraint>**MUST** read `references/025-quality-attribute-discovery.md` before applying Quality Attribute Discovery guidance</constraint>
       <constraint>**MUST** ground each candidate quality attribute in evidence from the problem frame, root causes, assumptions, or context map</constraint>
       <constraint>**MUST** prioritize candidate quality attributes by stakeholder impact and risk, not list them unordered</constraint>
-      <constraint>**MUST** stop at a prioritized discovery list and explicitly hand off architecture decisions to `030`-`032` ADR skills or `/explore-design`</constraint>
+      <constraint>**MUST** stop at a prioritized discovery list without selecting or recording an architecture decision</constraint>
       <constraint>**MUST NOT** record an architectural decision, ADR, or design direction as part of this skill's output</constraint>
       <constraint>**MUST NOT** invent a quality attribute or priority when the available content is vague or ambiguous; flag the gap for a clarifying question instead</constraint>
     </constraint-list>
@@ -64,7 +64,7 @@ Guide identification and prioritization of the quality attributes a future solut
     </step>
     <step number="5">
       <step-title>Report the Discovery List</step-title>
-      <step-content>Report the prioritized quality attributes and note that `030`-`032` ADR skills or `/explore-design` own the resulting architecture decisions; flag any item left open pending a clarifying answer.</step-content>
+      <step-content>Report the prioritized quality attributes, stating explicitly that the output stops at this discovery list and does not select or record an architecture decision; flag any item left open pending a clarifying answer.</step-content>
     </step>
   </steps>
 </prompt>

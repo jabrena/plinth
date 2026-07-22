@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when a framed problem needs root-cause investigation rather than a symptom-level fix, applying Five Whys, Fishbone (Ishikawa), Current Reality Tree, and constraint identification. This should trigger when `/explore-problem` evaluates an issue's Root Cause Analysis point of view, or when a maintainer directly asks to find the root cause of a problem before proposing a fix.</description>
+    <description>Use when a framed problem needs root-cause investigation rather than a symptom-level fix, applying Five Whys, Fishbone (Ishikawa), Current Reality Tree, and constraint identification. This should trigger when an issue's Root Cause Analysis point of view needs evaluation, or when a maintainer directly asks to find the root cause of a problem before proposing a fix.</description>
   </metadata>
 
   <title>Root Cause Analysis</title>
@@ -25,7 +25,7 @@ Guide the identification of root causes, not symptoms, for a framed problem, usi
 ]]></goal>
 
   <constraints>
-    <constraints-description>Distinguish root causes from symptoms before recommending a fix. When this technique is orchestrated by `/explore-problem`, the orchestrating command owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraints-description>Distinguish root causes from symptoms before recommending a fix. When this technique is orchestrated by another workflow, the orchestrator owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
     <constraint-list>
       <constraint>**MUST** read `references/022-root-cause-analysis.md` before applying Root Cause Analysis guidance</constraint>
       <constraint>**MUST** distinguish a symptom (an observed effect) from a root cause (the condition that produces it)</constraint>

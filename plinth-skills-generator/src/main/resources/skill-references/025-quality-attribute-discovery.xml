@@ -14,7 +14,7 @@
     <tone>Be evidence-driven and disciplined about scope. Ground every candidate quality attribute in the problem, root cause, assumptions, or context already gathered, and stop before recommending how to satisfy it.</tone>
 
     <goal>
-        Identify and prioritize the quality attributes (non-functional requirements) that a future solution must satisfy, grounded in the problem frame, root-cause findings, assumptions, and context map already gathered. Stop at a prioritized discovery list: this precedes and feeds `030-architecture-adr-general`, `031-architecture-adr-functional-requirements`, `032-architecture-adr-non-functional-requirements`, and `/explore-design`, which make and record the architectural decisions that satisfy the discovered attributes — this skill does not duplicate that ADR or design content, and does not itself select an architecture direction.
+        Identify and prioritize the quality attributes (non-functional requirements) that a future solution must satisfy, grounded in the problem frame, root-cause findings, assumptions, and context map already gathered. Stop at a prioritized discovery list: this skill does not select an architecture direction, record an architectural decision, or draft an ADR — it produces the grounded, prioritized input that later architecture and design work will use.
     </goal>
 
     <constraints>
@@ -22,7 +22,7 @@
         <constraint-list>
             <constraint>**EVIDENCE-GROUNDED CANDIDATES**: Ground each candidate quality attribute in evidence from the problem frame, root causes, assumptions, or context map, not a generic unfiltered checklist</constraint>
             <constraint>**PRIORITIZED, NOT UNORDERED**: Prioritize candidate quality attributes by stakeholder impact and risk if unmet, not list them unordered</constraint>
-            <constraint>**DISCOVERY LIST, NOT A DECISION**: Stop at a prioritized discovery list and explicitly hand off architecture decisions to `030`-`032` ADR skills or `/explore-design`</constraint>
+            <constraint>**DISCOVERY LIST, NOT A DECISION**: Stop at a prioritized discovery list; do not select or record an architecture decision</constraint>
             <constraint>**NO ADR CONTENT DUPLICATION**: Do not record an architectural decision, ADR, or design direction as part of this skill's output</constraint>
             <constraint>**NO INVENTED ATTRIBUTES**: Do not invent a quality attribute or priority when the available content is vague or ambiguous; flag it for a clarifying question instead</constraint>
         </constraint-list>
@@ -53,14 +53,14 @@ Prioritize the candidate quality attributes by stakeholder impact and by risk if
         <step number="4">
             <step-title>Stop Before Architecture Decisions</step-title>
             <step-content><![CDATA[
-Stop at the prioritized discovery list. Do not select an architecture approach, technology, or pattern, and do not draft an ADR here; that decision belongs to `030`-`032` ADR skills or `/explore-design`.
+Stop at the prioritized discovery list. Do not select an architecture approach, technology, or pattern, and do not draft an ADR here.
             ]]></step-content>
         </step>
 
         <step number="5">
             <step-title>Report the Discovery List</step-title>
             <step-content><![CDATA[
-Report the prioritized quality attributes with the evidence grounding each one, and note explicitly that `030`-`032` ADR skills or `/explore-design` own the resulting architecture decisions. Flag any item left open because the available content was vague or ambiguous, rather than inventing an answer.
+Report the prioritized quality attributes with the evidence grounding each one, stating explicitly that the output stops at this discovery list and does not select or record an architecture decision. Flag any item left open because the available content was vague or ambiguous, rather than inventing an answer.
             ]]></step-content>
         </step>
     </steps>
@@ -113,17 +113,17 @@ Report the prioritized quality attributes with the evidence grounding each one, 
         <example number="3" id="stop-before-the-architecture-decision">
             <example-header>
                 <example-title>Stop before the architecture decision</example-title>
-                <example-subtitle>Hand off to ADR skills and /explore-design instead of choosing an approach here</example-subtitle>
+                <example-subtitle>Stop at the discovery list instead of choosing an approach here</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                The discovery list should stop short of recommending how to satisfy the attributes; that decision, with its trade-offs, belongs to the architecture ADR skills and `/explore-design`.
+                The discovery list should stop short of recommending how to satisfy the attributes; deciding how to satisfy them, with its trade-offs, is out of scope for this skill.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="markdown"><![CDATA[**Quality Attribute Discovery output**: prioritized list of availability, observability, and scalability candidates with evidence and open questions.
-**Next step**: hand off to `032-architecture-adr-non-functional-requirements` and `/explore-design` to decide the architectural approach that satisfies these attributes.]]></code-block>
+**Next step**: this output stops here; deciding the architectural approach that satisfies these attributes is out of scope for this skill.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="markdown"><![CDATA[**Quality Attribute Discovery output**: we should use an event-driven CQRS architecture with a dedicated read-model store to satisfy availability and observability.]]></code-block>
@@ -136,7 +136,7 @@ Report the prioritized quality attributes with the evidence grounding each one, 
         <output-format-list>
             <output-format-item>Candidate quality attributes, each grounded in evidence from the problem frame, root causes, assumptions, or context map</output-format-item>
             <output-format-item>Candidates prioritized by stakeholder impact and risk if unmet</output-format-item>
-            <output-format-item>An explicit statement that architecture decisions are handed off to `030`-`032` ADR skills or `/explore-design`, not decided here</output-format-item>
+            <output-format-item>An explicit statement that the output stops at the discovery list and does not decide an architecture direction</output-format-item>
             <output-format-item>Any item left open pending a clarifying answer, named explicitly rather than invented</output-format-item>
         </output-format-list>
     </output-format>
@@ -146,7 +146,7 @@ Report the prioritized quality attributes with the evidence grounding each one, 
             <safeguards-item>Do not list a quality attribute that is not grounded in evidence already gathered</safeguards-item>
             <safeguards-item>Do not leave candidate quality attributes unordered when impact and risk clearly differ between them</safeguards-item>
             <safeguards-item>Do not select an architecture approach, technology, or pattern as part of this skill's output</safeguards-item>
-            <safeguards-item>Do not draft or duplicate ADR content that belongs to `030`-`032` or `/explore-design`</safeguards-item>
+            <safeguards-item>Do not draft or duplicate ADR or architecture-decision content</safeguards-item>
             <safeguards-item>Do not invent a quality attribute or priority when the available content is vague or ambiguous</safeguards-item>
         </safeguards-list>
     </safeguards>

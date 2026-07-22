@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when a framed and root-caused problem needs its assumptions made explicit before design or planning begins — explicit Assumptions, Unknowns, and a Validation plan. This should trigger when `/explore-problem` evaluates an issue's Assumption Analysis point of view, or when a maintainer directly asks to surface hidden assumptions and unknowns before committing to an approach.</description>
+    <description>Use when a framed and root-caused problem needs its assumptions made explicit before design or planning begins — explicit Assumptions, Unknowns, and a Validation plan. This should trigger when an issue's Assumption Analysis point of view needs evaluation, or when a maintainer directly asks to surface hidden assumptions and unknowns before committing to an approach.</description>
   </metadata>
 
   <title>Assumption Analysis</title>
@@ -24,7 +24,7 @@ Guide production of explicit Assumptions, a list of Unknowns, and a Validation p
 ]]></goal>
 
   <constraints>
-    <constraints-description>Make assumptions and unknowns explicit before they become undiscussed risk. When this technique is orchestrated by `/explore-problem`, the orchestrating command owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraints-description>Make assumptions and unknowns explicit before they become undiscussed risk. When this technique is orchestrated by another workflow, the orchestrator owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
     <constraint-list>
       <constraint>**MUST** read `references/023-assumption-analysis.md` before applying Assumption Analysis guidance</constraint>
       <constraint>**MUST** state each assumption as a falsifiable claim believed true but not yet verified</constraint>

@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when a problem under exploration needs its surrounding system context identified before design begins — Existing systems, Integrations, Ownership, and External dependencies. This should trigger when `/explore-problem` evaluates an issue's Context Mapping point of view, or when a maintainer directly asks to map the systems, integrations, owners, and external dependencies relevant to a problem.</description>
+    <description>Use when a problem under exploration needs its surrounding system context identified before design begins — Existing systems, Integrations, Ownership, and External dependencies. This should trigger when an issue's Context Mapping point of view needs evaluation, or when a maintainer directly asks to map the systems, integrations, owners, and external dependencies relevant to a problem.</description>
   </metadata>
 
   <title>Context Mapping</title>
@@ -24,7 +24,7 @@ Guide identification of Existing systems, Integrations, Ownership, and External 
 ]]></goal>
 
   <constraints>
-    <constraints-description>Map the surrounding context before any design decision assumes a system boundary. When this technique is orchestrated by `/explore-problem`, the orchestrating command owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
+    <constraints-description>Map the surrounding context before any design decision assumes a system boundary. When this technique is orchestrated by another workflow, the orchestrator owns clarifying-question sequencing; when applied standalone, ask directly.</constraints-description>
     <constraint-list>
       <constraint>**MUST** read `references/024-context-mapping.md` before applying Context Mapping guidance</constraint>
       <constraint>**MUST** identify existing systems that already touch the problem area, not only the system expected to change</constraint>
