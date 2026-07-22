@@ -1,7 +1,5 @@
 # benchmark
 
-## Purpose
-
 Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.
 
 ## Usage

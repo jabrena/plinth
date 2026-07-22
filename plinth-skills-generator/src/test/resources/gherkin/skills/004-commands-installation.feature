@@ -23,6 +23,7 @@ Scenario: Install embedded commands into the GitHub commands destination
     | fileName                 |
     | update-issue.md          |
     | explore-problem.md       |
+    | create-acceptance-criteria.md |
     | create-feature-branch.md |
     | create-worktree.md       |
     | explore-design.md        |
@@ -46,6 +47,7 @@ Scenario: Skill follows the generator registration and local-output workflow
   And "plinth-skills-generator/src/main/resources/skills.xml" registers skill id "004" with the commands installation reference
   And the generated local skill output includes ".agents/skills/004-commands-installation/SKILL.md"
   And the generated local skill output includes ".agents/skills/004-commands-installation/assets/commands/update-issue.md"
+  And the generated local skill output includes ".agents/skills/004-commands-installation/assets/commands/create-acceptance-criteria.md"
   And the generated local skill output includes ".agents/skills/004-commands-installation/assets/commands/benchmark.md"
   And generated references contain no unresolved include markers or broken local reference paths
   And generated release output under "skills/" is not edited directly

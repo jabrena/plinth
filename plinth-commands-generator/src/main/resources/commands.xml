@@ -2,6 +2,7 @@
 <command-inventory>
     <command file="update-issue.xml"/>
     <command file="explore-problem.xml"/>
+    <command file="create-acceptance-criteria.xml"/>
     <command file="create-feature-branch.xml"/>
     <command file="create-worktree.xml"/>
     <command file="explore-design.xml"/>

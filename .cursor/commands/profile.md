@@ -1,7 +1,5 @@
 # profile
 
-## Purpose
-
 Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.
 
 ## Usage

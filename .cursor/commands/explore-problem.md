@@ -1,7 +1,5 @@
 # explore-problem
 
-## Purpose
-
 Evaluate an issue through five points of view — problem framing, root cause analysis, assumption analysis, context mapping, and quality attribute discovery — and post the resulting Functional Specification as a new comment on the issue.
 
 ## Usage
