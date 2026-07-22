@@ -1,21 +1,29 @@
-## 1. Define Focused Contract Tests
+## 1. Characterize Existing Safeguards
 
-- [ ] 1.1 Update `plinth-commands-generator/src/test/java/info/jab/pml/CommandIndexesTest.java` to assert generated `/implement-spec` content includes the OpenSpec acceptance-evidence stop and missing-location question while preserving the dirty-workspace and `main` approval safeguards.
-- [ ] 1.2 Extend `plinth-commands-generator/src/test/resources/gherkin/commands/implement-spec.feature` with readiness scenarios for complete evidence, missing evidence, explicit location, missing location, and the protected `main` selection.
-- [ ] 1.3 Update `plinth-agents-generator/src/test/java/info/jab/pml/AgentIndexesTest.java` to assert `robot-tech-lead` owns pre-delegation acceptance-evidence and location verification.
-- [ ] 1.4 Extend `plinth-agents-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature` with matching stop, ask, and approved-location scenarios.
+- [ ] 1.1 Strengthen `plinth-commands-generator/src/test/java/info/jab/pml/CommandIndexesTest.java` characterization assertions for delegation, skill discovery, dirty-workspace blocking, feature-branch/worktree routing, and separate `main` approval without adding the new readiness behavior.
+- [ ] 1.2 Strengthen `plinth-agents-generator/src/test/java/info/jab/pml/AgentIndexesTest.java` characterization assertions for existing `robot-tech-lead` artifact authority, coder delegation, skill discovery, and no-direct-implementation safeguards.
+- [ ] 1.3 Run focused command and agent generator tests and record the green behavior-preservation baseline before changing either XML source.
 
-## 2. Implement Readiness Contracts
+## 2. Drive Readiness Behavior with Failing Tests
 
-- [ ] 2.1 Update `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` so OpenSpec execution verifies concrete scenarios plus actionable incomplete tasks before skill discovery, Git-location changes, or delegation.
-- [ ] 2.2 Update `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` to resolve location from invocation constraints, then OpenSpec content, then an explicit contributor question, while retaining dirty-workspace and default-branch protections.
-- [ ] 2.3 Update `plinth-agents-generator/src/main/resources/agents/robot-tech-lead.xml` with the same readiness ownership, evidence-remediation, and location-resolution contract.
-- [ ] 2.4 Validate both edited XML sources with `xmllint --noout` and their declared schemas.
+- [ ] 2.1 Add command contract assertions and scenarios in `CommandIndexesTest.java` and `plinth-commands-generator/src/test/resources/gherkin/commands/implement-spec.feature` for complete selected-scope traceability and stop-before-side-effects behavior when evidence is absent, ambiguous, placeholder, completed-only, partial, or divergent.
+- [ ] 2.2 Add command contract assertions and scenarios for invocation-over-`design.md` location precedence, the canonical `## Implementation Location` strategies, missing or invalid strategy questions, and preserved `main` approval.
+- [ ] 2.3 Add matching tech-lead assertions and scenarios in `AgentIndexesTest.java` and `plinth-agents-generator/src/test/resources/gherkin/agents/robot-tech-lead.feature` for selected-scope verification, artifact-specific remediation, and location resolution.
+- [ ] 2.4 Run the focused tests before XML edits and confirm they fail for the expected missing readiness and location policy markers.
 
-## 3. Verify Generated Behavior
+## 3. Implement the Smallest Contract Change
 
-- [ ] 3.1 Run `./mvnw clean verify -pl plinth-commands-generator` and review generated `implement-spec.md` under the module target output for the required gate ordering and safeguards.
-- [ ] 3.2 Run `./mvnw clean verify -pl plinth-agents-generator` and review generated `robot-tech-lead.md` under the module target output for aligned readiness behavior.
-- [ ] 3.3 Execute the existing focused `/implement-spec` and `robot-tech-lead` acceptance prompts listed in their module prompt inventories and record any environment-dependent skips.
-- [ ] 3.4 Run `openspec validate --all` from `documentation/` and resolve every validation error before implementation handoff.
-- [ ] 3.5 Review CI-facing diffs to confirm no generated `.cursor/`, public `skills/`, website `docs/`, XSLT, or unrelated inventory assets were edited directly.
+- [ ] 3.1 Update `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` to verify bidirectional traceability for the selected scope before skill discovery, Git-location changes, or delegation and to report every unsupported scenario or task.
+- [ ] 3.2 Update `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` to resolve location from invocation constraints, then a valid `design.md` `## Implementation Location` section, then an explicit contributor question while retaining dirty-workspace and default-branch protections.
+- [ ] 3.3 Update `plinth-agents-generator/src/main/resources/agents/robot-tech-lead.xml` with the aligned readiness ownership, remediation, selected-scope, and location-precedence contract.
+- [ ] 3.4 Refactor duplicated wording only when command and agent intent remains explicit and the new focused tests stay green; do not add a shared generator abstraction in this change.
+- [ ] 3.5 Validate both edited XML sources with `xmllint --noout` and their declared schemas.
+
+## 4. Verify Generated Behavior and Compatibility
+
+- [ ] 4.1 Run `./mvnw clean verify -pl plinth-commands-generator` and review generated `implement-spec.md` under the module target output for gate order, selected-scope traceability, location precedence, and preserved safeguards.
+- [ ] 4.2 Run `./mvnw clean verify -pl plinth-agents-generator` and review generated `robot-tech-lead.md` under the module target output for aligned policy markers.
+- [ ] 4.3 Cross-check generated command and agent Markdown for equivalent readiness semantics without requiring identical document structure.
+- [ ] 4.4 Execute the existing focused `/implement-spec` and `robot-tech-lead` acceptance prompts listed in their module prompt inventories and record any environment-dependent skips.
+- [ ] 4.5 Run `openspec validate --all` from `documentation/` and resolve every validation error before implementation handoff.
+- [ ] 4.6 Review CI-facing diffs to confirm no generated `.cursor/`, public `skills/`, website `docs/`, XSLT, or unrelated inventory assets were edited directly, and record migration guidance for callers affected by the stricter gate or location question.

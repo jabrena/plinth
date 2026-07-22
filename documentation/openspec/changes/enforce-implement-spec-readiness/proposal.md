@@ -4,9 +4,9 @@ GitHub issue [#1074](https://github.com/jabrena/plinth/issues/1074) identifies t
 
 ## What Changes
 
-- Require `@robot-tech-lead` to verify that an OpenSpec change contains concrete acceptance scenarios and actionable task-list evidence before any implementation delegation.
+- Require `@robot-tech-lead` to verify many-to-many traceability between concrete acceptance scenarios and the behavior-changing implementation or verification tasks in the selected execution scope before any implementation delegation.
 - Stop `/implement-spec` with actionable remediation when the required acceptance evidence is absent; the contributor must update the OpenSpec change and rerun the command.
-- Use an implementation location recorded in the selected artifact or command constraints; when none is present, ask the contributor to select `main`, a feature branch, or a worktree before continuing.
+- Use an implementation location supplied by command constraints or a canonical `## Implementation Location` section in the selected change's `design.md`; when neither is present or valid, ask the contributor to select `main`, a feature branch, or a worktree before continuing.
 - Preserve the existing dirty-workspace stop and require the existing warning plus explicit approval before implementation on `main` or the repository default branch.
 - Add focused command and agent contract coverage for readiness failures and location resolution.
 
@@ -27,8 +27,8 @@ None.
 - Authoritative agent source: `plinth-agents-generator/src/main/resources/agents/robot-tech-lead.xml`.
 - Focused generator assertions and Gherkin acceptance scenarios in both generator modules.
 - Generated `.cursor/commands/` and `.cursor/agents/` assets remain read-only outputs and are not edited directly.
-- **Compatibility:** This intentionally changes missing-location behavior from automatic strategy selection to an explicit question. Existing explicit locations continue to work, and `main` remains protected by its current warning and approval gate.
-- **Migration:** Callers should record an implementation location in the OpenSpec change or command constraints when non-interactive execution is required, and ensure acceptance scenarios plus corresponding actionable tasks exist before invoking `/implement-spec`.
+- **Compatibility:** This intentionally makes readiness stricter and changes missing-location behavior from automatic strategy selection to an explicit question. Existing explicit invocation locations continue to work, and `main` remains protected by its current warning and approval gate.
+- **Migration:** Callers should add an `## Implementation Location` section to `design.md` when non-interactive execution is required and ensure every selected behavior-changing task has scenario support while every applicable scenario has implementation or verification coverage before invoking `/implement-spec`.
 
 ## Source Artifacts and Derivation
 
@@ -44,4 +44,4 @@ Derivation is one-way for this change. OpenSpec artifacts do not silently rewrit
 ## Unresolved Questions
 
 - The exact user-facing wording for readiness failures and location questions remains an implementation detail, provided it is actionable and preserves the required stop/ask behavior.
-- `/explore-design` may refine the prompt structure and verification mechanics without changing the requirements in this proposal.
+- No architecture-blocking question remains after design refinement; exact prompt prose may be selected during test-driven implementation.
