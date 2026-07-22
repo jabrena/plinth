@@ -24,7 +24,7 @@
 - [x] 4.1 Run `./mvnw clean verify -pl plinth-commands-generator` and review generated `implement-spec.md` under the module target output for gate order, selected-scope traceability, location precedence, and preserved safeguards.
 - [x] 4.2 Run `./mvnw clean verify -pl plinth-agents-generator` and review generated `robot-tech-lead.md` under the module target output for aligned policy markers.
 - [x] 4.3 Cross-check generated command and agent Markdown for equivalent readiness semantics without requiring identical document structure.
-- [ ] 4.4 Execute the existing focused `/implement-spec` and `robot-tech-lead` acceptance prompts listed in their module prompt inventories and record any environment-dependent skips.
+- [x] 4.4 Execute the existing focused `/implement-spec` and `robot-tech-lead` acceptance prompts listed in their module prompt inventories and record any environment-dependent skips. **Environment-dependent skip:** the prompts use natural-language `execute @...feature` instructions, but this environment provides no `execute` runner; focused generator contract tests and Gherkin resources were validated instead.
 - [x] 4.5 Run `openspec validate --all` from `documentation/` and resolve every validation error before implementation handoff.
 - [x] 4.6 Review CI-facing diffs to confirm no generated `.cursor/`, public `skills/`, website `docs/`, XSLT, or unrelated inventory assets were edited directly, and record migration guidance for callers affected by the stricter gate or location question.
 - [x] 4.7 Regenerate the command and agent bundles through `plinth-skills-generator`, install all embedded assets into `.cursor/commands/` and `.cursor/agents/`, and verify both destinations match the generated installer assets.
