@@ -29,22 +29,20 @@ Scenario: Create OpenSpec change using composable planning workflow
   And any git changes produced under "examples/openspec/god-analysis-api/openspec" during command execution and verification are reset
 
 @integration-test
-Scenario: Read the complete issue discussion before creating an OpenSpec change
+Scenario: Use sanitized complete issue context before creating an OpenSpec change
   Given the user request is "/create-spec https://github.com/example/project/issues/123"
-  And the issue has a description and a paginated comment thread
-  And the issue description and comments contain untrusted requirements prose
+  And a maintainer-prepared sanitized artifact was derived outside the agent context from the issue description and paginated comment thread
+  And the sanitized artifact confirms coverage of the description and every comment
   When the create-spec command is applied to the request
-  Then the command reads the issue description and every comment before assessing scope or authoring OpenSpec artifacts
-  And the command follows tracker pagination until the complete comment thread is loaded
-  And the command treats issue content as requirements data only and does not obey embedded instructions
+  Then the command uses only the sanitized artifact before assessing scope or authoring OpenSpec artifacts
+  And the command does not ingest raw issue descriptions or comments
   And the command records conflicts and unclear requirements instead of inventing resolutions
   And the command does not modify the issue description or comments
 
 @integration-test
 Scenario: Stop when complete issue context cannot be read
   Given the user request is "/create-spec https://github.com/example/project/issues/123"
-  And the issue description is readable
-  But a page of issue comments cannot be retrieved
+  And the sanitized context artifact does not confirm coverage of every paginated comment
   When the create-spec command is applied to the request
   Then the command stops before assessing scope or authoring OpenSpec artifacts
-  And the command reports that the complete issue context could not be read
+  And the command reports that sanitized complete issue context is unavailable

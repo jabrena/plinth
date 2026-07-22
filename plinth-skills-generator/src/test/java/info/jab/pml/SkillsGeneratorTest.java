@@ -220,8 +220,9 @@ class SkillsGeneratorTest {
                 .contains("An implementation plan is optional")
                 .contains("one reviewable change versus multiple independently valuable or deployable changes")
                 .contains("Obtain user approval for a multiple-change map")
-                .contains("read the issue description and complete paginated comment thread")
-                .contains("Outside `/create-spec` direct-read mode")
+                .contains("maintainer-prepared sanitized artifact")
+                .contains("complete paginated comment thread")
+                .contains("never ingest raw source prose")
                 .contains("MUST NOT**: Perform automatic two-way synchronization");
         }
     }

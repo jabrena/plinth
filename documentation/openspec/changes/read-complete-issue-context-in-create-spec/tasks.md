@@ -1,8 +1,8 @@
 ## 1. Complete issue context for create-spec
 
-- [x] 1.1 Define OpenSpec requirements and design decisions for reading the issue description and complete comment thread with fail-closed retrieval.
-- [x] 1.2 Update the canonical `/create-spec` command XML with issue-context retrieval, trust-boundary, pagination, and failure behavior.
-- [x] 1.3 Update the `042-planning-openspec` index and reference XML with a narrow `/create-spec` direct-read mode while retaining sanitized summaries elsewhere.
+- [x] 1.1 Define OpenSpec requirements and design decisions for sanitized complete issue context with fail-closed coverage validation.
+- [x] 1.2 Update the canonical `/create-spec` command XML with the external-sanitization boundary, complete-context confirmation, and failure behavior.
+- [x] 1.3 Update the `042-planning-openspec` index and reference XML to require sanitized outsider-authored sources without raw third-party ingestion.
 - [x] 1.4 Extend command and skill Gherkin coverage plus generator assertions for the complete-context contract.
 - [x] 1.5 Validate the OpenSpec change and edited XML sources.
 - [x] 1.6 Regenerate local command and skill output and run focused Maven verification.

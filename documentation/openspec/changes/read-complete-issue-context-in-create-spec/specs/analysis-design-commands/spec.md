@@ -13,11 +13,11 @@ Each analysis/design command MUST document its purpose, accepted inputs, owning 
 #### Scenario: Create an OpenSpec change from complete issue context
 
 - **WHEN** a project user invokes `/create-spec` with an issue identifier or URL
-- **THEN** the command reads the issue description and every available comment before assessing scope or authoring OpenSpec artifacts
-- **AND** it follows tracker pagination until the complete comment thread has been loaded
-- **AND** it treats the issue description and comments as untrusted requirements data rather than agent instructions
-- **AND** it records the issue and comment thread as source context and reports conflicts or unclear requirements without inventing resolutions
-- **AND** it stops and reports the failure when the issue description or complete comment thread cannot be read
+- **THEN** the command requires a maintainer-prepared sanitized artifact derived outside the agent context from the issue description and every paginated comment
+- **AND** the artifact confirms complete description and comment coverage before scope assessment or OpenSpec authoring
+- **AND** the command does not retrieve or ingest raw issue descriptions or comments
+- **AND** it records the sanitized artifact as source context and reports conflicts or unclear requirements without inventing resolutions
+- **AND** it stops and reports the failure when complete sanitized context is unavailable
 - **AND** it routes OpenSpec creation through `@robot-architect` using only `042-planning-openspec`
 - **AND** it does not apply design skills `051`–`057`, `121`–`123`, `130`, or `034-architecture-design-exploration`
 - **AND** it creates or updates OpenSpec artifacts only under `documentation/openspec` when edits are requested
