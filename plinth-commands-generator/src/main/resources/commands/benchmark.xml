@@ -1,7 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="benchmark"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../commands.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <metadata>
+        <description>Design and coordinate a reproducible Java performance test.</description>
+        <argument-hint>[target] [objective-or-threshold] [workload] [environment] [preferred-tool]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
 
     <goal><![CDATA[
 Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.

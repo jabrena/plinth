@@ -3,6 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Update an issue description with structured, evidence-backed content.</description>
+        <argument-hint>[issue] [source] [tracker]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Update an existing project issue description with structured, evidence-backed content.
 

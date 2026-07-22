@@ -8,9 +8,9 @@ Issue [#1075](https://github.com/jabrena/plinth/issues/1075), its complete Funct
 
 **Goals:**
 
-- Represent `description`, `argument-hint`, `model`, `agent`, and a repeatable tool list in every authoritative command XML document.
+- Represent `description`, `argument-hint`, `model`, `agent`, and a repeatable tool list inside an agents-style `metadata` element in every authoritative command XML document.
 - Render valid YAML frontmatter before the existing Markdown heading.
-- Map XML `tools/list-tools/tool` entries to YAML `tools` sequence entries.
+- Map XML `tools/tools-list/tool` entries to YAML `tools` sequence entries.
 - Preserve XML tool order in the generated YAML sequence.
 - Preserve every command's existing Markdown content byte-for-byte after the frontmatter.
 - Verify that every generated command contains the maintainer-approved metadata declared by its XML source.
@@ -27,30 +27,30 @@ Issue [#1075](https://github.com/jabrena/plinth/issues/1075), its complete Funct
 
 ## Change Boundary Assessment
 
-This is one atomic change. Schema representation, frontmatter rendering, XML-source migration, and installer-asset propagation share one user-visible outcome, build, ownership boundary, and rollback path. Splitting the work by XSD, XSLT, or Maven module would create technical-layer changes with no independently useful result.
+This is one atomic change. Schema representation, YAML-frontmatter rendering, XML-source migration, and installer-asset propagation share one user-visible outcome, build, ownership boundary, and rollback path. Splitting the work by XSD, XSLT, or Maven module would create technical-layer changes with no independently useful result.
 
 ## Decisions
 
-### Add a required frontmatter subtree before the narrative contract
+### Add a required XML metadata subtree before the narrative contract
 
-`commands.xsd` will extend the root command sequence with a required `frontmatter` element before `goal`. The subtree will use this source shape:
+`commands.xsd` will follow the `agents.xsd` convention by extending the root command sequence with a required global `metadata` element reference before `goal`. Its children are composed through global element references and use this source shape:
 
 ```xml
-<frontmatter>
+<metadata>
     <description>One sentence describing what this command does.</description>
     <argument-hint>[optional arguments]</argument-hint>
     <model>inherit</model>
     <agent>inherit</agent>
     <tools>
-        <list-tools>
+        <tools-list>
             <tool>Read</tool>
             <tool>Edit</tool>
-        </list-tools>
+        </tools-list>
     </tools>
-</frontmatter>
+</metadata>
 ```
 
-All five metadata fields are required because the issue requires every generated command to follow the approved structure. `list-tools` contains one or more `tool` elements so the XML model represents the YAML sequence explicitly.
+All five metadata fields are required because the issue requires every generated command to follow the approved structure. `tools-list` contains one or more `tool` elements so the XML model represents the YAML sequence explicitly.
 
 Alternative considered: make the entire subtree optional for incremental migration. Rejected because it would permit a successful build with commands that still lack the accepted metadata and would weaken inventory-wide coverage.
 
@@ -58,15 +58,15 @@ Alternative considered: make the entire subtree optional for incremental migrati
 
 The XSD will enforce element structure and repetition but will not enumerate model, agent, or tool values. Each command source owns its description, argument hint, inherited model/agent selection, and applicable tools. Initial migration will use the approved `model: inherit` and `agent: inherit` values while command-specific descriptions, hints, and tools are reviewed against each command contract.
 
-Alternative considered: define one global tool list in the inventory or stylesheet. Rejected because `tools/list-tools/tool` is part of each command source and command capabilities can differ.
+Alternative considered: define one global tool list in the inventory or stylesheet. Rejected because `tools/tools-list/tool` is part of each command source and command capabilities can differ.
 
 ### Prepend frontmatter without re-rendering the existing body differently
 
 The root XSLT template will render an opening delimiter, metadata keys and tool sequence, a closing delimiter, and then the existing heading/body templates. The established rendering of `goal`, `constraints`, `steps`, `output-format`, and `safeguards` remains unchanged.
 
-One named XSLT template will emit metadata scalars in a YAML-safe single-quoted representation and escape embedded apostrophes by doubling them. The stylesheet will iterate over `tools/list-tools/tool` in document order so the YAML sequence is deterministic and preserves the XML order. Tests will cover YAML-significant punctuation and whitespace boundaries instead of relying only on simple values.
+One named XSLT template will emit metadata scalars in a YAML-safe single-quoted representation and escape embedded apostrophes by doubling them. The stylesheet will iterate over `tools/tools-list/tool` in document order so the YAML sequence is deterministic and preserves the XML order. Tests will cover YAML-significant punctuation and whitespace boundaries instead of relying only on simple values.
 
-Generated frontmatter will be parsed as YAML 1.2 with SnakeYAML Engine in test scope. Tests will assert the parsed keys and values against the XML source, including the ordered tools sequence. The parser is verification infrastructure only and adds no production runtime responsibility.
+Generated YAML frontmatter will be parsed as YAML 1.2 with SnakeYAML Engine in test scope. Tests will assert the parsed keys and values against the XML `metadata` source, including the ordered tools sequence. The parser is verification infrastructure only and adds no production runtime responsibility.
 
 Alternative considered: embed raw YAML in `goal` CDATA. Rejected because metadata would not be schema-validated, would duplicate formatting across fourteen sources, and would make the tools list opaque to XML processing.
 
@@ -103,20 +103,20 @@ Later approved acceptance criteria supersede the earlier direct `.cursor/command
 
 - **Incorrect YAML escaping could create frontmatter that looks plausible but is invalid** → parse generated metadata with a test-scoped YAML 1.2 parser and include apostrophes, colons, hashes, brackets, backslashes, and whitespace boundaries in renderer tests.
 - **Command-specific metadata may drift from command behavior** → keep metadata in the same XML source and add per-command contract assertions where routing or tool access matters.
-- **A partial migration could leave installer output inconsistent** → require frontmatter in the XSD and verify every inventory entry.
+- **A partial migration could leave installer output inconsistent** → require XML `metadata` in the XSD and verify every inventory entry.
 - **Prepending metadata could alter existing command bodies through whitespace changes** → compare the content after the closing delimiter and required separator with the previous generated body byte-for-byte.
 - **Cursor-compatible metadata may be ignored or interpreted differently by other installer destinations** → preserve the body and document that this change guarantees the approved Cursor format only.
 
 ## Migration Plan
 
-1. Extend `commands.xsd` with the required frontmatter subtree and repeatable tool representation.
+1. Extend `commands.xsd` with the required agents-style `metadata` subtree and repeatable tool representation.
 2. Add reviewed metadata to every XML source declared by `commands.xml`.
 3. Update the XSLT to prepend YAML frontmatter while preserving the existing body templates.
 4. Add focused schema, YAML parsing, approved-metadata, ordered-tool, body-parity, inventory, bridge, and installer-asset tests.
 5. Run XML validation and `./mvnw clean verify -pl plinth-skills-generator -am`.
 6. Inspect `.agents/skills/004-commands-installation/assets/commands` for complete, valid output.
 
-Rollback removes the frontmatter subtree, renderer prefix, migrated metadata, and associated tests together; the prior Markdown body generation and Maven bridge then remain intact.
+Rollback removes the XML `metadata` subtree, YAML-frontmatter renderer prefix, migrated metadata, and associated tests together; the prior Markdown body generation and Maven bridge then remain intact.
 
 ## Open Questions
 

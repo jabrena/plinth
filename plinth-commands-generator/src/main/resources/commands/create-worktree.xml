@@ -3,6 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Create an isolated Git worktree on a new conventionally named branch.</description>
+        <argument-hint>[issue-or-change|type description] [target-path] [base-reference]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Always create a new branch and linked Git worktree for isolated or parallel work without changing the current checkout.
 

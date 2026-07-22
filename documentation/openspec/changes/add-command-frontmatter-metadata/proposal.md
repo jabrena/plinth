@@ -4,7 +4,7 @@ Generated Plinth command Markdown currently begins with the command heading and 
 
 ## What Changes
 
-- Extend the command XML contract so each command can declare frontmatter metadata, including a structured `tools/list-tools/tool` list.
+- Extend the command XML contract so each command can declare a required `metadata` element, including a structured `tools/tools-list/tool` list used to render YAML frontmatter.
 - Emit valid YAML frontmatter before the existing Markdown heading for every command declared by the command inventory.
 - Preserve the existing Markdown command content after the generated frontmatter.
 - Propagate the generated command files through the existing Maven bridge into `.agents/skills/004-commands-installation/assets/commands`.
@@ -20,7 +20,7 @@ None.
 
 ### Modified Capabilities
 
-- `pml-commands-schema`: Add structured command-frontmatter metadata to the authoritative XML source contract and generated Markdown behavior.
+- `pml-commands-schema`: Add structured command metadata to the authoritative XML source contract and generated YAML-frontmatter behavior.
 - `commands-generator-module`: Require the complete frontmatter-enabled command bundle to propagate into the generated `004-commands-installation` skill assets.
 
 ## Impact
@@ -45,8 +45,8 @@ This is one-way derivation. This change does not update or synchronize the sourc
 
 ## Questions and Conflict Resolution
 
-- The issue shows all frontmatter fields, while the Functional Specification leaves XML required/optional/default cardinalities unresolved. The design resolves this by requiring the complete frontmatter subtree for every command so partial metadata cannot pass schema validation.
+- The issue shows all YAML frontmatter fields, while the Functional Specification leaves XML required/optional/default cardinalities unresolved. The design resolves this by requiring the complete XML `metadata` subtree for every command so partial metadata cannot pass schema validation.
 - The Functional Specification mentions direct `.cursor/commands` consumption, while the later approved acceptance criteria establishes the build boundary at `.agents/skills/004-commands-installation/assets/commands`. The later acceptance criteria governs this change; installation into a selected tool directory remains the installer skill's responsibility.
-- The Functional Specification leaves global versus command-specific tool values unresolved. The design resolves this by requiring each command source to declare its own repeatable `tools/list-tools/tool` entries without assuming that all commands use different values.
+- The Functional Specification leaves global versus command-specific tool values unresolved. The design resolves this by requiring each command source to declare its own repeatable `tools/tools-list/tool` entries without assuming that all commands use different values.
 - Exact per-command descriptions, argument hints, model, agent, and ordered tool values require maintainer approval during migration and are verified against each command source.
 - Generated frontmatter is parsed in tests with a test-scoped YAML 1.2 parser; this introduces no production runtime dependency.

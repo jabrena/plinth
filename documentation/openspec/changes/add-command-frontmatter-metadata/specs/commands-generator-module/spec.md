@@ -24,7 +24,7 @@ The build MUST prove that frontmatter-enabled command assets from `plinth-comman
 
 #### Scenario: Propagate command-specific tool metadata
 
-- **GIVEN** an inventoried command source declares `tools/list-tools/tool` entries
+- **GIVEN** an inventoried command source declares `tools/tools-list/tool` entries
 - **WHEN** the generated `004-commands-installation` asset for that command is inspected
 - **THEN** its YAML frontmatter contains the corresponding `tools` sequence entries
 - **AND** the YAML sequence preserves their XML document order

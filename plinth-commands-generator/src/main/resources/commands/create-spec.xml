@@ -3,6 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Create or update OpenSpec artifacts from approved source material.</description>
+        <argument-hint>[issue|design|adr|plan|existing-change]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Create or update one or more OpenSpec changes from the available issue, design, ADR, plan, or existing OpenSpec artifacts.
 

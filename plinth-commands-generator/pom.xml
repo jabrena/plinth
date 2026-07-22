@@ -13,6 +13,10 @@
 
     <groupId>info.jab.pml</groupId>
     <artifactId>plinth-commands-generator</artifactId>
+
+    <properties>
+        <snakeyaml-engine.version>3.0.1</snakeyaml-engine.version>
+    </properties>
     <packaging>jar</packaging>
 
     <dependencies>
@@ -30,6 +34,12 @@
         <dependency>
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.snakeyaml</groupId>
+            <artifactId>snakeyaml-engine</artifactId>
+            <version>${snakeyaml-engine.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="create-adr"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../commands.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <metadata>
+        <description>Create a repository ADR for an approved architectural decision.</description>
+        <argument-hint>[decision-source] [adr-type]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+            </tools-list>
+        </tools>
+    </metadata>
 
     <goal><![CDATA[
 Record an important architectural decision, its context, alternatives, and consequences.

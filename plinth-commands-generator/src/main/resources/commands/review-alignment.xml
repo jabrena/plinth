@@ -3,6 +3,18 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Review analysis and design artifacts for implementation readiness.</description>
+        <argument-hint>[artifact] [artifact ...]</argument-hint>
+        <model>inherit</model>
+        <agent>inherit</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Review available analysis and design artifacts for consistency, traceability, completeness, and implementation readiness.
 

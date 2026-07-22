@@ -3,7 +3,7 @@
   Command XML → Cursor slash-command Markdown.
   Mirrors agent-to-markdown.xsl: narrative contract lives in goal CDATA;
   structured elements follow commands.xsd order:
-  goal → constraints → steps → output-format → safeguards
+  metadata → goal → constraints → steps → output-format → safeguards
 -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0"
@@ -13,6 +13,40 @@
   <xsl:strip-space elements="command constraints constraint-list steps output-format output-format-list safeguards safeguards-list"/>
 
   <xsl:template match="/command">
+    <xsl:text>---
+description: </xsl:text>
+    <xsl:call-template name="yaml-single-quoted-scalar">
+      <xsl:with-param name="text" select="metadata/description"/>
+    </xsl:call-template>
+    <xsl:text>
+argument-hint: </xsl:text>
+    <xsl:call-template name="yaml-single-quoted-scalar">
+      <xsl:with-param name="text" select="metadata/argument-hint"/>
+    </xsl:call-template>
+    <xsl:text>
+model: </xsl:text>
+    <xsl:call-template name="yaml-single-quoted-scalar">
+      <xsl:with-param name="text" select="metadata/model"/>
+    </xsl:call-template>
+    <xsl:text>
+agent: </xsl:text>
+    <xsl:call-template name="yaml-single-quoted-scalar">
+      <xsl:with-param name="text" select="metadata/agent"/>
+    </xsl:call-template>
+    <xsl:text>
+tools:
+</xsl:text>
+    <xsl:for-each select="metadata/tools/tools-list/tool">
+      <xsl:text>  - </xsl:text>
+      <xsl:call-template name="yaml-single-quoted-scalar">
+        <xsl:with-param name="text" select="."/>
+      </xsl:call-template>
+      <xsl:text>
+</xsl:text>
+    </xsl:for-each>
+    <xsl:text>---
+
+</xsl:text>
     <xsl:text># </xsl:text>
     <xsl:value-of select="@id"/>
     <xsl:text>
@@ -23,6 +57,31 @@
     <xsl:apply-templates select="steps"/>
     <xsl:apply-templates select="output-format"/>
     <xsl:apply-templates select="safeguards"/>
+  </xsl:template>
+
+  <xsl:template name="yaml-single-quoted-scalar">
+    <xsl:param name="text"/>
+    <xsl:text>'</xsl:text>
+    <xsl:call-template name="yaml-single-quoted-content">
+      <xsl:with-param name="text" select="$text"/>
+    </xsl:call-template>
+    <xsl:text>'</xsl:text>
+  </xsl:template>
+
+  <xsl:template name="yaml-single-quoted-content">
+    <xsl:param name="text"/>
+    <xsl:choose>
+      <xsl:when test="contains($text, &quot;'&quot;)">
+        <xsl:value-of select="substring-before($text, &quot;'&quot;)"/>
+        <xsl:text>''</xsl:text>
+        <xsl:call-template name="yaml-single-quoted-content">
+          <xsl:with-param name="text" select="substring-after($text, &quot;'&quot;)"/>
+        </xsl:call-template>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="$text"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Goal already contains Markdown headings; emit trimmed body with no ## Goal wrapper -->
