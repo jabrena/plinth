@@ -27,8 +27,49 @@ A bare issue is context, not an execution contract. When repository policy requi
 - If the command runner is not `@robot-tech-lead`, immediately delegate the whole command execution to `@robot-tech-lead` and wait for its result.
 - `@robot-tech-lead` MUST invoke the selected implementation agent for implementation, test, and verification work; naming an agent in the response is not delegation.
 - If agent invocation is unavailable in the current environment, stop and report that `/implement-spec` cannot proceed instead of implementing directly.
+- For OpenSpec inputs, pass the **OpenSpec readiness gate** below before skill discovery, Git-location changes, or implementation delegation.
 - Before any implementation agent starts, pass the branch/worktree gate below and report the selected isolation strategy.
 - Before any implementation agent starts, `@robot-tech-lead` MUST publish a **Skill discovery brief** and pass an ordered **candidate skills to read** list in every implementation handoff.
+
+## OpenSpec readiness gate
+
+- After loading and structurally validating the selected change, determine the **selected execution scope** from the requested task or group, or all incomplete tasks when no narrower scope is supplied.
+- Require **bidirectional traceability**: every selected behavior-changing implementation task has one or more concrete scenarios in `specs/**/spec.md`, and every scenario applicable to the selected scope has an actionable implementation or verification task. Repository validation tasks must map to an explicit quality, safeguard, or verification obligation.
+- A concrete scenario defines its trigger, required preconditions, and observable outcome without unresolved placeholders. An actionable task names a specific remaining implementation or verification outcome; completed-only tasks do not provide executable work.
+- Treat evidence as not ready when it is **absent, ambiguous, placeholder, completed-only, partial, or divergent** from the selected change requirements or safeguards.
+- When the gate fails, stop and report **each unsupported scenario or task**, identify the owning OpenSpec artifact, and instruct the contributor to **update the OpenSpec change and rerun `/implement-spec`**.
+- The command must not invent acceptance criteria or tasks. A failed readiness gate stops **before skill discovery, Git-location changes, or implementation delegation**.
+- Do not require unrelated future task groups to be implementation-complete when a narrower task or group was explicitly selected.
+
+## Branch/worktree gate
+
+- After the OpenSpec readiness gate passes, inspect the workspace with `git status --short` before resolving or changing an implementation location.
+- If the workspace is dirty, stop immediately and report the changed/untracked paths. Do not create a feature branch, create a worktree, delegate implementation, or ask for approval to continue in the dirty checkout.
+- Continue only after the user cleans, commits, or stashes the workspace and reruns `/implement-spec`.
+- The dirty-workspace stop remains non-bypassable.
+
+## Implementation location precedence
+
+- Resolve location only after readiness and workspace cleanliness checks pass; invocation constraints take precedence over any artifact location.
+- If invocation constraints omit location, read an exact `## Implementation Location` section from the selected change's `design.md` using this canonical form:
+
+```markdown
+## Implementation Location
+
+- Strategy: `main` | `feature-branch` | `worktree`
+- Reference: `<branch-name-or-worktree-path>`
+```
+
+- `Strategy` is required. `Reference` is optional for `main` and may be omitted for a new feature branch or worktree that the existing creation command will name and report.
+- Treat a missing, blank, or unsupported `Strategy` as unresolved. Unless invocation constraints already resolved the conflict, ask the contributor to choose `main`, a feature branch, or a worktree and wait for the answer before creating or selecting a location.
+- Do not silently guess a strategy and do not delegate implementation until the location is confirmed.
+- If the confirmed strategy is a feature branch or worktree, apply the existing creation and conflict safeguards below and report the isolation strategy.
+- Report the selected feature branch or worktree paths before delegating implementation.
+- If the work is serial and the current checkout is not already a safe, suitable feature branch, execute `/create-feature-branch` before delegating implementation.
+- If independent groups can run in parallel or need isolation, execute `/create-worktree` for each independent branch/worktree before delegating implementation.
+- If the confirmed strategy is `main` or the repository default branch, warn about direct implementation there and require **separate explicit approval** before implementation starts.
+- Do not start implementation on `main` or the repository default branch unless the user explicitly approves that exception after being warned.
+- If branch or worktree creation is blocked by unsafe git state, existing branches, existing worktrees, or ambiguous base references, stop and ask the user how to proceed.
 
 ## Skill discovery gate
 
@@ -41,31 +82,20 @@ A bare issue is context, not an execution contract. When repository policy requi
 - Reading `.cursor/agents/*.md` or mentioning `@skill-id` in prose does **not** count as reading or invoking a skill.
 - Naming `@robot-tech-lead` or an implementation agent in the response does **not** count as invoking that agent; use the environment's agent or subagent invocation mechanism when available.
 
-## Branch/worktree gate
-
-- Before choosing a branch or worktree strategy, inspect the workspace with `git status --short`.
-- If the workspace is dirty, stop immediately and report the changed/untracked paths. Do not create a feature branch, create a worktree, delegate implementation, or ask for approval to continue in the dirty checkout.
-- Continue only after the user cleans, commits, or stashes the workspace and reruns `/implement-spec`.
-- Determine whether the selected artifact should run in the current checkout, a new feature branch, or one or more linked worktrees.
-- If the work is serial and the current checkout is not already a safe, suitable feature branch, execute `/create-feature-branch` before delegating implementation.
-- If independent groups can run in parallel or need isolation, execute `/create-worktree` for each independent branch/worktree before delegating implementation.
-- Do not start implementation on `main` or the repository default branch unless the user explicitly approves that exception after being warned.
-- If branch or worktree creation is blocked by unsafe git state, existing branches, existing worktrees, or ambiguous base references, stop and ask the user how to proceed.
-
 ## Workflow
 
-1. Load the actual selected plan or OpenSpec `tasks.md` and confirm it is current, approved, and internally consistent.
-2. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
-3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.
-4. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
-5. Build the Skill discovery brief per `@robot-tech-lead`; when the artifact is OpenSpec, read `@042-planning-openspec` and select framework-specific candidate skills for the routed implementation agent.
-6. Complete the branch/worktree gate: use `/create-feature-branch` for serial work in the current checkout, or `/create-worktree` when independent groups can run safely in parallel.
-7. Report the selected feature branch or worktree paths before delegating implementation.
-8. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
-9. Invoke the selected implementation agent for each group with task IDs, owned files, acceptance criteria, blocked-by relationships, focused validation commands, candidate skills to read, required skill report, and telemetry reminder.
-10. Integrate delegated results and require changed-file, test, build, risk, blocker, skills applied, and skills skipped evidence.
-11. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
-12. Report completion against the selected artifact.
+1. Load the actual selected plan or OpenSpec `tasks.md`; structurally validate OpenSpec input and confirm the artifact is current, approved, and internally consistent.
+2. For OpenSpec input, determine the selected execution scope and pass the bidirectional scenario/task readiness gate; stop with artifact-specific remediation before side effects when it fails.
+3. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
+4. Inspect workspace cleanliness and stop on dirty state, then resolve location from invocation constraints, valid `design.md`, or an explicit contributor answer.
+5. Complete the branch/worktree gate by applying the existing `main`, feature-branch, or worktree safeguards and report the selected location before delegation.
+6. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.
+7. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
+8. Build the Skill discovery brief per `@robot-tech-lead`; when the artifact is OpenSpec, read `@042-planning-openspec` and select framework-specific candidate skills for the routed implementation agent.
+9. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
+10. Invoke the selected implementation agent for each group with task IDs, owned files, acceptance criteria, blocked-by relationships, focused validation commands, candidate skills to read, required skill report, and telemetry reminder.
+11. Integrate delegated results and require changed-file, test, build, risk, blocker, skills applied, and skills skipped evidence.
+12. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass, then report completion against the selected artifact.
 
 ## Output
 
@@ -83,6 +113,8 @@ A bare issue is context, not an execution contract. When repository policy requi
 ## Safeguards
 
 - Do not implement from a stale, unapproved, missing, or conflicting execution artifact.
+- Do not continue from OpenSpec input whose selected scope lacks complete bidirectional scenario/task traceability.
+- Do not perform skill discovery, Git-location changes, or implementation delegation before the OpenSpec readiness gate passes.
 - Do not continue in the original command runner when `@robot-tech-lead` has not accepted the orchestration handoff.
 - Do not start implementation before the feature-branch or worktree gate has passed.
 - Do not start implementation before the Skill discovery brief is published and candidate skills are included in the handoff.

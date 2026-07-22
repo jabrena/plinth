@@ -8,6 +8,36 @@ Background:
   And the folder "examples/openspec/god-analysis-api/openspec" has no git changes
   And the folder "examples/openspec/god-analysis-api/demo" has no git changes
 
+Scenario: Reject incomplete selected-scope OpenSpec evidence before delegation
+  Given the selected OpenSpec scope has absent, ambiguous, placeholder, completed-only, partial, or divergent scenario-to-task evidence
+  When the agent evaluates delivery readiness
+  Then the agent reports every unsupported scenario or task and its owning OpenSpec artifact
+  And the agent instructs the contributor to update the change and rerun delivery
+  And the agent does not set up a location, discover skills, or invoke an implementation agent
+
+Scenario: Accept complete selected-scope OpenSpec evidence
+  Given every selected behavior-changing task maps to at least one concrete scenario
+  And every applicable concrete scenario maps to an actionable implementation or verification task
+  When the agent evaluates delivery readiness
+  Then the agent continues to workspace and implementation-location checks
+  And unrelated future task groups remain outside the current readiness decision
+
+Scenario: Resolve or ask for the implementation location before delegation
+  Given the OpenSpec readiness gate has passed
+  When invocation constraints provide an implementation location
+  Then the agent uses the invocation location instead of the design location
+  When invocation constraints omit the location and design.md has a valid Implementation Location section
+  Then the agent uses the design strategy and optional reference
+  When both sources omit a valid location or the design strategy is invalid
+  Then the agent asks the contributor to choose main, a feature branch, or a worktree
+  And the agent waits before location setup, skill discovery, or implementation delegation
+
+Scenario: Preserve default-branch approval after the contributor selects main
+  Given the confirmed implementation location is main or the repository default branch
+  When the agent prepares delivery
+  Then the agent warns about direct implementation on the default branch
+  And the agent requires separate explicit approval before invoking an implementation agent
+
 @acceptance-test
 Scenario: Coordinate God Analysis API implementation from a validated OpenSpec change
   Remark: Acceptance execution must coordinate delivery through coder delegation and must not implement outside the requested demo directory.
