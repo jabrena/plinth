@@ -118,7 +118,8 @@ Based on the current `skill-index-to-markdown.xsl` transformation and the repres
 |---|---|
 | `prompt/@id` | Skill identity (used to resolve `skill-indexes/{numericId}-skill.xml` from `skills.xml`); combined with `skills.xml` to derive the generated skill directory name |
 | `metadata/description` | YAML frontmatter `description:` (with the `SkillsGenerator.PROJECT_TAG` suffix appended by `appendProjectTagToDescription`) |
-| `metadata/author`, `metadata/version`, `metadata/license` | YAML frontmatter `metadata:` block (author/version/license), or a `license:` line inserted by `appendProjectTagToDescription` when absent |
+| `metadata/author`, `metadata/version` | YAML frontmatter `metadata:` block (`author`, `version`) |
+| `metadata/license` | **Correction (confirmed against `skill-index-to-markdown.xsl` and generated output during implementation):** a separate, top-level `license:` scalar emitted by the XSLT *before* the `metadata:` block, not nested inside it — e.g. `license: Apache-2.0` appears as its own frontmatter line, then `metadata:\n  author: ...\n  version: ...` follows. `SkillsGenerator.appendProjectTagToDescription` inserts this same top-level `license:` line immediately before `metadata:` only when it is absent (the non-XML `skill-indexes/*.md` path); for `useXml = true` sources the XSLT always emits it, so no insertion occurs. |
 | `title` | `SKILL.md` H1 heading / title content |
 | `goal` (CDATA) | `SKILL.md` body — primary narrative content ("What is covered", scope) |
 | `constraints/constraints-description`, `constraints/constraint-list/constraint` | `SKILL.md` constraints section |

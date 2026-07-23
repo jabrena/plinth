@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
@@ -16,9 +17,13 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
 import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 /**
  * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill files.
@@ -32,6 +37,13 @@ public final class SkillsGenerator {
 
     private static final String PROJECT_TAG = " Part of Plinth Toolkit";
     private static final String LICENSE_FIELD = "license: Apache-2.0";
+    private static final String SKILLS_XSD_RESOURCE = "skills.xsd";
+
+    /**
+     * Schema for {@code skill-indexes/*.xml} validation, loaded once from the classpath with
+     * external DTD/schema access denied so validation never depends on network access.
+     */
+    private static final Schema SKILLS_SCHEMA = loadSkillsSchema();
 
     private final SkillReferenceGenerator cursorRulesGenerator;
 
@@ -183,6 +195,7 @@ public final class SkillsGenerator {
                 throw new RuntimeException("XSLT not found: " + xsltResource);
             }
             DOMSource xmlSource = createXIncludeDomSource(xmlStream, xmlResource);
+            validateAgainstSkillsSchema(xmlSource, xmlResource);
 
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer(new StreamSource(xsltStream));
@@ -193,6 +206,49 @@ public final class SkillsGenerator {
             return appendReferencesSection(withProjectTag, references);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load and transform skill XML: " + xmlResource, e);
+        }
+    }
+
+    /**
+     * Validates a skill-index DOM against {@link #SKILLS_SCHEMA} before it is transformed.
+     * <p>
+     * Fails fast, matching every other failure mode in this class: a structurally invalid
+     * document throws immediately, naming the offending file; the {@link SAXException} cause
+     * carries the violated schema constraint (e.g. a {@code cvc-complex-type} diagnostic).
+     *
+     * @param xmlSource the XInclude-expanded skill-index DOM to validate
+     * @param xmlResource the classpath resource name of the offending file, for diagnostics
+     * @throws RuntimeException if {@code xmlSource} does not satisfy {@code skills.xsd}
+     */
+    private void validateAgainstSkillsSchema(DOMSource xmlSource, String xmlResource) {
+        try {
+            Validator validator = SKILLS_SCHEMA.newValidator();
+            validator.validate(xmlSource);
+        } catch (Exception e) {
+            throw new RuntimeException("Schema validation failed for " + xmlResource
+                + " against skills.xsd: " + e.getMessage(), e);
+        }
+    }
+
+    /**
+     * Loads {@code skills.xsd} once from the classpath, denying external DTD/schema access so
+     * validation never depends on network access to the remote PML schema.
+     *
+     * @return the compiled schema for {@code skill-indexes/*.xml} validation
+     * @throws IllegalStateException if {@code skills.xsd} is missing or cannot be compiled
+     */
+    private static Schema loadSkillsSchema() {
+        try {
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "");
+            schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "");
+            URL schemaUrl = SkillsGenerator.class.getClassLoader().getResource(SKILLS_XSD_RESOURCE);
+            if (schemaUrl == null) {
+                throw new IllegalStateException("Missing classpath resource: " + SKILLS_XSD_RESOURCE);
+            }
+            return schemaFactory.newSchema(schemaUrl);
+        } catch (SAXException e) {
+            throw new IllegalStateException("Cannot load " + SKILLS_XSD_RESOURCE, e);
         }
     }
 
