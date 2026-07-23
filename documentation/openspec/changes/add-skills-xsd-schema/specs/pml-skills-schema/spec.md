@@ -46,9 +46,10 @@ The change SHALL provide representative valid and invalid XML examples illustrat
 
 - **GIVEN** the same representative shape
 - **WHEN** a representative invalid example is authored for this change
-- **THEN** `examples/xml/invalid-skill-index-example.xml` is stored with this OpenSpec change, omitting required information (`metadata/description` and `title`)
+- **THEN** `examples/xml/invalid-skill-index-example.xml` is stored with this OpenSpec change, omitting the `<goal>` element
 - **AND** it is expected to fail validation with a meaningful diagnostic once the real `skills.xsd` is in place
-- **AND** the change records that the exact required/optional cardinalities and diagnostic text depend on the copied PML 0.8.0 content and MUST be reconfirmed with `xmllint` during implementation
+- **AND** the change records that `<goal>` is confirmed, by inspecting the actual PML 0.8.0 `pml.xsd` during design review (2026-07-23), to be the only required child element of `<prompt>` — `metadata/description` and `title` are both optional (`minOccurs="0"`) and would not produce a validation failure if omitted alone
+- **AND** the change records that the exact diagnostic text depends on the copied PML 0.8.0 content and MUST be reconfirmed with `xmllint` during implementation
 
 ### Requirement: Schema-per-artifact policy documentation
 

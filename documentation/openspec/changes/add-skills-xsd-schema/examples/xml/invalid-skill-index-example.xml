@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  Illustrative example only. Deliberately omits information required by the
-  current PML shape (metadata/description and title) to demonstrate an
-  expected validation failure. The exact XSD diagnostic depends on the real,
-  copied skills.xsd and MUST be reconfirmed with xmllint during
-  implementation (see design.md and tasks.md).
+  Illustrative example only. Deliberately omits <goal>, confirmed during
+  design review (2026-07-23) by inspecting the actual PML 0.8.0 pml.xsd to be
+  the only required child element of <prompt> — metadata/description and
+  title are both optional (minOccurs="0") and would not, alone, cause a
+  validation failure. The exact XSD diagnostic depends on the real, copied
+  skills.xsd and MUST be reconfirmed with xmllint during implementation (see
+  design.md and tasks.md).
 -->
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="skills.xsd"
@@ -13,13 +15,10 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.18.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <!-- Missing required <description>: expected to fail validation -->
+    <description>Illustrative example skill-index used to demonstrate an invalid document against the local skills.xsd baseline. Not a real, generated skill.</description>
   </metadata>
 
-  <!-- Missing required <title>: expected to fail validation -->
+  <title>Illustrative Example Invalid Skill</title>
 
-  <goal><![CDATA[
-Illustrative goal content. This document is intentionally incomplete to
-demonstrate a representative invalid skill-index example.
-]]></goal>
+  <!-- Missing required <goal>: expected to fail validation -->
 </prompt>

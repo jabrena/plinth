@@ -17,12 +17,12 @@ created: 2026-07-23
 ## 3. Generator runtime validation
 
 - [ ] 3.1 Add a schema-validation step to the `skill-indexes/` parsing path in `SkillsGenerator` (`loadSkillSummaryFromXml` / `createXIncludeDomSource`), validating against the classpath `skills.xsd` before or as part of DOM construction.
-- [ ] 3.2 Confirm the validation step produces a diagnostic identifying the offending file and violated constraint on failure, and does not require network access to the remote PML schema.
+- [ ] 3.2 Confirm the validation step produces a diagnostic identifying the offending file and violated constraint on failure, and does not require network access to the remote PML schema. Enforce this as an observable property, not only a design intent, by setting `XMLConstants.ACCESS_EXTERNAL_DTD` and `ACCESS_EXTERNAL_SCHEMA` to `""` (deny external access) on the `SchemaFactory` used for `skills.xsd` — matching `CommandSchemaTest`'s existing pattern in `plinth-commands-generator`, not `RemoteSchemaValidationTest`'s `"all"` setting (which intentionally permits the network fetch its remote-schema test needs).
 - [ ] 3.3 Confirm `skill-references/*.xml` generation is unaffected by this change (remains on its existing remote-schema behavior).
 
 ## 4. Maven and CI test coverage
 
-- [ ] 4.1 Add a new, separately named local-schema test (e.g. `SkillIndexSchemaValidationTest`) that enumerates and validates all 125 `skill-indexes/*.xml` files against `skills.xsd`, without changing `RemoteSchemaValidationTest`'s existing scope (`skill-references/` against the remote schema).
+- [ ] 4.1 Add a new, separately named local-schema test (e.g. `SkillIndexSchemaValidationTest`, structured after the already-shipped `CommandSchemaTest` in `plinth-commands-generator`: enumerate via `SkillIndexes`, load `skills.xsd` once via classpath with `ACCESS_EXTERNAL_DTD`/`ACCESS_EXTERNAL_SCHEMA` set to `""`) that enumerates and validates all 125 `skill-indexes/*.xml` files against `skills.xsd`, without changing `RemoteSchemaValidationTest`'s existing scope (`skill-references/` against the remote schema).
 - [ ] 4.2 Add at least one representative invalid fixture (see `examples/xml/invalid-skill-index-example.xml`) and assert that validation fails with a meaningful diagnostic.
 - [ ] 4.3 Confirm the new test executes as part of the existing CI pipeline that runs `plinth-skills-generator` verification (no new CI job required).
 
@@ -40,7 +40,7 @@ created: 2026-07-23
 ## 7. Examples
 
 - [ ] 7.1 Re-validate `examples/xml/valid-skill-index-example.xml` against the real `skills.xsd` with `xmllint --noout --schema` once it exists, and correct the example if it does not pass.
-- [ ] 7.2 Re-validate `examples/xml/invalid-skill-index-example.xml` against the real `skills.xsd`, record the actual failure diagnostic, and correct the example if it unexpectedly passes.
+- [ ] 7.2 Re-validate `examples/xml/invalid-skill-index-example.xml` (omits `<goal>`, the only required child element of `<prompt>` per the fetched PML 0.8.0 `pml.xsd` — confirmed during design review that `metadata/description` and `title` are optional and would not fail alone) against the real `skills.xsd`, record the actual failure diagnostic, and correct the example if it unexpectedly passes.
 
 ## 8. Integrated validation
 
@@ -49,9 +49,10 @@ created: 2026-07-23
 
 ## 9. Schema-per-artifact policy documentation (ADR-008, gating)
 
-- [ ] 9.1 Create `ADR-008` (MADR-style, per the existing `ADR-006` template) recording the one-XML-Schema-per-generated-artifact policy and the scope this change implements (skill-index only).
+- [ ] 9.1 Create `ADR-008` (MADR-style, per the existing `ADR-006` template) recording the one-XML-Schema-per-generated-artifact policy and the scope this change implements (skill-index only), including the colocated-schema `../<schema>.xsd` relative-path convention already followed by `agents.xsd` and `commands.xsd` as part of that policy.
 - [ ] 9.2 Add `ADR-008`'s entry to `documentation/adr/README.md`.
 - [ ] 9.3 Confirm `ADR-008` is authored and indexed before this change's implementation is considered complete — this is gating per the confirmed acceptance criteria for issue #991 (posted 2026-07-23), not a deferred follow-up.
+- [ ] 9.4 Run `jbang markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java .` against the new `documentation/adr/ADR-008-*.md` file and the updated `documentation/adr/README.md`, per this repository's Markdown-only-change validation convention, and resolve any reported issues (including local link checks) before considering ADR-008 authoring complete.
 
 ## 10. Follow-up documentation (deferred — not required to close this change)
 
