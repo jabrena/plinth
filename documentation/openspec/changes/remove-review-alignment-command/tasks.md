@@ -12,14 +12,17 @@
 - [ ] 1.8 Update `documentation/guides/GETTING-STARTED-WORKFLOWS.md`, `_ES`, and `_ZH` to remove `/review-alignment` as an available command.
 - [ ] 1.9 Update `documentation/guides/GETTING-STARTED-AGENTS.md`, `_ES`, and `_ZH` to remove `robot-business-analyst`'s alignment-review command reference.
 - [ ] 1.10 Update `documentation/guides/INVENTORY-COMMANDS-JAVA.md` to remove `/review-alignment` from the command inventory.
-- [ ] 1.11 Update `documentation/openspec/specs/analysis-design-commands/spec.md` per this change's `analysis-design-commands` spec delta.
-- [ ] 1.12 Update `documentation/openspec/specs/analysis-design-agents/spec.md` per this change's `analysis-design-agents` spec delta.
-- [ ] 1.13 Update `documentation/openspec/specs/implement-spec-command/spec.md` per this change's `implement-spec-command` spec delta.
-- [ ] 1.14 Validate changed XML files with `xmllint --noout`.
-- [ ] 1.15 Run `./mvnw clean install -pl plinth-skills-generator -am` to regenerate local `.agents/skills` output and inspect it for the absence of `/review-alignment`.
-- [ ] 1.16 Run `rg "review-alignment"` and confirm remaining matches are limited to `documentation/openspec/changes/archive/**`.
-- [ ] 1.17 Run `./mvnw clean verify -pl plinth-commands-generator -pl plinth-agents-generator -pl plinth-skills-generator -am`.
-- [ ] 1.18 Run `openspec validate --all` from `documentation/`.
+- [ ] 1.11 Update `README.md`, `README_ES.md`, and `README_ZH.md` to remove `/review-alignment` from their commands tables (found during `/explore-design` breaking-change review; not in the original Functional Specification scope).
+- [ ] 1.12 Update `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` step 3 so it stops and routes a material conflict to `robot-business-analyst` instead of requesting `/review-alignment` (found during `/explore-design` ATDD alignment review: the spec delta alone does not change this real command source).
+- [ ] 1.13 Update `plinth-commands-generator/src/main/resources/java-commands-inventory-template.md` to remove the `/review-alignment` row from the command inventory table (found during `/explore-design` ATDD alignment review).
+- [ ] 1.14 Update `documentation/openspec/specs/analysis-design-commands/spec.md` per this change's `analysis-design-commands` spec delta.
+- [ ] 1.15 Update `documentation/openspec/specs/analysis-design-agents/spec.md` per this change's `analysis-design-agents` spec delta.
+- [ ] 1.16 Update `documentation/openspec/specs/implement-spec-command/spec.md` per this change's `implement-spec-command` spec delta.
+- [ ] 1.17 Validate changed XML files with `xmllint --noout`.
+- [ ] 1.18 Run `./mvnw clean install -pl plinth-skills-generator -am` to regenerate local `.agents/skills` output and inspect it for the absence of `/review-alignment`.
+- [ ] 1.19 Run `rg "review-alignment"` and confirm remaining matches are limited to `documentation/openspec/changes/archive/**`.
+- [ ] 1.20 Run `./mvnw clean verify -pl plinth-commands-generator -pl plinth-agents-generator -pl plinth-skills-generator -am`.
+- [ ] 1.21 Run `openspec validate --all` from `documentation/`.
 
 ## Source and Derivation
 

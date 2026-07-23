@@ -33,7 +33,13 @@ The repository SHALL provide embedded command assets for `/create-worktree`, `/e
 - **THEN** `/review-alignment` is absent from active command sources
 - **AND** command-focused tests no longer assert the retired `/review-alignment` command contract
 - **AND** the skills pipeline no longer bundles `/review-alignment` installation assets
-- **AND** `GETTING-STARTED-WORKFLOWS.md`, `GETTING-STARTED-AGENTS.md`, `INVENTORY-COMMANDS-JAVA.md`, and their `_ES`/`_ZH` variants no longer describe `/review-alignment` as an available command
+- **AND** `GETTING-STARTED-WORKFLOWS.md`, `GETTING-STARTED-AGENTS.md`, `INVENTORY-COMMANDS-JAVA.md`, `java-commands-inventory-template.md`, and their `_ES`/`_ZH` variants no longer describe `/review-alignment` as an available command
+- **AND** `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` no longer requests `/review-alignment` on a material artifact conflict
+
+#### Scenario: Update README discoverability for the retired alignment command
+
+- **WHEN** `README.md`, `README_ES.md`, and `README_ZH.md` are inspected
+- **THEN** their commands tables do not include `/review-alignment`
 
 ## REMOVED Requirements
 
