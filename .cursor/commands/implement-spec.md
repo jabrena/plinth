@@ -98,7 +98,7 @@ A bare issue is context, not an execution contract. When repository policy requi
 
 1. Load the actual selected plan or OpenSpec `tasks.md`; structurally validate OpenSpec input and confirm the artifact is current, approved, and internally consistent.
 2. For OpenSpec input, determine the selected execution scope and pass the bidirectional scenario/task readiness gate; stop with artifact-specific remediation before side effects when it fails.
-3. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
+3. Stop and route the conflict to `@robot-business-analyst` for manual assessment when the issue, ADRs, specification, plan, or task list conflicts materially.
 4. Inspect workspace cleanliness and stop on dirty state, then resolve location from invocation constraints, valid `design.md`, or an explicit contributor answer.
 5. Complete the branch/worktree gate by applying the existing `main`, feature-branch, or worktree safeguards and report the selected location before delegation.
 6. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.

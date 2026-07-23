@@ -5,7 +5,7 @@ TBD - created by archiving change add-analysis-design-commands. Update Purpose a
 ## Requirements
 ### Requirement: Analysis and design command bundle
 
-The repository SHALL provide embedded command assets for `/create-worktree`, `/explore-design`, `/create-adr`, `/create-diagram`, `/create-spec`, and `/review-alignment` through the `plinth-commands-generator` module. The generator MUST NOT install or advertise `/review-breaking-changes`; breaking-change review is owned by `@056-design-avoid-breaking-changes`.
+The repository SHALL provide embedded command assets for `/create-worktree`, `/explore-design`, `/create-adr`, `/create-diagram`, and `/create-spec` through the `plinth-commands-generator` module. The generator MUST NOT install or advertise `/review-breaking-changes`; breaking-change review is owned by `@056-design-avoid-breaking-changes`. The generator MUST NOT install or advertise `/review-alignment`; that command is retired and its read-only review responsibility remains with `robot-business-analyst` without a dedicated command contract.
 
 #### Scenario: Install the command bundle without the retired breaking-change command
 
@@ -29,6 +29,20 @@ The repository SHALL provide embedded command assets for `/create-worktree`, `/e
 - **THEN** their planning command lists do not include `/review-breaking-changes`
 - **AND** their planning skill lists or equivalent discoverability sections include `056-design-avoid-breaking-changes`
 - **AND** no README link points to `.cursor/commands/review-breaking-changes.md`
+
+#### Scenario: Retire the review-alignment command source and validation coverage
+
+- **WHEN** command source files, command registration, command inventories, command-focused tests, and command acceptance prompt inventories are inspected
+- **THEN** `/review-alignment` is absent from active command sources
+- **AND** command-focused tests no longer assert the retired `/review-alignment` command contract
+- **AND** the skills pipeline no longer bundles `/review-alignment` installation assets
+- **AND** `GETTING-STARTED-WORKFLOWS.md`, `GETTING-STARTED-AGENTS.md`, `INVENTORY-COMMANDS-JAVA.md`, `java-commands-inventory-template.md`, and their `_ES`/`_ZH` variants no longer describe `/review-alignment` as an available command
+- **AND** `plinth-commands-generator/src/main/resources/commands/implement-spec.xml` no longer requests `/review-alignment` on a material artifact conflict
+
+#### Scenario: Update README discoverability for the retired alignment command
+
+- **WHEN** `README.md`, `README_ES.md`, and `README_ZH.md` are inspected
+- **THEN** their commands tables do not include `/review-alignment`
 
 ### Requirement: Command contracts
 
@@ -162,14 +176,3 @@ The existing `/create-feature-branch` command SHALL support the optional transit
 - **AND** accepted inputs list `OpenSpec change with unresolved technical approaches or design gaps` immediately after `Issue or user story`
 - **AND** the associated skills include `059-design-atdd` for the final OpenSpec alignment gate
 - **AND** the command documents that it runs after `/create-spec`, not as the first workflow mission
-
-### Requirement: Read-only alignment command routing
-
-`/review-alignment` MUST route the available issue/story, design, ADR, plan, and OpenSpec artifacts to `robot-business-analyst` for read-only review.
-
-#### Scenario: Review a partial artifact set
-
-- **WHEN** a user invokes `/review-alignment` without every artifact type
-- **THEN** the command accepts the available artifacts
-- **AND** it requests aligned areas, severity-ranked issues, open questions, recommended corrections, and readiness
-- **AND** it does not request automatic artifact modification

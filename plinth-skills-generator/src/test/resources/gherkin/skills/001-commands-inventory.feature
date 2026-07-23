@@ -29,7 +29,6 @@ Scenario: Generate embedded commands inventory with every command asset
     | create-adr.md            | /create-adr              |
     | create-diagram.md        | /create-diagram          |
     | create-spec.md           | /create-spec             |
-    | review-alignment.md      | /review-alignment        |
     | implement-spec.md       | /implement-spec         |
     | close-spec.md           | /close-spec             |
     | profile.md               | /profile                 |

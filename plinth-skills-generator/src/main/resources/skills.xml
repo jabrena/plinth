@@ -50,8 +50,6 @@
                 target="assets/commands/create-diagram.md" />
             <resource source="skill-references/assets/commands/create-spec.md"
                 target="assets/commands/create-spec.md" />
-            <resource source="skill-references/assets/commands/review-alignment.md"
-                target="assets/commands/review-alignment.md" />
             <resource source="skill-references/assets/commands/implement-spec.md"
                 target="assets/commands/implement-spec.md" />
             <resource source="skill-references/assets/commands/close-spec.md"

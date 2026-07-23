@@ -6,7 +6,7 @@ Los agentes integrados separan análisis, arquitectura, liderazgo técnico e imp
 
 | Agent | Misiones | Uso |
 | --- | --- | --- |
-| `robot-business-analyst` | Refinar issues en GitHub/Jira.<br>Realizar revisiones de alineación, trazabilidad y preparación en modo solo lectura. | Usa `/update-issue` o `/review-alignment`. No implementa código ni corrige artefactos de forma silenciosa. |
+| `robot-business-analyst` | Refinar issues en GitHub/Jira. | Usa `/update-issue`. No implementa código ni corrige artefactos de forma silenciosa. |
 | `robot-architect` | Explorar alternativas de diseño.<br>Crear ADRs.<br>Crear diagramas de arquitectura. | Usa `/explore-design`, `/create-adr` o `/create-diagram`. Entrega las restricciones aprobadas al tech lead. |
 | `robot-tech-lead` | Crear cambios OpenSpec.<br>Coordinar la entrega.<br>Seleccionar y delegar en agentes de implementación.<br>Controlar implementación y verificación. | Usa `/create-spec` o proporciona un plan/lista de tareas OpenSpec aprobada para la entrega. |
 | `robot-java-performance` | Coordinar profiling y benchmarking.<br>Preservar evidencias de baseline y medición.<br>Delegar optimizaciones aprobadas a coder agents. | Usa `/profile` o `/benchmark`. No implementa código de aplicación directamente. |

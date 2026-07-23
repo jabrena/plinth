@@ -105,8 +105,6 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
     @122-java-type-design
     @123-java-design-patterns
     @130-java-testing-strategies
-/review-alignment
-@robot-business-analyst
 /explore-design
 @robot-architect
     @034-architecture-design-exploration

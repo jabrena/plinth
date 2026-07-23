@@ -57,7 +57,6 @@
                 - [create-adr.md](../assets/commands/create-adr.md)
                 - [create-diagram.md](../assets/commands/create-diagram.md)
                 - [create-spec.md](../assets/commands/create-spec.md)
-                - [review-alignment.md](../assets/commands/review-alignment.md)
                 - [implement-spec.md](../assets/commands/implement-spec.md)
                 - [close-spec.md](../assets/commands/close-spec.md)
                 - [profile.md](../assets/commands/profile.md)
@@ -70,7 +69,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all fourteen commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all thirteen commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>
