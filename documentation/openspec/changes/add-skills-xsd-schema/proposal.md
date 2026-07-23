@@ -10,7 +10,8 @@ GitHub issue [#991](https://github.com/jabrena/plinth/issues/991) requests a loc
 - Add Maven test coverage that validates the complete `skill-indexes/` inventory (all 125 files) plus representative valid and invalid fixtures against `skills.xsd`, and confirm this coverage runs in CI.
 - Document the mapping between `skills.xsd` XML elements and the `SKILL.md` frontmatter/content contract.
 - Verify that generated `SKILL.md` output is byte-for-byte identical before and after the schema-reference migration.
-- Record, as explicit follow-up tasks (not gated on this change's completion), the future creation of `ADR-008` (schema-per-artifact policy) and the future update of `ADR-001` and its `documentation/adr/README.md` index row, per the issue's own sequencing ("ADR-001 is a follow-up documentation task for this issue; do not describe the new schema architecture as implemented before the schema migration is complete").
+- Create `ADR-008` (schema-per-artifact policy) as part of this change's completion, recording the policy and the scope this change implements (skill-index only), and add its entry to `documentation/adr/README.md` — this is gating per the acceptance criteria confirmed on issue #991 (posted 2026-07-23).
+- Record, as an explicit follow-up task (not gated on this change's completion), the future update of `ADR-001` and its `documentation/adr/README.md` index row, per the issue's own sequencing ("ADR-001 is a follow-up documentation task for this issue; do not describe the new schema architecture as implemented before the schema migration is complete").
 
 ## Capabilities
 
@@ -32,7 +33,8 @@ None. This change does not alter existing OpenSpec capability specs for the skil
 - **CI:** the new/extended test runs in the existing `plinth-skills-generator` verification path; no new CI job is required beyond that.
 - **Compatibility:** generated `target/skills/<skill-id>/SKILL.md`, `.agents/skills/`, and `skills/` (release profile) content must remain byte-for-byte identical; only the XML schema reference and validation layer change, not generated content.
 - **Not in scope:** `skill-references/*.xml`, `commands.xml`/`agents.xml` and their generators, and any change to `SKILL.md` content, frontmatter values, or the skill-references transformation path.
-- **Deferred, tracked separately:** `ADR-008` (schema-per-artifact policy) creation and the `ADR-001` / `documentation/adr/README.md` update. Both are recorded in `tasks.md` as explicit follow-up items so they are not lost, but per the issue they are completed during/after implementation of this change, not as part of approving this OpenSpec change.
+- **Gating:** `ADR-008` (schema-per-artifact policy) creation and its `documentation/adr/README.md` index entry, per the acceptance criteria confirmed on issue #991 (posted 2026-07-23).
+- **Deferred, tracked separately:** the `ADR-001` / `documentation/adr/README.md` update. Recorded in `tasks.md` as an explicit follow-up item so it is not lost, but per the issue it is completed during/after implementation of this change, not as part of approving this OpenSpec change.
 
 ## Source Artifacts and Derivation
 
@@ -54,7 +56,8 @@ None. This change does not alter existing OpenSpec capability specs for the skil
 
 | Question | Decision | Status |
 |---|---|---|
-| Is this one reviewable change, or should it split? | One change. Schema baseline, migration, runtime validation, and test/CI coverage share one module (`plinth-skills-generator`), one artifact type (`skill-indexes/`), one rollback boundary (revert the schema reference + validation step), and one compatibility guarantee (byte-for-byte output). ADR-008 creation and the ADR-001 update are tracked as follow-up tasks outside this change's completion gate, per the issue's own sequencing — they are not split into a separate OpenSpec change because they have no independent design content beyond "record what this change did." | **Resolved** |
+| Is this one reviewable change, or should it split? | One change. Schema baseline, migration, runtime validation, test/CI coverage, and ADR-008 authoring share one module/change (`plinth-skills-generator`), one artifact type (`skill-indexes/`), one rollback boundary (revert the schema reference + validation step), and one compatibility guarantee (byte-for-byte output). Only the ADR-001 update is tracked as a follow-up task outside this change's completion gate, per the issue's own sequencing — it is not split into a separate OpenSpec change because it has no independent design content beyond "record what this change did." | **Resolved** |
+| Is ADR-008 creation gating for this change, or a deferred follow-up? | Gating. The acceptance criteria confirmed on issue #991 (posted 2026-07-23) include "Schema-per-artifact policy is documented" (ADR-008 reviewed, records the policy) as an observable scenario — superseding this change's earlier deferral. The ADR-001 update remains deferred; it is not part of the confirmed acceptance criteria. | **Resolved** |
 | Schema content | Complete, unchanged copy of PML 0.8.0 `pml.xsd`; no specialized `SKILL.md`-specific tightening in this change (explicitly deferred per the Functional Specification) | **Resolved** |
 | Schema location | `plinth-skills-generator/src/main/resources/skills.xsd`, beside `skills.xml` | **Resolved** |
 | Schema scope | Only `skill-indexes/*.xml`; `skill-references/*.xml` keeps the remote PML reference and is unaffected | **Resolved** |
@@ -67,4 +70,4 @@ See [`design.md`](design.md) for the schema/runtime/test architecture and mappin
 
 ## Handoff
 
-After OpenSpec docs and `openspec validate --all` pass, `@robot-tech-lead` can coordinate implementation from `tasks.md`: schema copy and byte-verification, atomic migration of all 125 `skill-indexes/` references, `SkillsGenerator` runtime validation, Maven/CI test coverage, and the byte-for-byte compatibility check — followed, as separate follow-up work, by ADR-008 authoring and the ADR-001/README update.
+After OpenSpec docs and `openspec validate --all` pass, `@robot-tech-lead` can coordinate implementation from `tasks.md`: schema copy and byte-verification, atomic migration of all 125 `skill-indexes/` references, `SkillsGenerator` runtime validation, Maven/CI test coverage, the byte-for-byte compatibility check, and ADR-008 authoring (all gating) — followed, as separate follow-up work, by the ADR-001/README update.

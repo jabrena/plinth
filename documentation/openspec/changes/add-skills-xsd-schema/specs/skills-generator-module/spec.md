@@ -53,14 +53,26 @@ Generated `SKILL.md` output SHALL remain byte-for-byte identical before and afte
 - **THEN** every generated `SKILL.md` file is byte-for-byte identical between the two generations
 - **AND** any difference blocks promotion of this change until output parity is restored
 
-### Requirement: Deferred documentation follow-ups tracked, not implemented, by this change
+### Requirement: ADR-008 documents the schema-per-artifact policy
 
-Creation of `ADR-008` (schema-per-artifact policy) and the update of `ADR-001` and its `documentation/adr/README.md` index row SHALL be tracked as explicit follow-up tasks and SHALL NOT be required for this change's implementation to be considered complete.
+This change SHALL author `ADR-008` in `documentation/adr/`, recording the policy of maintaining one XML Schema per generated artifact and the scope implemented by this change (skill-index only), and SHALL add its entry to `documentation/adr/README.md`, before this change's implementation is considered complete.
 
-#### Scenario: Follow-up tasks recorded without blocking this change
+#### Scenario: ADR-008 authored and indexed as a gating step
+
+- **GIVEN** this change's schema, migration, runtime-validation, and Maven/CI test tasks are complete
+- **WHEN** this change's implementation is finalized
+- **THEN** `documentation/adr/ADR-008-*.md` exists, following the repository's existing MADR-style ADR template, and describes the schema-per-artifact policy and this change's scope
+- **AND** `documentation/adr/README.md` includes a new row for `ADR-008`
+- **AND** completing and indexing `ADR-008` is a prerequisite for closing this change's implementation, per the acceptance criteria confirmed on issue #991 (posted 2026-07-23)
+
+### Requirement: Deferred ADR-001 update tracked, not implemented, by this change
+
+The update of `ADR-001` and its `documentation/adr/README.md` index row SHALL be tracked as an explicit follow-up task and SHALL NOT be required for this change's implementation to be considered complete.
+
+#### Scenario: Follow-up task recorded without blocking this change
 
 - **GIVEN** this change's `tasks.md`
-- **WHEN** the schema, migration, runtime validation, and test/CI coverage tasks in this change are completed
-- **THEN** `tasks.md` also lists ADR-008 creation and the ADR-001/README update as separate, explicitly deferred follow-up tasks
-- **AND** those follow-up tasks are not prerequisites for closing this change's implementation
+- **WHEN** the schema, migration, runtime validation, test/CI coverage, and ADR-008 tasks in this change are completed
+- **THEN** `tasks.md` also lists the ADR-001/README update as a separate, explicitly deferred follow-up task
+- **AND** that follow-up task is not a prerequisite for closing this change's implementation
 - **AND** the ADR-001 update, when performed later, preserves the original ADR date, identifier, and link while describing the current XML-to-Agent-Skills generation architecture

@@ -60,4 +60,4 @@ The schema design SHALL document the broader architectural direction of maintain
 - **WHEN** this change's design is reviewed
 - **THEN** the design states that `skills.xsd` covers only skill-index XML → `SKILL.md` generation
 - **AND** the design states that skill-reference XML, command XML, and agent XML schemas remain owned by their own changes
-- **AND** the design records that a future `ADR-008` is the intended home for the cross-artifact schema-per-artifact policy statement, without requiring this change to author that ADR
+- **AND** the design records that this change authors `ADR-008` as the home for the cross-artifact schema-per-artifact policy statement, and that completing `ADR-008` is required before this change's implementation is considered done

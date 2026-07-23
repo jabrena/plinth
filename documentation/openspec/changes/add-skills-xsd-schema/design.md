@@ -12,7 +12,7 @@ Issue [#991](https://github.com/jabrena/plinth/issues/991) and its Functional Sp
 - `SkillsGenerator.createXIncludeDomSource` builds an XInclude-aware, namespace-aware `DocumentBuilder` and parses `skill-indexes/*.xml` directly into a DOM for XSLT transformation (`skill-index-to-markdown.xsl`) — there is no `Schema`/`Validator` step in this path today.
 - `RemoteSchemaValidationTest` (`plinth-skills-generator/src/test/java/info/jab/pml/RemoteSchemaValidationTest.java`) validates `SkillReferences.xmlFilenames()` against the remote `pml.xsd` — this is the `skill-references/` artifact type, not `skill-indexes/`. No automated test currently validates any `skill-indexes/*.xml` file against any schema.
 - `SkillIndexes` (`plinth-skills-generator/src/main/java/info/jab/pml/SkillIndexes.java`) loads `skills.xml`, resolves each `<skill>` entry's numeric id, and detects whether a `skill-indexes/{numericId}-skill.xml` (XML, `useXml = true`) or `.md` source exists. It does not itself validate structure.
-- The Functional Specification confirms: `skills.xsd` will be a complete, unchanged copy of PML 0.8.0 `pml.xsd`; it is stored beside `skills.xml`; only `skill-indexes/` XML uses it; validation must exist at XML-declaration/`xmllint`, generator-runtime, Maven-test, and CI layers; migration is atomic within this issue; generated output must stay byte-for-byte identical; and a future ADR-008 records a schema-per-artifact policy.
+- The Functional Specification confirms: `skills.xsd` will be a complete, unchanged copy of PML 0.8.0 `pml.xsd`; it is stored beside `skills.xml`; only `skill-indexes/` XML uses it; validation must exist at XML-declaration/`xmllint`, generator-runtime, Maven-test, and CI layers; migration is atomic within this issue; generated output must stay byte-for-byte identical; and ADR-008 records a schema-per-artifact policy (authored within this change per the confirmed acceptance criteria — see "ADR-008 scope and gating" below).
 - Sibling precedent exists for artifact-scoped schemas: archived changes `2026-07-15-design-pml-agents-schema` (`agents.xsd`) and `2026-07-17-design-pml-commands-schema` (`commands.xsd`) each authored a **new, specialized** schema for their artifact. This change is different in kind: `skills.xsd` is explicitly an **unchanged copy** of an existing published schema, not a new design. The precedent changes are used here only for documentation-format and validation-layering conventions, not for schema-content decisions.
 
 ## Goals / Non-Goals
@@ -25,7 +25,7 @@ Issue [#991](https://github.com/jabrena/plinth/issues/991) and its Functional Sp
 - Add Maven test coverage for the complete `skill-indexes/` inventory plus representative valid/invalid fixtures, running in CI.
 - Document the mapping between `skills.xsd` XML elements and the `SKILL.md` frontmatter/content contract.
 - Verify generated `SKILL.md` output remains byte-for-byte identical before and after migration.
-- Record the future `ADR-008` (schema-per-artifact policy) and future `ADR-001` update as explicit, non-gating follow-up tasks.
+- Author `ADR-008` (schema-per-artifact policy) as part of this change's completion, and add its entry to `documentation/adr/README.md`, per the acceptance criteria confirmed on issue #991 (posted 2026-07-23). Record the future `ADR-001` update as an explicit, non-gating follow-up task.
 
 **Non-Goals:**
 
@@ -33,13 +33,13 @@ Issue [#991](https://github.com/jabrena/plinth/issues/991) and its Functional Sp
 - Do not touch `skill-references/*.xml`, its schema reference, or `RemoteSchemaValidationTest`'s existing scope.
 - Do not change `commands.xml`/`agents.xml` or their generators.
 - Do not change generated `SKILL.md` content, frontmatter values, or the skill-references transformation path.
-- Do not author ADR-008 or update ADR-001/README in this change (explicit follow-up, tracked in `tasks.md`).
+- Do not update ADR-001/README in this change (explicit, non-gating follow-up, tracked in `tasks.md`). ADR-008 authoring, by contrast, is in scope for this change (see Goals).
 - Do not refresh the public `skills/` release output as part of this change (only through the existing, separate `release` profile decision).
 - Do not add Schematron or `@kind`-style profile validation; this change is XSD-only, matching the agents/commands precedent's validation-layering choice.
 
 ## Change Boundary Assessment
 
-This is one atomic, reviewable change. The schema baseline, the migration of all 125 skill-index references, the generator runtime-validation step, and the Maven/CI test coverage share one module (`plinth-skills-generator`), one artifact type (`skill-indexes/`), one compatibility guarantee (byte-for-byte `SKILL.md` output), and one rollback boundary (revert the schema reference and the validation step together). Splitting by technical layer (e.g., "schema only" vs. "migration only" vs. "runtime validation only") would produce non-independently-reviewable slices with no standalone value, which the create-spec workflow explicitly disallows. ADR-008 and the ADR-001 update are excluded from this change's completion gate — per the issue, they are follow-up documentation work performed during/after implementation — but are captured in `tasks.md` so they are not lost.
+This is one atomic, reviewable change. The schema baseline, the migration of all 125 skill-index references, the generator runtime-validation step, the Maven/CI test coverage, and ADR-008 authoring share one module/change (`plinth-skills-generator`), one artifact type (`skill-indexes/`), one compatibility guarantee (byte-for-byte `SKILL.md` output), and one rollback boundary (revert the schema reference and the validation step together). Splitting by technical layer (e.g., "schema only" vs. "migration only" vs. "runtime validation only") would produce non-independently-reviewable slices with no standalone value, which the create-spec workflow explicitly disallows. Only the ADR-001 update is excluded from this change's completion gate — per the issue, it is follow-up documentation work performed during/after implementation — but it is captured in `tasks.md` so it is not lost. ADR-008 authoring is part of this change's completion gate (see "ADR-008 scope and gating" below).
 
 ## Decisions
 
@@ -81,6 +81,17 @@ Naming note: `RemoteSchemaValidationTest` keeps its current name and scope (`ski
 - A structurally invalid `skill-indexes/{numericId}-skill.xml` throws a clear, actionable exception identifying the offending file and the XSD violation, instead of silently producing malformed or partial `SKILL.md` output (or an unrelated XSLT error).
 - The validation step does not require network access — `skills.xsd` is a classpath resource in `plinth-skills-generator`, consistent with the Functional Specification's reliability/reproducibility quality attribute ("Skill-index validation must work without runtime dependence on remote-schema availability").
 - XInclude resolution and validation ordering are confirmed during implementation (validating before XInclude expansion validates the raw source; validating after expansion validates the fully resolved document — the Functional Specification does not mandate one order, so implementation selects whichever preserves current XInclude behavior and is documented in code comments/tests).
+
+### ADR-008 scope and gating
+
+`ADR-008` SHALL be authored as part of this change's completion (not a deferred follow-up), recording:
+
+1. The schema-per-artifact policy: skill-index XML → `SKILL.md` (`skills.xsd`, this change), skill-reference XML → reference Markdown (unaffected), command XML → `commands.xsd`, agent XML → `agents.xsd`.
+2. The scope this change implements: skill-index only; the other artifact schemas remain owned by their own changes.
+
+It SHALL follow the existing MADR-style ADR template used by this repository (see `ADR-006-separate-local-skill-generation-from-release-publishing.md`), and SHALL be indexed with a new row in `documentation/adr/README.md`.
+
+Rationale: the acceptance criteria confirmed on issue #991 (posted as a comment on 2026-07-23) include "Schema-per-artifact policy is documented" — `Given` `documentation/adr` is reviewed, `When` ADR-008 is reviewed, `Then` it records the policy — as an observable scenario of the Feature. That supersedes this change's earlier deferral of ADR-008 to a non-gating follow-up. The ADR-001 update remains deferred: it is not mentioned in the confirmed acceptance criteria, and the issue's own sequencing instruction ("ADR-001 is a follow-up documentation task for this issue; do not describe the new schema architecture as implemented before the schema migration is complete") still applies to it — ADR-001 must preserve its original date, identifier, and link when updated later.
 
 ### Mapping: `skills.xsd` XML elements ↔ `SKILL.md` frontmatter/content
 
@@ -129,7 +140,7 @@ These illustrate the acceptance-criteria intent ("Given a representative valid/i
 | `SkillIndexes` | Inventory resolution (unchanged behavior) | `skills.xml`, `skill-indexes/` |
 | New local-schema test (e.g. `SkillIndexSchemaValidationTest`) | Complete-inventory + invalid-fixture coverage | `skills.xsd`, `skill-indexes/*.xml` |
 | `RemoteSchemaValidationTest` | Unchanged: `skill-references/` against remote `pml.xsd` | Remote `pml.xsd` (unaffected) |
-| Future `ADR-008` | Schema-per-artifact policy record | This change's outcome (follow-up, not gated here) |
+| `ADR-008` (authored within this change) | Schema-per-artifact policy record | This change's outcome (gating) |
 | Future `ADR-001` update | Reflects current XML-to-Agent-Skills architecture | This change's outcome (follow-up, not gated here) |
 
 ## Data Flow
@@ -189,8 +200,8 @@ OpenSpec:
 
 | Topic | Recommendation | Status |
 |---|---|---|
-| ADR-008: one XML Schema per generated artifact (skill-index, skill-reference, command, agent) | Author after this change's implementation is complete, per the issue's sequencing | **Deferred follow-up** (tracked in `tasks.md`, not gated on this change) |
-| ADR-001 update: reflect current XSD-validated XML sources, `plinth-skills-generator`, `skills.xsd`, and generated Agent Skills, while preserving the original date/identifier/link | Update after this change's implementation is complete | **Deferred follow-up** (tracked in `tasks.md`, not gated on this change) |
+| ADR-008: one XML Schema per generated artifact (skill-index, skill-reference, command, agent) | Author as part of this change's implementation, per the acceptance criteria confirmed on issue #991 (posted 2026-07-23) | **Gating** (tracked in `tasks.md` section 9) |
+| ADR-001 update: reflect current XSD-validated XML sources, `plinth-skills-generator`, `skills.xsd`, and generated Agent Skills, while preserving the original date/identifier/link | Update after this change's implementation is complete | **Deferred follow-up** (tracked in `tasks.md` section 10, not gated on this change) |
 | Local unchanged-copy schema baseline as the correct first step (vs. specializing now) | Accepted for this change | **Resolved** |
 
 ## Compatibility Review (`056`)
@@ -213,7 +224,8 @@ OpenSpec:
 | Schema scope? | `skill-indexes/*.xml` only | **Resolved** |
 | Repurpose `RemoteSchemaValidationTest`? | No — add a separately named local-schema test | **Resolved** |
 | Validation-layer count? | Four: `xmllint`, generator runtime, Maven tests, CI | **Resolved** |
-| ADR-008 / ADR-001 update timing? | Follow-up, after this change's implementation; tracked in `tasks.md`, not gating this change | **Resolved** |
+| ADR-008 timing? | Authored as part of this change's completion (`tasks.md` section 9), per the acceptance criteria confirmed on issue #991 (posted 2026-07-23) | **Resolved** |
+| ADR-001 update timing? | Follow-up, after this change's implementation; tracked in `tasks.md` section 10, not gating this change | **Resolved** |
 
 ## Open Questions (carried from the Functional Specification's "Remaining assumptions")
 

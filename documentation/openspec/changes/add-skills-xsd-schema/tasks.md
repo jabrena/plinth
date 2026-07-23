@@ -47,7 +47,12 @@ created: 2026-07-23
 - [ ] 8.1 Run `./mvnw clean verify -pl plinth-skills-generator -am` and resolve schema, runtime-validation, and test failures.
 - [ ] 8.2 Run `openspec validate --all` from `documentation/` and resolve every validation error before implementation promotion.
 
-## 9. Follow-up documentation (deferred — not required to close this change)
+## 9. Schema-per-artifact policy documentation (ADR-008, gating)
 
-- [ ] 9.1 (Follow-up, after this change's implementation) Create `ADR-008` recording the one-XML-Schema-per-generated-artifact policy and the scope this change implemented (skill-index only).
-- [ ] 9.2 (Follow-up, after this change's implementation) Update `ADR-001-generate-cursor-rules-from-xml-files.md` and its entry in `documentation/adr/README.md` to describe the current XML-to-Agent-Skills generation architecture (XSD-validated XML sources, `plinth-skills-generator`, `skills.xsd`, generated Agent Skills), preserving the original ADR date, identifier, and link.
+- [ ] 9.1 Create `ADR-008` (MADR-style, per the existing `ADR-006` template) recording the one-XML-Schema-per-generated-artifact policy and the scope this change implements (skill-index only).
+- [ ] 9.2 Add `ADR-008`'s entry to `documentation/adr/README.md`.
+- [ ] 9.3 Confirm `ADR-008` is authored and indexed before this change's implementation is considered complete — this is gating per the confirmed acceptance criteria for issue #991 (posted 2026-07-23), not a deferred follow-up.
+
+## 10. Follow-up documentation (deferred — not required to close this change)
+
+- [ ] 10.1 (Follow-up, after this change's implementation) Update `ADR-001-generate-cursor-rules-from-xml-files.md` and its entry in `documentation/adr/README.md` to describe the current XML-to-Agent-Skills generation architecture (XSD-validated XML sources, `plinth-skills-generator`, `skills.xsd`, generated Agent Skills), preserving the original ADR date, identifier, and link.
