@@ -30,17 +30,45 @@ local, artifact-scoped schema for skill-index XML (`skills.xsd`), which raised t
 question this ADR resolves: should every generated-artifact type have its own schema, and should
 schemas remain scoped strictly to the artifact type they validate?
 
+More fundamentally, a single monolithic schema shared across artifact types cannot faithfully
+represent them, because an agent, a command, and a skill index are different abstractions with
+different lifecycles. Each is authored, versioned, and evolved on its own schedule: a skill index
+can grow a new optional element (for example, a richer `constraints` shape) without any
+corresponding change to what a command or an agent needs to express, and vice versa. A shared
+`pml.xsd` would force every artifact type through one structural contract, so a change driven by
+one abstraction's lifecycle (adding, tightening, or deprecating a field) either bleeds into
+artifact types that never asked for it, or gets held back until every artifact type is ready to
+accept it. Modeling each generated artifact with its own schema lets each abstraction's structure
+evolve at its own pace, independent of the others.
+
+Skill-reference XML is the deliberate exception to this per-artifact split, and for the opposite
+reason: it is not a distinct abstraction that has outgrown the shared PML schema, it is that
+schema's original abstraction. Before Agent Skills existed, this project generated system prompts
+(the `.cursor/rules/` "system prompt" pipeline described in [ADR-004](./ADR-004-skill-generation.md),
+which frames Agent Skills as "the natural evolution of system prompts"). Skill-reference XML —
+with its `role`, `goal`, and template-driven structure — is that same system-prompt shape carried
+forward, not a new one. `pml.xsd` was, and still is, the right schema for it. Additionally, `pml.xsd`
+is currently published from this project's history, but the project's stated direction is to
+finish migrating it fully into the dedicated `pml` repository in coming releases, so that repository
+— not `plinth` — becomes its sole authoritative home. Forking a local, plinth-owned copy for
+skill-reference XML now (the way `skills.xsd` does for skill-index XML) would pull that ownership
+in the opposite direction from where it is headed.
+
 ## Decision Drivers
 
 * Skill-index generation (`SkillsGenerator`) must not depend on runtime network access to a
   remote schema to be reliable and reproducible.
-* Each generated artifact (skill-index, skill-reference, command, agent) has a distinct XML shape
-  and evolves independently; a shared schema across artifact types would couple unrelated changes.
+* Each generated artifact (skill-index, skill-reference, command, agent) is a distinct abstraction
+  with its own lifecycle — authored, versioned, and structurally evolved on its own schedule; a
+  shared schema across artifact types would couple unrelated changes and force every abstraction
+  through one structural contract regardless of which one actually needs to change.
 * `agents.xsd` and `commands.xsd` already established a working, colocated-schema convention that
   should be extended consistently rather than reinvented per artifact.
-* Skill-reference XML intentionally remains on the shared, externally-owned PML schema because it
-  is not (yet) being migrated to a local, specialized schema; this ADR must record that boundary,
-  not blur it.
+* Skill-reference XML intentionally remains on the shared PML schema because it is the direct
+  continuation of this project's former system-prompt abstraction (see [ADR-004](./ADR-004-skill-generation.md)) —
+  the abstraction `pml.xsd` was built to model — not a distinct artifact type that has outgrown it;
+  forking a local copy for it would work against the schema's planned migration to being fully
+  owned by the external `pml` repository. This ADR must record that boundary, not blur it.
 
 ## Considered Options
 
@@ -55,10 +83,12 @@ schemas remain scoped strictly to the artifact type they validate?
 
 ## Decision Outcome
 
-Chosen option: "Option 1: One XML Schema per generated artifact", because it matches the
-already-shipped, working precedent (`agents.xsd`, `commands.xsd`) and closes the one remaining
-gap (skill-index XML depending on a remote schema) without merging unrelated artifact types under
-a single schema file. Under this policy:
+Chosen option: "Option 1: One XML Schema per generated artifact", because a skill index, a
+command, and an agent are different abstractions with different lifecycles, and one monolithic
+`pml.xsd` cannot represent that without coupling their independent evolution together. This option
+also matches the already-shipped, working precedent (`agents.xsd`, `commands.xsd`) and closes the
+one remaining gap (skill-index XML depending on a remote schema) without merging unrelated
+artifact types under a single schema file. Under this policy:
 
 * Skill-index XML (`plinth-skills-generator/src/main/resources/skill-indexes/*.xml`) validates
   against `skills.xsd`, a complete, unchanged local copy of PML 0.8.0 `pml.xsd`, colocated at
@@ -67,7 +97,10 @@ a single schema file. Under this policy:
 * Skill-reference XML (`plinth-skills-generator/src/main/resources/skill-references/*.xml`)
   continues to validate against the remote PML 0.8.0 `pml.xsd`
   (`https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd`), unaffected by this ADR. It is not
-  migrated to a local schema by this decision.
+  migrated to a local schema by this decision, because it is the same abstraction `pml.xsd` was
+  originally built to model (this project's former system prompts, per ADR-004) rather than a
+  distinct one, and the schema's ownership is headed toward the external `pml` repository, not
+  toward being forked locally.
 * Command XML (`plinth-commands-generator/src/main/resources/commands/*.xml`) validates against
   `commands.xsd`, already colocated at `plinth-commands-generator/src/main/resources/commands.xsd`.
 * Agent XML (`plinth-agents-generator/src/main/resources/agents/*.xml`) validates against
@@ -124,6 +157,10 @@ The implementation is confirmed when:
 ### Option 2: One shared schema across all XML sources
 
 * Good, because a single schema file is simpler to reference.
+* Bad, because it treats abstractions with different lifecycles — skill index, command, agent —
+  as if they shared one structural contract; a change one abstraction's lifecycle demands (a new
+  field, a tightened constraint, a deprecation) either leaks into artifact types that never asked
+  for it, or gets blocked until every artifact type is ready to accept it.
 * Bad, because it couples unrelated artifact types (a command XML change could force a schema
   review for skill-index XML, and vice versa).
 * Bad, because it contradicts the already-shipped `agents.xsd`/`commands.xsd` precedent, which
