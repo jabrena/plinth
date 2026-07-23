@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Illustrative example only. Mirrors the current, already-shipped shape of
+  plinth-skills-generator/src/main/resources/skill-indexes/301-skill.xml.
+  This does NOT stage a copy of PML 0.8.0 pml.xsd; the real skills.xsd is an
+  unchanged copy created during implementation (see design.md). Re-validate
+  this file against the real skills.xsd once it exists.
+-->
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="skills.xsd"
+      id="999-example-illustrative-skill">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.18.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Illustrative example skill-index used to demonstrate a valid document against the local skills.xsd baseline. Not a real, generated skill.</description>
+  </metadata>
+
+  <title>Illustrative Example Skill</title>
+  <goal><![CDATA[
+Illustrative goal content demonstrating a structurally valid skill-index document.
+
+**Scope:** Design-time example only; not part of the skills.xml inventory.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Illustrative constraints description.</constraints-description>
+    <constraint-list>
+      <constraint>Illustrative constraint entry.</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Illustrative trigger phrase</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1"><step-title>Illustrative step</step-title><step-content>Illustrative step content.</step-content></step>
+  </steps>
+</prompt>

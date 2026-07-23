@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Illustrative example only. Deliberately omits information required by the
+  current PML shape (metadata/description and title) to demonstrate an
+  expected validation failure. The exact XSD diagnostic depends on the real,
+  copied skills.xsd and MUST be reconfirmed with xmllint during
+  implementation (see design.md and tasks.md).
+-->
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="skills.xsd"
+      id="999-example-illustrative-invalid-skill">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.18.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <!-- Missing required <description>: expected to fail validation -->
+  </metadata>
+
+  <!-- Missing required <title>: expected to fail validation -->
+
+  <goal><![CDATA[
+Illustrative goal content. This document is intentionally incomplete to
+demonstrate a representative invalid skill-index example.
+]]></goal>
+</prompt>
