@@ -1,6 +1,7 @@
 package info.jab.pml;
 
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -30,7 +31,11 @@ class CommandSkillPropagationTest {
 
             assertThat(output.resourceFiles())
                 .withFailMessage("Generated 004 missing asset %s", assetPath)
-                .containsKey(assetPath);
+                .containsEntry(assetPath, loadBridgedCommand(commandFile));
+            assertThat(output.resourceFiles().get(assetPath))
+                .startsWith("---\n")
+                .contains("\ntools:\n")
+                .contains("\n---\n\n# " + commandName + "\n");
             assertThat(reference)
                 .withFailMessage("Generated 004 reference missing link to %s", assetPath)
                 .contains("](../" + assetPath + ")");
@@ -48,7 +53,10 @@ class CommandSkillPropagationTest {
 
         String reference = output.referenceMds().get("001-commands-inventory");
         String templateAssetPath = "assets/java-commands-inventory-template.md";
-        String template = output.resourceFiles().get(templateAssetPath);
+        String template = Objects.requireNonNull(
+            output.resourceFiles().get(templateAssetPath),
+            "Generated 001 inventory template must exist"
+        );
 
         assertThat(output.resourceFiles())
             .withFailMessage("Generated 001 missing asset %s", templateAssetPath)
@@ -66,6 +74,16 @@ class CommandSkillPropagationTest {
                 .withFailMessage("Generated 001 reference must not embed command /%s", commandName)
                 .doesNotContain("`/" + commandName + "`");
         });
+
+        int previousPosition = -1;
+        for (String commandFile : CommandIndexes.commandFiles().toList()) {
+            String commandName = commandFile.substring(0, commandFile.length() - ".md".length());
+            int position = template.indexOf("`/" + commandName + "`");
+            assertThat(position)
+                .withFailMessage("Generated 001 inventory order differs at /%s", commandName)
+                .isGreaterThan(previousPosition);
+            previousPosition = position;
+        }
     }
 
     private String loadBridgedCommand(String commandFile) {

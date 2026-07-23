@@ -1,7 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="create-diagram"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../commands.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <metadata>
+        <description>Create an architecture or design diagram from selected source artifacts.</description>
+        <argument-hint>[source-artifact] [diagram-type]</argument-hint>
+        <model>inherit</model>
+        <agent>robot-architect</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+            </tools-list>
+        </tools>
+    </metadata>
 
     <goal><![CDATA[
 Create an architecture or design diagram that explains a selected system view.

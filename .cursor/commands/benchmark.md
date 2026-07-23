@@ -1,3 +1,15 @@
+---
+description: 'Design and coordinate a reproducible Java performance test.'
+argument-hint: '[target]'
+model: 'inherit'
+agent: 'robot-java-performance'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+  - 'Bash'
+---
+
 # benchmark
 
 Select and coordinate an appropriate Java performance test with reproducible workload, environment, thresholds, and result artifacts.

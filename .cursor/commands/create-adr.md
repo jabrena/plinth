@@ -1,3 +1,14 @@
+---
+description: 'Create a repository ADR for an approved architectural decision.'
+argument-hint: '[decision-source] [adr-type]'
+model: 'inherit'
+agent: 'robot-architect'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+---
+
 # create-adr
 
 Record an important architectural decision, its context, alternatives, and consequences.

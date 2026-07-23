@@ -3,6 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Refine the technical design of an issue or OpenSpec change before implementation.</description>
+        <argument-hint>[openspec-change]</argument-hint>
+        <model>inherit</model>
+        <agent>robot-architect</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Improve and refine the technical approach for an issue or OpenSpec change after initial specification—with alternatives, trade-offs, compatibility review, rollout controls, and verification strategy—before implementation.
 

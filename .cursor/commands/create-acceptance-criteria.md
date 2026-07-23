@@ -1,3 +1,13 @@
+---
+description: 'Derive and post confirmed Gherkin acceptance criteria for an issue.'
+argument-hint: '[issue-url]'
+model: 'inherit'
+agent: 'robot-business-analyst'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # create-acceptance-criteria
 
 Derive observable Gherkin acceptance criteria from the Functional Specification comment produced by `/explore-problem` and post the confirmed result as a separate comment on the same issue.

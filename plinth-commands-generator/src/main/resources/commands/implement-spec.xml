@@ -3,6 +3,21 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Deliver an approved plan or OpenSpec change through controlled implementation.</description>
+        <argument-hint>[openspec-change]</argument-hint>
+        <model>inherit</model>
+        <agent>robot-tech-lead</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Write</tool>
+                <tool>Edit</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Deliver an approved implementation plan or validated OpenSpec task list through controlled implementation.
 

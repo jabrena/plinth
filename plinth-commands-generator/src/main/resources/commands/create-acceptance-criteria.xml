@@ -1,7 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <command id="create-acceptance-criteria"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="../commands.xsd">
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="../commands.xsd">
+
+    <metadata>
+        <description>Derive and post confirmed Gherkin acceptance criteria for an issue.</description>
+        <argument-hint>[issue-url]</argument-hint>
+        <model>inherit</model>
+        <agent>robot-business-analyst</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
 
     <goal><![CDATA[
 Derive observable Gherkin acceptance criteria from the Functional Specification comment produced by `/explore-problem` and post the confirmed result as a separate comment on the same issue.

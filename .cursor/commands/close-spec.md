@@ -1,3 +1,13 @@
+---
+description: 'Archive a completed OpenSpec change by name.'
+argument-hint: '[openspec-change]'
+model: 'inherit'
+agent: 'robot-architect'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # close-spec
 
 Archive an OpenSpec change by name, using the OpenSpec CLI, so completed changes can be reconciled and removed from the active change list.

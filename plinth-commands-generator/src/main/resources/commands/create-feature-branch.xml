@@ -3,6 +3,19 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
+    <metadata>
+        <description>Create and switch to a conventionally named feature branch.</description>
+        <argument-hint>[issue-or-change|type description] [base-reference]</argument-hint>
+        <model>inherit</model>
+        <agent>robot-tech-lead</agent>
+        <tools>
+            <tools-list>
+                <tool>Read</tool>
+                <tool>Bash</tool>
+            </tools-list>
+        </tools>
+    </metadata>
+
     <goal><![CDATA[
 Create and switch the current checkout to a conventionally named local branch for GitHub issue, OpenSpec, analysis, design, documentation, or implementation work.
 

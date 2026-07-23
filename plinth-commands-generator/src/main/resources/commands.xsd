@@ -3,10 +3,11 @@
            elementFormDefault="qualified">
 
     <!-- Root element for a single command definition document (inventory stays in commands.xml).
-         Sequence aligned with agents.xsd: goal → constraints → steps → output-format → safeguards -->
+         Sequence aligned with agents.xsd: metadata → goal → constraints → steps → output-format → safeguards -->
     <xs:element name="command">
         <xs:complexType>
             <xs:sequence>
+                <xs:element ref="metadata"/>
                 <xs:element ref="goal"/>
                 <xs:element ref="constraints" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="steps"/>
@@ -16,6 +17,42 @@
             <xs:attribute name="id" type="xs:string" use="required"/>
         </xs:complexType>
     </xs:element>
+
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="description"/>
+                <xs:element ref="argument-hint"/>
+                <xs:element ref="model"/>
+                <xs:element ref="agent"/>
+                <xs:element ref="tools"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Reuse the global PML vocabulary style used by metadata and agents. -->
+    <xs:element name="description" type="xs:string"/>
+    <xs:element name="argument-hint" type="xs:string"/>
+    <xs:element name="model" type="xs:string"/>
+    <xs:element name="agent" type="xs:string"/>
+
+    <xs:element name="tools">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tools-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tools-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tool" minOccurs="1" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tool" type="xs:string"/>
 
     <!-- Mixed text blocks for Markdown-heavy sections (agents-style goal CDATA) -->
     <xs:complexType name="MixedText" mixed="true">
