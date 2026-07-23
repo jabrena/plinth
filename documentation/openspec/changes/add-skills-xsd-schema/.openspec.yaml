@@ -1,0 +1,10 @@
+version: 1
+change:
+  name: add-skills-xsd-schema
+  status: proposed
+  links:
+    - title: GitHub Issue #991
+      url: https://github.com/jabrena/plinth/issues/991
+specs:
+  - specs/pml-skills-schema/spec.md
+  - specs/skills-generator-module/spec.md
