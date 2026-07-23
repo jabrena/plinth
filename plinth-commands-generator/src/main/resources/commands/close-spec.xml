@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Archive a completed OpenSpec change by name.</description>
-        <argument-hint>[change-name]</argument-hint>
+        <argument-hint>[openspec-change]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-architect</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

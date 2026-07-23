@@ -7,7 +7,7 @@
         <description>Derive and post confirmed Gherkin acceptance criteria for an issue.</description>
         <argument-hint>[issue-url]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-business-analyst</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

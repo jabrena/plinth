@@ -1,3 +1,15 @@
+---
+description: 'Coordinate a reproducible Java profiling and optimization lifecycle.'
+argument-hint: '[target]'
+model: 'inherit'
+agent: 'robot-java-performance'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+  - 'Bash'
+---
+
 # profile
 
 Coordinate a Java profiling lifecycle from reproducible baseline through evidence-backed optimization verification.

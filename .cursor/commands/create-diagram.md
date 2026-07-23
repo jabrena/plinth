@@ -1,3 +1,14 @@
+---
+description: 'Create an architecture or design diagram from selected source artifacts.'
+argument-hint: '[source-artifact] [diagram-type]'
+model: 'inherit'
+agent: 'robot-architect'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+---
+
 # create-diagram
 
 Create an architecture or design diagram that explains a selected system view.

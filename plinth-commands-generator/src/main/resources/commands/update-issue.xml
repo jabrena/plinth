@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Update an issue description with structured, evidence-backed content.</description>
-        <argument-hint>[issue] [source] [tracker]</argument-hint>
+        <argument-hint>[issue-url]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-business-analyst</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

@@ -7,7 +7,7 @@
         <description>Create and switch to a conventionally named feature branch.</description>
         <argument-hint>[issue-or-change|type description] [base-reference]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-tech-lead</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

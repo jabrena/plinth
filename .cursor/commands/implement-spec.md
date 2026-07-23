@@ -1,3 +1,15 @@
+---
+description: 'Deliver an approved plan or OpenSpec change through controlled implementation.'
+argument-hint: '[openspec-change]'
+model: 'inherit'
+agent: 'robot-tech-lead'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+  - 'Bash'
+---
+
 # implement-spec
 
 Deliver an approved implementation plan or validated OpenSpec task list through controlled implementation.

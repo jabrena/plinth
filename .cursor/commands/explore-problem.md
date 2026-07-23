@@ -1,3 +1,13 @@
+---
+description: 'Analyze an issue through five lenses and post a Functional Specification.'
+argument-hint: '[issue-url]'
+model: 'inherit'
+agent: 'robot-business-analyst'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # explore-problem
 
 Evaluate an issue through five points of view — problem framing, root cause analysis, assumption analysis, context mapping, and quality attribute discovery — and post the resulting Functional Specification as a new comment on the issue.

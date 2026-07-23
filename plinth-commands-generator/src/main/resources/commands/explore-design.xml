@@ -4,10 +4,10 @@
          xsi:noNamespaceSchemaLocation="../commands.xsd">
 
     <metadata>
-        <description>Refine an issue or OpenSpec change's technical design before implementation.</description>
-        <argument-hint>[issue|openspec-change]</argument-hint>
+        <description>Refine the technical design of an issue or OpenSpec change before implementation.</description>
+        <argument-hint>[openspec-change]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-architect</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

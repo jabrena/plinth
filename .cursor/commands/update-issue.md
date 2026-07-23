@@ -1,3 +1,13 @@
+---
+description: 'Update an issue description with structured, evidence-backed content.'
+argument-hint: '[issue-url]'
+model: 'inherit'
+agent: 'robot-business-analyst'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # update-issue
 
 Update an existing project issue description with structured, evidence-backed content.

@@ -7,7 +7,7 @@
         <description>Analyze an issue through five lenses and post a Functional Specification.</description>
         <argument-hint>[issue-url]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-business-analyst</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

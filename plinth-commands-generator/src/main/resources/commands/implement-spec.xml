@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Deliver an approved plan or OpenSpec change through controlled implementation.</description>
-        <argument-hint>[approved-plan|openspec-change] [task-or-group] [constraints]</argument-hint>
+        <argument-hint>[openspec-change]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-tech-lead</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

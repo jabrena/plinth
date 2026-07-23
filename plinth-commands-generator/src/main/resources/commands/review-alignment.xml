@@ -7,7 +7,7 @@
         <description>Review analysis and design artifacts for implementation readiness.</description>
         <argument-hint>[artifact] [artifact ...]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-business-analyst</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

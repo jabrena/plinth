@@ -1,3 +1,15 @@
+---
+description: 'Create or update OpenSpec artifacts from approved source material.'
+argument-hint: '[issue-url]'
+model: 'inherit'
+agent: 'robot-architect'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+  - 'Bash'
+---
+
 # create-spec
 
 Create or update one or more OpenSpec changes from the available issue, design, ADR, plan, or existing OpenSpec artifacts.

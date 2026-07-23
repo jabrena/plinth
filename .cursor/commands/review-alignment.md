@@ -1,3 +1,12 @@
+---
+description: 'Review analysis and design artifacts for implementation readiness.'
+argument-hint: '[artifact] [artifact ...]'
+model: 'inherit'
+agent: 'robot-business-analyst'
+tools:
+  - 'Read'
+---
+
 # review-alignment
 
 Review available analysis and design artifacts for consistency, traceability, completeness, and implementation readiness.

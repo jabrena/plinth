@@ -48,7 +48,7 @@ class CommandFrontmatterTest {
             assertThat(frontmatter.get("description")).isEqualTo(expected.description());
             assertThat(frontmatter.get("argument-hint")).isEqualTo(expected.argumentHint());
             assertThat(frontmatter.get("model")).isEqualTo("inherit");
-            assertThat(frontmatter.get("agent")).isEqualTo("inherit");
+            assertThat(frontmatter.get("agent")).isEqualTo(expected.agent());
             assertThat(frontmatter.get("tools")).isEqualTo(expected.tools());
         }
         assertThat(APPROVED_METADATA).hasSize(14);
@@ -148,27 +148,28 @@ class CommandFrontmatterTest {
 
     private static Map<String, ExpectedMetadata> approvedMetadata() {
         Map<String, ExpectedMetadata> metadata = new LinkedHashMap<>();
-        metadata.put("benchmark", expected("Design and coordinate a reproducible Java performance test.",
-            "[target] [objective-or-threshold] [workload] [environment] [preferred-tool]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("close-spec", expected("Archive a completed OpenSpec change by name.", "[change-name]", "Read", "Bash"));
-        metadata.put("create-acceptance-criteria", expected("Derive and post confirmed Gherkin acceptance criteria for an issue.", "[issue-url]", "Read", "Bash"));
-        metadata.put("create-adr", expected("Create a repository ADR for an approved architectural decision.", "[decision-source] [adr-type]", "Read", "Write", "Edit"));
-        metadata.put("create-diagram", expected("Create an architecture or design diagram from selected source artifacts.", "[source-artifact] [diagram-type]", "Read", "Write", "Edit"));
-        metadata.put("create-feature-branch", expected("Create and switch to a conventionally named feature branch.", "[issue-or-change|type description] [base-reference]", "Read", "Bash"));
-        metadata.put("create-spec", expected("Create or update OpenSpec artifacts from approved source material.", "[issue|design|adr|plan|existing-change]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("create-worktree", expected("Create an isolated Git worktree on a new conventionally named branch.", "[issue-or-change|type description] [target-path] [base-reference]", "Read", "Bash"));
-        metadata.put("explore-design", expected("Refine an issue or OpenSpec change's technical design before implementation.", "[issue|openspec-change]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("explore-problem", expected("Analyze an issue through five lenses and post a Functional Specification.", "[issue-url]", "Read", "Bash"));
-        metadata.put("implement-spec", expected("Deliver an approved plan or OpenSpec change through controlled implementation.", "[approved-plan|openspec-change] [task-or-group] [constraints]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("profile", expected("Coordinate a reproducible Java profiling and optimization lifecycle.", "[application-or-module] [issue|plan|openspec-change|suspected-problem] [runtime-command] [workload]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("review-alignment", expected("Review analysis and design artifacts for implementation readiness.", "[artifact] [artifact ...]", "Read"));
-        metadata.put("update-issue", expected("Update an issue description with structured, evidence-backed content.", "[issue] [source] [tracker]", "Read", "Bash"));
+        metadata.put("benchmark", expected("robot-java-performance",
+            "Design and coordinate a reproducible Java performance test.",
+            "[target]", "Read", "Write", "Edit", "Bash"));
+        metadata.put("close-spec", expected("robot-architect", "Archive a completed OpenSpec change by name.", "[openspec-change]", "Read", "Bash"));
+        metadata.put("create-acceptance-criteria", expected("robot-business-analyst", "Derive and post confirmed Gherkin acceptance criteria for an issue.", "[issue-url]", "Read", "Bash"));
+        metadata.put("create-adr", expected("robot-architect", "Create a repository ADR for an approved architectural decision.", "[decision-source] [adr-type]", "Read", "Write", "Edit"));
+        metadata.put("create-diagram", expected("robot-architect", "Create an architecture or design diagram from selected source artifacts.", "[source-artifact] [diagram-type]", "Read", "Write", "Edit"));
+        metadata.put("create-feature-branch", expected("robot-tech-lead", "Create and switch to a conventionally named feature branch.", "[issue-or-change|type description] [base-reference]", "Read", "Bash"));
+        metadata.put("create-spec", expected("robot-architect", "Create or update OpenSpec artifacts from approved source material.", "[issue-url]", "Read", "Write", "Edit", "Bash"));
+        metadata.put("create-worktree", expected("robot-tech-lead", "Create an isolated Git worktree on a new conventionally named branch.", "[issue-or-change|type description] [target-path] [base-reference]", "Read", "Bash"));
+        metadata.put("explore-design", expected("robot-architect", "Refine the technical design of an issue or OpenSpec change before implementation.", "[openspec-change]", "Read", "Write", "Edit", "Bash"));
+        metadata.put("explore-problem", expected("robot-business-analyst", "Analyze an issue through five lenses and post a Functional Specification.", "[issue-url]", "Read", "Bash"));
+        metadata.put("implement-spec", expected("robot-tech-lead", "Deliver an approved plan or OpenSpec change through controlled implementation.", "[openspec-change]", "Read", "Write", "Edit", "Bash"));
+        metadata.put("profile", expected("robot-java-performance", "Coordinate a reproducible Java profiling and optimization lifecycle.", "[target]", "Read", "Write", "Edit", "Bash"));
+        metadata.put("review-alignment", expected("robot-business-analyst", "Review analysis and design artifacts for implementation readiness.", "[artifact] [artifact ...]", "Read"));
+        metadata.put("update-issue", expected("robot-business-analyst", "Update an issue description with structured, evidence-backed content.", "[issue-url]", "Read", "Bash"));
         return Map.copyOf(metadata);
     }
 
-    private static ExpectedMetadata expected(String description, String argumentHint, String... tools) {
-        return new ExpectedMetadata(description, argumentHint, List.of(tools));
+    private static ExpectedMetadata expected(String agent, String description, String argumentHint, String... tools) {
+        return new ExpectedMetadata(agent, description, argumentHint, List.of(tools));
     }
 
-    private record ExpectedMetadata(String description, String argumentHint, List<String> tools) {}
+    private record ExpectedMetadata(String agent, String description, String argumentHint, List<String> tools) {}
 }

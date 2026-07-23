@@ -1,3 +1,13 @@
+---
+description: 'Create and switch to a conventionally named feature branch.'
+argument-hint: '[issue-or-change|type description] [base-reference]'
+model: 'inherit'
+agent: 'robot-tech-lead'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # create-feature-branch
 
 Create and switch the current checkout to a conventionally named local branch for GitHub issue, OpenSpec, analysis, design, documentation, or implementation work.

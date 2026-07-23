@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Design and coordinate a reproducible Java performance test.</description>
-        <argument-hint>[target] [objective-or-threshold] [workload] [environment] [preferred-tool]</argument-hint>
+        <argument-hint>[target]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-java-performance</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

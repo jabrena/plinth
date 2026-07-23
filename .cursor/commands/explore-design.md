@@ -1,3 +1,15 @@
+---
+description: 'Refine the technical design of an issue or OpenSpec change before implementation.'
+argument-hint: '[openspec-change]'
+model: 'inherit'
+agent: 'robot-architect'
+tools:
+  - 'Read'
+  - 'Write'
+  - 'Edit'
+  - 'Bash'
+---
+
 # explore-design
 
 Improve and refine the technical approach for an issue or OpenSpec change after initial specification—with alternatives, trade-offs, compatibility review, rollout controls, and verification strategy—before implementation.

@@ -1,3 +1,13 @@
+---
+description: 'Create an isolated Git worktree on a new conventionally named branch.'
+argument-hint: '[issue-or-change|type description] [target-path] [base-reference]'
+model: 'inherit'
+agent: 'robot-tech-lead'
+tools:
+  - 'Read'
+  - 'Bash'
+---
+
 # create-worktree
 
 Always create a new branch and linked Git worktree for isolated or parallel work without changing the current checkout.

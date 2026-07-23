@@ -40,7 +40,7 @@ This is one atomic change. Schema representation, YAML-frontmatter rendering, XM
     <description>One sentence describing what this command does.</description>
     <argument-hint>[optional arguments]</argument-hint>
     <model>inherit</model>
-    <agent>inherit</agent>
+    <agent>robot-architect</agent>
     <tools>
         <tools-list>
             <tool>Read</tool>
@@ -56,7 +56,7 @@ Alternative considered: make the entire subtree optional for incremental migrati
 
 ### Keep metadata values extensible and command-specific
 
-The XSD will enforce element structure and repetition but will not enumerate model, agent, or tool values. Each command source owns its description, argument hint, inherited model/agent selection, and applicable tools. Initial migration will use the approved `model: inherit` and `agent: inherit` values while command-specific descriptions, hints, and tools are reviewed against each command contract.
+The XSD will enforce element structure and repetition but will not enumerate model, agent, or tool values. Each command source owns its description, argument hint, model selection, owning Plinth agent, and applicable tools. Initial migration will use `model: inherit`; each `agent` value will use the exact agent id declared by the command's owning-agent contract and registered in `plinth-agents-generator/src/main/resources/agents.xml`.
 
 Alternative considered: define one global tool list in the inventory or stylesheet. Rejected because `tools/tools-list/tool` is part of each command source and command capabilities can differ.
 

@@ -7,7 +7,7 @@
         <description>Create a repository ADR for an approved architectural decision.</description>
         <argument-hint>[decision-source] [adr-type]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-architect</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

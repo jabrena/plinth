@@ -7,7 +7,7 @@
         <description>Create an isolated Git worktree on a new conventionally named branch.</description>
         <argument-hint>[issue-or-change|type description] [target-path] [base-reference]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-tech-lead</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

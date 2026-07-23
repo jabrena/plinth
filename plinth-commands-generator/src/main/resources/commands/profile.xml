@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Coordinate a reproducible Java profiling and optimization lifecycle.</description>
-        <argument-hint>[application-or-module] [issue|plan|openspec-change|suspected-problem] [runtime-command] [workload]</argument-hint>
+        <argument-hint>[target]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-java-performance</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>

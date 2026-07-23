@@ -5,9 +5,9 @@
 
     <metadata>
         <description>Create or update OpenSpec artifacts from approved source material.</description>
-        <argument-hint>[issue|design|adr|plan|existing-change]</argument-hint>
+        <argument-hint>[issue-url]</argument-hint>
         <model>inherit</model>
-        <agent>inherit</agent>
+        <agent>robot-architect</agent>
         <tools>
             <tools-list>
                 <tool>Read</tool>
