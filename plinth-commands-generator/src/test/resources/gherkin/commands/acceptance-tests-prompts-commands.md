@@ -86,13 +86,6 @@ execute @plinth-commands-generator/src/test/resources/gherkin/commands/profile.f
 and verify that acceptance-tests passes.
 ```
 
-## /review-alignment
-
-```bash
-execute @plinth-commands-generator/src/test/resources/gherkin/commands/review-alignment.feature
-and verify that acceptance-tests passes.
-```
-
 ## /update-issue
 
 ```bash

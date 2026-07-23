@@ -6,7 +6,7 @@ The embedded agents separate analysis, architecture, technical leadership, and i
 
 | Agent | Missions | Usage |
 | --- | --- | --- |
-| `robot-business-analyst` | Refine GitHub/Jira issues.<br>Perform read-only alignment, traceability, and readiness reviews. | Use `/update-issue` or `/review-alignment`. It does not implement code or silently correct artifacts. |
+| `robot-business-analyst` | Refine GitHub/Jira issues. | Use `/update-issue`. It does not implement code or silently correct artifacts. |
 | `robot-architect` | Explore design alternatives.<br>Create ADRs.<br>Create architecture diagrams. | Use `/explore-design`, `/create-adr`, or `/create-diagram`. It hands approved constraints to the tech lead. |
 | `robot-tech-lead` | Create OpenSpec changes.<br>Coordinate delivery.<br>Select and delegate to implementation agents.<br>Track implementation and verification. | Use `/create-spec`, or provide an approved plan/OpenSpec task list for delivery. |
 | `robot-java-performance` | Coordinate profiling and benchmarking.<br>Preserve baseline and measurement evidence.<br>Delegate approved optimizations to coder agents. | Use `/profile` or `/benchmark`. It does not implement application code directly. |

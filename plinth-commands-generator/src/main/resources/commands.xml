@@ -9,7 +9,6 @@
     <command file="create-adr.xml"/>
     <command file="create-diagram.xml"/>
     <command file="create-spec.xml"/>
-    <command file="review-alignment.xml"/>
     <command file="implement-spec.xml"/>
     <command file="close-spec.xml"/>
     <command file="profile.xml"/>

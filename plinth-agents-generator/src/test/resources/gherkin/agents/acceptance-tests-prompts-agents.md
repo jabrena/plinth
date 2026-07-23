@@ -1,12 +1,5 @@
 # Acceptance Test Prompts for Agents
 
-## robot-business-analyst
-
-```bash
-execute @plinth-agents-generator/src/test/resources/gherkin/agents/robot-business-analyst.feature
-and verify that acceptance-tests passes.
-```
-
 ## robot-architect
 
 ```bash

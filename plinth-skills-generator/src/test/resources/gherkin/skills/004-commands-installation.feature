@@ -30,7 +30,6 @@ Scenario: Install embedded commands into the GitHub commands destination
     | create-adr.md            |
     | create-diagram.md        |
     | create-spec.md           |
-    | review-alignment.md      |
     | implement-spec.md       |
     | close-spec.md           |
     | profile.md               |

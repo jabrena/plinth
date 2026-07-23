@@ -51,7 +51,7 @@ class CommandFrontmatterTest {
             assertThat(frontmatter.get("agent")).isEqualTo(expected.agent());
             assertThat(frontmatter.get("tools")).isEqualTo(expected.tools());
         }
-        assertThat(APPROVED_METADATA).hasSize(14);
+        assertThat(APPROVED_METADATA).hasSize(13);
     }
 
     @Test
@@ -139,9 +139,8 @@ class CommandFrontmatterTest {
         hashes.put("create-worktree.md", "2f744fa6ded845ca31be3ecdf0df1cbd3cb6c90e03dae910535d9cf8ee5f9f25");
         hashes.put("explore-design.md", "192d877d65ea77c76645e1371666ac8a9bd2a78d44faaf58cf30aa6d625adc7c");
         hashes.put("explore-problem.md", "bf0b8c1acd2f79b79c5958124c06297a62d5faecbaa0933541808fdd49213cf2");
-        hashes.put("implement-spec.md", "2ae28a480c28405205e38ee502138c9e695b3f07b5911ede7450154d5f1a2b30");
+        hashes.put("implement-spec.md", "242cc4b809d108cffa02783bbf96afd6cc32f734b1e2a8fa8c04f0bd5cac7026");
         hashes.put("profile.md", "98e107c4a577b9c745ca0639b4929b5e223b04668e78ff00138fd0f07657c060");
-        hashes.put("review-alignment.md", "df4e45038ac1ebcead4a6bbd2b6f6d05603254596d8fb6da075e9156be0143d5");
         hashes.put("update-issue.md", "7766e1ae872b034570b1c183b2a2695722ab64a4bfbecefcc0567f540333ef41");
         return Map.copyOf(hashes);
     }
@@ -162,7 +161,6 @@ class CommandFrontmatterTest {
         metadata.put("explore-problem", expected("robot-business-analyst", "Analyze an issue through five lenses and post a Functional Specification.", "[issue-url]", "Read", "Bash"));
         metadata.put("implement-spec", expected("robot-tech-lead", "Deliver an approved plan or OpenSpec change through controlled implementation.", "[openspec-change]", "Read", "Write", "Edit", "Bash"));
         metadata.put("profile", expected("robot-java-performance", "Coordinate a reproducible Java profiling and optimization lifecycle.", "[target]", "Read", "Write", "Edit", "Bash"));
-        metadata.put("review-alignment", expected("robot-business-analyst", "Review analysis and design artifacts for implementation readiness.", "[artifact] [artifact ...]", "Read"));
         metadata.put("update-issue", expected("robot-business-analyst", "Update an issue description with structured, evidence-backed content.", "[issue-url]", "Read", "Bash"));
         return Map.copyOf(metadata);
     }

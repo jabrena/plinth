@@ -49,7 +49,7 @@ The command bundle SHALL provide `/implement-spec`, and the command MUST use `@r
 
 - **WHEN** authoritative issue, ADR, specification, or plan content conflicts materially
 - **THEN** implementation stops
-- **AND** the conflict is routed to `/review-alignment`
+- **AND** the conflict is routed to `robot-business-analyst` for manual assessment, since the `/review-alignment` command is retired
 
 #### Scenario: Complete implementation workflow
 

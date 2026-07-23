@@ -17,7 +17,6 @@ Provide a quick checklist of the embedded commands available for installation in
 | `/create-adr` | Design | Record an architectural decision, alternatives, rationale, and consequences. |
 | `/create-diagram` | Design | Create a focused architecture or design diagram from approved artifacts. |
 | `/create-spec` | Analysis / Design | Create or update one or more validated OpenSpec changes. |
-| `/review-alignment` | Analysis / Design | Review available artifacts for traceability, consistency, completeness, and readiness. |
 | `/implement-spec` | Implementation | Deliver an approved plan or validated OpenSpec task list through framework-aware delegation. |
 | `/close-spec` | Operation / Maintenance | Archive an OpenSpec change by name using the OpenSpec CLI. |
 | `/profile` | Operation | Coordinate Java profiling from baseline detection through verified optimization. |

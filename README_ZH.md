@@ -102,8 +102,6 @@ Analysis & Design
       @122-java-type-design
       @123-java-design-patterns
       @130-java-testing-strategies
-  /review-alignment
-    @robot-business-analyst
   /explore-design
     @robot-architect
       @034-architecture-design-exploration
@@ -151,7 +149,7 @@ MCP Servers
 
 | 资源 | 可用选项 |
 | --- | --- |
-| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` · `/explore-design` |
+| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/create-adr` · `/create-diagram` · `/create-spec` · `/explore-design` |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
 | **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/plinth/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/plinth/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/plinth/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/plinth/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/plinth/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/plinth/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/plinth/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/plinth/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/plinth/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/plinth/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/plinth/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/plinth/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/plinth/053-design-simple-rules) · [056-design-avoid-breaking-changes](https://www.skills.sh/jabrena/plinth/056-design-avoid-breaking-changes) · [200-agents-md](https://www.skills.sh/jabrena/plinth/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
