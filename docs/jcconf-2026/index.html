@@ -5,7 +5,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-    <title>JCConf 2026 - AI-Native Java Engineering</title>
+    <title>JCConf 2026 - Harness Engineering with Java</title>
 
     <link rel="stylesheet" href="dist/reset.css">
     <link rel="stylesheet" href="dist/reveal.css">
@@ -25,7 +25,7 @@
             <section data-background-image="./images/pillars2.jpg">
                 <h1>
                     <span style="display: inline-block; color: black; background: #ffffff;">
-                        AI-Native Java Engineering
+                        利用 Java 进行工程实践
                     </span>
                 </h1>
                 <p>
@@ -68,10 +68,32 @@
             </section>
 
             <section>
-                <img src="./images/ppt.png" width="60%" />
-                <small><strong>Source: </strong><a href="https://cio-wiki.org/wiki/Leavitt%27s_Alignment_Model"
-                        target="_blank">Leavitt's Alignment Model (1965) >> People, Process and Technology
-                        Framework</a></small>
+                <section>
+                    <img src="./images/ppt.png" width="60%" />
+                    <small><strong>Source: </strong><a href="https://cio-wiki.org/wiki/Leavitt%27s_Alignment_Model"
+                            target="_blank">Leavitt's Alignment Model (1965) >> People, Process and Technology
+                            Framework</a></small>
+                </section>
+                <section>
+                    <h2>Talk's scope</h2>
+                    <div class="grid-3 compact">
+                        <div class="card evidence">
+                            <h3>Specialized LLMs for Enterprise</h3>
+                            <p><strong>Train Specialized LLMs</strong></p>
+                            <p>Fine-tuning, LoRA/QLoRA, Distillation, ...</p>
+                        </div>
+                        <div class="card context">
+                            <h3>AI Agent Orchestration & Pipelines</h3>
+                            <p><strong>Automate stable processes using AI Agents</strong></p>
+                            <p>Spring AI, LangChain4j, Embabel, ...</p>
+                        </div>
+                        <div class="card risk">
+                            <h3>AI Harness Engineering <span class="tag focus">FOCUS OF THIS TALK</span></h3>
+                            <p><strong>Software Engineering enhanced with AI</strong></p>
+                            <p>SDD, Java Skills, MCP-Servers, Knowledge bases, ...</p>
+                        </div>
+                    </div>
+                </section>
             </section>
 
             <section>
@@ -99,7 +121,7 @@
                         is changing <strong>the way of work</strong> but with the change
                         appear new challeges to address.
                     </p>
-                    <img src="./images/SDLC.jpg" width="40%" />
+                    <img src="./images/SDLC.jpg" width="35%" />
                 </section>
 
                 <section>
@@ -170,6 +192,10 @@
                         <div class="arrow">→</div>
                         <div class="card risk">Inconsistency propagates faster</div>
                     </div>
+                    <p>
+                        Faster generation doesn't repair a weak boundary—it spreads its
+                        gaps across the system faster than anyone can review them.
+                    </p>
                 </section>
 
                 <section>
@@ -226,6 +252,22 @@
                         <div class="card agent"><strong>Implementation</strong></div>
                     </div>
                     <p class="lead"><span class="evidence">Evidence</span> closes the loop.</p>
+                    <hr />
+                    <div style="display: grid; grid-template-columns: auto auto; justify-content: center;
+                        align-items: center; column-gap: 3rem; row-gap: 0.5rem;">
+                        <p><img src="./images/openspec.png" style="width: 80%;" /></p>
+                        <p><img src="./images/spec-kit-logo.png" style="width: 25%;" /></p>
+                        <p>
+                            <small>
+                                <a href="https://openspec.dev/" target="_blank">https://openspec.dev/</a>
+                            </small>
+                        </p>
+                        <p>
+                            <small>
+                                <a href="https://github.github.com/spec-kit/" target="_blank">https://github.github.com/spec-kit/</a>
+                            </small>
+                        </p>
+                    </div>
                 </section>
 
                 <section>
@@ -240,12 +282,41 @@
                             <p>Components<br />Interfaces<br />Migration<br />Validation</p>
                         </div>
                     </div>
+                </section>
+
+                <section>
+                    <h2>Good specifications  requires time</h2>
                     <p>
+                        AI makes <span class="evidence">implementation 10&times; faster</span>.<br />
+                        Understanding intent, constraints, and consequences still runs at <span class="risk">1&times;</span>.
+                    </p>
+                    <img src="./images/kitchen-timer.png" width="30%" />
+                </section>
+
+                <section>
+                    <h2>Agile three amigos is not a Movie!</h2>
+                    <p>
+                        <img src="./images/three-amigos.png" width="40%" />
+                    </p>
+                    <p>
+                        The Three Amigos is a practice where three perspectives review an increment of
+                        work before, during, and after development: <strong>Business</strong>, <strong>Development</strong> & <strong>Testing</strong>.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>Use the double loop Agile</h2>
+                    <p>
+                        <img src="./images/double-loop-agile.png" width="60%" />
                         <small>
-                            <a href="https://openspec.dev/" target="_blank">
-                                OpenSpec makes technical decisions explicit.
-                            </a>
+                            <strong>Source: </strong><a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work"
+                                target="_blank">https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work</a>
                         </small>
+                    </p>
+                    <p>
+                        Two loops run in parallel: discovery asks
+                        are we building the right thing? and delivery
+                        asks are we building it right?
                     </p>
                 </section>
 
@@ -258,6 +329,14 @@
                         <div class="card risk">What else will <strong>this change</strong> affect?</div>
                     </div>
                 </section>
+
+                <section class="section-divider bridge">
+                    <p class="statement">
+                        The spec is right and the repo is
+                        green - what still lives
+                        outside it? 🤔
+                    </p>
+                </section>
             </section>
 
             <section>
@@ -268,7 +347,7 @@
                 </section>
 
                 <section>
-                    <h2>A locally correct Java rename can break the system</h2>
+                    <h2>A locally correct Java rename operation can break the system</h2>
                     <blockquote><strong>Rename <code>customerId</code> to <code>clientId</code>.</strong></blockquote>
                     <pre><code class="language-java" data-trim data-noescape>
 record Order(String clientId, BigDecimal total) {}
@@ -335,12 +414,19 @@ record Order(String clientId, BigDecimal total) {}
                 <section>
                     <h2>What should an organizational product provide?</h2>
                     <ul>
-                        <li class="fragment">Structure knowledge about domains, subdomains, ownership, and technical
+                        <li>Structure knowledge about domains, subdomains, ownership, and technical
                             dependencies.</li>
-                        <li class="fragment">Register approved, versioned skills for engineering work.</li>
-                        <li class="fragment">Expose relevant knowledge and skills to agents through MCP.</li>
+                        <li>Register approved, versioned skills for engineering work.</li>
+                        <li>Expose relevant knowledge and skills to agents through MCP.</li>
                     </ul>
-                    <p class="fragment lead">🤔 One product. Three capabilities.</p>
+                    <p>🤔 One product. Three capabilities.</p>
+                </section>
+
+                <section class="section-divider bridge">
+                    <p class="statement">
+                        How to improve the development experience 
+                        using AI Harness engineering at scale? 🤔
+                    </p>
                 </section>
             </section>
 
@@ -359,51 +445,18 @@ record Order(String clientId, BigDecimal total) {}
                             <p>What is true here?</p>
                             <small>Domains, subdomains, systems, owners, decisions, and dependencies</small>
                         </div>
-                        <div class="card local">
-                            <h3>MCP server</h3>
-                            <p>How do agents access it?</p>
-                            <small>Query knowledge and discover relevant skills on demand</small>
-                        </div>
                         <div class="card agent">
                             <h3>Skills registry</h3>
-                            <p>How should work be performed here?</p>
+                            <p>Reuse Software Engineering practices?</p>
                             <small>Approved, versioned engineering policies and practices</small>
+                        </div>
+                        <div class="card local">
+                            <h3>MCP server</h3>
+                            <p>How to query the system?</p>
+                            <small>Query knowledge and discover relevant skills on demand</small>
                         </div>
                     </div>
                     <p>One product structures knowledge, registers practices, and exposes both consistently.</p>
-                </section>
-
-                <section>
-                    <h2>The knowledge model connects ownership to technical dependencies</h2>
-                    <div class="grid-3 compact">
-                        <div class="card context">
-                            <h3>WHERE? · Business</h3>
-                            <p>Domain → Subdomain<br />→ Bounded Context</p>
-                        </div>
-                        <div class="card context">
-                            <h3>WHO / WHY? · Organization</h3>
-                            <p>Team → Owner<br />→ Criticality → Decisions</p>
-                        </div>
-                        <div class="card context">
-                            <h3>WHAT DEPENDS? · Systems</h3>
-                            <p>Service → API<br />→ Event → Database</p>
-                        </div>
-                    </div>
-                    <p>DDD locates the change; technical relationships reveal its blast radius.</p>
-                </section>
-
-                <section>
-                    <h2>MCP gives agents a wider organizational horizon</h2>
-                    <div class="flow compact">
-                        <div class="card context"><strong>Knowledge product</strong><br />Context + skills</div>
-                        <div class="arrow">→</div>
-                        <div class="card local"><strong>MCP server</strong><br />Query + discovery</div>
-                        <div class="arrow">→</div>
-                        <div class="card agent">Engineers + AI agents</div>
-                    </div>
-                    <p>Retrieve the relevant organizational context and approved practice for each change.</p>
-                    <small><a href="https://modelcontextprotocol.io/introduction" target="_blank">Model Context
-                            Protocol</a></small>
                 </section>
 
 
@@ -429,6 +482,18 @@ record Order(String clientId, BigDecimal total) {}
                 </section>
 
                 <section>
+                    <h2>What is Plinth? 🤔</h2>
+                    <p>
+                        Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC.
+                    </p>
+                    <p>
+                        <small>
+                            <a href="https://github.com/jabrena/plinth" target="_blank">https://github.com/jabrena/plinth</a>
+                        </small>
+                    </p>
+                </section>
+
+                <section>
                     <h2>Plinth operationalizes the engineering workflow</h2>
                     <small>
                         <div class="grid-2 compact">
@@ -445,7 +510,7 @@ record Order(String clientId, BigDecimal total) {}
                     </small>
                     <p>The organization supplies its knowledge; Plinth turns intent into validated change.</p>
                     <p><small><a href="https://github.com/jabrena/plinth"
-                                target="_blank">github.com/jabrena/plinth</a></small></p>
+                                target="_blank">https://github.com/jabrena/plinth</a></small></p>
                 </section>
 
                 <section>
@@ -469,7 +534,7 @@ record Order(String clientId, BigDecimal total) {}
                         </div>
                     </small>
                     <p><small><a href="https://github.com/jabrena/plinth"
-                                target="_blank">github.com/jabrena/plinth</a></small></p>
+                                target="_blank">https://github.com/jabrena/plinth</a></small></p>
                 </section>
             </section>
 
@@ -480,22 +545,21 @@ record Order(String clientId, BigDecimal total) {}
                 </section>
 
                 <section>
-                    <h2>Takeaways</h2>
+                    <h2>What can a team do next Monday?</h2>
                     <ul>
-                        <li>Formalize cross-team communication to avoid "Frankenstein" systems.</li>
-                        <li>Architects must strengthen consistency across domains, subdomains, and teams.</li>
-                        <li>Use monorepos to facilitate the AI-agent harness.</li>
-                        <li>Every large organization needs a governed knowledge product, a skills registry, and an
-                            MCP interface for agent access.</li>
+                        <li>Review if your service databases has Migration scripts</li>
+                        <li>Review if service communications use Contracts (OpenAPI, AVRO, etc...) and they are governed.</li>
+                        <li>Review in what way your developments reuse patterns, components and patterns in your Domains.</li>
+                        <li>Review if your teams are using monorepos to facilitate the AI-agent harness.</li>
                     </ul>
                 </section>
                 <section>
-                    <h2>Takeaways</h2>
+                    <h2>What can a team do next Monday?</h2>
                     <ul>
-                        <li>An AI-agent harness is not a silver bullet.</li>
-                        <li>Specify before generating.</li>
-                        <li>Engineer the workflow, not just the prompt.</li>
-                        <li>Optimize for system awareness and system correctness.</li>
+                        <li>Review if your Software engineers are using common Skills?</li>
+                        <li>Review if your Squads use SDD or they require a specific training.</li>
+                        <li>Review to Engineer the workflow, not just the prompt.</li>
+                        <li>Review to optimize for system awareness and system correctness.</li>
                     </ul>
                 </section>
             </section>

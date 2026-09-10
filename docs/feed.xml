@@ -2,7 +2,7 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/plinth/</id>
   <title>Plinth</title>
-  <updated>2026-09-03T16:40:38+0200</updated>
+  <updated>2026-09-10T12:11:46+0800</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/plinth//feed.xml' />
   <entry>
@@ -10,7 +10,7 @@
     <title>Validating hypotheses about Plinth workflow with a Benchmark Part 2</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/09/validating-hypotheses-about-plinth-workflow-with-a-benchmark-part-2.html" />
-    <updated>2026-09-05T00:00:00+0200</updated>
+    <updated>2026-09-05T00:00:00+0800</updated>
     <summary>This is the second article in a series that tries to put a number on the value of Plinth&apos;s AI-native development workflow for Java. The Part 1 article showed the benchmark results across 4 scenarios:
 
 
@@ -26,7 +26,7 @@ scenario3An OpenSp...</summary>
     <title>What&apos;s new in Plinth 0.18.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/08/release-0.18.0.html" />
-    <updated>2026-08-03T00:00:00+0200</updated>
+    <updated>2026-08-03T00:00:00+0800</updated>
     <summary>Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable Commands, Agents, Skills, and MCP Servers.
 This release focuses on two things. First, Plinth now treats specification as two explicit phases — Functional and Technical — with new commands and skills that turn a raw issue into agreed requirements and an approved design before any code gets written. Seco...</summary>
   </entry>
@@ -35,7 +35,7 @@ This release focuses on two things. First, Plinth now treats specification as tw
     <title>Why Functional and Technical Specifications Matter for AI-Assisted Development</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/07/why-functional-and-technical-specifications-matter.html" />
-    <updated>2026-07-30T00:00:00+0200</updated>
+    <updated>2026-07-30T00:00:00+0800</updated>
     <summary>The gap AI agents fall into
 When you ask an AI agent to &amp;quot;add rate limiting to the API&amp;quot; and it will produce something. It might even compile, pass a quick test, and look complete in the diff.
 But what does &amp;quot;rate limiting&amp;quot; mean here? Per user, per API key, per IP? What happens when the limit is hit — a 429, a queue, a silent drop? Is this a business rule with a specific number att...</summary>
@@ -45,7 +45,7 @@ But what does &amp;quot;rate limiting&amp;quot; mean here? Per user, per API key
     <title>Validating hypotheses about Plinth workflow with a Benchmark Part 1</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/07/validating-hypotheses-about-plinth-workflow-with-a-benchmark-part-1.html" />
-    <updated>2026-07-30T00:00:00+0200</updated>
+    <updated>2026-07-30T00:00:00+0800</updated>
     <summary>The questions behind the benchmark
 During the last months, the project has evolved from a complete Skills folder for Java to provide an AI-native development workflow for Java, more or less this project lives in the Third generation (Systemp prompts -&amp;gt; Skills -&amp;gt; AI-Native development Workflow). During this time, any inquisitive user could ask for evidences about what is the real value using t...</summary>
   </entry>
@@ -54,7 +54,7 @@ During the last months, the project has evolved from a complete Skills folder fo
     <title>What&apos;s new in Plinth 0.17.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/07/release-0.17.0.html" />
-    <updated>2026-07-13T00:00:00+0200</updated>
+    <updated>2026-07-13T00:00:00+0800</updated>
     <summary>Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable Commands, Agents, Skills, and MCP Servers.
 This release brings several improvements to the development workflow, but the most visible change is the new project identity: the repository moves from cursor-rules-java to plinth.
 Thanks to our community members in Urumqi, Singapore, Des Moines, Bengaluru, a...</summary>
@@ -64,7 +64,7 @@ Thanks to our community members in Urumqi, Singapore, Des Moines, Bengaluru, a..
     <title>Why Do I Need to Use the Parallel Change Pattern?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html" />
-    <updated>2026-07-04T00:00:00+0200</updated>
+    <updated>2026-07-04T00:00:00+0800</updated>
     <summary>The hidden risk in fast code generation
 AI coding tools are very good at producing a complete-looking change from a short request.
 That is useful when the change is local. It becomes risky when the change crosses compatibility boundaries: database schemas, public APIs, event contracts, configuration keys, command outputs, generated artifacts, or workflows consumed by other services.
@@ -75,7 +75,7 @@ A human enginee...</summary>
     <title>Introduction to EU regulations Part II</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/07/introduction-to-eu-regulations-part-ii.html" />
-    <updated>2026-07-03T00:00:00+0200</updated>
+    <updated>2026-07-03T00:00:00+0800</updated>
     <summary>Compliance as code
 The first article introduced the EU regulatory skill family and focused on broad digital regulation: AI systems, operational resilience, privacy, cybersecurity, product security, data access, online platforms, and digital markets.
 This second article explains the remaining regulation and ISO skills added for the future 0.17.0 release, and connects them to a more specialized idea:...</summary>
@@ -85,7 +85,7 @@ This second article explains the remaining regulation and ISO skills added for t
     <title>From Code Generation to Software Engineering: Why AI Agents Need Design Skills</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/06/from-code-generation-to-software-engineering.html" />
-    <updated>2026-06-30T00:00:00+0200</updated>
+    <updated>2026-06-30T00:00:00+0800</updated>
     <summary>The shift from generation to engineering
 The first wave of AI-assisted development was mostly about speed. Ask the model for a class, a test, a migration, a controller, a README section, or a refactoring, then review what came back.
 That capability is useful, but it is not the same as software engineering.
@@ -96,7 +96,7 @@ Software engineering is not only the ability to produce code. It is the ability 
     <title>What&apos;s new in Cursor rules for Java 0.16.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/06/release-0.16.0.html" />
-    <updated>2026-06-22T00:00:00+0200</updated>
+    <updated>2026-06-22T00:00:00+0800</updated>
     <summary>What is the purpose?
 An opinionated, AI-native development workflow for Java Enterprise: reusable Skills, Agents, Commands, and third-party MCP servers combined with a human-in-the-loop model to modernize real-world SDLC practices.
 Starting with this release, the project introduces a simple way to describe any SDLC action through three phases: Plan, Build, and Operate. Software engineers can use th...</summary>
@@ -106,7 +106,7 @@ Starting with this release, the project introduces a simple way to describe any 
     <title>How to validate skills?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/06/skill-validators-pipeline.html" />
-    <updated>2026-06-16T00:00:00+0200</updated>
+    <updated>2026-06-16T00:00:00+0800</updated>
     <summary>Why validate Skills?
 Skills are executable guidance for AI agents. They can include instructions, references, scripts, and workflows that influence how an agent reads files, runs commands, edits code, or reasons about a software delivery process.
 That power is useful, but it also means a generated skill should not be treated as ordinary Markdown. A broken document can confuse an agent. A malformed ...</summary>
@@ -116,7 +116,7 @@ That power is useful, but it also means a generated skill should not be treated 
     <title>Introduction to EU regulations Part I</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/06/introduction-to-eu-regulations-part-i.html" />
-    <updated>2026-06-16T00:00:00+0200</updated>
+    <updated>2026-06-16T00:00:00+0800</updated>
     <summary>Why this topic matters
 Modern Java Enterprise systems are no longer reviewed only for code quality, performance, and availability. Many systems now process personal data, call AI models, automate decisions, operate critical services, integrate with cloud providers, expose online platform workflows, or participate in digital markets.
 That means engineering teams need a practical way to translate reg...</summary>
@@ -126,7 +126,7 @@ That means engineering teams need a practical way to translate reg...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.15.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/06/release-0.15.0.html" />
-    <updated>2026-06-01T00:00:00+0200</updated>
+    <updated>2026-06-01T00:00:00+0800</updated>
     <summary>What is the purpose?
 An opinionated, AI-native workflow for evolving modern Java Enterprise SDLC practices through reusable Skills, Agents, and MCP servers.
 It helps you answer the Five Whys when your team needs to evolve a Java-based product or service:
@@ -140,7 +140,7 @@ Thanks to our community members in Singapore, Hanoi, Hong Kong, Milan, and New..
     <title>What&apos;s new in Cursor rules for Java 0.14.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/04/release-0.14.0.html" />
-    <updated>2026-04-13T00:00:00+0200</updated>
+    <updated>2026-04-13T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 A curated and opinionated collection of Skills and Agents to be used in modern SDLC workflows for Java Enterprise development with your favorite AI Agent harness.
 
@@ -154,7 +154,7 @@ Until this release, the project maintained t...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.13.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/03/release-0.13.0.html" />
-    <updated>2026-03-30T00:00:00+0200</updated>
+    <updated>2026-03-30T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 A curated collection of Rules, Skills, and Agents for Java Enterprise development—to be used in modern SDLC workflows.
 With appreciation for our community in Singapore, Amsterdam, Madrid, Ashburn, and Atlanta. 👋👋👋
@@ -167,7 +167,7 @@ The project needed to provide solutions for roles not necessarily tied to th...<
     <title>What&apos;s new in Cursor rules for Java 0.12.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2026/03/release-0.12.0.html" />
-    <updated>2026-03-08T00:00:00+0100</updated>
+    <updated>2026-03-08T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 A curated collection of System prompts &amp;amp; Skills for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 Recently, we reached the milestone of 300+ ⭐ on GitHub. Many thanks to the users in Lanzhou, Singapore, Pontiac, Boardman, and Shanghai. 👋👋👋
@@ -179,7 +179,7 @@ In this release, the project introduc...</summary>
     <title>The European tour 2025 is over</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/11/the-tour-in-europe-2025-is-over.html" />
-    <updated>2025-11-10T00:00:00+0100</updated>
+    <updated>2025-11-10T00:00:00+0800</updated>
     <summary>Introduction
 Over the last few weeks, I had the privilege of sharing with the Java community a few ideas that could be very useful for Java Software engineers in their daily work or for organizations enhancing their pipelines.
 Using these lines, I would like to acknowledge Stephan Janssen from Devoxx, Luis Fabrício De Llamas from DevConverge, Christina Bergh from W-JAX and the entire Madrid JUG tea...</summary>
@@ -189,7 +189,7 @@ Using these lines, I would like to acknowledge Stephan Janssen from Devoxx, Luis
     <title>What&apos;s new in Cursor rules for Java 0.11.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/09/release-0.11.0.html" />
-    <updated>2025-09-29T00:00:00+0200</updated>
+    <updated>2025-09-29T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work &amp;amp; data pipelines. The available System prompts for Java cover areas such as Build system based on Maven, Design, Coding, Testing, Refactoring &amp;amp; JMH Benchmarking, Performance testing with JMeter, Profiling with async-...</summary>
   </entry>
@@ -198,7 +198,7 @@ The project provides a collection of System prompts for Java Enterprise developm
     <title>Beyond Traditional Profiling: Mastering JFR for Modern Java Applications</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/09/jfr-modern-java-profiling.html" />
-    <updated>2025-09-17T00:00:00+0200</updated>
+    <updated>2025-09-17T00:00:00+0800</updated>
     <summary>Discovering JFR: A Journey into Modern Java Profiling Excellence
 Symptom: memory usage drifts under real production load. Constraint: profiling cannot degrade latency or throughput. Solution: Java Flight Recorder (JFR) — the built‑in, low‑overhead recorder that captures CPU, memory, GC, I/O, and custom events from live systems with typically under 2% impact.
 With JFR, production evidence replaces g...</summary>
@@ -208,7 +208,7 @@ With JFR, production evidence replaces g...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.10.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/09/release-0.10.0.html" />
-    <updated>2025-09-05T00:00:00+0200</updated>
+    <updated>2025-09-05T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
 The available System prompts for Java cover aspects like Build system based on Maven, Design, Coding, Testing, Refactoring &amp;amp; JMH Benchmarking, Performance testing with JMeter, Profiling with Async profiler/JDK tools &amp;amp; Documentation.
@@ -220,7 +220,7 @@ What...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.9.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/07/release-0.9.0.html" />
-    <updated>2025-07-23T00:00:00+0200</updated>
+    <updated>2025-07-23T00:00:00+0800</updated>
     <summary>What are Cursor rules for Java?
 Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.
 
@@ -234,7 +234,7 @@ Added Consultative Interaction Technique in the majority of R...</summary>
     <title>The Three-Node Quality Framework for AI Prompts</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/07/prompt-quality-framework.html" />
-    <updated>2025-07-20T00:00:00+0200</updated>
+    <updated>2025-07-20T00:00:00+0800</updated>
     <summary>Overview
 When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the three-node quality framework that combines prerequisites, content structure, and ongoing safety measures.
 The Three Pillars
@@ -246,7 +246,7 @@ Purpo...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.8.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/plinth//blog/2025/07/release-0.8.0.html" />
-    <updated>2025-07-12T00:00:00+0200</updated>
+    <updated>2025-07-12T00:00:00+0800</updated>
     <summary>New interactive behaviors in the Cursor rules
 In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the pac...</summary>
   </entry>
