@@ -1,9 +1,9 @@
-title=Module 2: Hands-on Profiling with System Prompts
+title=Module 2: Detect and Collect Profiling Evidence
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
 tags=java, profiling
 ~~~~~~
 
@@ -11,7 +11,7 @@ tags=java, profiling
 
 **⏱️ Duration:** 3 hours
 **🎯 Learning Objectives:**
-- Master the @161-java-profiling-detect system prompt and its 21 profiling options
+- Master the `161-java-profiling-detect` Agent Skill and its 21 profiling options
 - Learn problem-driven profiling strategies for different performance issues
 - Understand flamegraph interpretation and visual analysis techniques
 - Generate comprehensive profiling evidence under realistic load conditions
@@ -23,11 +23,17 @@ tags=java, profiling
 
 ### Understanding the Problem-Driven Approach
 
-The profiling script in @161-java-profiling-detect follows a **problem-first methodology**:
+The profiling script packaged by `161-java-profiling-detect` follows a **problem-first methodology**:
 
 1. **Problem Identification** → 2. **Tool Selection** → 3. **Data Collection** → 4. **Evidence Generation**
 
 This approach ensures you collect the **right data** for the **specific problem** you're investigating.
+
+Run all commands in this module from the demo project root:
+
+```bash
+cd ./examples/profiling/spring-boot-memory-leak-demo
+```
 
 #### **🔍 The 5 Problem Categories**
 
@@ -56,7 +62,7 @@ This approach ensures you collect the **right data** for the **specific problem*
 **What it shows:** Which methods allocate the most objects
 
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select: 2. Memory Allocation Profiling (30s)
 ```
 
@@ -96,7 +102,7 @@ Key Indicators:
 **What it shows:** Long-term memory accumulation patterns
 
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select: 8. Memory Leak Detection (5min)
 ```
 
@@ -105,7 +111,7 @@ Key Indicators:
 1. **Start the 5-minute leak detection:**
 ```bash
 # This is a long-running profiling session
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select option 8
 ```
 
@@ -135,7 +141,7 @@ Key Indicators:
 **What it shows:** Multi-phase analysis with baseline, detailed, and leak detection
 
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select: 9. Complete Memory Analysis Workflow
 ```
 
@@ -149,7 +155,7 @@ This option generates **three sequential reports:**
 1. **Execute the complete workflow:**
 ```bash
 # This will take about 6.5 minutes total
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select option 9
 ```
 
@@ -195,7 +201,7 @@ Files generated:
 **What it shows:** CPU, allocation, lock, and wall-clock data simultaneously
 
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select: 12. All Events Profiling (30s)
 ```
 
@@ -233,7 +239,7 @@ TLAB is a JVM optimization technique that provides each thread with its own priv
 - **Correlation**: Cross-reference TLAB data with memory leak patterns
 
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select: 18. JFR Memory Leak Analysis with TLAB tracking
 ```
 
@@ -241,7 +247,7 @@ TLAB is a JVM optimization technique that provides each thread with its own priv
 
 1. **Execute TLAB tracking (10 minutes):**
 ```bash
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select option 18
 # Enter duration: 10 (minutes)
 ```
@@ -320,13 +326,13 @@ Critical Leak:          15+ levels deep
 1. **Generate multiple flamegraphs with different durations:**
 ```bash
 # Short-term (30s)
-./profile-java-process.sh  # Option 2
+./profiler/scripts/profile-java-process.sh  # Option 2
 
 # Medium-term (60s)
-./profile-java-process.sh  # Option 7, duration: 60
+./profiler/scripts/profile-java-process.sh  # Option 7, duration: 60
 
 # Long-term (300s)
-./profile-java-process.sh  # Option 8
+./profiler/scripts/profile-java-process.sh  # Option 8
 ```
 
 2. **Create comparison table:**
@@ -561,8 +567,8 @@ chmod +x measure-flamegraph.sh
 - ✅ Created systematic evidence collection processes
 
 ### **What's Next?**
-In **Module 3: Analysis and Evidence Collection**, we'll focus on:
-- Systematic analysis using @162-java-profiling-analyze
+In **Module 3: Analyze Profiling Evidence**, we'll focus on:
+- Systematic analysis using `162-java-profiling-analyze`
 - Creating structured documentation from profiling evidence
 - Developing prioritized solution recommendations
 - Cross-correlating multiple profiling results for comprehensive insights

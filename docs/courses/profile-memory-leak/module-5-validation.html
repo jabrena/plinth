@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Module 5: Validation and Comparison - Plinth</title>
+  <title>Module 5: Verify Profiling Improvements - Plinth</title>
   <meta name="author" content="" />
   <meta name="description" content="">
   <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Plinth"/>
@@ -78,7 +78,7 @@
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <div class="course-heading">
-<h1>Module 5: Validation and Comparison</h1>
+<h1>Module 5: Verify Profiling Improvements</h1>
 </div>
 </div>
 </div>
@@ -97,11 +97,12 @@
     Published:
     <time datetime="2025-09-17">2025-09-17</time>
     &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
+    &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
@@ -111,18 +112,18 @@
 </div>
 <hr>
 
-<h2>Rigorous Before/After Analysis using @164-java-profiling-compare</h2>
+<h2>Rigorous Before/After Analysis with <code>164-java-profiling-verify</code></h2>
 <p><strong>⏱️ Duration:</strong> 1 hour<br />
 <strong>🎯 Learning Objectives:</strong><br />
-- Master the @164-java-profiling-compare system prompt for rigorous validation<br />
+- Master the <code>164-java-profiling-verify</code> Agent Skill for rigorous validation<br />
 - Generate comprehensive before/after profiling comparisons<br />
 - Create quantitative evidence of memory leak resolution<br />
 - Document measurable performance improvements<br />
 - Establish ongoing monitoring strategies for production deployment</p>
 <hr />
 <h2>🎯 The Validation Framework</h2>
-<h3>Understanding @164-java-profiling-compare Methodology</h3>
-<p>The comparison system prompt provides a <strong>rigorous framework</strong> for validating performance improvements:</p>
+<h3>Understanding the <code>164-java-profiling-verify</code> Methodology</h3>
+<p>The verification skill provides a <strong>rigorous framework</strong> for validating performance improvements:</p>
 <pre><code>Baseline Data → Implementation → Post-Fix Data → Comparative Analysis → Quantified Results
 </code></pre>
 <p><strong>Key Principles:</strong><br />
@@ -137,7 +138,7 @@
 <h2>📊 Step 1: Baseline vs Post-Fix Data Collection</h2>
 <h3><strong>🎯 Practical Exercise 1: Generating Post-Fix Profiling Data</strong></h3>
 <p>Since you've implemented the fixes in Module 4, let's generate comprehensive post-fix data:</p>
-<pre><code class="language-bash">cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+<pre><code class="language-bash">cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Verify we're running with fixes enabled
 echo &quot;=== VERIFYING FIX STATUS ===&quot;
@@ -158,7 +159,7 @@ echo &quot;This will take approximately 6.5 minutes for complete analysis...&quo
 # Select: 9. Complete Memory Analysis Workflow
 
 # In another terminal, generate identical load pattern as baseline
-cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Create load script that matches baseline conditions
 cat &gt; post-fix-load.sh &lt;&lt; 'EOF'
@@ -424,7 +425,7 @@ chmod +x calculate-improvements.sh
 </code></pre>
 <hr />
 <h2>📋 Step 4: Creating Comparison Documentation</h2>
-<h3><strong>Following @164-java-profiling-compare Template</strong></h3>
+<h3><strong>Following the <code>164-java-profiling-verify</code> Template</strong></h3>
 <pre><code class="language-bash"># Create comprehensive comparison analysis document
 DATE_SUFFIX=$(date +%Y%m%d)
 cat &gt; profiling-comparison-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
@@ -590,7 +591,7 @@ cat &gt; profiling-final-results-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 
 ---
 
-**🎉 COURSE COMPLETION: Congratulations on mastering Java memory leak detection and resolution using systematic profiling techniques and system prompts!**
+**🎉 COURSE COMPLETION: Congratulations on mastering Java memory leak detection and resolution with the complete Detect → Analyze → Refactor → Verify skill workflow!**
 EOF
 
 echo &quot;Final results summary created: profiling-final-results-${DATE_SUFFIX}.md&quot;
@@ -611,19 +612,19 @@ echo &quot;Final results summary created: profiling-final-results-${DATE_SUFFIX}
 - [ ] Confirmed no performance regressions introduced<br />
 - [ ] Established ongoing monitoring and alerting</p>
 <p><strong>✅ Professional Documentation:</strong><br />
-- [ ] Created comparison analysis following @164-java-profiling-compare template<br />
+- [ ] Created comparison analysis following the <code>164-java-profiling-verify</code> template<br />
 - [ ] Generated final results summary suitable for stakeholders<br />
 - [ ] Documented lessons learned and best practices<br />
 - [ ] Provided actionable recommendations for production deployment<br />
 - [ ] Established foundation for future performance optimization work</p>
 <h3>🏆 Course Completion Achievement</h3>
-<p><strong>Congratulations!</strong> You have successfully completed the <strong>&quot;Java Memory Leak Detection Course - From Detection to Resolution using System Prompts&quot;</strong></p>
+<p><strong>Congratulations!</strong> You have successfully completed the <strong>&quot;Java Memory Leak Detection Course - Detect, Analyze, Refactor, and Verify&quot;</strong></p>
 <p><strong>Your Achievements:</strong><br />
 - ✅ <strong>Module 1</strong>: Mastered memory leak foundations and detection setup<br />
 - ✅ <strong>Module 2</strong>: Became proficient with 21 profiling options and flamegraph interpretation<br />
 - ✅ <strong>Module 3</strong>: Applied systematic analysis and created evidence-based documentation<br />
-- ✅ <strong>Module 4</strong>: Implemented enterprise-grade resource management patterns<br />
-- ✅ <strong>Module 5</strong>: Validated improvements through rigorous comparative analysis</p>
+- ✅ <strong>Module 4</strong>: Used <code>163-java-profiling-refactor</code> to implement targeted resource management fixes<br />
+- ✅ <strong>Module 5</strong>: Used <code>164-java-profiling-verify</code> for rigorous comparative analysis</p>
 <h3>🎓 Skills Acquired</h3>
 <p><strong>Technical Proficiency:</strong><br />
 - async-profiler mastery with 21+ profiling options<br />
@@ -652,8 +653,13 @@ echo &quot;Final results summary created: profiling-final-results-${DATE_SUFFIX}
 <li><strong>Pattern Recognition</strong>: Understanding resource lifecycle patterns prevents entire classes of issues</li>
 <li><strong>Continuous Learning</strong>: Performance optimization is an ongoing discipline requiring constant skill development</li>
 </ul>
-<h3><strong>The Power of System Prompts</strong></h3>
-<p>Through this course, you've experienced how system prompts (@161, @162, @164) provide:<br />
+<h3><strong>The Four-Skill Profiling Lifecycle</strong></h3>
+<p>Through this course, you've experienced how the four profiling Agent Skills work together:<br />
+- <strong><code>161-java-profiling-detect</code></strong>: Collect problem-driven evidence under realistic load<br />
+- <strong><code>162-java-profiling-analyze</code></strong>: Cross-reference evidence and prioritize solutions<br />
+- <strong><code>163-java-profiling-refactor</code></strong>: Apply targeted changes from trusted analysis documents<br />
+- <strong><code>164-java-profiling-verify</code></strong>: Compare identical before/after conditions and detect regressions</p>
+<p>Together, they provide:<br />
 - <strong>Structured Workflows</strong>: Consistent, repeatable processes<br />
 - <strong>Best Practices</strong>: Proven methodologies<br />
 - <strong>Knowledge Transfer</strong>: Systematic approaches that can be taught and shared<br />

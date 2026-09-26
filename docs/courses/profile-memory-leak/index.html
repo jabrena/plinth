@@ -97,11 +97,12 @@
     Published:
     <time datetime="2025-09-17">2025-09-17</time>
     &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
+    &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
@@ -111,15 +112,15 @@
 </div>
 <hr>
 
-<p>🎯 <strong>Master Java memory leak detection through hands-on profiling with the Spring Boot memory leak demo</strong></p>
+<p>🎯 <strong>Master Java memory leak detection through the complete Detect → Analyze → Refactor → Verify workflow with the Spring Boot memory leak demo</strong></p>
 <hr />
 <h2>📚 Course Structure</h2>
 <ul>
 <li><a href="module-1-foundations.html">Module 1: Foundations</a> - 2 hours (Focus: Memory leak theory and setup; Key learning: Understanding leak patterns; profiling infrastructure)</li>
-<li><a href="module-2-profiling.html">Module 2: Profiling</a> - 3 hours (Focus: Hands-on profiling mastery; Key learning: 21 profiling options; flamegraph interpretation)</li>
-<li><a href="module-3-analysis.html">Module 3: Analysis</a> - 2 hours (Focus: Systematic analysis; Key learning: Evidence documentation; prioritization frameworks)</li>
-<li><a href="module-4-refactoring.html">Module 4: Refactoring</a> - 2 hours (Focus: Solution implementation; Key learning: Resource lifecycle patterns; coco=false fix)</li>
-<li><a href="module-5-validation.html">Module 5: Validation</a> - 1 hour (Focus: Before/after comparison; Key learning: Quantitative validation; success measurement)</li>
+<li><a href="module-2-profiling.html">Module 2: Detect</a> - 3 hours (Skill: <code>161-java-profiling-detect</code>; Focus: Problem-driven data collection; flamegraph and JFR evidence)</li>
+<li><a href="module-3-analysis.html">Module 3: Analyze</a> - 2 hours (Skill: <code>162-java-profiling-analyze</code>; Focus: Evidence documentation; Impact/Effort prioritization)</li>
+<li><a href="module-4-refactoring.html">Module 4: Refactor</a> - 2 hours (Skill: <code>163-java-profiling-refactor</code>; Focus: Trusted analysis; targeted resource lifecycle fixes)</li>
+<li><a href="module-5-validation.html">Module 5: Verify</a> - 1 hour (Skill: <code>164-java-profiling-verify</code>; Focus: Controlled before/after comparison; regression detection)</li>
 </ul>
 <p><strong>Total Duration:</strong> 8-12 hours (depending on learning path)</p>
 <h3>📚 Course details</h3>
@@ -129,22 +130,23 @@
 - What are memory leaks and why they matter?<br />
 - Types of memory leaks in Java applications<br />
 - Introduction to the Spring Boot memory leak demo<br />
-- Setting up profiling infrastructure with system prompts<br />
+- Setting up profiling infrastructure with the detection skill<br />
 - Understanding the <code>coco=true/false</code> configuration pattern</p>
 <p><strong>Hands-on Activities:</strong><br />
 - Explore the CocoController vs NoCocoController implementations<br />
-- Set up profiling scripts using @161-java-profiling-detect<br />
+- Set up profiling scripts using <code>161-java-profiling-detect</code><br />
 - Run initial baseline profiling session</p>
 <p><strong>Learning Outcomes:</strong><br />
 - Identify different types of memory leak patterns<br />
 - Set up automated profiling environment<br />
 - Understand the demo application architecture</p>
 <hr />
-<h3><strong>Module 2: Hands-on Profiling with System Prompts</strong> (3 hours)</h3>
-<p><strong>Learning Focus:</strong> Using system prompts to systematically collect profiling data</p>
+<h3><strong>Module 2: Detect and Collect Profiling Evidence</strong> (3 hours)</h3>
+<p><strong>Learning Focus:</strong> Using <code>161-java-profiling-detect</code> to collect problem-driven profiling data</p>
 <p><strong>Key Topics:</strong><br />
-- Deep dive into @161-java-profiling-detect system prompt<br />
+- Deep dive into the <code>161-java-profiling-detect</code> Agent Skill<br />
 - Interactive profiling script walkthrough (21 profiling options)<br />
+- Trusted, preinstalled async-profiler v4.x setup<br />
 - Memory leak detection strategies (5-minute vs 30-second profiles)<br />
 - JMeter load testing integration for realistic scenarios<br />
 - Understanding flamegraph interpretation</p>
@@ -158,8 +160,8 @@
 - Generate meaningful profiling data under load<br />
 - Interpret flamegraph visualizations effectively</p>
 <hr />
-<h3><strong>Module 3: Analysis and Evidence Collection</strong> (2 hours)</h3>
-<p><strong>Learning Focus:</strong> Systematic analysis using @162-java-profiling-analyze</p>
+<h3><strong>Module 3: Analyze Profiling Evidence</strong> (2 hours)</h3>
+<p><strong>Learning Focus:</strong> Systematic analysis using <code>162-java-profiling-analyze</code></p>
 <p><strong>Key Topics:</strong><br />
 - Systematic analysis framework for profiling data<br />
 - Problem categorization and severity assessment<br />
@@ -176,8 +178,8 @@
 - Create structured documentation for findings<br />
 - Prioritize fixes using Impact/Effort scoring</p>
 <hr />
-<h3><strong>Module 4: Refactoring and Solution Implementation</strong> (2 hours)</h3>
-<p><strong>Learning Focus:</strong> Implementing fixes based on analysis findings</p>
+<h3><strong>Module 4: Refactor from Profiling Evidence</strong> (2 hours)</h3>
+<p><strong>Learning Focus:</strong> Using <code>163-java-profiling-refactor</code> to implement targeted fixes from trusted analysis findings</p>
 <p><strong>Key Topics:</strong><br />
 - Understanding the <code>coco=false</code> refactoring strategy<br />
 - Thread pool lifecycle management<br />
@@ -185,17 +187,18 @@
 - Resource cleanup patterns (@PreDestroy)<br />
 - Deployment verification procedures</p>
 <p><strong>Hands-on Activities:</strong><br />
+- Review repository-owned profiling problem and solution documents<br />
 - Switch from CocoController to NoCocoController<br />
 - Verify code changes are properly applied<br />
 - Implement monitoring and alerting<br />
 - Test application stability after refactoring</p>
 <p><strong>Learning Outcomes:</strong><br />
-- Apply systematic refactoring strategies<br />
+- Apply evidence-driven, targeted refactoring strategies<br />
 - Implement proper resource management patterns<br />
-- Validate refactoring through testing</p>
+- Validate refactoring through the project test suite</p>
 <hr />
-<h3><strong>Module 5: Validation and Comparison</strong> (1 hour)</h3>
-<p><strong>Learning Focus:</strong> Using @164-java-profiling-compare to validate improvements</p>
+<h3><strong>Module 5: Verify Profiling Improvements</strong> (1 hour)</h3>
+<p><strong>Learning Focus:</strong> Using <code>164-java-profiling-verify</code> to validate improvements</p>
 <p><strong>Key Topics:</strong><br />
 - Before/after comparison methodology<br />
 - Quantitative metrics extraction<br />
@@ -215,18 +218,19 @@
 <h2>🛠️ Tools and Technologies</h2>
 <h3><strong>Primary Tools:</strong></h3>
 <ul>
-<li><strong>async-profiler v4.1</strong>: Advanced profiling with flamegraph generation</li>
+<li><strong>async-profiler v4.x</strong>: Advanced profiling with flamegraph generation</li>
 <li><strong>JFR (Java Flight Recorder)</strong>: Low-overhead continuous profiling</li>
 <li><strong>JMeter</strong>: Load testing for realistic profiling scenarios</li>
 <li><strong>Spring Boot Actuator</strong>: Application monitoring and health checks</li>
 </ul>
-<h3><strong>System Prompts Used:</strong></h3>
+<h3><strong>Profiling Agent Skills:</strong></h3>
 <ul>
-<li><strong>@161-java-profiling-detect</strong>: Setup and data collection</li>
-<li><strong>@162-java-profiling-analyze</strong>: Systematic analysis framework</li>
-<li><strong>@164-java-profiling-compare</strong>: Before/after validation</li>
-<li><strong>@151-java-performance-jmeter</strong>: Load testing integration</li>
+<li><strong><code>161-java-profiling-detect</code></strong>: Trusted profiler setup and problem-driven data collection</li>
+<li><strong><code>162-java-profiling-analyze</code></strong>: Evidence analysis, documentation, and prioritization</li>
+<li><strong><code>163-java-profiling-refactor</code></strong>: Targeted code changes based on trusted analysis</li>
+<li><strong><code>164-java-profiling-verify</code></strong>: Controlled before/after comparison and regression detection</li>
 </ul>
+<p>The <code>151-java-performance-jmeter</code> skill can complement the workflow when a reproducible load test must be created or improved.</p>
 <h3><strong>Visualization Techniques:</strong></h3>
 <ul>
 <li><strong>Flamegraphs</strong>: Call stack and allocation visualization</li>
@@ -235,17 +239,20 @@
 <li><strong>Thread dumps</strong>: Concurrency and threading analysis</li>
 </ul>
 <hr />
-<h2>🛠️ System Prompts Integration</h2>
-<p>This course demonstrates practical usage of three key system prompts:</p>
-<h3><strong><a href="https://github.com/jabrena/plinth/tree/main/.cursor/rules/161-java-profiling-detect.md">@161-java-profiling-detect</a></strong></h3>
+<h2>🛠️ Four-Skill Profiling Workflow</h2>
+<p>This course demonstrates the four profiling Agent Skills as one evidence-driven lifecycle. Finish each phase before moving to the next so that code changes remain traceable to measured evidence.</p>
+<h3><strong>1. <a href="https://www.skills.sh/jabrena/plinth/161-java-profiling-detect"><code>161-java-profiling-detect</code></a></strong></h3>
 <p><strong>Purpose:</strong> Data collection and problem identification<br />
-<strong>Usage:</strong> My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler</p>
-<h3><strong><a href="https://github.com/jabrena/plinth/tree/main/.cursor/rules/162-java-profiling-analyze.md">@162-java-profiling-analyze</a></strong></h3>
-<p><strong>Purpose:</strong> Systematic analysis and solution development<br />
-<strong>Usage:</strong> Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @162-java-profiling-analyze</p>
-<h3><strong><a href="https://github.com/jabrena/plinth/tree/main/.cursor/rules/164-java-profiling-compare.md">@164-java-profiling-compare</a></strong></h3>
-<p><strong>Purpose:</strong> Before/after validation and improvement measurement<br />
-<strong>Usage:</strong> Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare</p>
+<strong>Example request:</strong> <code>Set up problem-driven profiling for this Java application with the 161-java-profiling-detect skill and store the artifacts under profiler/.</code></p>
+<h3><strong>2. <a href="https://www.skills.sh/jabrena/plinth/162-java-profiling-analyze"><code>162-java-profiling-analyze</code></a></strong></h3>
+<p><strong>Purpose:</strong> Systematic analysis, evidence documentation, and solution prioritization<br />
+<strong>Example request:</strong> <code>Analyze the artifacts under profiler/results with the 162-java-profiling-analyze skill and document evidence, assumptions, and prioritized solutions.</code></p>
+<h3><strong>3. <a href="https://www.skills.sh/jabrena/plinth/163-java-profiling-refactor"><code>163-java-profiling-refactor</code></a></strong></h3>
+<p><strong>Purpose:</strong> Targeted refactoring based on trusted profiling analysis<br />
+<strong>Example request:</strong> <code>Apply the approved profiling solutions with the 163-java-profiling-refactor skill and verify the project test suite.</code></p>
+<h3><strong>4. <a href="https://www.skills.sh/jabrena/plinth/164-java-profiling-verify"><code>164-java-profiling-verify</code></a></strong></h3>
+<p><strong>Purpose:</strong> Before/after validation, regression detection, and improvement measurement<br />
+<strong>Example request:</strong> <code>Compare the baseline and post-refactoring artifacts with the 164-java-profiling-verify skill under identical load conditions.</code></p>
 <hr />
 <h2>🎯 Key Concepts Covered</h2>
 <h3><strong>Memory Leak Patterns</strong></h3>
@@ -323,8 +330,8 @@
 <hr />
 <h2>🎓 Course Philosophy</h2>
 <h3><strong>Progressive Learning Design</strong></h3>
-<p>This course follows the <strong>@behaviour-progressive-learning</strong> pattern:<br />
-- <strong>Extract</strong> core concepts from system prompts<br />
+<p>This course follows a progressive learning approach:<br />
+- <strong>Extract</strong> core concepts from the four profiling Agent Skills<br />
 - <strong>Structure</strong> content into progressive learning modules<br />
 - <strong>Create</strong> interactive exercises with guided solutions<br />
 - <strong>Generate</strong> comprehensive courses with multiple paths<br />

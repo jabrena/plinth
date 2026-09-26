@@ -1,17 +1,17 @@
-title=Module 3: Analysis and Evidence Collection
+title=Module 3: Analyze Profiling Evidence
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
 tags=java, profiling
 ~~~~~~
 
-## Systematic Analysis using @162-java-profiling-analyze
+## Systematic Analysis with `162-java-profiling-analyze`
 
 **⏱️ Duration:** 2 hours
 **🎯 Learning Objectives:**
-- Master the systematic analysis framework from @162-java-profiling-analyze
+- Master the systematic analysis framework from the `162-java-profiling-analyze` Agent Skill
 - Learn to categorize and prioritize performance issues using Impact/Effort scoring
 - Create structured documentation following professional templates
 - Develop cross-correlation analysis skills for multiple profiling results
@@ -21,9 +21,9 @@ tags=java, profiling
 
 ## 🧠 The Systematic Analysis Framework
 
-### Understanding the @162-java-profiling-analyze Approach
+### Understanding the `162-java-profiling-analyze` Approach
 
-The analysis system prompt provides a **structured methodology** that transforms raw profiling data into actionable insights:
+The analysis skill provides a **structured methodology** that transforms raw profiling data into actionable insights:
 
 ```
 Raw Profiling Data → Systematic Analysis → Categorized Problems → Prioritized Solutions
@@ -47,7 +47,7 @@ Raw Profiling Data → Systematic Analysis → Categorized Problems → Prioriti
 Let's organize the profiling data you've collected in Module 2:
 
 ```bash
-cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Create organized analysis workspace
 mkdir -p profiler/analysis-workspace
@@ -105,7 +105,7 @@ echo "Analysis workspace prepared with $(ls evidence/ | wc -l) evidence files"
 
 ### Memory-Related Issues Analysis Framework
 
-Based on the @162-java-profiling-analyze methodology, let's systematically analyze each type of issue:
+Based on the `162-java-profiling-analyze` methodology, let's systematically analyze each type of issue:
 
 #### **🎯 Practical Exercise 2: Memory Leak Pattern Analysis**
 
@@ -232,12 +232,13 @@ echo "Edit correlation-analysis.md with your specific measurements"
 
 ### **Creating the Problem Analysis Document**
 
-Following the @162-java-profiling-analyze template:
+Following the `162-java-profiling-analyze` template, create the repository-owned analysis document that the refactoring skill can trust:
 
 ```bash
 # Create the problem analysis document
 DATE_SUFFIX=$(date +%Y%m%d)
-cat > analysis/profiling-problem-analysis-${DATE_SUFFIX}.md << 'EOF'
+mkdir -p ../docs
+cat > ../docs/profiling-problem-analysis-${DATE_SUFFIX}.md << 'EOF'
 # Profiling Problem Analysis - [DATE]
 
 ## Executive Summary
@@ -278,7 +279,7 @@ cat > analysis/profiling-problem-analysis-${DATE_SUFFIX}.md << 'EOF'
 - **Root Cause**: Inefficient string handling in object initialization
 
 ## Methodology
-- **Profiling Tools Used**: async-profiler v4.1, JFR analysis
+- **Profiling Tools Used**: async-profiler v4.x, JFR analysis
 - **Data Collection Approach**: Multi-duration analysis (30s, 5min, comprehensive workflow)
 - **Load Testing**: JMeter coordinated load testing for realistic conditions
 - **Analysis Techniques Applied**: Flamegraph visual analysis, quantitative measurements, cross-correlation
@@ -290,10 +291,10 @@ cat > analysis/profiling-problem-analysis-${DATE_SUFFIX}.md << 'EOF'
 4. **LOW (Future)**: Performance monitoring and alerting infrastructure
 
 ## Supporting Evidence Files
-- Memory leak detection: `../evidence/memory-leak-*.html`
-- Allocation analysis: `../evidence/allocation-flamegraph-*.html`
-- JFR recordings: `../evidence/*.jfr`
-- Measurements: `../correlation-analysis.md`
+- Memory leak detection: `../results/memory-leak-*.html`
+- Allocation analysis: `../results/allocation-flamegraph-*.html`
+- JFR recordings: `../results/*.jfr`
+- Measurements: `../analysis-workspace/correlation-analysis.md`
 
 ## Next Steps
 1. Proceed to solution development (Module 4)
@@ -301,7 +302,7 @@ cat > analysis/profiling-problem-analysis-${DATE_SUFFIX}.md << 'EOF'
 3. Validate improvements through comparative analysis (Module 5)
 EOF
 
-echo "Problem analysis document created: analysis/profiling-problem-analysis-${DATE_SUFFIX}.md"
+echo "Problem analysis document created: profiler/docs/profiling-problem-analysis-${DATE_SUFFIX}.md"
 echo "Please edit the template with your specific measurements and findings"
 ```
 
@@ -352,7 +353,7 @@ echo "Prioritization analysis created"
 ```bash
 # Create comprehensive solutions document
 DATE_SUFFIX=$(date +%Y%m%d)
-cat > solutions/profiling-solutions-${DATE_SUFFIX}.md << 'EOF'
+cat > ../docs/profiling-solutions-${DATE_SUFFIX}.md << 'EOF'
 # Profiling Solutions and Recommendations - [DATE]
 
 ## Quick Wins (Low effort, High impact)
@@ -454,7 +455,7 @@ cat > solutions/profiling-solutions-${DATE_SUFFIX}.md << 'EOF'
 - **Regression Risk**: Automated profiling in CI/CD pipeline
 EOF
 
-echo "Solutions document created: solutions/profiling-solutions-${DATE_SUFFIX}.md"
+echo "Solutions document created: profiler/docs/profiling-solutions-${DATE_SUFFIX}.md"
 ```
 
 ---
@@ -589,14 +590,15 @@ echo "Final analysis package created in reports/final-analysis-package/"
 ## 🚀 Transition to Module 4
 
 **Outstanding work!** You've successfully:
-- ✅ Applied systematic analysis methodology from @162-java-profiling-analyze
+- ✅ Applied the systematic analysis methodology from `162-java-profiling-analyze`
 - ✅ Created comprehensive problem documentation with quantitative evidence
 - ✅ Developed prioritized solutions using Impact/Effort framework
 - ✅ Performed cross-correlation analysis across multiple data sources
 - ✅ Generated professional-grade analysis reports
 
 ### **What's Next?**
-In **Module 4: Refactoring and Solution Implementation**, we'll focus on:
+In **Module 4: Refactor from Profiling Evidence**, we'll focus on:
+- Using `163-java-profiling-refactor` with the trusted, repository-owned analysis and solutions documents
 - Implementing the prioritized solutions you've identified
 - Using the coco=false configuration to resolve memory leaks
 - Validating that fixes are properly applied and effective
