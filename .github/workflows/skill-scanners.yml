@@ -147,7 +147,7 @@ jobs:
             --verbose \
             --print-errors \
             --print-full-descriptions \
-            --ignore-issues-codes W011 \
+            --ignore-risks third_party_content_exposure \
             2>&1 | tee snyk-agent-scan-reviewed-exceptions-report.txt
           exception_status=${PIPESTATUS[0]}
           set -e
