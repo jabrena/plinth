@@ -1,5 +1,6 @@
 package info.jab.mv.application;
 
+import info.jab.mv.application.port.BlockedRemoteLinkException;
 import info.jab.mv.application.port.RemoteLinkRequester;
 import info.jab.mv.application.port.RemoteLinkResponse;
 import java.net.URI;
@@ -109,6 +110,23 @@ class RemoteLinkValidatorTest {
         assertThat(result).isPresent();
         assertThat(Thread.currentThread().isInterrupted()).isTrue();
         assertThat(result.orElseThrow().toString()).contains("Remote link check failed");
+    }
+
+    @Test
+    void validate_skipsLinksBlockedByDestinationPolicy() {
+        RemoteLinkValidator validator = new RemoteLinkValidator(new BlockedRequester(), TIMEOUT);
+
+        Optional<?> result = validator.validate(DOCUMENT, "http://169.254.169.254/latest/meta-data/");
+
+        assertThat(result).isEmpty();
+    }
+
+    private static final class BlockedRequester implements RemoteLinkRequester {
+
+        @Override
+        public RemoteLinkResponse request(URI uri, String method, Duration timeout) throws BlockedRemoteLinkException {
+            throw new BlockedRemoteLinkException(uri);
+        }
     }
 
     private static final class CountingRequester implements RemoteLinkRequester {

@@ -1,5 +1,6 @@
 package info.jab.mv.application;
 
+import info.jab.mv.application.port.BlockedRemoteLinkException;
 import info.jab.mv.application.port.RemoteLinkRequester;
 import info.jab.mv.application.port.RemoteLinkResponse;
 import info.jab.mv.domain.ValidationError;
@@ -60,6 +61,9 @@ public final class RemoteLinkValidator {
                 return Optional.of("Remote link is not reachable: " + uri + " (HTTP " + status + ")");
             }
 
+            return Optional.empty();
+        } catch (BlockedRemoteLinkException e) {
+            // Internal network destinations are never contacted and cannot be validated.
             return Optional.empty();
         } catch (HttpTimeoutException e) {
             return Optional.of("Remote link timed out after " + timeout.toSeconds() + " seconds: " + uri);

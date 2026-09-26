@@ -15,6 +15,26 @@
     <artifactId>site</artifactId>
     <packaging>pom</packaging>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-clean-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <!-- A running jbake:inline preview or Spotlight can hold or rewrite target/docs-local
+                             while it is being deleted; move it aside atomically and delete it in the background. -->
+                        <id>default-clean</id>
+                        <configuration>
+                            <fast>true</fast>
+                            <retryOnError>true</retryOnError>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
     <profiles>
         <profile>
             <id>local-preview</id>

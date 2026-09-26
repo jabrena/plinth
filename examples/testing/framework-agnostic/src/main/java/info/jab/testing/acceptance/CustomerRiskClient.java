@@ -12,6 +12,8 @@ final class CustomerRiskClient {
 
     private static final ObjectMapper JSON = new ObjectMapper();
 
+    private record RiskAssessmentRequest(String email) {}
+
     private final HttpClient httpClient;
     private final URI baseUri;
 
@@ -23,9 +25,7 @@ final class CustomerRiskClient {
     CustomerRiskDecision assess(String email) throws IOException, InterruptedException {
         HttpRequest request = HttpRequest.newBuilder(baseUri.resolve("/risk-assessments"))
             .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString("""
-                {"email":"%s"}
-                """.formatted(email)))
+            .POST(HttpRequest.BodyPublishers.ofString(JSON.writeValueAsString(new RiskAssessmentRequest(email))))
             .build();
 
         HttpResponse<String> response = httpClient.send(request, HttpResponse.BodyHandlers.ofString());
