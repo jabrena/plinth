@@ -82,11 +82,11 @@ cd target && npx skills add jabrena/plinth --all --agent cursor && cd ..
 Can you update the current changelog for 0.14.0 comparing git commits in relation to 0.13.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.18.0
+./mvnw versions:set -DnewVersion=0.19.0
 ./mvnw versions:commit
 
 # Prompt to update the project to a new version
-Update xml files from @resources/ and update the version to 0.18.0 removing Snapshot.
+Update xml files from @resources/ and update the version to 0.19.0 removing Snapshot.
 ./mvnw clean verify -pl plinth-skills-generator -am
 
 ## Tagging process
