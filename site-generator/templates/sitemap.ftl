@@ -4,7 +4,11 @@
     <#if content.type != "maincss">
     <url>
         <loc>${config.site_host}${content.uri}</loc>
+        <#if (content.updated)?has_content>
+        <lastmod>${content.updated}</lastmod>
+        <#else>
         <lastmod>${content.date?string("yyyy-MM-dd")}</lastmod>
+        </#if>
     </url>
     </#if>
 </#list>
