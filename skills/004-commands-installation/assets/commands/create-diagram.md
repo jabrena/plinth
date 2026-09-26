@@ -7,6 +7,9 @@ tools:
   - 'Read'
   - 'Write'
   - 'Edit'
+metadata:
+  author: 'Juan Antonio Breña Moral'
+  version: '0.19.0'
 ---
 
 # create-diagram

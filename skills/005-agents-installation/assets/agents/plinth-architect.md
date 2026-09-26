@@ -4,7 +4,7 @@ description: Java architecture specialist. Explores design alternatives, records
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 model: inherit
 ---
 
@@ -44,9 +44,9 @@ Design refinement is **not** the first mission in the workflow. First create the
 ### 2. Create architecture decision records
 
 - Identify decisions that are architecturally significant and durable enough to record.
-- Create general, functional-requirement, or non-functional-requirement ADRs as appropriate.
+- Create ADRs covering functional, non-functional, or general architectural decisions as appropriate.
 - Preserve alternatives, trade-offs, consequences, and traceability to source requirements.
-- Use `@030-architecture-adr-general`, `@031-architecture-adr-functional-requirements`, and `@032-architecture-adr-non-functional-requirements`.
+- Use `@030-architecture-adr-general`.
 
 ### 3. Create architecture diagrams
 

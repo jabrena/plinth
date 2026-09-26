@@ -1,12 +1,15 @@
 ---
 description: 'Create a repository ADR for an approved architectural decision.'
-argument-hint: '[decision-source] [adr-type]'
+argument-hint: '[decision-source]'
 model: 'inherit'
 agent: 'plinth-architect'
 tools:
   - 'Read'
   - 'Write'
   - 'Edit'
+metadata:
+  author: 'Juan Antonio Breña Moral'
+  version: '0.19.0'
 ---
 
 # create-adr
@@ -16,14 +19,13 @@ Record an important architectural decision, its context, alternatives, and conse
 ## Usage
 
 ```text
-/create-adr <decision-source> [<adr-type>]
+/create-adr <decision-source>
 ```
 
 ## Accepted Inputs
 
 - Approved design exploration, issue, specification, or implementation plan
 - Existing architecture constraints and related ADRs
-- Optional ADR type: general, functional requirements, or non-functional requirements
 
 ## Owning Agent
 
@@ -32,12 +34,10 @@ Record an important architectural decision, its context, alternatives, and conse
 ## Associated Skills
 
 - `030-architecture-adr-general`
-- `031-architecture-adr-functional-requirements`
-- `032-architecture-adr-non-functional-requirements`
 
 ## Workflow
 
-1. Confirm the decision scope and select the appropriate ADR skill.
+1. Confirm the decision scope with `030-architecture-adr-general`.
 2. Gather context, constraints, considered alternatives, and consequences.
 3. Draft the ADR using the repository convention.
 4. Check consistency with related issues, designs, specifications, and ADRs.
