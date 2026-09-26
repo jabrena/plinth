@@ -2,16 +2,16 @@ title=Module 2: Code Quality - Testing & Design Principles
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
-tags=java, system-prompts
+tags=java, skills
 ~~~~~~
 
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
 
-- **Generate comprehensive unit tests** using AI-powered system prompts
+- **Generate comprehensive unit tests** using Java Agent Skills
 - **Apply object-oriented design principles** systematically
 - **Implement type-safe design patterns** effectively
 - **Create maintainable, testable code** following industry standards
@@ -23,14 +23,14 @@ By the end of this module, you will:
 **Difficulty:** Intermediate
 **Prerequisites:** Module 1 completed, OOP fundamentals
 
-This module focuses on code quality through automated testing and design principles. You'll learn to use system prompts that not only generate tests but also improve your code's design and maintainability.
+This module focuses on code quality through automated testing and design principles. You'll learn to use Agent Skills that not only generate tests but also improve your code's design and maintainability.
 
 ## 🗺️ Learning Path
 
 ### **Lesson 2.1: Unit Testing Mastery** (90 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Master unit testing best practices using `@131-java-unit-testing`
+- Master unit testing best practices using `131-java-testing-unit-testing`
 - Understand test-driven development workflows
 - Generate comprehensive test suites automatically
 
@@ -74,11 +74,11 @@ public class Calculator {
 }
 ```
 
-**Step 2: Apply System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing`
+**Step 2: Apply Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 131-java-testing-unit-testing`
 
 **Step 3: Interactive Approach**
-Try: `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction`
+Try: `Improve the class/classes added in the context applying the Agent Skill 131-java-testing-unit-testing with the behaviour @behaviour-consultative-interaction`
 
 **Expected Outcomes:**
 - Comprehensive test class with JUnit 5
@@ -89,7 +89,7 @@ Try: `Improve the class/classes added in the context applying the system prompt 
 
 #### 🔍 **Deep Dive: Generated Test Analysis**
 
-The system prompt should generate tests like:
+The Agent Skill should generate tests like:
 ```java
 @Test
 @DisplayName("Should return sum when adding two positive numbers")
@@ -130,7 +130,7 @@ void shouldThrowIllegalArgumentException_WhenDividingByZero() {
 ### **Lesson 2.2: Object-Oriented Design Excellence** (75 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Apply OOP principles using `@121-java-object-oriented-design`
+- Apply OOP principles using `121-java-object-oriented-design`
 - Understand SOLID principles in practice
 - Refactor procedural code to object-oriented design
 
@@ -182,11 +182,11 @@ public class UserService {
 - Difficult to test
 - Violates Single Responsibility Principle
 
-**Step 2: Apply System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design`
+**Step 2: Apply Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 121-java-object-oriented-design`
 
 **Step 3: Analyze Improvements**
-The system prompt should suggest:
+The Agent Skill should suggest:
 
 ```java
 // Separated concerns
@@ -232,7 +232,7 @@ public class UserService {
 ### **Lesson 2.3: Type Design Mastery** (90 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Implement type-safe design using `@122-java-type-design`
+- Implement type-safe design using `122-java-type-design`
 - Understand value objects and domain modeling
 - Apply modern Java type system features
 
@@ -267,8 +267,8 @@ public class Order {
 - Possible invalid states
 - No business meaning in types
 
-**Step 2: Apply System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @122-java-type-design`
+**Step 2: Apply Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 122-java-type-design`
 
 **Step 3: Analyze Type-Safe Design**
 Expected improvements:
@@ -367,7 +367,7 @@ For the improved `UserService`:
 - **Contract Tests**: External service interactions
 
 **Step 2: Generate Test Suite**
-Use system prompts to create comprehensive test coverage.
+Use Agent Skills to create comprehensive test coverage.
 
 ---
 

@@ -2,20 +2,20 @@ title=Module 4: Modern Java - Advanced Language Features
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
-tags=java, system-prompts
+tags=java, skills
 ~~~~~~
 
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
 
-- **Master Java Generics** from basics to advanced patterns using `@128-java-generics`
-- **Apply functional programming** techniques effectively using `@142-java-functional-programming`
-- **Implement functional exception handling** with monads using `@143-java-functional-exception-handling`
-- **Leverage data-oriented programming** with records and sealed types using `@144-java-data-oriented-programming`
-- **Refactor legacy code** with modern Java features using `@141-java-refactoring-with-modern-features`
+- **Master Java Generics** from basics to advanced patterns using `128-java-generics`
+- **Apply functional programming** techniques effectively using `142-java-functional-programming`
+- **Implement functional exception handling** with monads using `143-java-functional-exception-handling`
+- **Leverage data-oriented programming** with records and sealed types using `144-java-data-oriented-programming`
+- **Refactor legacy code** with modern Java features using `141-java-refactoring-with-modern-features`
 
 ## 📚 Module Overview
 
@@ -88,8 +88,8 @@ public class DataProcessor {
 - Runtime ClassCastException risk
 - No API contract clarity
 
-**Step 2: Apply Generics System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @128-java-generics`
+**Step 2: Apply Generics Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 128-java-generics`
 
 **Step 3: Analyze Generic Improvements**
 Expected transformation:
@@ -211,7 +211,7 @@ public class TypeSafeContainer {
 ### **Lesson 4.2: Functional Programming Excellence** (90 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Apply functional programming principles using `@142-java-functional-programming`
+- Apply functional programming principles using `142-java-functional-programming`
 - Master Stream API and lambda expressions
 - Implement immutable data structures
 - Use higher-order functions effectively
@@ -262,8 +262,8 @@ public class OrderProcessor {
 }
 ```
 
-**Step 2: Apply Functional Programming System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @142-java-functional-programming`
+**Step 2: Apply Functional Programming Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 142-java-functional-programming`
 
 **Expected Functional Transformation:**
 
@@ -329,7 +329,7 @@ public class FunctionalOrderProcessor {
 ### **Lesson 4.3: Functional Exception Handling** (75 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Implement monadic error handling using `@143-java-functional-exception-handling`
+- Implement monadic error handling using `143-java-functional-exception-handling`
 - Master Optional and Either types
 - Apply Railway-Oriented Programming
 - Eliminate null pointer exceptions
@@ -376,7 +376,7 @@ public class UserService {
 ```
 
 **Step 2: Apply Functional Exception Handling**
-Use: `Improve the class/classes added in the context applying the system prompt @143-java-functional-exception-handling`
+Use: `Improve the class/classes added in the context applying the Agent Skill 143-java-functional-exception-handling`
 
 **Expected Monadic Transformation:**
 
@@ -487,7 +487,7 @@ public sealed interface UserError permits
 ### **Lesson 4.4: Data-Oriented Programming** (75 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Leverage records and sealed types using `@144-java-data-oriented-programming`
+- Leverage records and sealed types using `144-java-data-oriented-programming`
 - Model domain data effectively
 - Implement pattern matching
 - Create immutable data structures
@@ -519,7 +519,7 @@ public class PaymentMethod {
 ```
 
 **Step 2: Apply Data-Oriented Programming**
-Use: `Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming`
+Use: `Improve the class/classes added in the context applying the Agent Skill 144-java-data-oriented-programming`
 
 **Expected Data-Oriented Design:**
 

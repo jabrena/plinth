@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -97,16 +97,17 @@
     Published:
     <time datetime="2025-09-17">2025-09-17</time>
     &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
+    &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
       <a href="../../tags/java.html" class="course-tag">java</a>
-      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+      <a href="../../tags/skills.html" class="course-tag">skills</a>
   </div>
 </div>
 <hr>
@@ -114,7 +115,7 @@
 <h2>🎯 Learning Objectives</h2>
 <p>By the end of this module, you will:</p>
 <ul>
-<li><strong>Generate comprehensive unit tests</strong> using AI-powered system prompts</li>
+<li><strong>Generate comprehensive unit tests</strong> using Java Agent Skills</li>
 <li><strong>Apply object-oriented design principles</strong> systematically</li>
 <li><strong>Implement type-safe design patterns</strong> effectively</li>
 <li><strong>Create maintainable, testable code</strong> following industry standards</li>
@@ -124,12 +125,12 @@
 <p><strong>Duration:</strong> 5 hours<br />
 <strong>Difficulty:</strong> Intermediate<br />
 <strong>Prerequisites:</strong> Module 1 completed, OOP fundamentals</p>
-<p>This module focuses on code quality through automated testing and design principles. You'll learn to use system prompts that not only generate tests but also improve your code's design and maintainability.</p>
+<p>This module focuses on code quality through automated testing and design principles. You'll learn to use Agent Skills that not only generate tests but also improve your code's design and maintainability.</p>
 <h2>🗺️ Learning Path</h2>
 <h3><strong>Lesson 2.1: Unit Testing Mastery</strong> (90 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Master unit testing best practices using <code>@131-java-unit-testing</code></li>
+<li>Master unit testing best practices using <code>131-java-testing-unit-testing</code></li>
 <li>Understand test-driven development workflows</li>
 <li>Generate comprehensive test suites automatically</li>
 </ul>
@@ -164,10 +165,10 @@
     }
 }
 </code></pre>
-<p><strong>Step 2: Apply System Prompt</strong><br />
-Use: <code>Improve the class/classes added in the context applying the system prompt @131-java-unit-testing</code></p>
+<p><strong>Step 2: Apply Agent Skill</strong><br />
+Use: <code>Improve the class/classes added in the context applying the Agent Skill 131-java-testing-unit-testing</code></p>
 <p><strong>Step 3: Interactive Approach</strong><br />
-Try: <code>Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction</code></p>
+Try: <code>Improve the class/classes added in the context applying the Agent Skill 131-java-testing-unit-testing with the behaviour @behaviour-consultative-interaction</code></p>
 <p><strong>Expected Outcomes:</strong><br />
 - Comprehensive test class with JUnit 5<br />
 - Parameterized tests for multiple scenarios<br />
@@ -175,7 +176,7 @@ Try: <code>Improve the class/classes added in the context applying the system pr
 - Mock usage where appropriate<br />
 - Clear, descriptive test names</p>
 <h4>🔍 <strong>Deep Dive: Generated Test Analysis</strong></h4>
-<p>The system prompt should generate tests like:</p>
+<p>The Agent Skill should generate tests like:</p>
 <pre><code class="language-java">@Test
 @DisplayName(&quot;Should return sum when adding two positive numbers&quot;)
 void shouldReturnSum_WhenAddingTwoPositiveNumbers() {
@@ -212,7 +213,7 @@ void shouldThrowIllegalArgumentException_WhenDividingByZero() {
 <h3><strong>Lesson 2.2: Object-Oriented Design Excellence</strong> (75 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Apply OOP principles using <code>@121-java-object-oriented-design</code></li>
+<li>Apply OOP principles using <code>121-java-object-oriented-design</code></li>
 <li>Understand SOLID principles in practice</li>
 <li>Refactor procedural code to object-oriented design</li>
 </ul>
@@ -258,10 +259,10 @@ void shouldThrowIllegalArgumentException_WhenDividingByZero() {
 - Hard dependencies on database and email service<br />
 - Difficult to test<br />
 - Violates Single Responsibility Principle</p>
-<p><strong>Step 2: Apply System Prompt</strong><br />
-Use: <code>Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design</code></p>
+<p><strong>Step 2: Apply Agent Skill</strong><br />
+Use: <code>Improve the class/classes added in the context applying the Agent Skill 121-java-object-oriented-design</code></p>
 <p><strong>Step 3: Analyze Improvements</strong><br />
-The system prompt should suggest:</p>
+The Agent Skill should suggest:</p>
 <pre><code class="language-java">// Separated concerns
 public class User {
     private final String name;
@@ -304,7 +305,7 @@ public class UserService {
 <h3><strong>Lesson 2.3: Type Design Mastery</strong> (90 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Implement type-safe design using <code>@122-java-type-design</code></li>
+<li>Implement type-safe design using <code>122-java-type-design</code></li>
 <li>Understand value objects and domain modeling</li>
 <li>Apply modern Java type system features</li>
 </ul>
@@ -333,8 +334,8 @@ public class UserService {
 - No validation at type level<br />
 - Possible invalid states<br />
 - No business meaning in types</p>
-<p><strong>Step 2: Apply System Prompt</strong><br />
-Use: <code>Improve the class/classes added in the context applying the system prompt @122-java-type-design</code></p>
+<p><strong>Step 2: Apply Agent Skill</strong><br />
+Use: <code>Improve the class/classes added in the context applying the Agent Skill 122-java-type-design</code></p>
 <p><strong>Step 3: Analyze Type-Safe Design</strong><br />
 Expected improvements:</p>
 <pre><code class="language-java">// Value objects with validation
@@ -423,7 +424,7 @@ For the improved <code>UserService</code>:<br />
 - <strong>Integration Tests</strong>: Database interactions<br />
 - <strong>Contract Tests</strong>: External service interactions</p>
 <p><strong>Step 2: Generate Test Suite</strong><br />
-Use system prompts to create comprehensive test coverage.</p>
+Use Agent Skills to create comprehensive test coverage.</p>
 <hr />
 <h2>🏆 Module Assessment</h2>
 <h3><strong>Knowledge Validation Checkpoint</strong></h3>

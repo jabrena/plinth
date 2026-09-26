@@ -2,16 +2,16 @@ title=Module 3: Secure Coding - Security & Best Practices
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
-tags=java, system-prompts
+tags=java, skills
 ~~~~~~
 
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
 
-- **Implement security best practices** using automated system prompts
+- **Implement security best practices** using automated Agent Skills
 - **Handle concurrency safely** with modern Java patterns
 - **Apply proper logging strategies** for production applications
 - **Master exception handling** techniques for robust applications
@@ -23,14 +23,14 @@ By the end of this module, you will:
 **Difficulty:** Intermediate to Advanced
 **Prerequisites:** Module 2 completed, basic security awareness
 
-This module focuses on creating production-ready, secure applications. You'll learn to use system prompts that automatically apply security best practices, handle concurrency correctly, and implement robust error handling.
+This module focuses on creating production-ready, secure applications. You'll learn to use Agent Skills that automatically apply security best practices, handle concurrency correctly, and implement robust error handling.
 
 ## 🗺️ Learning Path
 
 ### **Lesson 3.1: Security Best Practices** (75 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Apply secure coding practices using `@124-java-secure-coding`
+- Apply secure coding practices using `124-java-secure-coding`
 - Understand common security vulnerabilities
 - Implement input validation and sanitization
 - Apply the principle of least privilege
@@ -95,11 +95,11 @@ public class UserAuthService {
 - No input validation
 - No rate limiting or brute force protection
 
-**Step 2: Apply Security System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @124-java-secure-coding`
+**Step 2: Apply Security Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 124-java-secure-coding`
 
 **Step 3: Interactive Security Review**
-Try: `Improve the class/classes added in the context applying the system prompt @124-java-secure-coding with the behaviour @behaviour-consultative-interaction`
+Try: `Improve the class/classes added in the context applying the Agent Skill 124-java-secure-coding with the behaviour @behaviour-consultative-interaction`
 
 **Expected Security Improvements:**
 
@@ -197,7 +197,7 @@ public class SecureUserAuthService {
 ### **Lesson 3.2: Concurrency Mastery** (60 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Implement thread-safe code using `@125-java-concurrency`
+- Implement thread-safe code using `125-java-concurrency`
 - Understand modern Java concurrency utilities
 - Apply concurrent design patterns safely
 
@@ -241,8 +241,8 @@ public class CounterService {
 }
 ```
 
-**Step 2: Apply Concurrency System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @125-java-concurrency`
+**Step 2: Apply Concurrency Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 125-java-concurrency`
 
 **Expected Improvements:**
 
@@ -286,7 +286,7 @@ public class ThreadSafeCounterService {
 ### **Lesson 3.3: Logging Excellence** (45 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Implement proper logging using `@126-java-logging`
+- Implement proper logging using `181-java-observability-logging`
 - Understand logging levels and structured logging
 - Apply security considerations in logging
 
@@ -318,8 +318,8 @@ public class PaymentService {
 }
 ```
 
-**Step 2: Apply Logging System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @126-java-logging`
+**Step 2: Apply Logging Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 181-java-observability-logging`
 
 **Expected Improvements:**
 
@@ -372,7 +372,7 @@ public class SecurePaymentService {
 ### **Lesson 3.4: Exception Handling Mastery** (60 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Implement robust exception handling using `@127-java-exception-handling`
+- Implement robust exception handling using `126-java-exception-handling`
 - Design exception hierarchies effectively
 - Apply error recovery strategies
 
@@ -402,8 +402,8 @@ public class FileProcessor {
 }
 ```
 
-**Step 2: Apply Exception Handling System Prompt**
-Use: `Improve the class/classes added in the context applying the system prompt @127-java-exception-handling`
+**Step 2: Apply Exception Handling Agent Skill**
+Use: `Improve the class/classes added in the context applying the Agent Skill 126-java-exception-handling`
 
 **Expected Improvements:**
 
