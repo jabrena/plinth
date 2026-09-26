@@ -292,6 +292,32 @@
             <properties>
                 <skills.output.directory>${project.basedir}/../skills</skills.output.directory>
             </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-skills</id>
+                                <configuration>
+                                    <resources combine.self="override">
+                                        <resource>
+                                            <directory>${project.build.directory}/skills</directory>
+                                            <includes>
+                                                <include>**/*</include>
+                                            </includes>
+                                            <excludes>
+                                                <exclude>202-knowledge-base/**</exclude>
+                                            </excludes>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
         </profile>
     </profiles>
 </project>
