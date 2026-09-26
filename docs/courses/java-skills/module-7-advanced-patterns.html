@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 7: Advanced Patterns - Composing Java Skill Workflows - Plinth</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Plinth"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Plinth</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/plinth/dvbe26/index.html" target="_blank">Devoxx BE 2026</a>
+      <a href="https://jabrena.github.io/plinth/jcconf-2026/index.html" target="_blank">JCConf 2026</a>
+      <a href="https://jabrena.github.io/plinth/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/plinth/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 7: Advanced Patterns - Composing Java Skill Workflows</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
+    &nbsp;
+    <i class="fa fa-user"></i>
+    MyRobot
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/skills.html" class="course-tag">skills</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li>Select skills by engineering outcome instead of by familiar terminology</li>
+<li>Sequence skills so each phase produces trusted inputs for the next</li>
+<li>Distinguish independent checks that can run in parallel from dependent changes</li>
+<li>Preserve human decisions, repository constraints, and validation evidence</li>
+<li>Design a complete Java delivery workflow without bypassing skill safeguards</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 4 hours<br />
+<strong>Difficulty:</strong> Advanced<br />
+<strong>Prerequisites:</strong> All previous modules completed</p>
+<p>This capstone focuses on composition. A skill owns a bounded engineering responsibility; a workflow connects those responsibilities through explicit artifacts and verification gates. The objective is not to invoke as many skills as possible, but to use the smallest coherent set that moves the codebase from evidence to a validated outcome.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 7.1: Select Skills by Outcome</strong> (45 minutes)</h3>
+<p>Start with the desired result and choose the skill whose contract matches it.</p>
+<p>| Objective | Skill | Expected evidence or output |<br />
+|---|---|---|<br />
+| Improve Maven configuration | <code>110-java-maven-best-practices</code> | Reviewed <code>pom.xml</code> changes and Maven validation |<br />
+| Improve object modeling | <code>121-java-object-oriented-design</code> | Design findings and targeted refactoring |<br />
+| Improve type safety | <code>122-java-type-design</code> | Stronger types and reduced invalid states |<br />
+| Add unit tests | <code>131-java-testing-unit-testing</code> | Focused tests and passing test suite |<br />
+| Investigate runtime performance | <code>161-java-profiling-detect</code> | Reproducible profiling artifacts |<br />
+| Explain profiling evidence | <code>162-java-profiling-analyze</code> | Problem and solution documents |<br />
+| Apply measured performance fixes | <code>163-java-profiling-refactor</code> | Targeted code changes based on trusted analysis |<br />
+| Prove performance improvement | <code>164-java-profiling-verify</code> | Controlled before/after comparison |</p>
+<h4>🔧 Hands-on Exercise 7.1</h4>
+<p>For each request, identify one primary skill and explain why adjacent skills are not yet needed:</p>
+<ol>
+<li>“The service slows down after several hours.”</li>
+<li>“This public API accepts combinations of values that are invalid.”</li>
+<li>“The Maven build allows conflicting dependency versions.”</li>
+<li>“The repository needs a developer guide.”</li>
+</ol>
+<p>The answer should name an initial skill, its required context, and its completion evidence.</p>
+<h3><strong>Lesson 7.2: Build Evidence-Driven Sequences</strong> (75 minutes)</h3>
+<p>Dependent skills must be ordered around durable artifacts:</p>
+<pre><code class="language-text">Observe → Analyze → Decide → Change → Verify
+</code></pre>
+<p>The profiling family demonstrates this boundary clearly:</p>
+<ol>
+<li><code>161-java-profiling-detect</code> collects artifacts under realistic load.</li>
+<li><code>162-java-profiling-analyze</code> cross-references the artifacts and records prioritized solutions.</li>
+<li><code>163-java-profiling-refactor</code> accepts trusted, repository-owned analysis documents and applies targeted changes.</li>
+<li><code>164-java-profiling-verify</code> repeats equivalent conditions and reports improvements or regressions.</li>
+</ol>
+<p>Skipping analysis makes the refactoring speculative. Skipping verification turns an optimization into an unproven assumption.</p>
+<h4>🔧 Hands-on Exercise 7.2</h4>
+<p>Design a profiling workflow for a Java service with increasing allocation pressure. Record:</p>
+<ul>
+<li>The load scenario and success criteria</li>
+<li>The artifacts produced by detection</li>
+<li>The problem and solution documents produced by analysis</li>
+<li>The approved refactoring scope</li>
+<li>The identical conditions required for verification</li>
+</ul>
+<h3><strong>Lesson 7.3: Combine Quality Skills Safely</strong> (75 minutes)</h3>
+<p>Some skills can inspect the same change independently, while others must wait for an earlier decision.</p>
+<pre><code class="language-text">                 ┌─ 124-java-secure-coding ─┐
+Design decision ─┼─ 125-java-concurrency ───┼─ Consolidate findings ─ Test
+                 └─ 122-java-type-design ───┘
+</code></pre>
+<p>Parallel review is useful when checks do not modify overlapping files. Refactoring should remain coordinated and sequential when several skills would edit the same classes.</p>
+<h4>🔧 Hands-on Exercise 7.3</h4>
+<p>Plan a review for a concurrent payment component:</p>
+<ol>
+<li>Use <code>124-java-secure-coding</code> to review trust boundaries and sensitive data.</li>
+<li>Use <code>125-java-concurrency</code> to review shared state and lifecycle management.</li>
+<li>Use <code>122-java-type-design</code> to identify invalid domain states.</li>
+<li>Consolidate findings before authorizing code changes.</li>
+<li>Use <code>131-java-testing-unit-testing</code> and the project test suite to protect behavior.</li>
+</ol>
+<p>Document which steps can run independently and which require an approved ordering.</p>
+<h3><strong>Lesson 7.4: Design a Delivery Workflow</strong> (75 minutes)</h3>
+<p>A robust multi-skill workflow includes:</p>
+<ul>
+<li><strong>Objective:</strong> the observable outcome, not a list of tools</li>
+<li><strong>Scope:</strong> repositories, modules, packages, or files that may change</li>
+<li><strong>Inputs:</strong> trusted issues, specifications, profiling reports, or code</li>
+<li><strong>Decision points:</strong> questions that require maintainer judgment</li>
+<li><strong>Handoffs:</strong> durable artifacts consumed by later skills</li>
+<li><strong>Validation:</strong> tests, build checks, scanners, or comparisons</li>
+<li><strong>Stop conditions:</strong> missing evidence, failed prerequisites, or unsafe ambiguity</li>
+</ul>
+<h4>🔧 Capstone Exercise</h4>
+<p>Create a workflow for adding a performance-sensitive Java feature:</p>
+<ol>
+<li>Plan the change and acceptance criteria.</li>
+<li>Review object and type design with <code>121-java-object-oriented-design</code> and <code>122-java-type-design</code>.</li>
+<li>Implement with the relevant Java language or framework skill.</li>
+<li>Add focused tests with <code>131-java-testing-unit-testing</code>.</li>
+<li>Review security and concurrency where applicable.</li>
+<li>Establish load with <code>151-java-performance-jmeter</code>.</li>
+<li>Run the 161 → 162 → 163 → 164 profiling lifecycle only when measurements justify optimization.</li>
+<li>Update project documentation with <code>170-java-documentation</code>.</li>
+</ol>
+<p>Your workflow must identify the artifact or validation gate that permits each transition.</p>
+<h2>🏆 Module Assessment</h2>
+<p>You have completed the module when you can:</p>
+<ul>
+<li>[ ] Select a minimal set of skills for a stated outcome</li>
+<li>[ ] Explain the contract and evidence produced by every selected skill</li>
+<li>[ ] Prevent downstream work from starting without trusted inputs</li>
+<li>[ ] Separate parallel review from overlapping code changes</li>
+<li>[ ] Define build, test, security, and performance validation gates</li>
+<li>[ ] Record a reproducible end-to-end workflow</li>
+</ul>
+<h2>🎓 Course Completion</h2>
+<p>You now have a practical model for using Java Agent Skills:</p>
+<ul>
+<li>Skills are bounded workflows, not magic commands.</li>
+<li>Repository context and maintainer decisions remain authoritative.</li>
+<li>Generated output must be reviewed and validated.</li>
+<li>Evidence should flow from one phase to the next.</li>
+<li>Verification completes the work; implementation alone does not.</li>
+</ul>
+<p>Continue by applying one complete workflow to a real Java project and retaining its decisions, artifacts, and validation results in the repository.</p>
+<p><a href="index.html">Return to the course overview</a></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/plinth" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

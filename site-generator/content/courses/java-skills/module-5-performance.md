@@ -2,19 +2,19 @@ title=Module 5: Performance - Optimization & Profiling
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
-tags=java, system-prompts
+tags=java, skills
 ~~~~~~
 
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
 
-- **Create JMeter performance tests** using `@151-java-performance-jmeter`
-- **Profile applications comprehensively** using `@161-java-profiling-detect`
-- **Analyze performance bottlenecks** using `@162-java-profiling-analyze`
-- **Compare performance improvements** using `@164-java-profiling-compare`
+- **Create JMeter performance tests** using `151-java-performance-jmeter`
+- **Profile applications comprehensively** using `161-java-profiling-detect`
+- **Analyze performance bottlenecks** using `162-java-profiling-analyze`
+- **Compare performance improvements** using `164-java-profiling-verify`
 - **Benchmark code with JMH** for micro-optimizations
 - **Apply systematic performance optimization** strategies
 
@@ -31,7 +31,7 @@ This module focuses on systematic performance optimization using AI-powered prof
 ### **Lesson 5.1: JMeter Performance Testing** (90 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Create comprehensive JMeter test plans using `@151-java-performance-jmeter`
+- Create comprehensive JMeter test plans using `151-java-performance-jmeter`
 - Design realistic load testing scenarios
 - Analyze performance metrics and identify bottlenecks
 
@@ -53,8 +53,8 @@ This module focuses on systematic performance optimization using AI-powered prof
 cd examples/spring-boot-jmeter-demo
 ```
 
-**Step 2: Apply JMeter System Prompt**
-Use: `Add JMeter performance testing to this project using @151-java-performance-jmeter`
+**Step 2: Apply JMeter Agent Skill**
+Use: `Add JMeter performance testing to this project using 151-java-performance-jmeter`
 
 **Step 3: Create Specific Test Plan**
 Try: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?`
@@ -77,7 +77,7 @@ Try: `Can you create a Jmeter file based on the restcontroller in the path src/t
 ### **Lesson 5.2: Application Profiling Setup** (120 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Set up comprehensive profiling using `@161-java-profiling-detect`
+- Set up comprehensive profiling using `161-java-profiling-detect`
 - Configure JVM for optimal profiling
 - Collect runtime performance data
 
@@ -99,7 +99,7 @@ cd examples/spring-boot-memory-leak-demo
 ```
 
 **Step 2: Apply Profiling Detection Prompt**
-Use: `My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler`
+Use: `My Java application has performance issues - help me set up comprehensive profiling process using 161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler`
 
 **Expected Generated Scripts:**
 
@@ -160,7 +160,7 @@ esac
 ### **Lesson 5.3: Performance Analysis** (150 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Analyze profiling results using `@162-java-profiling-analyze`
+- Analyze profiling results using `162-java-profiling-analyze`
 - Identify performance bottlenecks systematically
 - Generate actionable optimization recommendations
 
@@ -176,7 +176,7 @@ esac
 #### 🔧 **Hands-on Exercise 5.3:**
 
 **Step 1: Analyze Collected Data**
-Use: `Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @162-java-profiling-analyze`
+Use: `Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the Agent Skill 162-java-profiling-analyze`
 
 **Expected Analysis Report:**
 
@@ -267,7 +267,7 @@ public String processUsers(List<User> users) {
 **Scenario:** Benchmark different string concatenation approaches.
 
 **Step 1: Add JMH Support**
-Use: `Add JMH support using the cursor rule @112-java-maven-plugins and not make any question`
+Use: `Add JMH support using the Agent Skill 112-java-maven-plugins and not make any question`
 
 **Step 2: Create Benchmark**
 Use: `Can you create a JMH benchmark in order to know what is the best implementation?`
@@ -335,7 +335,7 @@ After running the benchmark, use: `Can you explain the JMH results and advice ab
 ### **Lesson 5.5: Performance Comparison** (60 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Compare before/after performance using `@164-java-profiling-compare`
+- Compare before/after performance using `164-java-profiling-verify`
 - Validate optimization effectiveness
 - Create performance improvement reports
 
@@ -348,7 +348,7 @@ Implement the recommended changes from the analysis report.
 Collect new performance data with the same load conditions.
 
 **Step 3: Compare Results**
-Use: `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare`
+Use: `Review if the problems was solved with last refactoring using the reports located in @/results with the Agent Skill 164-java-profiling-verify`
 
 **Expected Comparison Report:**
 ```markdown

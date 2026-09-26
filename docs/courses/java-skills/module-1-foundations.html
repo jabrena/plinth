@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -94,18 +94,20 @@
 
 <div class="course-meta">
     <i class="fa fa-calendar-o"></i>
-    2025-09-17
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
     &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
       <a href="../../tags/java.html" class="course-tag">java</a>
-      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+      <a href="../../tags/skills.html" class="course-tag">skills</a>
   </div>
 </div>
 <hr>
@@ -113,28 +115,28 @@
 <h2>🎯 Learning Objectives</h2>
 <p>By the end of this module, you will:</p>
 <ul>
-<li><strong>Master Maven best practices</strong> using automated system prompts</li>
+<li><strong>Master Maven best practices</strong> using automated Agent Skills</li>
 <li><strong>Configure quality dependencies</strong> for enterprise-grade projects</li>
 <li><strong>Generate professional documentation</strong> automatically</li>
 <li><strong>Understand the fundamentals</strong> of AI-powered development workflows</li>
-<li><strong>Apply system prompts effectively</strong> in real-world scenarios</li>
+<li><strong>Apply Agent Skills effectively</strong> in real-world scenarios</li>
 </ul>
 <h2>📚 Module Overview</h2>
 <p><strong>Duration:</strong> 4 hours<br />
 <strong>Difficulty:</strong> Beginner to Intermediate<br />
-<strong>Prerequisites:</strong> Basic Maven knowledge, Java 21+</p>
-<p>This foundational module introduces you to the core system prompts that automate project setup and build system configuration. You'll learn to transform manual, error-prone tasks into automated, consistent workflows.</p>
+<strong>Prerequisites:</strong> Basic Maven knowledge, Java 25</p>
+<p>This foundational module introduces you to the core Agent Skills that automate project setup and build system configuration. You'll learn to transform manual, error-prone tasks into automated, consistent workflows.</p>
 <h2>🗺️ Learning Path</h2>
-<h3><strong>Lesson 1.1: Understanding System Prompts</strong> (45 minutes)</h3>
+<h3><strong>Lesson 1.1: Understanding Agent Skills</strong> (45 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Understand what system prompts are and why they matter</li>
-<li>Learn the anatomy of effective Cursor Rules</li>
+<li>Understand what Agent Skills are and why they matter</li>
+<li>Learn the anatomy of effective Agent Skills</li>
 <li>Explore the benefits of AI-powered development workflows</li>
 </ul>
 <h4>📖 <strong>Core Concepts:</strong></h4>
-<p><strong>What are System Prompts?</strong></p>
-<p>System prompts are structured instructions that guide AI assistants to perform specific development tasks consistently and professionally. Think of them as &quot;expert consultants&quot; embedded in your IDE.</p>
+<p><strong>What are Agent Skills?</strong></p>
+<p>Agent Skills are versioned instruction packages that guide an AI assistant through a bounded engineering workflow. A skill can define prerequisites, questions, constraints, references, scripts, outputs, and validation steps.</p>
 <p><strong>Key Benefits:</strong><br />
 - <strong>Consistency</strong>: Same high-quality output every time<br />
 - <strong>Efficiency</strong>: Automate repetitive tasks<br />
@@ -142,36 +144,36 @@
 - <strong>Scalability</strong>: Apply across teams and projects</p>
 <h4>💡 <strong>Knowledge Check:</strong></h4>
 <p><em>Before we continue, can you think of 3 repetitive tasks in Java development that could benefit from automation?</em></p>
-<p><strong>Example System Prompt Structure:</strong></p>
-<pre><code class="language-markdown">## Role
-You are a Senior Java Developer...
+<p><strong>Example Agent Skill Structure:</strong></p>
+<pre><code class="language-markdown">---
+name: 110-java-maven-best-practices
+description: Review and improve Maven project configuration.
+---
 
-## Goal
-Your task is to...
+## Workflow
+1. Validate the project.
+2. Inspect pom.xml.
+3. Propose scoped improvements.
+4. Apply the approved changes.
+5. Verify the build.
 
-## Constraints
-- Follow Maven best practices
-- Use Java 21+ features
-- Ensure backward compatibility
-
-## Output Format
-- Generate pom.xml modifications
-- Provide explanation of changes
-- Include validation steps
+## References
+- Read references/110-java-maven-best-practices.md before editing.
 </code></pre>
 <h4>🔧 <strong>Hands-on Exercise 1.1:</strong></h4>
-<p><strong>Scenario:</strong> You've joined a new team and need to understand their system prompt approach.</p>
+<p><strong>Scenario:</strong> You've joined a new team and need to understand its Agent Skill workflow.</p>
 <ol>
-<li><strong>Explore the System Prompt:</strong> Open <code>.cursor/rules/100-java-system-prompt-java-list.md</code></li>
-<li><strong>Analyze Structure:</strong> Identify the Role, Goal, and Constraints sections</li>
-<li><strong>Test the Prompt:</strong> Use it to generate the main project documentation</li>
+<li><strong>Explore the Agent Skill:</strong> Open <code>.agents/skills/110-java-maven-best-practices/SKILL.md</code></li>
+<li><strong>Analyze Structure:</strong> Identify its trigger, workflow, constraints, references, and validation requirements</li>
+<li><strong>Inspect Supporting Material:</strong> Read only the references explicitly required by the skill</li>
+<li><strong>Test the Skill:</strong> Ask the agent to review a sample <code>pom.xml</code> with <code>110-java-maven-best-practices</code></li>
 </ol>
-<p><strong>Expected Outcome:</strong> Understanding of how system prompts structure AI interactions for consistent results.</p>
+<p><strong>Expected Outcome:</strong> Understanding of how Agent Skills structure AI interactions for consistent results.</p>
 <hr />
 <h3><strong>Lesson 1.2: Maven Best Practices Automation</strong> (75 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Apply Maven best practices using <code>@110-java-maven-best-practices</code></li>
+<li>Apply Maven best practices using <code>110-java-maven-best-practices</code></li>
 <li>Understand modern Maven project structure</li>
 <li>Learn to validate and optimize <code>pom.xml</code> configurations</li>
 </ul>
@@ -188,25 +190,25 @@ Your task is to...
 <pre><code class="language-bash"># Navigate to the problematic project
 cd examples/maven-demo-ko
 </code></pre>
-<p><strong>Step 2: Apply System Prompt</strong><br />
-Use the prompt: <code>Apply in the pom.xml the rule @110-java-maven-best-practices</code></p>
-<p><strong>Step 3: Interactive Mode</strong><br />
-Try: <code>Apply in the pom.xml the rule @110-java-maven-best-practices with the behaviour @behaviour-consultative-interaction</code></p>
+<p><strong>Step 2: Apply Agent Skill</strong><br />
+Use: <code>Review and improve this pom.xml with the 110-java-maven-best-practices skill.</code></p>
+<p><strong>Step 3: Follow the Skill Workflow</strong><br />
+Answer the skill's questions, review the proposed Maven changes, and approve only the options that match the project.</p>
 <p><strong>Expected Improvements:</strong><br />
-- Updated Java version to 21+<br />
+- Updated Java version to the repository's Java 25 baseline<br />
 - Proper plugin versions<br />
 - Dependency scope optimization<br />
 - Property consolidation</p>
 <h4>💡 <strong>Knowledge Check:</strong></h4>
-<p><em>What's the difference between using a system prompt in &quot;purist way&quot; vs. with consultative behavior?</em></p>
-<p><strong>Answer:</strong> Purist way applies changes automatically, while consultative behavior asks questions and provides options for customization.</p>
+<p><em>Why should you follow a skill's required questions instead of asking the agent to bypass them?</em></p>
+<p><strong>Answer:</strong> Required questions capture project-specific decisions and safeguards. Bypassing them can produce incorrect or unsafe changes.</p>
 <hr />
 <h3><strong>Lesson 1.3: Quality Dependencies Integration</strong> (60 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Add essential quality dependencies using <code>@111-java-maven-dependencies</code></li>
+<li>Add essential quality dependencies using <code>111-java-maven-dependencies</code></li>
 <li>Understand the purpose of JSpecify, Error Prone, NullAway, and VAVR</li>
-<li>Learn interactive vs. non-interactive prompt usage</li>
+<li>Learn how interactive skill decisions constrain dependency changes</li>
 </ul>
 <h4>📖 <strong>Core Concepts:</strong></h4>
 <p><strong>Essential Quality Dependencies:</strong></p>
@@ -222,9 +224,9 @@ Try: <code>Apply in the pom.xml the rule @110-java-maven-best-practices with the
 <pre><code class="language-bash">cd examples/maven-demo
 </code></pre>
 <p><strong>Step 2: Interactive Approach</strong><br />
-Use: <code>Add essential Maven dependencies for code quality using @111-java-maven-dependencies</code></p>
+Use: <code>Evaluate quality dependencies for this Maven project with the 111-java-maven-dependencies skill.</code></p>
 <p><strong>Step 3: Specific Addition</strong><br />
-Try: <code>Add VAVR dependency with the help of @111-java-maven-dependencies and not make any question</code></p>
+Try: <code>Evaluate whether Vavr is justified for this project with the 111-java-maven-dependencies skill.</code></p>
 <p><strong>Step 4: Validation</strong></p>
 <pre><code class="language-bash">./mvnw clean compile
 </code></pre>
@@ -239,7 +241,7 @@ Try: <code>Add VAVR dependency with the help of @111-java-maven-dependencies and
 <h3><strong>Lesson 1.4: Maven Plugins Mastery</strong> (45 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Configure essential Maven plugins using <code>@112-java-maven-plugins</code></li>
+<li>Configure essential Maven plugins using <code>112-java-maven-plugins</code></li>
 <li>Understand plugin lifecycle and execution</li>
 <li>Learn selective plugin application</li>
 </ul>
@@ -252,9 +254,9 @@ Try: <code>Add VAVR dependency with the help of @111-java-maven-dependencies and
 - <strong>SpotBugs Plugin</strong>: Static analysis</p>
 <h4>🔧 <strong>Hands-on Exercise 1.4:</strong></h4>
 <p><strong>Step 1: Interactive Enhancement</strong><br />
-Use: <code>Improve the pom.xml using the cursor rule @112-java-maven-plugins</code></p>
+Use: <code>Review this pom.xml with the 112-java-maven-plugins skill and recommend only justified plugins.</code></p>
 <p><strong>Step 2: Selective Application</strong><br />
-Try: <code>Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question</code></p>
+Try: <code>Evaluate and configure Maven Enforcer with the 112-java-maven-plugins skill.</code></p>
 <p><strong>Step 3: Validation</strong></p>
 <pre><code class="language-bash">./mvnw clean verify
 </code></pre>
@@ -262,7 +264,7 @@ Try: <code>Add Maven Enforcer plugin only from the rule @112-java-maven-plugins 
 <h3><strong>Lesson 1.5: Professional Documentation Generation</strong> (75 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Generate developer documentation using <code>@113-java-maven-documentation</code></li>
+<li>Generate developer documentation using <code>113-java-maven-documentation</code></li>
 <li>Create comprehensive README-DEV.md files</li>
 <li>Understand documentation-driven development</li>
 </ul>
@@ -275,7 +277,7 @@ Try: <code>Add Maven Enforcer plugin only from the rule @112-java-maven-plugins 
 - <strong>Contributing Guidelines</strong>: Team collaboration</p>
 <h4>🔧 <strong>Hands-on Exercise 1.5:</strong></h4>
 <p><strong>Step 1: Generate Documentation</strong><br />
-Use: <code>Generate developer documentation with essential Maven commands using @113-java-maven-documentation</code></p>
+Use: <code>Generate Maven developer documentation with the 113-java-maven-documentation skill.</code></p>
 <p><strong>Step 2: Review Generated Content</strong><br />
 - Examine the generated <code>README-DEV.md</code><br />
 - Understand the Maven command explanations<br />
@@ -286,15 +288,15 @@ Use: <code>Generate developer documentation with essential Maven commands using 
 <hr />
 <h2>🏆 Module Assessment</h2>
 <h3><strong>Knowledge Validation Checkpoint</strong></h3>
-<p><strong>Question 1:</strong> What are the three main benefits of using system prompts in Java development?</p>
-<p><strong>Question 2:</strong> Which system prompt would you use to add Error Prone dependency to a project?</p>
-<p><strong>Question 3:</strong> What's the difference between interactive and non-interactive system prompt usage?</p>
+<p><strong>Question 1:</strong> What are the three main benefits of using Agent Skills in Java development?</p>
+<p><strong>Question 2:</strong> Which Agent Skill would you use to add Error Prone dependency to a project?</p>
+<p><strong>Question 3:</strong> What information should be confirmed before an interactive skill changes a build?</p>
 <h3><strong>Practical Assessment Project</strong></h3>
 <p><strong>Project: &quot;Enterprise Project Setup&quot;</strong></p>
 <p><strong>Scenario:</strong> You're tasked with setting up a new Java microservice project for your team.</p>
 <p><strong>Requirements:</strong><br />
 1. Create a new Maven project structure<br />
-2. Apply Maven best practices using system prompts<br />
+2. Apply Maven best practices using Agent Skills<br />
 3. Add all quality dependencies<br />
 4. Configure essential plugins<br />
 5. Generate comprehensive documentation</p>
@@ -306,7 +308,7 @@ Use: <code>Generate developer documentation with essential Maven commands using 
 - Project builds without warnings<br />
 - All quality tools are properly configured<br />
 - Documentation is comprehensive and professional<br />
-- System prompts were used effectively throughout</p>
+- Agent Skills were used effectively and their validation requirements were completed</p>
 <h3><strong>Time Investment:</strong></h3>
 <ul>
 <li><strong>Setup</strong>: 30 minutes</li>
@@ -316,7 +318,7 @@ Use: <code>Generate developer documentation with essential Maven commands using 
 </ul>
 <hr />
 <h2>🚀 Next Steps</h2>
-<p><strong>Congratulations!</strong> You've mastered the foundational system prompts for Java project setup and build systems.</p>
+<p><strong>Congratulations!</strong> You've mastered the foundational Agent Skills for Java project setup and build systems.</p>
 <p><strong>What You've Accomplished:</strong><br />
 - ✅ Automated Maven project configuration<br />
 - ✅ Integrated quality dependencies and plugins<br />

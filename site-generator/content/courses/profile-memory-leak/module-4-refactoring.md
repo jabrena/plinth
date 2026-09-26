@@ -1,20 +1,21 @@
-title=Module 4: Refactoring and Solution Implementation
+title=Module 4: Refactor from Profiling Evidence
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
 tags=java, profiling
 ~~~~~~
 
-## Implementing Memory Leak Fixes and Validation
+## Implementing Targeted Memory Leak Fixes with `163-java-profiling-refactor`
 
 **⏱️ Duration:** 2 hours
 **🎯 Learning Objectives:**
 - Implement the prioritized solutions identified in Module 3
+- Use only trusted, repository-owned profiling analysis as the basis for code changes
 - Understand the `coco=false` configuration pattern for immediate leak resolution
 - Understand proper resource lifecycle management patterns
-- Validate that fixes are correctly applied and effective
+- Run the project test suite to confirm that targeted fixes are correctly applied
 - Set up monitoring and alerting for ongoing protection
 
 ---
@@ -23,10 +24,10 @@ tags=java, profiling
 
 ### The Three-Phase Implementation Approach
 
-Based on your analysis from Module 3, we'll implement solutions in priority order:
+Use `163-java-profiling-refactor` with the `profiler/docs/profiling-problem-analysis-*.md` and `profiler/docs/profiling-solutions-*.md` files produced in Module 3. Review their provenance before changing code, then implement solutions in priority order:
 
 1. **Phase 1: Emergency Response (5 minutes)** - Configuration change for immediate relief
-2. **Phase 2: Validation and Monitoring (30 minutes)** - Verify fixes and establish monitoring
+2. **Phase 2: Functional Checks and Monitoring (30 minutes)** - Run tests and establish monitoring
 3. **Phase 3: Long-term Improvements (1 hour)** - Enhanced patterns and prevention
 
 ### 💡 Learning Insight
@@ -42,7 +43,7 @@ Let's implement the highest-priority solution with immediate impact:
 
 #### **Step 1: Verify Current Configuration**
 ```bash
-cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Check current configuration
 echo "=== Current Configuration Status ==="
@@ -146,7 +147,7 @@ grep -A 15 -B 2 "createObject" src/main/java/info/jab/ms/NoCocoController.java
 
 ---
 
-## 🔍 Phase 2: Validation and Monitoring
+## 🔍 Phase 2: Functional Checks and Monitoring
 
 ### **🎯 Practical Exercise 2: Comprehensive Fix Validation**
 
@@ -225,26 +226,13 @@ wait $JMETER_PID
 echo "Load test completed successfully"
 ```
 
-#### **Step 3: Comparative Memory Analysis**
+#### **Step 3: Run the Project Test Suite**
 ```bash
-# Generate post-fix profiling data for comparison
-echo "=== GENERATING POST-FIX PROFILING DATA ==="
-
-cd profiler/scripts
-./profile-java-process.sh
-# Select: 2. Memory Allocation Profiling (30s)
-# This will generate new flamegraphs with the fixes applied
-
-# Generate load during profiling
-cd ../..
-for i in {1..50}; do
-    curl -s -X POST http://localhost:8080/api/v1/objects/create > /dev/null
-    curl -s -X POST http://localhost:8080/api/v1/threads/create > /dev/null
-    sleep 1
-done
-
-echo "Post-fix profiling data generated"
+# Confirm the targeted refactoring preserves application behavior.
+./mvnw test
 ```
+
+Performance comparison belongs to `164-java-profiling-verify` and is performed under controlled conditions in Module 5.
 
 ---
 
@@ -527,8 +515,8 @@ chmod +x memory-alerts.sh
 - [ ] Analyzed thread safety improvements
 - [ ] Documented key differences between implementations
 
-**✅ Monitoring and Validation:**
-- [ ] Generated post-fix profiling data
+**✅ Monitoring and Functional Checks:**
+- [ ] Passed the project test suite after the targeted refactoring
 - [ ] Completed sustained load testing (10+ minutes)
 - [ ] Implemented memory usage monitoring
 - [ ] Created alerting thresholds and scripts
@@ -585,8 +573,8 @@ public class SafeCache<K, V> {
 - ✅ Demonstrated production-ready resource lifecycle management
 
 ### **What's Next?**
-In **Module 5: Validation and Comparison**, we'll focus on:
-- Using @164-java-profiling-compare to rigorously validate improvements
+In **Module 5: Verify Profiling Improvements**, we'll focus on:
+- Using `164-java-profiling-verify` to rigorously validate improvements
 - Generating before/after profiling comparisons
 - Creating quantitative evidence of memory leak resolution
 - Documenting the complete success story with measurable results

@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Module 4: Refactoring and Solution Implementation - Plinth</title>
+  <title>Module 4: Refactor from Profiling Evidence - Plinth</title>
   <meta name="author" content="" />
   <meta name="description" content="">
   <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Plinth"/>
@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -78,7 +78,7 @@
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <div class="course-heading">
-<h1>Module 4: Refactoring and Solution Implementation</h1>
+<h1>Module 4: Refactor from Profiling Evidence</h1>
 </div>
 </div>
 </div>
@@ -94,13 +94,15 @@
 
 <div class="course-meta">
     <i class="fa fa-calendar-o"></i>
-    2025-09-17
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
     &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
@@ -110,21 +112,22 @@
 </div>
 <hr>
 
-<h2>Implementing Memory Leak Fixes and Validation</h2>
+<h2>Implementing Targeted Memory Leak Fixes with <code>163-java-profiling-refactor</code></h2>
 <p><strong>⏱️ Duration:</strong> 2 hours<br />
 <strong>🎯 Learning Objectives:</strong><br />
 - Implement the prioritized solutions identified in Module 3<br />
+- Use only trusted, repository-owned profiling analysis as the basis for code changes<br />
 - Understand the <code>coco=false</code> configuration pattern for immediate leak resolution<br />
 - Understand proper resource lifecycle management patterns<br />
-- Validate that fixes are correctly applied and effective<br />
+- Run the project test suite to confirm that targeted fixes are correctly applied<br />
 - Set up monitoring and alerting for ongoing protection</p>
 <hr />
 <h2>🚀 Implementation Strategy Overview</h2>
 <h3>The Three-Phase Implementation Approach</h3>
-<p>Based on your analysis from Module 3, we'll implement solutions in priority order:</p>
+<p>Use <code>163-java-profiling-refactor</code> with the <code>profiler/docs/profiling-problem-analysis-*.md</code> and <code>profiler/docs/profiling-solutions-*.md</code> files produced in Module 3. Review their provenance before changing code, then implement solutions in priority order:</p>
 <ol>
 <li><strong>Phase 1: Emergency Response (5 minutes)</strong> - Configuration change for immediate relief</li>
-<li><strong>Phase 2: Validation and Monitoring (30 minutes)</strong> - Verify fixes and establish monitoring</li>
+<li><strong>Phase 2: Functional Checks and Monitoring (30 minutes)</strong> - Run tests and establish monitoring</li>
 <li><strong>Phase 3: Long-term Improvements (1 hour)</strong> - Enhanced patterns and prevention</li>
 </ol>
 <h3>💡 Learning Insight</h3>
@@ -134,7 +137,7 @@
 <h3><strong>🎯 Practical Exercise 1: Immediate Memory Leak Resolution</strong></h3>
 <p>Let's implement the highest-priority solution with immediate impact:</p>
 <h4><strong>Step 1: Verify Current Configuration</strong></h4>
-<pre><code class="language-bash">cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+<pre><code class="language-bash">cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Check current configuration
 echo &quot;=== Current Configuration Status ===&quot;
@@ -222,7 +225,7 @@ grep -A 15 -B 2 &quot;createObject&quot; src/main/java/info/jab/ms/NoCocoControl
 <h3>💡 Learning Reinforcement</h3>
 <p><strong>Notice how the fixed implementation follows enterprise patterns: bounded collections, shared resources, lifecycle management, and graceful error handling. These aren't just memory leak fixes - they're production-ready design patterns!</strong></p>
 <hr />
-<h2>🔍 Phase 2: Validation and Monitoring</h2>
+<h2>🔍 Phase 2: Functional Checks and Monitoring</h2>
 <h3><strong>🎯 Practical Exercise 2: Comprehensive Fix Validation</strong></h3>
 <h4><strong>Step 1: Functional Validation</strong></h4>
 <pre><code class="language-bash"># Create comprehensive validation script
@@ -295,25 +298,11 @@ done
 wait $JMETER_PID
 echo &quot;Load test completed successfully&quot;
 </code></pre>
-<h4><strong>Step 3: Comparative Memory Analysis</strong></h4>
-<pre><code class="language-bash"># Generate post-fix profiling data for comparison
-echo &quot;=== GENERATING POST-FIX PROFILING DATA ===&quot;
-
-cd profiler/scripts
-./profile-java-process.sh
-# Select: 2. Memory Allocation Profiling (30s)
-# This will generate new flamegraphs with the fixes applied
-
-# Generate load during profiling
-cd ../..
-for i in {1..50}; do
-    curl -s -X POST http://localhost:8080/api/v1/objects/create &gt; /dev/null
-    curl -s -X POST http://localhost:8080/api/v1/threads/create &gt; /dev/null
-    sleep 1
-done
-
-echo &quot;Post-fix profiling data generated&quot;
+<h4><strong>Step 3: Run the Project Test Suite</strong></h4>
+<pre><code class="language-bash"># Confirm the targeted refactoring preserves application behavior.
+./mvnw test
 </code></pre>
+<p>Performance comparison belongs to <code>164-java-profiling-verify</code> and is performed under controlled conditions in Module 5.</p>
 <hr />
 <h2>🛠️ Phase 3: Understanding the Implementation Patterns</h2>
 <h3><strong>Resource Lifecycle Management Deep Dive</strong></h3>
@@ -563,8 +552,8 @@ chmod +x memory-alerts.sh
 - [ ] Recognized <code>@PreDestroy</code> cleanup pattern<br />
 - [ ] Analyzed thread safety improvements<br />
 - [ ] Documented key differences between implementations</p>
-<p><strong>✅ Monitoring and Validation:</strong><br />
-- [ ] Generated post-fix profiling data<br />
+<p><strong>✅ Monitoring and Functional Checks:</strong><br />
+- [ ] Passed the project test suite after the targeted refactoring<br />
 - [ ] Completed sustained load testing (10+ minutes)<br />
 - [ ] Implemented memory usage monitoring<br />
 - [ ] Created alerting thresholds and scripts<br />
@@ -610,8 +599,8 @@ public class SafeCache&lt;K, V&gt; {
 - ✅ Implemented monitoring and alerting infrastructure<br />
 - ✅ Demonstrated production-ready resource lifecycle management</p>
 <h3><strong>What's Next?</strong></h3>
-<p>In <strong>Module 5: Validation and Comparison</strong>, we'll focus on:<br />
-- Using @164-java-profiling-compare to rigorously validate improvements<br />
+<p>In <strong>Module 5: Verify Profiling Improvements</strong>, we'll focus on:<br />
+- Using <code>164-java-profiling-verify</code> to rigorously validate improvements<br />
 - Generating before/after profiling comparisons<br />
 - Creating quantitative evidence of memory leak resolution<br />
 - Documenting the complete success story with measurable results</p>

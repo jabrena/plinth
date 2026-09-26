@@ -2,14 +2,14 @@ title=Mastering Java Generics - From Type Safety to Advanced Patterns
 type=course
 status=published
 date=2025-09-13
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
 tags=java, generics
 ~~~~~~
 
 ## Course Overview
 
-Transform your Java development skills with this comprehensive course on generics - one of Java's most powerful yet misunderstood features. This course takes you from basic type safety concepts to advanced patterns used in production systems.
+Transform your Java development skills with this comprehensive course on generics - one of Java's most powerful yet misunderstood features. This course takes you from basic type safety concepts to advanced patterns used in production systems and pairs the lessons with the `128-java-generics` Agent Skill for guided code reviews and refactoring.
 
 ### 🎯 Learning Objectives
 
@@ -22,6 +22,7 @@ By the end of this course, you will be able to:
 - **Integrate generics with modern Java features** like Records and sealed types
 - **Apply advanced patterns** like type tokens and heterogeneous containers
 - **Optimize performance** through proper generic design choices
+- **Use the Java Generics Agent Skill** to review and improve generics in real projects
 
 ### 📋 Prerequisites
 
@@ -29,6 +30,15 @@ By the end of this course, you will be able to:
 - **Object-Oriented Programming**: Understanding of polymorphism and encapsulation
 - **Basic Maven/Gradle**: Ability to compile and run Java projects
 - **Development Environment**: Java 17+ with IDE support
+
+### 🧩 Companion Agent Skill
+
+Use the `128-java-generics` skill while working through the exercises. It provides a portable Agent Skill workflow across supported coding agents.
+
+- **Skill registry**: [`128-java-generics` on Skills.sh](https://www.skills.sh/jabrena/plinth/128-java-generics)
+- **Skill source**: [`skills/128-java-generics`](https://github.com/jabrena/plinth/tree/main/skills/128-java-generics)
+- **Install**: `npx skills add https://github.com/jabrena/plinth --skill 128-java-generics`
+- **Example request**: `Review the Java classes in the current context and improve their generics usage with the 128-java-generics skill.`
 
 ### ⏱️ Course Duration & Difficulty
 
@@ -99,7 +109,7 @@ By the end of this course, you will be able to:
 - Best practices checklist
 
 **🎯 Learning Goals**: Validate mastery
-**📝 Assessment**: Complete capstone project
+**📝 Assessment**: Complete the capstone project, then use the `128-java-generics` skill for a final review
 
 ---
 

@@ -17,11 +17,18 @@
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <article role="main" class="course-content">
 
-<#if (content.author)?has_content || (content.date)?has_content || (content.version)?has_content>
+<#if (content.author)?has_content || (content.date)?has_content || (content.updated)?has_content || (content.version)?has_content>
 <div class="course-meta">
   <#if (content.date)?has_content>
     <i class="fa fa-calendar-o"></i>
-    ${content.date?string(config.date_format)}
+    Published:
+    <time datetime="${content.date?string("yyyy-MM-dd")}">${content.date?string(config.date_format)}</time>
+  </#if>
+  <#if (content.updated)?has_content>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="${content.updated}">${content.updated}</time>
   </#if>
   <#if (content.author)?has_content>
     &nbsp;

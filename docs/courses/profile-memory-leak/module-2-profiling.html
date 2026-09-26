@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Module 2: Hands-on Profiling with System Prompts - Plinth</title>
+  <title>Module 2: Detect and Collect Profiling Evidence - Plinth</title>
   <meta name="author" content="" />
   <meta name="description" content="">
   <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Plinth"/>
@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -78,7 +78,7 @@
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <div class="course-heading">
-<h1>Module 2: Hands-on Profiling with System Prompts</h1>
+<h1>Module 2: Detect and Collect Profiling Evidence</h1>
 </div>
 </div>
 </div>
@@ -94,13 +94,15 @@
 
 <div class="course-meta">
     <i class="fa fa-calendar-o"></i>
-    2025-09-17
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
     &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
@@ -113,7 +115,7 @@
 <h2>Mastering the Interactive Profiling Script and Evidence Collection</h2>
 <p><strong>⏱️ Duration:</strong> 3 hours<br />
 <strong>🎯 Learning Objectives:</strong><br />
-- Master the @161-java-profiling-detect system prompt and its 21 profiling options<br />
+- Master the <code>161-java-profiling-detect</code> Agent Skill and its 21 profiling options<br />
 - Learn problem-driven profiling strategies for different performance issues<br />
 - Understand flamegraph interpretation and visual analysis techniques<br />
 - Generate comprehensive profiling evidence under realistic load conditions<br />
@@ -121,11 +123,14 @@
 <hr />
 <h2>🎯 Deep Dive: The Interactive Profiling Script</h2>
 <h3>Understanding the Problem-Driven Approach</h3>
-<p>The profiling script in @161-java-profiling-detect follows a <strong>problem-first methodology</strong>:</p>
+<p>The profiling script packaged by <code>161-java-profiling-detect</code> follows a <strong>problem-first methodology</strong>:</p>
 <ol>
 <li><strong>Problem Identification</strong> → 2. <strong>Tool Selection</strong> → 3. <strong>Data Collection</strong> → 4. <strong>Evidence Generation</strong></li>
 </ol>
 <p>This approach ensures you collect the <strong>right data</strong> for the <strong>specific problem</strong> you're investigating.</p>
+<p>Run all commands in this module from the demo project root:</p>
+<pre><code class="language-bash">cd ./examples/profiling/spring-boot-memory-leak-demo
+</code></pre>
 <h4><strong>🔍 The 5 Problem Categories</strong></h4>
 <pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Step 0: Problem Identification
@@ -145,7 +150,7 @@
 <h4><strong>🎯 Option 2: Memory Allocation Profiling (30s)</strong></h4>
 <p><strong>When to use:</strong> Initial memory pattern analysis<br />
 <strong>What it shows:</strong> Which methods allocate the most objects</p>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select: 2. Memory Allocation Profiling (30s)
 </code></pre>
 <p><strong>🎯 Practical Exercise 1: Basic Allocation Analysis</strong></p>
@@ -182,7 +187,7 @@ Key Indicators:
 <h4><strong>🎯 Option 8: Memory Leak Detection (5min)</strong></h4>
 <p><strong>When to use:</strong> Comprehensive leak pattern analysis<br />
 <strong>What it shows:</strong> Long-term memory accumulation patterns</p>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select: 8. Memory Leak Detection (5min)
 </code></pre>
 <p><strong>🎯 Practical Exercise 2: Long-term Leak Detection</strong></p>
@@ -190,7 +195,7 @@ Key Indicators:
 <li><strong>Start the 5-minute leak detection:</strong></li>
 </ol>
 <pre><code class="language-bash"># This is a long-running profiling session
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select option 8
 </code></pre>
 <ol>
@@ -215,7 +220,7 @@ Key Indicators:
 <h4><strong>🎯 Option 9: Complete Memory Analysis Workflow</strong></h4>
 <p><strong>When to use:</strong> Comprehensive memory investigation<br />
 <strong>What it shows:</strong> Multi-phase analysis with baseline, detailed, and leak detection</p>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select: 9. Complete Memory Analysis Workflow
 </code></pre>
 <p>This option generates <strong>three sequential reports:</strong><br />
@@ -227,7 +232,7 @@ Key Indicators:
 <li><strong>Execute the complete workflow:</strong></li>
 </ol>
 <pre><code class="language-bash"># This will take about 6.5 minutes total
-./profile-java-process.sh
+./profiler/scripts/profile-java-process.sh
 # Select option 9
 </code></pre>
 <ol>
@@ -267,7 +272,7 @@ chmod +x coordinated-load.sh
 <h4><strong>🎯 Option 12: All Events Profiling (30s)</strong></h4>
 <p><strong>When to use:</strong> Comprehensive system analysis<br />
 <strong>What it shows:</strong> CPU, allocation, lock, and wall-clock data simultaneously</p>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select: 12. All Events Profiling (30s)
 </code></pre>
 <p><strong>Expected Results:</strong></p>
@@ -295,14 +300,14 @@ chmod +x coordinated-load.sh
 - <strong>Allocation Tracking</strong>: Monitor allocation rates per thread<br />
 - <strong>Waste Analysis</strong>: Identify threads with high TLAB waste ratios<br />
 - <strong>Correlation</strong>: Cross-reference TLAB data with memory leak patterns</p>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select: 18. JFR Memory Leak Analysis with TLAB tracking
 </code></pre>
 <p><strong>🎯 Practical Exercise 4: Advanced JFR Analysis</strong></p>
 <ol>
 <li><strong>Execute TLAB tracking (10 minutes):</strong></li>
 </ol>
-<pre><code class="language-bash">./profile-java-process.sh
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
 # Select option 18
 # Enter duration: 10 (minutes)
 </code></pre>
@@ -365,13 +370,13 @@ Critical Leak:          15+ levels deep
 <li><strong>Generate multiple flamegraphs with different durations:</strong></li>
 </ol>
 <pre><code class="language-bash"># Short-term (30s)
-./profile-java-process.sh  # Option 2
+./profiler/scripts/profile-java-process.sh  # Option 2
 
 # Medium-term (60s)
-./profile-java-process.sh  # Option 7, duration: 60
+./profiler/scripts/profile-java-process.sh  # Option 7, duration: 60
 
 # Long-term (300s)
-./profile-java-process.sh  # Option 8
+./profiler/scripts/profile-java-process.sh  # Option 8
 </code></pre>
 <ol>
 <li><strong>Create comparison table:</strong></li>
@@ -569,8 +574,8 @@ chmod +x measure-flamegraph.sh
 - ✅ Developed flamegraph interpretation skills<br />
 - ✅ Created systematic evidence collection processes</p>
 <h3><strong>What's Next?</strong></h3>
-<p>In <strong>Module 3: Analysis and Evidence Collection</strong>, we'll focus on:<br />
-- Systematic analysis using @162-java-profiling-analyze<br />
+<p>In <strong>Module 3: Analyze Profiling Evidence</strong>, we'll focus on:<br />
+- Systematic analysis using <code>162-java-profiling-analyze</code><br />
 - Creating structured documentation from profiling evidence<br />
 - Developing prioritized solution recommendations<br />
 - Cross-correlating multiple profiling results for comprehensive insights</p>

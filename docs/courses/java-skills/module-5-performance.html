@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -94,18 +94,20 @@
 
 <div class="course-meta">
     <i class="fa fa-calendar-o"></i>
-    2025-09-17
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
     &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
       <a href="../../tags/java.html" class="course-tag">java</a>
-      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+      <a href="../../tags/skills.html" class="course-tag">skills</a>
   </div>
 </div>
 <hr>
@@ -113,10 +115,10 @@
 <h2>🎯 Learning Objectives</h2>
 <p>By the end of this module, you will:</p>
 <ul>
-<li><strong>Create JMeter performance tests</strong> using <code>@151-java-performance-jmeter</code></li>
-<li><strong>Profile applications comprehensively</strong> using <code>@161-java-profiling-detect</code></li>
-<li><strong>Analyze performance bottlenecks</strong> using <code>@162-java-profiling-analyze</code></li>
-<li><strong>Compare performance improvements</strong> using <code>@164-java-profiling-compare</code></li>
+<li><strong>Create JMeter performance tests</strong> using <code>151-java-performance-jmeter</code></li>
+<li><strong>Profile applications comprehensively</strong> using <code>161-java-profiling-detect</code></li>
+<li><strong>Analyze performance bottlenecks</strong> using <code>162-java-profiling-analyze</code></li>
+<li><strong>Compare performance improvements</strong> using <code>164-java-profiling-verify</code></li>
 <li><strong>Benchmark code with JMH</strong> for micro-optimizations</li>
 <li><strong>Apply systematic performance optimization</strong> strategies</li>
 </ul>
@@ -129,7 +131,7 @@
 <h3><strong>Lesson 5.1: JMeter Performance Testing</strong> (90 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Create comprehensive JMeter test plans using <code>@151-java-performance-jmeter</code></li>
+<li>Create comprehensive JMeter test plans using <code>151-java-performance-jmeter</code></li>
 <li>Design realistic load testing scenarios</li>
 <li>Analyze performance metrics and identify bottlenecks</li>
 </ul>
@@ -145,8 +147,8 @@
 <p><strong>Step 1: Setup Test Environment</strong></p>
 <pre><code class="language-bash">cd examples/spring-boot-jmeter-demo
 </code></pre>
-<p><strong>Step 2: Apply JMeter System Prompt</strong><br />
-Use: <code>Add JMeter performance testing to this project using @151-java-performance-jmeter</code></p>
+<p><strong>Step 2: Apply JMeter Agent Skill</strong><br />
+Use: <code>Add JMeter performance testing to this project using 151-java-performance-jmeter</code></p>
 <p><strong>Step 3: Create Specific Test Plan</strong><br />
 Try: <code>Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?</code></p>
 <p><strong>Expected JMeter Configuration:</strong><br />
@@ -166,7 +168,7 @@ Try: <code>Can you create a Jmeter file based on the restcontroller in the path 
 <h3><strong>Lesson 5.2: Application Profiling Setup</strong> (120 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Set up comprehensive profiling using <code>@161-java-profiling-detect</code></li>
+<li>Set up comprehensive profiling using <code>161-java-profiling-detect</code></li>
 <li>Configure JVM for optimal profiling</li>
 <li>Collect runtime performance data</li>
 </ul>
@@ -182,7 +184,7 @@ Try: <code>Can you create a Jmeter file based on the restcontroller in the path 
 <pre><code class="language-bash">cd examples/spring-boot-memory-leak-demo
 </code></pre>
 <p><strong>Step 2: Apply Profiling Detection Prompt</strong><br />
-Use: <code>My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler</code></p>
+Use: <code>My Java application has performance issues - help me set up comprehensive profiling process using 161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler</code></p>
 <p><strong>Expected Generated Scripts:</strong></p>
 <p><strong>1. run-with-profiler.sh:</strong></p>
 <pre><code class="language-bash">#!/bin/bash
@@ -234,7 +236,7 @@ esac
 <h3><strong>Lesson 5.3: Performance Analysis</strong> (150 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Analyze profiling results using <code>@162-java-profiling-analyze</code></li>
+<li>Analyze profiling results using <code>162-java-profiling-analyze</code></li>
 <li>Identify performance bottlenecks systematically</li>
 <li>Generate actionable optimization recommendations</li>
 </ul>
@@ -247,7 +249,7 @@ esac
 5. <strong>GC Impact</strong>: Garbage collection overhead</p>
 <h4>🔧 <strong>Hands-on Exercise 5.3:</strong></h4>
 <p><strong>Step 1: Analyze Collected Data</strong><br />
-Use: <code>Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @162-java-profiling-analyze</code></p>
+Use: <code>Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the Agent Skill 162-java-profiling-analyze</code></p>
 <p><strong>Expected Analysis Report:</strong></p>
 <pre><code class="language-markdown"># Performance Analysis Report - 2025-01-XX
 
@@ -344,7 +346,7 @@ public String processUsers(List&lt;User&gt; users) {
 **Scenario:** Benchmark different string concatenation approaches.
 
 **Step 1: Add JMH Support**
-Use: `Add JMH support using the cursor rule @112-java-maven-plugins and not make any question`
+Use: `Add JMH support using the Agent Skill 112-java-maven-plugins and not make any question`
 
 **Step 2: Create Benchmark**
 Use: `Can you create a JMH benchmark in order to know what is the best implementation?`
@@ -409,7 +411,7 @@ After running the benchmark, use: <code>Can you explain the JMH results and advi
 <h3><strong>Lesson 5.5: Performance Comparison</strong> (60 minutes)</h3>
 <h4>🎯 <strong>Learning Objectives:</strong></h4>
 <ul>
-<li>Compare before/after performance using <code>@164-java-profiling-compare</code></li>
+<li>Compare before/after performance using <code>164-java-profiling-verify</code></li>
 <li>Validate optimization effectiveness</li>
 <li>Create performance improvement reports</li>
 </ul>
@@ -419,7 +421,7 @@ Implement the recommended changes from the analysis report.</p>
 <p><strong>Step 2: Re-run Profiling</strong><br />
 Collect new performance data with the same load conditions.</p>
 <p><strong>Step 3: Compare Results</strong><br />
-Use: <code>Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare</code></p>
+Use: <code>Review if the problems was solved with last refactoring using the reports located in @/results with the Agent Skill 164-java-profiling-verify</code></p>
 <p><strong>Expected Comparison Report:</strong></p>
 <pre><code class="language-markdown"># Performance Improvement Validation Report
 

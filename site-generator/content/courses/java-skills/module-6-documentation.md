@@ -2,17 +2,17 @@ title=Module 6: Documentation - Professional Documentation & Diagrams
 type=course
 status=published
 date=2025-09-17
+updated=2026-09-26
 author=MyRobot
-version=0.11.0-SNAPSHOT
-tags=java, system-prompts
+tags=java, skills
 ~~~~~~
 
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
 
-- **Generate comprehensive project documentation** using `@170-java-documentation`
-- **Create professional UML diagrams** using `@171-java-diagrams`
+- **Generate comprehensive project documentation** using `170-java-documentation`
+- **Create professional UML diagrams** using `033-architecture-diagrams`
 - **Master documentation-driven development** practices
 - **Apply modular, step-based documentation** approaches
 - **Create maintainable, professional documentation** that scales with projects
@@ -30,7 +30,7 @@ This module focuses on creating professional, comprehensive documentation that e
 ### **Lesson 6.1: Technical Documentation Generation** (105 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Generate complete project documentation using `@170-java-documentation`
+- Generate complete project documentation using `170-java-documentation`
 - Create README.md, package-info.java, and Javadoc
 - Apply modular documentation strategies
 
@@ -59,10 +59,10 @@ cd examples/spring-boot-demo
 ```
 
 **Step 2: Interactive Documentation Generation**
-Use: `Generate technical documentation about the project with the cursor rule @170-java-documentation`
+Use: `Generate technical documentation about the project with the Agent Skill 170-java-documentation`
 
 **Step 3: Specific Documentation Type**
-Try: `Generate README.md with @170-java-documentation without any question`
+Try: `Generate README.md with 170-java-documentation without any question`
 
 **Expected Generated Documentation Structure:**
 
@@ -281,7 +281,7 @@ package com.example.demo.controller;
 ### **Lesson 6.2: UML Diagram Generation** (75 minutes)
 
 #### 🎯 **Learning Objectives:**
-- Create comprehensive UML diagrams using `@171-java-diagrams`
+- Create comprehensive UML diagrams using `033-architecture-diagrams`
 - Generate class, sequence, and state diagrams
 - Apply C4 model for architecture documentation
 
@@ -297,10 +297,10 @@ package com.example.demo.controller;
 #### 🔧 **Hands-on Exercise 6.2:**
 
 **Step 1: Interactive Diagram Generation**
-Use: `Generate diagrams about the project with the cursor rule @171-java-diagrams`
+Use: `Generate diagrams about the project with the Agent Skill 033-architecture-diagrams`
 
 **Step 2: Specific Diagram Type**
-Try: `Create UML class diagrams with @171-java-diagrams without any question`
+Try: `Create UML class diagrams with 033-architecture-diagrams without any question`
 
 **Expected Generated Diagrams:**
 
@@ -417,7 +417,7 @@ Rel(demo_app, email_service, "Sends emails", "SMTP")
 #### 💡 **Diagram Generation Workflow:**
 
 **Step 1: Generate PlantUML Files**
-The system prompt creates `.puml` files in `docs/diagrams/`
+The Agent Skill creates `.puml` files in `docs/diagrams/`
 
 **Step 2: Convert to Images (Optional)**
 ```bash
@@ -463,7 +463,7 @@ jbang puml-to-png@jabrena --watch .
 **Scenario:** Create comprehensive documentation for a Java microservice project.
 
 **Requirements:**
-1. Generate complete project documentation using system prompts
+1. Generate complete project documentation using Agent Skills
 2. Create UML diagrams covering all architectural aspects
 3. Ensure documentation follows professional standards
 4. Include both user and developer documentation
@@ -507,7 +507,7 @@ jbang puml-to-png@jabrena --watch .
 👉 **[Continue to Module 7: Advanced Patterns →](module-7-advanced-patterns.html)**
 
 **In Module 7, you'll learn to:**
-- Create custom system prompts
+- Create custom Agent Skills
 - Apply progressive learning behaviors
 - Design educational content from technical prompts
 - Master advanced AI-powered development workflows
@@ -523,4 +523,4 @@ jbang puml-to-png@jabrena --watch .
 
 ---
 
-*Complete your journey with advanced system prompt creation and educational content generation.*
+*Complete your journey with advanced Agent Skill creation and educational content generation.*

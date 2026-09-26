@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-  <title>Module 3: Analysis and Evidence Collection - Plinth</title>
+  <title>Module 3: Analyze Profiling Evidence - Plinth</title>
   <meta name="author" content="" />
   <meta name="description" content="">
   <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Plinth"/>
@@ -53,7 +53,7 @@
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
-      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-skills/index.html">Skill Agents for Java</a>
       <a href="../../courses/java-generics/index.html">Java Generics</a>
       <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
     </div>
@@ -78,7 +78,7 @@
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <div class="course-heading">
-<h1>Module 3: Analysis and Evidence Collection</h1>
+<h1>Module 3: Analyze Profiling Evidence</h1>
 </div>
 </div>
 </div>
@@ -94,13 +94,15 @@
 
 <div class="course-meta">
     <i class="fa fa-calendar-o"></i>
-    2025-09-17
+    Published:
+    <time datetime="2025-09-17">2025-09-17</time>
+    &nbsp;
+    <i class="fa fa-refresh"></i>
+    Updated:
+    <time datetime="2026-09-26">2026-09-26</time>
     &nbsp;
     <i class="fa fa-user"></i>
     MyRobot
-    &nbsp;
-    <i class="fa fa-tag"></i>
-    Version 0.11.0-SNAPSHOT
   <div class="course-tags">
     &nbsp;
     <i class="fa fa-tags"></i>
@@ -110,18 +112,18 @@
 </div>
 <hr>
 
-<h2>Systematic Analysis using @162-java-profiling-analyze</h2>
+<h2>Systematic Analysis with <code>162-java-profiling-analyze</code></h2>
 <p><strong>⏱️ Duration:</strong> 2 hours<br />
 <strong>🎯 Learning Objectives:</strong><br />
-- Master the systematic analysis framework from @162-java-profiling-analyze<br />
+- Master the systematic analysis framework from the <code>162-java-profiling-analyze</code> Agent Skill<br />
 - Learn to categorize and prioritize performance issues using Impact/Effort scoring<br />
 - Create structured documentation following professional templates<br />
 - Develop cross-correlation analysis skills for multiple profiling results<br />
 - Generate actionable solution recommendations with implementation details</p>
 <hr />
 <h2>🧠 The Systematic Analysis Framework</h2>
-<h3>Understanding the @162-java-profiling-analyze Approach</h3>
-<p>The analysis system prompt provides a <strong>structured methodology</strong> that transforms raw profiling data into actionable insights:</p>
+<h3>Understanding the <code>162-java-profiling-analyze</code> Approach</h3>
+<p>The analysis skill provides a <strong>structured methodology</strong> that transforms raw profiling data into actionable insights:</p>
 <pre><code>Raw Profiling Data → Systematic Analysis → Categorized Problems → Prioritized Solutions
 </code></pre>
 <p><strong>Key Principles:</strong><br />
@@ -135,7 +137,7 @@
 <h2>📊 Step 1: Inventory and Organize Your Profiling Results</h2>
 <h3><strong>🎯 Practical Exercise 1: Results Inventory</strong></h3>
 <p>Let's organize the profiling data you've collected in Module 2:</p>
-<pre><code class="language-bash">cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+<pre><code class="language-bash">cd ./examples/profiling/spring-boot-memory-leak-demo
 
 # Create organized analysis workspace
 mkdir -p profiler/analysis-workspace
@@ -185,7 +187,7 @@ echo &quot;Analysis workspace prepared with $(ls evidence/ | wc -l) evidence fil
 <hr />
 <h2>🔍 Step 2: Problem Identification and Categorization</h2>
 <h3>Memory-Related Issues Analysis Framework</h3>
-<p>Based on the @162-java-profiling-analyze methodology, let's systematically analyze each type of issue:</p>
+<p>Based on the <code>162-java-profiling-analyze</code> methodology, let's systematically analyze each type of issue:</p>
 <h4><strong>🎯 Practical Exercise 2: Memory Leak Pattern Analysis</strong></h4>
 <p><strong>Open your memory leak detection flamegraph:</strong></p>
 <pre><code class="language-bash"># Open the longest-duration memory leak report
@@ -300,10 +302,11 @@ echo &quot;Edit correlation-analysis.md with your specific measurements&quot;
 <hr />
 <h2>📝 Step 3: Structured Documentation Creation</h2>
 <h3><strong>Creating the Problem Analysis Document</strong></h3>
-<p>Following the @162-java-profiling-analyze template:</p>
+<p>Following the <code>162-java-profiling-analyze</code> template, create the repository-owned analysis document that the refactoring skill can trust:</p>
 <pre><code class="language-bash"># Create the problem analysis document
 DATE_SUFFIX=$(date +%Y%m%d)
-cat &gt; analysis/profiling-problem-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
+mkdir -p ../docs
+cat &gt; ../docs/profiling-problem-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 # Profiling Problem Analysis - [DATE]
 
 ## Executive Summary
@@ -344,7 +347,7 @@ cat &gt; analysis/profiling-problem-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 - **Root Cause**: Inefficient string handling in object initialization
 
 ## Methodology
-- **Profiling Tools Used**: async-profiler v4.1, JFR analysis
+- **Profiling Tools Used**: async-profiler v4.x, JFR analysis
 - **Data Collection Approach**: Multi-duration analysis (30s, 5min, comprehensive workflow)
 - **Load Testing**: JMeter coordinated load testing for realistic conditions
 - **Analysis Techniques Applied**: Flamegraph visual analysis, quantitative measurements, cross-correlation
@@ -356,10 +359,10 @@ cat &gt; analysis/profiling-problem-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 4. **LOW (Future)**: Performance monitoring and alerting infrastructure
 
 ## Supporting Evidence Files
-- Memory leak detection: `../evidence/memory-leak-*.html`
-- Allocation analysis: `../evidence/allocation-flamegraph-*.html`
-- JFR recordings: `../evidence/*.jfr`
-- Measurements: `../correlation-analysis.md`
+- Memory leak detection: `../results/memory-leak-*.html`
+- Allocation analysis: `../results/allocation-flamegraph-*.html`
+- JFR recordings: `../results/*.jfr`
+- Measurements: `../analysis-workspace/correlation-analysis.md`
 
 ## Next Steps
 1. Proceed to solution development (Module 4)
@@ -367,7 +370,7 @@ cat &gt; analysis/profiling-problem-analysis-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 3. Validate improvements through comparative analysis (Module 5)
 EOF
 
-echo &quot;Problem analysis document created: analysis/profiling-problem-analysis-${DATE_SUFFIX}.md&quot;
+echo &quot;Problem analysis document created: profiler/docs/profiling-problem-analysis-${DATE_SUFFIX}.md&quot;
 echo &quot;Please edit the template with your specific measurements and findings&quot;
 </code></pre>
 <h3><strong>🎯 Practical Exercise 4: Impact/Effort Prioritization</strong></h3>
@@ -409,7 +412,7 @@ echo &quot;Prioritization analysis created&quot;
 <h3><strong>Creating the Solutions Document</strong></h3>
 <pre><code class="language-bash"># Create comprehensive solutions document
 DATE_SUFFIX=$(date +%Y%m%d)
-cat &gt; solutions/profiling-solutions-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
+cat &gt; ../docs/profiling-solutions-${DATE_SUFFIX}.md &lt;&lt; 'EOF'
 # Profiling Solutions and Recommendations - [DATE]
 
 ## Quick Wins (Low effort, High impact)
@@ -516,7 +519,7 @@ public void cleanup() throws InterruptedException {
 <li><strong>Regression Risk</strong>: Automated profiling in CI/CD pipeline<br />
 EOF</li>
 </ul>
-<p>echo &quot;Solutions document created: solutions/profiling-solutions-${DATE_SUFFIX}.md&quot;</p>
+<p>echo &quot;Solutions document created: profiler/docs/profiling-solutions-${DATE_SUFFIX}.md&quot;</p>
 <pre><code>
 ---
 
@@ -635,13 +638,14 @@ echo &quot;Final analysis package created in reports/final-analysis-package/&quo
 <hr />
 <h2>🚀 Transition to Module 4</h2>
 <p><strong>Outstanding work!</strong> You've successfully:<br />
-- ✅ Applied systematic analysis methodology from @162-java-profiling-analyze<br />
+- ✅ Applied the systematic analysis methodology from <code>162-java-profiling-analyze</code><br />
 - ✅ Created comprehensive problem documentation with quantitative evidence<br />
 - ✅ Developed prioritized solutions using Impact/Effort framework<br />
 - ✅ Performed cross-correlation analysis across multiple data sources<br />
 - ✅ Generated professional-grade analysis reports</p>
 <h3><strong>What's Next?</strong></h3>
-<p>In <strong>Module 4: Refactoring and Solution Implementation</strong>, we'll focus on:<br />
+<p>In <strong>Module 4: Refactor from Profiling Evidence</strong>, we'll focus on:<br />
+- Using <code>163-java-profiling-refactor</code> with the trusted, repository-owned analysis and solutions documents<br />
 - Implementing the prioritized solutions you've identified<br />
 - Using the coco=false configuration to resolve memory leaks<br />
 - Validating that fixes are properly applied and effective<br />
