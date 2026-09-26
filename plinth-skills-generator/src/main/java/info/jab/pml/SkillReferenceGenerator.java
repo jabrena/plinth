@@ -7,8 +7,7 @@ import java.io.StringWriter;
 import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.XMLConstants;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.Result;
 import javax.xml.transform.Transformer;
@@ -88,19 +87,13 @@ public final class SkillReferenceGenerator {
      */
     private SAXSource createSaxSource(TransformationSources sources, String xmlFileName) {
         try {
-            // First, process XInclude using DOM
-            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
-            domFactory.setNamespaceAware(true);
-            domFactory.setXIncludeAware(true);
-
-            DocumentBuilder builder = domFactory.newDocumentBuilder();
-
+            // First, process XInclude using a hardened DOM parser
             // Set base URI from XML resource location so XInclude resolves relative to the XML's directory (or jar root).
             InputSource inputSource = new InputSource(sources.xmlStream());
             String baseURI = resolveBaseUri(xmlFileName);
             inputSource.setSystemId(baseURI);
 
-            Document document = builder.parse(inputSource);
+            Document document = SecureXIncludeParser.parse(inputSource, resolveResourceRoot(xmlFileName, baseURI));
 
             // Convert DOM back to SAX source
             DOMSource domSource = new DOMSource(document);
@@ -109,6 +102,8 @@ public final class SkillReferenceGenerator {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setValidating(false);
+            factory.setFeature(XMLConstants.FEATURE_SECURE_PROCESSING, true);
+            factory.setFeature("http://apache.org/xml/features/disallow-doctype-decl", true);
 
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
 
@@ -151,6 +146,20 @@ public final class SkillReferenceGenerator {
             baseURI = baseURI.replace("test-classes", "classes");
         }
         return baseURI;
+    }
+
+    /**
+     * Resolves the classpath root that contains {@code xmlFileName}; XInclude may not load resources outside it.
+     */
+    private String resolveResourceRoot(String xmlFileName, String baseUri) {
+        URL xmlUrl = getClass().getClassLoader().getResource(xmlFileName);
+        if (xmlUrl != null) {
+            String urlStr = xmlUrl.toString();
+            if (urlStr.endsWith(xmlFileName)) {
+                return urlStr.substring(0, urlStr.length() - xmlFileName.length());
+            }
+        }
+        return baseUri;
     }
 
     /**

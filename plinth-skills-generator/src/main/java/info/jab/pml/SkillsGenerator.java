@@ -10,8 +10,6 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.xml.XMLConstants;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -253,14 +251,22 @@ public final class SkillsGenerator {
     }
 
     private DOMSource createXIncludeDomSource(InputStream xmlStream, String xmlResource) throws Exception {
-        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-        docFactory.setNamespaceAware(true);
-        docFactory.setXIncludeAware(true);
-        DocumentBuilder builder = docFactory.newDocumentBuilder();
         InputSource inputSource = new InputSource(xmlStream);
-        inputSource.setSystemId(resolveBaseUri(xmlResource));
-        Document document = builder.parse(inputSource);
+        String baseUri = resolveBaseUri(xmlResource);
+        inputSource.setSystemId(baseUri);
+        Document document = SecureXIncludeParser.parse(inputSource, resolveResourceRoot(xmlResource, baseUri));
         return new DOMSource(document);
+    }
+
+    private String resolveResourceRoot(String xmlResource, String baseUri) {
+        URL xmlUrl = getClass().getClassLoader().getResource(xmlResource);
+        if (xmlUrl != null) {
+            String url = xmlUrl.toString();
+            if (url.endsWith(xmlResource)) {
+                return url.substring(0, url.length() - xmlResource.length());
+            }
+        }
+        return baseUri;
     }
 
     private String resolveBaseUri(String xmlResource) {

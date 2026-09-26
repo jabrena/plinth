@@ -11,6 +11,7 @@
 //SOURCES application/MarkdownValidationService.java
 //SOURCES application/RemoteLinkValidator.java
 //SOURCES application/StructuredValidationRunner.java
+//SOURCES application/port/BlockedRemoteLinkException.java
 //SOURCES application/port/MarkdownFileFinder.java
 //SOURCES application/port/RemoteLinkRequester.java
 //SOURCES application/port/RemoteLinkResponse.java
@@ -22,6 +23,7 @@
 //SOURCES adapter/in/cli/MarkdownValidatorCommand.java
 //SOURCES adapter/out/filesystem/FileSystemMarkdownFileFinder.java
 //SOURCES adapter/out/http/HttpClientRemoteLinkRequester.java
+//SOURCES adapter/out/http/PublicAddressPolicy.java
 
 package info.jab.mv;
 
