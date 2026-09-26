@@ -78,8 +78,8 @@ if [ "$PROCESS_COUNT" -eq 1 ]; then
     echo "  PID: $PID"
     echo "  Name: $PROCESS_NAME"
     echo ""
-    read -p "Do you want to profile this process? (y/N): " CONFIRM
-    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+    read -p "Do you want to profile this process? (y/N): " PROFILE_ANSWER
+    if [[ ! "$PROFILE_ANSWER" =~ ^[Yy]$ ]]; then
         echo "Profiling cancelled by user."
         exit 0
     fi
@@ -1292,8 +1292,8 @@ while true; do
         NEW_PID=$(jps -l | grep "$PROCESS_NAME" | head -1 | cut -d' ' -f1)
         if [ ! -z "$NEW_PID" ] && [ "$NEW_PID" != "$PID" ]; then
             echo -e "${YELLOW}Found similar process with new PID: $NEW_PID${NC}"
-            read -p "Switch to the new PID? (y/N): " SWITCH_CONFIRM
-            if [[ "$SWITCH_CONFIRM" =~ ^[Yy]$ ]]; then
+            read -p "Switch to the new PID? (y/N): " SWITCH_ANSWER
+            if [[ "$SWITCH_ANSWER" =~ ^[Yy]$ ]]; then
                 PID=$NEW_PID
                 echo -e "${GREEN}Switched to PID: $PID${NC}"
             else
