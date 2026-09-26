@@ -11,3 +11,7 @@
 ## [Sangwon Park](https://github.com/wipheg)
 
 - 057-design-feature-toggles
+
+## [SecurO](https://github.com/Secur0-com)
+
+- Detected areas to improve security in the code.

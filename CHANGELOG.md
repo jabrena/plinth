@@ -5,6 +5,36 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.19.0] 2026-09-28
+
+### Added
+
+- **Skills**:
+  - ISO/IEC 25010:2023 quality model engineering review skill covering all nine quality characteristics, with questionnaire, report template, examples, and acceptance prompt (`@814-regulations-iso-25010`) (#1128)
+
+- **Agents & commands**:
+  - `/onboarding` command to set up a root `AGENTS.md` and one unambiguous OpenSpec project before issue-driven work (#1126)
+  - Provenance metadata in command definitions, rendered in generated frontmatter, with version consistency tests for commands and agents (#1120)
+
+- **Benchmark**:
+  - Expanded the benchmark harness for part 2 with a reorganized problem 1, a direct scenario, a problem 2 harness, and v2 solution snapshot metrics (#1122)
+  - New scenario samples and results for Claude Code (Fable 5, Opus 5, Sonnet 5), Codex GPT-5, and Grok 4.5 (#1132, #1140, #1144, #1145, #1149, #1151, #1157, #1161, #1166, #1167, #1169, #1170, #1171, #1172)
+
+- **Documentation & website**:
+  - JCConf 2026 "Harness Engineering with Java" and DVBE 2026 AI-native Java conference decks (#1109, #1121, #1131, #1134, #1139, #1142, #1155, #1158, #1159, #1163, #1165, #1181, #1182, #1183, #1184, #1185)
+
+### Removed
+
+- **Skills**:
+  - Removed `@031-architecture-adr-functional-requirements` and `@032-architecture-adr-non-functional-requirements`; requirement discovery is covered by `/explore-problem` (`@021`–`@025`) and quality attributes by `@814-regulations-iso-25010` (#1136)
+
+### Security
+
+- Parsed skill generator XML sources through a hardened XInclude parser (secure processing, no DOCTYPE or external entities, `xi:include` restricted to the resource root) to block XXE and XInclude file reads (#1197)
+- `markdown-validator` skips links that resolve to non-public addresses and re-validates every redirect hop to prevent SSRF (#1197)
+- The risk-assessment acceptance example serializes its request body with Jackson to prevent JSON injection (#1197)
+- Pinned third-party GitHub Actions to full commit SHAs (#1197)
+
 ## [0.18.0] 2026-07-27
 
 ### Added

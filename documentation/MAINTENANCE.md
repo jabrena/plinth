@@ -35,7 +35,7 @@ Can you analyze the last Java version, Java 26 from @All-JEPS.md if exist some J
 Review that the list doesn´t any broken link to @/.cursor with .md files
 
 # Prompt to provide a release changelog
-Can you update the current changelog for 0.18.0 comparing git commits in relation to 0.17.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
+Can you update the current changelog for 0.19.0 comparing git commits in relation to 0.18.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
 Update version to 0.18.0 for all XML files and pom.xml in all maven modules and finally regenerate local skills with ./mvnw clean install -pl plinth-skills-generator -am
@@ -52,6 +52,7 @@ Update version to 0.18.0 for all XML files and pom.xml in all maven modules and 
 - [ ] Review Skill validation output
 - [ ] Review Skill security validation
 - [ ] Last review in docs (Manual)
+- [ ] Update CONTRIBUTORS.md
 - [ ] Optionally validate generated site HTML with Nu Html Checker (see [Validate site HTML](#validate-site-html-on-demand))
 - [ ] Refresh public skills/ release output with `./mvnw clean install -pl plinth-skills-generator -P release`
 - [ ] Verify that Pipeline is in Green
