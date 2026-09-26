@@ -7,7 +7,7 @@
         <authors>
             <author>Juan Antonio Breña Moral</author>
         </authors>
-        <version>0.19.0-SNAPSHOT</version>
+        <version>0.19.0</version>
         <license>Apache-2.0</license>
         <title>ISO/IEC 25010:2023 Quality Model Guidance for Java Enterprise Engineering</title>
         <description>Use as Java-focused ISO/IEC 25010:2023 engineering examples covering all nine product-quality characteristics for structured, repeatable Java Enterprise quality-attribute review.</description>

@@ -4,7 +4,7 @@ description: Use when you need to install the embedded project commands into com
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Embedded commands installer
 
@@ -47,6 +47,7 @@ Wait for the user answer and do not copy any file before the destination is expl
 
 Copy these exact source files from the skill `assets/commands/` directory into the chosen destination directory:
 
+- [onboarding.md](../assets/commands/onboarding.md)
 - [update-issue.md](../assets/commands/update-issue.md)
 - [explore-problem.md](../assets/commands/explore-problem.md)
 - [create-acceptance-criteria.md](../assets/commands/create-acceptance-criteria.md)
@@ -68,7 +69,7 @@ When a target file already exists, overwrite it only after clearly notifying the
 #### Step Constraints
 
 - **MUST** copy from embedded assets, not from external URLs
-- **MUST** install all thirteen commands as one set
+- **MUST** install all fourteen commands as one set
 - **MUST** preserve original file names
 
 ### Step 3: Report installation result

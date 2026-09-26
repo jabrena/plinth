@@ -4,7 +4,7 @@ description: Security profile guidance for OWASP Dependency Check.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Maven Plugins: pom.xml Configuration Best Practices
 

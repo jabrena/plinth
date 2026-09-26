@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic Docker and container image gui
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Java container image best practices with Docker
 

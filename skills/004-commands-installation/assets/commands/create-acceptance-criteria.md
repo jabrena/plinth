@@ -6,6 +6,9 @@ agent: 'plinth-business-analyst'
 tools:
   - 'Read'
   - 'Bash'
+metadata:
+  author: 'Juan Antonio Breña Moral'
+  version: '0.19.0'
 ---
 
 # create-acceptance-criteria

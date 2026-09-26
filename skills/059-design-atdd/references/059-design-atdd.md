@@ -4,7 +4,7 @@ description: Example-driven reference for classifying and reporting alignment be
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Acceptance Test-Driven Development Alignment Review
 

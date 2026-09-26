@@ -4,7 +4,7 @@ description: Use when you need to apply Java concurrency best practices — incl
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Java rules for Concurrency objects
 
@@ -31,7 +31,7 @@ These guidelines are built upon the following core principles:
 *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
 *   **Structured Concurrency**: Use `StructuredTaskScope` when a task forks related subtasks that should succeed, fail, cancel, and be observed as one unit. In Java 27, this is the seventh preview API from JEP 533 and requires `--enable-preview`.
 *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
-9.  **Cooperative Cancellation and Interruption Discipline**: Design tasks to be cancellable; always respond to interruption promptly. Do not swallow `InterruptedException`; either propagate it or restore the interrupt flag with `Thread.currentThread().interrupt()`. Prefer time-bounded operations (`orTimeout`, `completeOnTimeout`, timeouts on blocking calls), use `Future.cancel(true)`, prefer `Lock.lockInterruptibly()`/`tryLock(timeout, unit)` where applicable, and ensure cleanup on cancellation.
+9.  **Cooperative Cancellation and Interruption Discipline**: Design tasks to be cancellable and to react promptly to interruption. Do not swallow `InterruptedException`; either propagate it or restore the interrupt flag with `Thread.currentThread().interrupt()`. Prefer time-bounded operations (`orTimeout`, `completeOnTimeout`, timeouts on blocking calls), use `Future.cancel(true)`, prefer `Lock.lockInterruptibly()`/`tryLock(timeout, unit)` where applicable, and ensure cleanup on cancellation.
 10. **Backpressure and Overload Protection**: Prevent unbounded work queues and cascading failures by using bounded queues, appropriate rejection policies (e.g., `CallerRunsPolicy` for graceful shedding), semaphores/bulkheads to cap concurrency, request rate limiting, and the `Flow` (Reactive Streams) API when stream backpressure is needed.
 11. **Deadlock Avoidance and Lock Hygiene**: Establish global lock ordering, minimize lock scope, avoid holding locks while calling out to untrusted code, favor non-blocking algorithms or `tryLock` with timeouts where practical, and avoid nested synchronization across unrelated components.
 12. **Correct Use of ForkJoin and Parallel Streams**: Reserve ForkJoin/parallel streams for CPU-bound, short-lived, side-effect-free tasks. Avoid blocking I/O within the common pool; if blocking is unavoidable, use `ForkJoinPool.ManagedBlocker` or a dedicated executor. Do not rely on `parallelStream()` in request-scoped code paths unless measured and justified.

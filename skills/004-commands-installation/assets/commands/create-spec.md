@@ -8,6 +8,9 @@ tools:
   - 'Write'
   - 'Edit'
   - 'Bash'
+metadata:
+  author: 'Juan Antonio Breña Moral'
+  version: '0.19.0'
 ---
 
 # create-spec

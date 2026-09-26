@@ -5,7 +5,7 @@
         <authors>
             <author>Juan Antonio Breña Moral</author>
         </authors>
-        <version>0.19.0-SNAPSHOT</version>
+        <version>0.19.0</version>
         <license>Apache-2.0</license>
         <title>LLM Wiki Knowledge Base</title>
         <description>Build and maintain an LLM-maintained wiki — a persistent, compounding markdown knowledge base synthesized from curated raw sources through a three-layer architecture and repeatable ingest, query, and lint operations.</description>
@@ -233,7 +233,7 @@ add parameters. see the scaling laws paper. there might be a data quality angle.
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="markdown"><![CDATA[<!-- index.md -->
+                    <code-block language="markdown"><![CDATA[File: index.md
 
 ## Concepts
 
@@ -244,7 +244,7 @@ add parameters. see the scaling laws paper. there might be a data quality angle.
 
 - [[scaling-laws]] — 2026-02 report deriving compute-optimal scaling ratios
 
-<!-- log.md -->
+File: log.md
 
 ## [2026-02-18] ingest | Scaling Laws report
 
@@ -256,12 +256,12 @@ concepts/self-attention.md. Flagged contradiction with entities/openai.md on opt
 Answered from concepts/compute-optimal-training.md. Filed synthesis to concepts/budget-allocation.md.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="markdown"><![CDATA[<!-- index.md -->
+                    <code-block language="markdown"><![CDATA[File: index.md
 - self-attention.md
 - compute stuff
 - the paper
 
-<!-- log.md -->
+File: log.md
 - did some ingesting today
 - answered a few questions
 - cleaned things up]]></code-block>

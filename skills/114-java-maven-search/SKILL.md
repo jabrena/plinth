@@ -4,7 +4,7 @@ description: Routes Maven version questions to the right workflow by choosing pr
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.18.0
+  version: 0.19.0
 ---
 # Maven version workflow router
 
