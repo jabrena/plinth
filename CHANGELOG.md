@@ -28,13 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Skills**:
   - Removed `@031-architecture-adr-functional-requirements` and `@032-architecture-adr-non-functional-requirements`; requirement discovery is covered by `/explore-problem` (`@021`–`@025`) and quality attributes by `@814-regulations-iso-25010` (#1136)
 
-### Security
-
-- Parsed skill generator XML sources through a hardened XInclude parser (secure processing, no DOCTYPE or external entities, `xi:include` restricted to the resource root) to block XXE and XInclude file reads (#1197)
-- `markdown-validator` skips links that resolve to non-public addresses and re-validates every redirect hop to prevent SSRF (#1197)
-- The risk-assessment acceptance example serializes its request body with Jackson to prevent JSON injection (#1197)
-- Pinned third-party GitHub Actions to full commit SHAs (#1197)
-
 ## [0.18.0] 2026-07-27
 
 ### Added

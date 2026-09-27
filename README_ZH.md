@@ -18,7 +18,7 @@
 
 ## 项目概览
 
-- 13 Commands
+- 14 Commands
 - 9 Agents
 - 125 Skills
 
@@ -44,9 +44,11 @@ npx skills add jabrena/plinth --skill '*' --agent codex -y
 npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
-### 查看实际效果
+## 使用 Skills 重构代码
 
-向你的智能体提出：
+本项目为 Java 企业级开发提供了一套完整的 Agent Skills，涵盖：`基于 Maven 的构建系统`、`设计`、`编码`、`测试`、`可观测性`、`重构与 JMH 基准测试`、`使用 JMeter/Gatling 进行性能测试`、`使用 Async Profiler/OpenJDK 工具进行性能分析`、`文档`、`Spring Boot`、`Quarkus`、`Micronaut`、`OpenAPI`、`WireMock`、`Docker`、`SQL/NoSQL`、`安全`和 `AGENTS.md`。
+
+**用户提示词示例：**
 
 ```text
 使用 @110-java-maven-best-practices 审查位于 examples/@maven/maven-demo 的 Maven 项目。

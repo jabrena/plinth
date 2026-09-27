@@ -18,7 +18,7 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 ## Proyecto de un vistazo
 
-- 13 Commands
+- 14 Commands
 - 9 Agents
 - 125 Skills
 
@@ -44,9 +44,11 @@ npx skills add jabrena/plinth --skill '*' --agent codex -y
 npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
-### Míralo en acción
+## Refactoriza tu código con Skills
 
-Pide a tu agente:
+El proyecto ofrece un conjunto completo de Agent Skills para el desarrollo Java Enterprise que cubre aspectos como: `Sistema de build basado en Maven`, `Diseño`, `Programación`, `Testing`, `Observabilidad`, `Refactoring y benchmarking con JMH`, `Pruebas de rendimiento con JMeter/Gatling`, `Profiling con Async Profiler/herramientas de OpenJDK`, `Documentación`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock`, `Docker`, `SQL/NoSQL`, `Seguridad` y `AGENTS.md`.
+
+**Ejemplo de prompt de usuario:**
 
 ```text
 Usa @110-java-maven-best-practices para revisar este proyecto Maven ubicado en examples/@maven/maven-demo
