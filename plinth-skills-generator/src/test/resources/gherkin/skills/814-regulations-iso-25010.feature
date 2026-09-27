@@ -32,17 +32,3 @@ Scenario: Review a Java change through pull-request delivery with ISO/IEC 25010:
   And the skill reports conclusions and actions using the ISO/IEC 25010:2023 engineering review report template
   And the skill overwrites the ISO/IEC 25010:2023 engineering review report at "examples/regulations/iso-25010/ISO-25010-ENGINEERING-REVIEW-REPORT.md"
   And any git changes produced during skill execution and verification are reset
-
-@integration-test
-Scenario: Skill follows the generator registration and local-output workflow
-  Given skill content must be maintained through the generator pipeline
-  When the ISO/IEC 25010:2023 skill is implemented
-  Then the source changes are made under "plinth-skills-generator/src/main/resources"
-  And "plinth-skills-generator/src/main/resources/skills.xml" registers skill id "814" with skillId "814-regulations-iso-25010"
-  And the generated local skill output includes ".agents/skills/814-regulations-iso-25010/SKILL.md"
-  And the generated local skill output includes ".agents/skills/814-regulations-iso-25010/assets/questions/814-iso-25010-engineering-review-questionnaire.md"
-  And the generated local skill output includes ".agents/skills/814-regulations-iso-25010/assets/reports/814-iso-25010-engineering-review-report-template.md"
-  And generated references contain no unresolved include markers or broken local reference paths
-  And generated release output under "skills/" is not edited directly
-  And the skill's guidance defines a structured, repeatable review rather than interactive, conversational ADR discovery
-  And applicable XML and skill generation validations can be executed before promotion

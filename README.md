@@ -18,7 +18,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Project at a glance
 
-- 13 Commands
+- 14 Commands
 - 9 Agents
 - 125 Skills
 
@@ -62,7 +62,7 @@ You can use the project in 2 ways:
 - Use the AI-Native development workflow
 - Refactor your code with Skills
 
-#### Using AI-Native development workflow
+## Using the AI-Native development workflow
 
 Prepare the repository with `/onboarding`, then identify an issue in your `Kanban` dashboard from `Atlasian Jira`, `Github Issues` or `Azure DevOps` and apply the following workflow:
 
@@ -212,9 +212,11 @@ Review Java systems, AI models, and how GenAI tools are used across applications
 
 **Note:** This set of skills could be a good complement for the future [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
 
-#### Refactor your code with Skill
+## Refactor your code with Skill
 
-Ask your agent:
+The project provides a complete set of Agent Skills for Java Enterprise development covering aspects like: `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter/Gatling`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock`, `Docker`, `SQL/NoSQL`, `Security` & `AGENTS.md`
+
+**User prompt example:**
 
 ```text
 Use @110-java-maven-best-practices to review this Maven project located in examples/@maven/maven-demo
