@@ -5,6 +5,10 @@
         <lastmod>2015-02-01</lastmod>
     </url>
     <url>
+        <loc>https://jabrena.github.io/plinth/blog/2026/09/release-0.19.0.html</loc>
+        <lastmod>2026-09-28</lastmod>
+    </url>
+    <url>
         <loc>https://jabrena.github.io/plinth/blog/2026/09/validating-hypotheses-about-plinth-workflow-with-a-benchmark-part-2.html</loc>
         <lastmod>2026-09-05</lastmod>
     </url>
@@ -93,14 +97,6 @@
         <lastmod>2025-07-12</lastmod>
     </url>
     <url>
-        <loc>https://jabrena.github.io/plinth/courses/profile-memory-leak/module-2-profiling.html</loc>
-        <lastmod>2026-09-26</lastmod>
-    </url>
-    <url>
-        <loc>https://jabrena.github.io/plinth/courses/java-skills/module-2-code-quality.html</loc>
-        <lastmod>2026-09-26</lastmod>
-    </url>
-    <url>
         <loc>https://jabrena.github.io/plinth/courses/profile-memory-leak/module-1-foundations.html</loc>
         <lastmod>2026-09-26</lastmod>
     </url>
@@ -146,6 +142,14 @@
     </url>
     <url>
         <loc>https://jabrena.github.io/plinth/courses/java-skills/module-3-secure-coding.html</loc>
+        <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+        <loc>https://jabrena.github.io/plinth/courses/profile-memory-leak/module-2-profiling.html</loc>
+        <lastmod>2026-09-26</lastmod>
+    </url>
+    <url>
+        <loc>https://jabrena.github.io/plinth/courses/java-skills/module-2-code-quality.html</loc>
         <lastmod>2026-09-26</lastmod>
     </url>
     <url>

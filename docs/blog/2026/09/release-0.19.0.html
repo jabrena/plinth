@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Plinth 0.19.0? - Plinth</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Plinth"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Plinth</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/plinth/dvbe26/index.html" target="_blank">Devoxx BE 2026</a>
+      <a href="https://jabrena.github.io/plinth/jcconf-2026/index.html" target="_blank">JCConf 2026</a>
+      <a href="https://jabrena.github.io/plinth/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/plinth/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/java-skills/index.html">Skill Agents for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Plinth 0.19.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-09-28
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+    <a href="../../../tags/skills.html">skills</a>
+    <a href="../../../tags/java.html">java</a>
+    <a href="../../../tags/agents.html">agents</a>
+    <a href="../../../tags/commands.html">commands</a>
+    <a href="../../../tags/openspec.html">openspec</a>
+    <a href="../../../tags/benchmark.html">benchmark</a>
+    <a href="../../../tags/regulations.html">regulations</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<p><code>Plinth</code> is an AI-native engineering toolkit for the modern Java Enterprise SDLC, built around reusable <code>Commands</code>, <code>Agents</code>, <code>Skills</code>, and <code>MCP Servers</code>. You can use this project to provide an <code>AI-native workflow</code> to your <code>Java Engineering teams</code>, or just use it to refactor aspects of your project with one of the most popular <code>Agent Skill collections for Java Enterprise development</code> in marketplaces like <a href="https://www.skills.sh/">Skills.sh</a>.</p>
+<hr />
+<p>This release focuses on three things. First, a new <code>/onboarding</code> command prepares a repository for issue-driven work, so the workflow introduced in <code>0.18.0</code> starts from a known, unambiguous state. Second, requirement discovery gets simpler: the <code>ISO/IEC 25010:2023 quality model</code> becomes a first-class engineering review skill, replacing the two older ADR-based requirement skills. Third, the benchmark reaches Part 2, isolating what the orchestration command adds once a written OpenSpec plan already exists. The idea behind all three is the same one that guided the previous release: <code>&quot;better code generation begins before code generation&quot;</code> — and it also begins with an honest measurement of what each step actually buys. In general, this is a small, operational release covering the period between <a href="https://jcconf.tw/2026/"><code>JCConf 2026</code></a> and <a href="https://devoxx.be/"><code>Devoxx BE 2026</code></a>.</p>
+<p>Thanks to our community members in <a href="https://www.google.com/maps/place/Des+Moines"><code>Des Moines</code></a>, <a href="https://www.google.com/maps/search/?api=1&amp;query=Singapore"><code>Singapore</code></a>, <a href="https://www.google.com/maps/place/Taipei"><code>Taipei</code></a>, <a href="https://www.google.com/maps/place/Madrid"><code>Madrid</code></a>, and <a href="https://www.google.com/maps/search/?api=1&amp;query=Shanghai"><code>Shanghai</code></a>. 👋👋👋</p>
+<p>This article is divided into the following sections:</p>
+<ul>
+<li><a href="#community-first">Community first!</a></li>
+<li><a href="#what-are-the-top-10-skills-from-this-project-in-skillssh">What are the top 10 skills from this project on Skills.sh?</a></li>
+<li><a href="#onboarding-a-repository-before-issue-driven-work">Onboarding a repository before issue-driven work</a></li>
+<li><a href="#reviewing-quality-attributes-with-iso-iec-25010-2023">Reviewing quality attributes with ISO/IEC 25010:2023</a></li>
+<li><a href="#comparing-plinth-commands-with-openspec-and-spec-kit">Comparing Plinth commands with OpenSpec and Spec Kit</a></li>
+<li><a href="#testing-the-workflow-with-a-reproducible-benchmark-part-2">Testing the workflow with a reproducible benchmark, Part 2</a></li>
+<li><a href="#jcconf-2026">How was the experience in JCConf 2026?</a></li>
+<li><a href="#doubts">Do you still have questions about the project?</a></li>
+<li><a href="#next-steps">Next steps</a></li>
+</ul>
+<p>If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use <a href="https://github.com/jabrena/plinth/discussions"><code>GitHub Discussions</code></a>.</p>
+<p><strong>Help this project grow:</strong> <a href="https://github.com/sponsors/jabrena">If this project helps your team, become a sponsor.</a></p>
+<p><a id="community-first"></a></p>
+<h2>Community first!</h2>
+<p>In this release, I want to thank <a href="https://github.com/lealoureiro"><code>Leandro Loureiro</code></a> and <a href="https://github.com/wipheg"><code>Sangwon Park</code></a> for contributing benchmark samples. Benchmark Part 2 took roughly <code>4 weeks</code> to collect samples across Claude Code, Codex, and Grok and to analyze the results, growing from <code>54</code> samples in Part 1 to <code>217</code> samples in Part 2.</p>
+<p>I also want to thank <a href="https://secur0.com/en"><code>SecurO</code></a>, the cybersecurity company behind the largest community of ethical hackers in Spain, for their security expertise and the insights that helped improve this project. Many thanks to <a href="https://www.linkedin.com/in/javier-juarez-zarruk/">Javier Juárez Zarruk</a>, <a href="https://www.linkedin.com/in/daniel-ximenez/">Daniel Ximenez</a>, and <a href="https://www.linkedin.com/in/arnau-cebri%C3%A1n-i-ortega-a65360211">Arnau Cebrián</a> for the support.</p>
+<p><a href="https://secur0.com/en"><img src="/plinth/images/2026/9/secur0-logo.png" alt="" /></a></p>
+<p>If you would like to participate, review the open issues labeled <a href="https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22"><code>good first issue</code></a>, propose improvements, test the workflow with another agent tool, or share your experience in <a href="https://github.com/jabrena/plinth/discussions"><code>GitHub Discussions</code></a>.</p>
+<p><a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a></p>
+<h2>What are the top 10 skills from this project on Skills.sh?</h2>
+<p>The <a href="https://www.skills.sh/jabrena/plinth">Skills.sh registry</a> reports <code>29.1K</code> installs in total — roughly <code>48%</code> growth since the <a href="https://jabrena.github.io/plinth/blog/2026/08/release-0.18.0.html#what-are-the-top-10-skills-from-this-project-in-skillssh"><code>0.18.0</code> release</a>. Compared with <code>0.18.0</code>, these are the current top 10 skills among Skills.sh users:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Plinth rank&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
+      <th>Skills.sh Search</th>
+      <th>Skills.sh Search rank</th>
+      <th>Skill</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>#1</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=maven">Maven</a></td>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices"><code>110-java-maven-best-practices</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#2</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20object%20oriented">Java object oriented</a></td>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design"><code>121-java-object-oriented-design</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#3</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20security">Java security</a></td>
+      <td><code>#28</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/124-java-secure-coding"><code>124-java-secure-coding</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#4</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20unit%20testing">Java unit testing</a></td>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/131-java-testing-unit-testing"><code>131-java-testing-unit-testing</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#5</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20refactoring">Java refactoring</a></td>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/141-java-refactoring-with-modern-features"><code>141-java-refactoring-with-modern-features</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#6</code> ↗️ <code>+2</code></td>
+      <td><a href="https://www.skills.sh/search?q=maven">Maven</a></td>
+      <td><code>#3</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies"><code>111-java-maven-dependencies</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#7</code> 🆕</td>
+      <td><a href="https://www.skills.sh/search?q=java%20type%20design">Java type design</a></td>
+      <td><code>#1</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/122-java-type-design"><code>122-java-type-design</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#8</code> ↘️ <code>-2</code></td>
+      <td><a href="https://www.skills.sh/search?q=java%20concurrency">Java concurrency</a></td>
+      <td><code>#2</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/125-java-concurrency"><code>125-java-concurrency</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#9</code> ➡️ <code>=</code></td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#31</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/302-frameworks-spring-boot-rest"><code>302-frameworks-spring-boot-rest</code></a></td>
+    </tr>
+    <tr>
+      <td><code>#10</code> 🆕</td>
+      <td><a href="https://www.skills.sh/search?q=spring%20boot">Spring Boot</a></td>
+      <td><code>#32</code></td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/301-frameworks-spring-boot-core"><code>301-frameworks-spring-boot-core</code></a></td>
+    </tr>
+  </tbody>
+</table>
+<p><strong>Note:</strong> The <code>Skills.sh Search rank</code> column shows the skill's position inside that <code>Skills.sh</code> search category when results are sorted by install count.</p>
+<p>Two changes stand out. <code>@122-java-type-design</code> enters the table for the first time, and <code>Spring Boot</code> now has two skills in the top 10 — <code>@301-frameworks-spring-boot-core</code> joins <code>@302-frameworks-spring-boot-rest</code> — which suggests framework-specific guidance is becoming as relevant to users as the core Java skills. <code>@142-java-functional-programming</code> and <code>@128-java-generics</code> leave the top 10 this time, although both remain close behind.</p>
+<p><a id="onboarding-a-repository-before-issue-driven-work"></a></p>
+<h2>Onboarding a repository before issue-driven work</h2>
+<p>The <code>0.18.0</code> release described a complete command sequence from a raw issue to an archived OpenSpec change. That sequence assumes two things about the repository it runs in: that agents have root guidance describing how the project works, and that there is exactly one OpenSpec project to write changes into. When either assumption fails, the first command in the chain pays the cost — an agent guesses where specifications live, or two OpenSpec directories quietly diverge.</p>
+<p>The new <code>/onboarding</code> command makes those prerequisites explicit and establishes:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Prerequisite</th>
+      <th>When present</th>
+      <th>When missing</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Root <code>AGENTS.md</code></td>
+      <td>Preserved unchanged</td>
+      <td>Created by delegating to <a href="https://www.skills.sh/jabrena/plinth/200-agents-md"><code>@200-agents-md</code></a></td>
+    </tr>
+    <tr>
+      <td>Exactly one OpenSpec project</td>
+      <td>Preserved, wherever it is located</td>
+      <td>Initialized by delegating to <a href="https://www.skills.sh/jabrena/plinth/042-planning-openspec"><code>@042-planning-openspec</code></a>, defaulting to <code>documentation/openspec</code></td>
+    </tr>
+    <tr>
+      <td>More than one OpenSpec project</td>
+      <td colspan="2">Reports every conflicting path as technical debt and stops before any change</td>
+    </tr>
+  </tbody>
+</table>
+<p>The command is deliberately conservative. It discovers every <code>openspec</code> directory recursively before touching anything, never modifies an existing <code>AGENTS.md</code> or OpenSpec project, rejects result paths that escape the repository, and never runs its two interactive delegations concurrently. Running it again on an onboarded repository performs no writes and simply reports where the OpenSpec project lives. That makes <code>/onboarding</code> safe to run as the first step on any repository — new or existing — before the rest of the workflow begins.</p>
+<p><a id="reviewing-quality-attributes-with-iso-iec-25010-2023"></a></p>
+<h2>Reviewing quality attributes with ISO/IEC 25010:2023</h2>
+<p>The <code>0.18.0</code> release introduced <code>/explore-problem</code>, which investigates an issue through five lenses, including <a href="https://www.skills.sh/jabrena/plinth/025-quality-attribute-discovery"><code>@025-quality-attribute-discovery</code></a>. With that lens in place, two older skills — <code>@031-architecture-adr-functional-requirements</code> and <code>@032-architecture-adr-non-functional-requirements</code> — were covering the same ground through a different entry point. This release removes them: requirement discovery now lives in <code>/explore-problem</code> (<code>@021</code>–<code>@025</code>), and structured quality-attribute review lives in a new skill.</p>
+<p>The new <a href="https://www.skills.sh/jabrena/plinth/814-regulations-iso-25010"><code>@814-regulations-iso-25010</code></a> skill runs a structured, repeatable review of a Java enterprise system against the ISO/IEC 25010:2023 product quality model, covering all nine quality characteristics:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Characteristic</th>
+      <th>Example Java engineering evidence</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td>Functional Suitability</td><td>Acceptance tests traced to requirements</td></tr>
+    <tr><td>Performance Efficiency</td><td>Load and soak test results</td></tr>
+    <tr><td>Compatibility</td><td>API contracts and contract tests</td></tr>
+    <tr><td>Interaction Capability</td><td>Error responses and API usability</td></tr>
+    <tr><td>Reliability</td><td>Circuit breakers, retries, and timeouts</td></tr>
+    <tr><td>Security</td><td>Authentication and authorization implementation</td></tr>
+    <tr><td>Maintainability</td><td>Module boundaries and static analysis output</td></tr>
+    <tr><td>Flexibility</td><td>Externalized configuration</td></tr>
+    <tr><td>Safety</td><td>Operational guardrails and fail-safe behavior</td></tr>
+  </tbody>
+</table>
+<p>It ships with a questionnaire, a report template, examples, and an acceptance prompt, and it produces an engineering review report rather than running an interactive ADR discovery session. Each finding is classified as a confirmed gap, a potential gap, or no identified concern, and is handed to an explicit owner — architecture, product, security, platform, or operations — when it needs a decision beyond engineering review.</p>
+<p>Like the rest of the <code>8xx</code> regulations family, the skill is careful about what it is not: it is not certification advice, a compliance decision, or an audit conclusion. It helps a Java team make quality visible and reviewable, and leaves the formal determination to qualified owners.</p>
+<p>In upcoming releases, the skill <a href="https://www.skills.sh/jabrena/plinth/814-regulations-iso-25010"><code>@814-regulations-iso-25010</code></a> will replace <a href="https://www.skills.sh/jabrena/plinth/025-quality-attribute-discovery"><code>@025-quality-attribute-discovery</code></a> within <code>/explore-problem</code>.</p>
+<p><a id="comparing-plinth-commands-with-openspec-and-spec-kit"></a></p>
+<h2>Comparing Plinth commands with OpenSpec and Spec Kit</h2>
+<p>The <a href="https://jabrena.github.io/plinth/blog/2026/08/release-0.18.0.html#comparing-plinth-commands-with-openspec-and-spec-kit"><code>0.18.0</code> article</a> compared <code>Plinth commands</code> against <code>OpenSpec</code> and <code>Spec Kit</code> phases. <code>0.19.0</code> adds <code>/onboarding</code> at the start of that mapping:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Plinth Command</th>
+      <th>OpenSpec phase</th>
+      <th>Spec Kit phase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/onboarding</code></td>
+      <td>Project setup<br><code>openspec init</code></td>
+      <td><code>specify init</code>, <code>/speckit.constitution</code></td>
+    </tr>
+    <tr>
+      <td><code>/update-issue</code></td>
+      <td>Issue intake<br><code>openspec list</code></td>
+      <td><code>/speckit.specify</code> input</td>
+    </tr>
+    <tr>
+      <td><code>/explore-problem</code></td>
+      <td>— (precedes OpenSpec)</td>
+      <td><code>/speckit.specify</code> input, <code>/speckit.clarify</code></td>
+    </tr>
+    <tr>
+      <td><code>/create-acceptance-criteria</code></td>
+      <td>— (precedes OpenSpec)</td>
+      <td><code>/speckit.clarify</code>, <code>/speckit.checklist</code></td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code></td>
+      <td>Proposal and Specification<br><code>openspec new change &lt;change-name&gt;</code>, <code>openspec show &lt;change-name&gt;</code></td>
+      <td><code>/speckit.specify</code> plus <code>/speckit.checklist</code></td>
+    </tr>
+    <tr>
+      <td><code>/explore-design</code></td>
+      <td>Task planning and alignment review<br><code>openspec validate --all</code></td>
+      <td><code>/speckit.plan</code> and <code>/speckit.tasks</code></td>
+    </tr>
+    <tr>
+      <td><code>/implement-spec</code></td>
+      <td>Implementation<br><code>openspec show &lt;change-name&gt;</code></td>
+      <td><code>/speckit.implement</code></td>
+    </tr>
+    <tr>
+      <td><code>/close-spec</code></td>
+      <td>Review and closure<br><code>openspec archive &lt;change-name&gt;</code></td>
+      <td><code>/speckit.analyze</code> and <code>/speckit.converge</code></td>
+    </tr>
+  </tbody>
+</table>
+<p><code>/onboarding</code> differs from <code>openspec init</code> and <code>specify init</code> in one important way: it does not just initialize; it also refuses to proceed when the repository is ambiguous. A repository with two OpenSpec projects is reported as technical debt instead of silently getting a third.</p>
+<p><a id="testing-the-workflow-with-a-reproducible-benchmark-part-2"></a></p>
+<h2>Testing the workflow with a reproducible benchmark, Part 2</h2>
+<p>The <a href="https://jabrena.github.io/plinth/blog/2026/08/release-0.18.0.html#testing-the-workflow-with-a-reproducible-benchmark"><code>0.18.0</code> release</a> introduced a benchmark harness under <a href="https://github.com/jabrena/plinth/tree/main/benchmarks"><code>benchmarks/</code></a>. Part 1 showed one scenario clearly ahead of the rest, but it could not say <em>why</em>, because that scenario changed two things at once: the OpenSpec plan and the orchestration command that executes it.</p>
+<p>Part 2 separates them. This release expands the harness with a new direct scenario, a second problem, and v2 solution snapshot metrics:</p>
+<table>
+  <thead>
+    <tr>
+      <th>Addition</th>
+      <th>Purpose</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>scenario5</code></td>
+      <td>The same OpenSpec plan as <code>scenario4</code>, implemented directly with <code>/implement-spec</code> forbidden — a clean A/B where orchestration is the only variable.</td>
+    </tr>
+    <tr>
+      <td>Problem 2 — Greek Gods API</td>
+      <td>A Quarkus persistence-and-scheduling problem that joins the original Spring Boot fan-out-and-sum one, so every finding can be read per problem.</td>
+    </tr>
+    <tr>
+      <td>New samples</td>
+      <td>Results from Claude Code (Fable 5, Opus 5, Sonnet 5), Codex GPT-5, and Grok 4.5, growing the corpus from 54 samples to 217 samples.</td>
+    </tr>
+  </tbody>
+</table>
+<p>The number of samples grew roughly fourfold, from <code>54</code> in Part 1 to <code>217</code> in Part 2.</p>
+<p>The results revisit the three hypotheses from Part 1:</p>
+<ul>
+<li><strong>Orchestration reduces rework beyond the written plan — conditionally supported.</strong> On the harder Quarkus problem, the orchestrated scenario passed every run with half the average rework of the direct one. On the simpler fan-out problem, the gap closed, while the direct scenario was about <code>36%</code> faster by median wall time.</li>
+<li><strong>The delegation command drives skill and agent use — supported.</strong> With the same plan but no orchestration, runs used half the skills and almost no agents. Richer documents do not pull the library in; the command does.</li>
+<li><strong>Written architecture holds regardless of who executes it — supported.</strong> The hexagonal scaffold and its boundary test appeared in 67 of 68 direct runs, because the OpenSpec input spells them out. What neither workflow controls yet is the dependency graph.</li>
+</ul>
+<p>The practical conclusion is a more precise recommendation than Part 1 allowed: reach for <code>/implement-spec</code> on integration-heavy work, not by default. That is exactly the kind of statement a benchmark should make possible — not a declaration of a universal winner, but evidence about when each step of the workflow pays for itself.</p>
+<p>For the detailed methodology and findings, read <a href="/plinth/blog/2026/09/validating-hypotheses-about-plinth-workflow-with-a-benchmark-part-2.html">Validating Hypotheses About the Plinth Workflow with a Benchmark, Part 2</a>.</p>
+<p>In upcoming releases, <code>/implement-spec</code> will be improved to reduce latency.</p>
+<p><a id="jcconf-2026"></a></p>
+<h2>How was the experience in JCConf 2026?</h2>
+<p>JCConf 2026 was a one-day conference held in Taipei, and it was an excellent place to learn how people from <code>Taiwan</code>, <code>China</code>, <code>Japan</code>, and other countries in <code>Asia</code> use agentic development daily. I am sincerely grateful to <a href="https://www.linkedin.com/in/nicolas-lu-153bb7286">Nicolas Lu</a> and the whole <strong>JCConf team</strong> for their full support.</p>
+<table>
+  <tbody>
+    <tr>
+      <td><a href="https://jcconf.tw/2026/"><img src="/plinth/images/2026/9/jcconf-1.png" alt="JCConf 2026"></a></td>
+      <td><a href="https://jcconf.tw/2026/"><img src="/plinth/images/2026/9/jcconf-2.png" alt="JCConf 2026"></a></td>
+    </tr>
+  </tbody>
+</table>
+<p>The talk went smoothly, and I achieved my goal of raising awareness of a few points teams should consider to avoid production issues when using this kind of tooling. If you didn't attend the talk, you can review the <a href="https://jabrena.github.io/plinth/jcconf-2026/index.html">slides</a>.</p>
+<p><a id="doubts"></a></p>
+<h2>Do you still have questions about the project?</h2>
+<p>If you are interested in learning how to apply an AI-native workflow to Java Enterprise development, you can attend the following workshop at <code>Devoxx Belgium 2026</code>.</p>
+<p><a href="https://devoxx.be/"><img src="/plinth/images/2026/9/devoxx-workshop.png" alt="" /></a></p>
+<p><strong>Agenda (180 min):</strong></p>
+<ul>
+<li>Introduction to Agentic Development</li>
+<li>Run Exercise 1</li>
+<li>Break</li>
+<li>Run Exercise 2</li>
+<li>Advanced concepts</li>
+<li>Q&amp;A</li>
+</ul>
+<p><strong>Plinth Workflow:</strong></p>
+<pre><code class="language-text">/onboarding
+  |
+  v
+Issue
+  |
+  v
+/update-issue --&gt; /explore-problem --&gt; /create-acceptance-criteria
+  |
+  v
+/create-spec --&gt; /explore-design
+  |
+  v
+/implement-spec
+  |
+  v
+/close-spec
+</code></pre>
+<p>The workshop shows how agents implement changes faster. But a green PR can still be wrong: code that compiles, passes tests and security scans, and meets its acceptance criteria can break production when the consequences live outside the repository. A rename like <code>customerId</code> → <code>clientId</code> is locally correct, yet it can ripple through OpenAPI clients, Kafka events, Flyway migrations, and data pipelines. Implementation speeds up; context and review capacity do not.</p>
+<p><a href="https://devoxx.be/"><img src="/plinth/images/2026/9/devoxx-talk.png" alt="" /></a></p>
+<p>If you want to go beyond the green PR, the talk explains why Human-in-the-Loop (HITL) is still required and how to make it meaningful rather than <em>human-as-a-button</em>. It walks through PR gates, shows how laws, standards, and frameworks such as the <code>EU AI Act</code>, <code>GDPR</code>, <code>CRA</code>, <code>NIS2</code>, and <code>DORA</code> become engineering controls, and closes with steps a team can apply next Monday. Agents may propose; accountable humans decide. Join the talk <a href="https://m.devoxx.com/events/dvbe26/talks/7017/the-importance-of-hitl-to-avoid-chaos-and-eu-regulations-for-ai"><code>The Importance of HITL to Avoid Chaos and EU Regulations for AI</code></a> at <a href="https://devoxx.be/"><code>Devoxx BE 2026</code></a>.</p>
+<p><a id="next-steps"></a></p>
+<h2>Next steps</h2>
+<p>For the next release, we plan to work on a few topics:</p>
+<ul>
+<li>Reduce the latency of <code>/implement-spec</code> on simple problems, as suggested by the Part 2 benchmark.</li>
+<li>Add <code>Katas</code> that help users learn <code>Plinth</code> incrementally.</li>
+<li>Add support for <code>agent plugins</code>.</li>
+<li>Go deeper into the EU regulation ecosystem for <code>GenAI</code>.</li>
+</ul>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/plinth" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
