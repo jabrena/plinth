@@ -6,13 +6,11 @@ author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 
-`Plinth` is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable `Commands`, `Agents`, `Skills`, and `MCP Servers`. You can use this project to provide your `Engineering teams` an `AI Native workflow` or use the project to refactor aspects of your project with one of most popular `Agent Skill collection for Java Enterprise development` in the Skill marketplaces.
+`Plinth` is an AI-native engineering toolkit for the modern Java Enterprise SDLC, built around reusable `Commands`, `Agents`, `Skills`, and `MCP Servers`. You can use this project to provide an `AI-native workflow` to your `Java Engineering teams`, or just use it to refactor aspects of your project with one of the most popular `Agent Skill collections for Java Enterprise development` in marketplaces like [Skills.sh](https://www.skills.sh/).
 
 ---
 
-This release focuses on three things. First, a new `/onboarding` command prepares a repository for issue-driven work, so the workflow introduced in `0.18.0` starts from a known, unambiguous state. Second, requirement discovery gets simpler: the `ISO/IEC 25010:2023 quality model` becomes a first-class engineering review skill, replacing the two older ADR-based requirement skills. Third, the benchmark reaches Part 2, isolating what the orchestration command adds once a written OpenSpec plan already exists. The idea behind all three is the same one that guided the previous release: `"better code generation begins before code generation"` — and it also begins with an honest measurement of what each step actually buys.
-
-In General, this is a small and operational release between the period between [`JCConf 2026`](https://jcconf.tw/2026/) and [`Devoxx BE`](https://devoxx.be/).
+This release focuses on three things. First, a new `/onboarding` command prepares a repository for issue-driven work, so the workflow introduced in `0.18.0` starts from a known, unambiguous state. Second, requirement discovery gets simpler: the `ISO/IEC 25010:2023 quality model` becomes a first-class engineering review skill, replacing the two older ADR-based requirement skills. Third, the benchmark reaches Part 2, isolating what the orchestration command adds once a written OpenSpec plan already exists. The idea behind all three is the same one that guided the previous release: `"better code generation begins before code generation"` — and it also begins with an honest measurement of what each step actually buys. In general, this is a small, operational release covering the period between [`JCConf 2026`](https://jcconf.tw/2026/) and [`Devoxx BE 2026`](https://devoxx.be/).
 
 Thanks to our community members in [`Des Moines`](https://www.google.com/maps/place/Des+Moines), [`Singapore`](https://www.google.com/maps/search/?api=1&query=Singapore), [`Taipei`](https://www.google.com/maps/place/Taipei), [`Madrid`](https://www.google.com/maps/place/Madrid), and [`Shanghai`](https://www.google.com/maps/search/?api=1&query=Shanghai). 👋👋👋
 
@@ -24,6 +22,7 @@ This article is divided into the following sections:
 - [Reviewing quality attributes with ISO/IEC 25010:2023](#reviewing-quality-attributes-with-iso-iec-25010-2023)
 - [Comparing Plinth commands with OpenSpec and Spec Kit](#comparing-plinth-commands-with-openspec-and-spec-kit)
 - [Testing the workflow with a reproducible benchmark, Part 2](#testing-the-workflow-with-a-reproducible-benchmark-part-2)
+- [How was the experience in JCConf 2026?](#jcconf-2026)
 - [Do you still have questions about the project?](#doubts)
 - [Next steps](#next-steps)
 
@@ -35,9 +34,9 @@ If you have questions about the project, how to customize it for your team, how 
 
 ## Community first!
 
-In this release, I want to thank [`Leandro Loureiro`](https://github.com/lealoureiro) and [`Sangwon Park`](https://github.com/wipheg) for contributing benchmark samples. Part 2 took roughly `3.5 weeks` of collecting samples across Claude Code, Codex, and Grok and analyzing the results, growing from `54` samples in Part 1 to `217` samples in Part 2.
+In this release, I want to thank [`Leandro Loureiro`](https://github.com/lealoureiro) and [`Sangwon Park`](https://github.com/wipheg) for contributing benchmark samples. Benchmark Part 2 took roughly `4 weeks` to collect samples across Claude Code, Codex, and Grok and to analyze the results, growing from `54` samples in Part 1 to `217` samples in Part 2.
 
-I also want to thank [`SecurO`](https://secur0.com/en), the Cybersecurity company behing the largest community of ethical hackers in spain for the security support and the security insights to improve this project. Many thanks [Arnau Cebrian](https://www.linkedin.com/in/arnau-cebri%C3%A1n-i-ortega-a65360211) for the support.
+I also want to thank [`SecurO`](https://secur0.com/en), the cybersecurity company behind the largest community of ethical hackers in Spain, for their security expertise and the insights that helped improve this project. Many thanks to [Javier Juárez Zarruk](https://www.linkedin.com/in/javier-juarez-zarruk/), [Daniel Ximenez](https://www.linkedin.com/in/daniel-ximenez/), and [Arnau Cebrián](https://www.linkedin.com/in/arnau-cebri%C3%A1n-i-ortega-a65360211) for the support.
 
 [![](/plinth/images/2026/9/secur0-logo.png)](https://secur0.com/en)
 
@@ -122,7 +121,7 @@ The [Skills.sh registry](https://www.skills.sh/jabrena/plinth) reports `29.1K` i
   </tbody>
 </table>
 
-**Note:** The `Search rank` column shows the skill's position inside that `Skills.sh` search category when results are sorted by install count.
+**Note:** The `Skills.sh Search rank` column shows the skill's position inside that `Skills.sh` search category when results are sorted by install count.
 
 Two changes stand out. `@122-java-type-design` enters the table for the first time, and `Spring Boot` now has two skills in the top 10 — `@301-frameworks-spring-boot-core` joins `@302-frameworks-spring-boot-rest` — which suggests framework-specific guidance is becoming as relevant to users as the core Java skills. `@142-java-functional-programming` and `@128-java-generics` leave the top 10 this time, although both remain close behind.
 
@@ -190,11 +189,11 @@ The new [`@814-regulations-iso-25010`](https://www.skills.sh/jabrena/plinth/814-
   </tbody>
 </table>
 
-It ships with a questionnaire, a report template, examples, and an acceptance prompt, and it produces an engineering review report rather than an interactive ADR discovery. Each finding is classified as a confirmed gap, a potential gap, or no identified concern, and is handed to an explicit owner — architecture, product, security, platform, or operations — when it needs a decision beyond engineering review.
+It ships with a questionnaire, a report template, examples, and an acceptance prompt, and it produces an engineering review report rather than running an interactive ADR discovery session. Each finding is classified as a confirmed gap, a potential gap, or no identified concern, and is handed to an explicit owner — architecture, product, security, platform, or operations — when it needs a decision beyond engineering review.
 
 Like the rest of the `8xx` regulations family, the skill is careful about what it is not: it is not certification advice, a compliance decision, or an audit conclusion. It helps a Java team make quality visible and reviewable, and leaves the formal determination to qualified owners.
 
-In coming releases, the Skill [`@814-regulations-iso-25010`](https://www.skills.sh/jabrena/plinth/814-regulations-iso-25010) will replace: [`@025-quality-attribute-discovery`](https://www.skills.sh/jabrena/plinth/025-quality-attribute-discovery).
+In upcoming releases, the skill [`@814-regulations-iso-25010`](https://www.skills.sh/jabrena/plinth/814-regulations-iso-25010) will replace [`@025-quality-attribute-discovery`](https://www.skills.sh/jabrena/plinth/025-quality-attribute-discovery) within `/explore-problem`.
 
 <a id="comparing-plinth-commands-with-openspec-and-spec-kit"></a>
 
@@ -254,7 +253,7 @@ The [`0.18.0` article](https://jabrena.github.io/plinth/blog/2026/08/release-0.1
   </tbody>
 </table>
 
-`/onboarding` differs from `openspec init` and `specify init` in one important way: it does not only initialize, it refuses to proceed when the repository is ambiguous. A repository with two OpenSpec projects is reported as technical debt instead of silently getting a third.
+`/onboarding` differs from `openspec init` and `specify init` in one important way: it does not just initialize; it also refuses to proceed when the repository is ambiguous. A repository with two OpenSpec projects is reported as technical debt instead of silently getting a third.
 
 <a id="testing-the-workflow-with-a-reproducible-benchmark-part-2"></a>
 
@@ -282,32 +281,85 @@ Part 2 separates them. This release expands the harness with a new direct scenar
     </tr>
     <tr>
       <td>New samples</td>
-      <td>Results from Claude Code (Fable 5, Opus 5, Sonnet 5), Codex GPT-5, and Grok 4.5, growing the corpus from 54 runs to 217 records.</td>
+      <td>Results from Claude Code (Fable 5, Opus 5, Sonnet 5), Codex GPT-5, and Grok 4.5, growing the corpus from 54 samples to 217 samples.</td>
     </tr>
   </tbody>
 </table>
 
-The number of samples grew about four times, from `54` in Part 1 to `217` in Part 2.
+The number of samples grew roughly fourfold, from `54` in Part 1 to `217` in Part 2.
 
 The results revisit the three hypotheses from Part 1:
 
 - **Orchestration reduces rework beyond the written plan — conditionally supported.** On the harder Quarkus problem, the orchestrated scenario passed every run with half the average rework of the direct one. On the simpler fan-out problem, the gap closed, while the direct scenario was about `36%` faster by median wall time.
 - **The delegation command drives skill and agent use — supported.** With the same plan but no orchestration, runs used half the skills and almost no agents. Richer documents do not pull the library in; the command does.
-- **Written architecture holds regardless of who executes — supported.** The hexagonal scaffold and its boundary test appeared in 67 of 68 direct runs, because the OpenSpec input spells them out. What neither workflow controls yet is the dependency graph.
+- **Written architecture holds regardless of who executes it — supported.** The hexagonal scaffold and its boundary test appeared in 67 of 68 direct runs, because the OpenSpec input spells them out. What neither workflow controls yet is the dependency graph.
 
 The practical conclusion is a more precise recommendation than Part 1 allowed: reach for `/implement-spec` on integration-heavy work, not by default. That is exactly the kind of statement a benchmark should make possible — not a declaration of a universal winner, but evidence about when each step of the workflow pays for itself.
 
 For the detailed methodology and findings, read [Validating Hypotheses About the Plinth Workflow with a Benchmark, Part 2](/plinth/blog/2026/09/validating-hypotheses-about-plinth-workflow-with-a-benchmark-part-2.html).
 
+In upcoming releases, `/implement-spec` will be improved to reduce latency.
+
+<a id="jcconf-2026"></a>
+
+## How was the experience in JCConf 2026?
+
+JCConf 2026 was a one-day conference held in Taipei, and it was an excellent place to learn how people from `Taiwan`, `China`, `Japan`, and other countries in `Asia` use agentic development daily. I am sincerely grateful to [Nicolas Lu](https://www.linkedin.com/in/nicolas-lu-153bb7286) and the whole **JCConf team** for their full support.
+
+<table>
+  <tbody>
+    <tr>
+      <td><a href="https://jcconf.tw/2026/"><img src="/plinth/images/2026/9/jcconf-1.png" alt="JCConf 2026"></a></td>
+      <td><a href="https://jcconf.tw/2026/"><img src="/plinth/images/2026/9/jcconf-2.png" alt="JCConf 2026"></a></td>
+    </tr>
+  </tbody>
+</table>
+
+The talk went smoothly, and I achieved my goal of raising awareness of a few points teams should consider to avoid production issues when using this kind of tooling. If you didn't attend the talk, you can review the [slides](https://jabrena.github.io/plinth/jcconf-2026/index.html).
+
 <a id="doubts"></a>
 
 ## Do you still have questions about the project?
 
-If you feel stuck using this project or have questions, you can attend the talk [`Harness Engineering with Java`](https://jabrena.github.io/plinth/jcconf-2026/) at [`JCConf 2026`](https://jcconf.tw/2026/):
+If you are interested in learning how to apply an AI-native workflow to Java Enterprise development, you can attend the following workshop at `Devoxx Belgium 2026`.
 
-[![](/plinth/images/2026/7/jcconf-2026.png)](https://jcconf.tw/2026/)
+[![](/plinth/images/2026/9/devoxx-workshop.png)](https://devoxx.be/)
 
-You can also review the deck [`The Importance of HITL to Avoid Chaos and EU Regulations for AI`](https://jabrena.github.io/plinth/dvbe26/) prepared for `Devoxx Belgium 2026`.
+**Agenda (180 min):**
+
+- Introduction to Agentic Development
+- Run Exercise 1
+- Break
+- Run Exercise 2
+- Advanced concepts
+- Q&A
+
+**Plinth Workflow:**
+
+```text
+/onboarding
+  |
+  v
+Issue
+  |
+  v
+/update-issue --> /explore-problem --> /create-acceptance-criteria
+  |
+  v
+/create-spec --> /explore-design
+  |
+  v
+/implement-spec
+  |
+  v
+/close-spec
+```
+
+The workshop shows how agents implement changes faster. But a green PR can still be wrong: code that compiles, passes tests and security scans, and meets its acceptance criteria can break production when the consequences live outside the repository. A rename like `customerId` → `clientId` is locally correct, yet it can ripple through OpenAPI clients, Kafka events, Flyway migrations, and data pipelines. Implementation speeds up; context and review capacity do not.
+
+[![](/plinth/images/2026/9/devoxx-talk.png)](https://devoxx.be/)
+
+If you want to go beyond the green PR, the talk explains why Human-in-the-Loop (HITL) is still required and how to make it meaningful rather than *human-as-a-button*. It walks through PR gates, shows how laws, standards, and frameworks such as the `EU AI Act`, `GDPR`, `CRA`, `NIS2`, and `DORA` become engineering controls, and closes with steps a team can apply next Monday. Agents may propose; accountable humans decide. Join the talk [`The Importance of HITL to Avoid Chaos and EU Regulations for AI`](https://m.devoxx.com/events/dvbe26/talks/7017/the-importance-of-hitl-to-avoid-chaos-and-eu-regulations-for-ai) at [`Devoxx BE 2026`](https://devoxx.be/).
 
 <a id="next-steps"></a>
 
@@ -317,5 +369,5 @@ For the next release, we plan to work on a few topics:
 
 - Reduce the latency of `/implement-spec` on simple problems, as suggested by the Part 2 benchmark.
 - Add `Katas` that help users learn `Plinth` incrementally.
-- Add a skill about `JVM Flags`.
+- Add support for `agent plugins`.
 - Go deeper into the EU regulation ecosystem for `GenAI`.
