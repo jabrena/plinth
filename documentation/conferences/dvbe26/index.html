@@ -68,19 +68,64 @@
             </section>
 
             <section>
-                <img src="./images/ppt.png" width="60%" />
-                <small><strong>Source: </strong><a href="https://cio-wiki.org/wiki/Leavitt%27s_Alignment_Model"
-                        target="_blank">Leavitt's Alignment Model (1965) >> People, Process and Technology
-                        Framework</a></small>
+                <section>
+                    <img src="./images/ppt.png" width="60%" />
+                    <small><strong>Source: </strong><a href="https://cio-wiki.org/wiki/Leavitt%27s_Alignment_Model"
+                            target="_blank">Leavitt's Alignment Model (1965) >> People, Process and Technology
+                            Framework</a></small>
+                </section>
+                <section>
+                    <h2>Talk's scope</h2>
+                    <div class="grid-3 compact">
+                        <div class="card evidence">
+                            <h3>Specialized LLMs for Enterprise</h3>
+                            <p><strong>Train Specialized LLMs</strong></p>
+                            <p>Fine-tuning, LoRA/QLoRA, Distillation, ...</p>
+                        </div>
+                        <div class="card context">
+                            <h3>AI Agent Orchestration & Pipelines</h3>
+                            <p><strong>Automate stable processes using AI Agents</strong></p>
+                            <p>Spring AI, LangChain4j, Embabel, ...</p>
+                        </div>
+                        <div class="card risk">
+                            <h3>AI Harness Engineering <span class="tag focus">FOCUS OF THIS TALK</span></h3>
+                            <p><strong>Software Engineering enhanced with AI</strong></p>
+                            <p>SDD, Java Skills, MCP-Servers, Knowledge bases, ...</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section>
+                    <h2>Three project realities</h2>
+                    <div class="grid-3 compact">
+                        <div class="card evidence">
+                            <h3>Greenfield</h3>
+                            <p><strong>Design the context</strong></p>
+                            <p>Define boundaries<br />contracts<br />and owners</p>
+                        </div>
+                        <div class="card context">
+                            <h3>Brownfield <span class="tag focus">FOCUS OF THIS TALK</span></h3>
+                            <p><strong>Discover and connect context</strong></p>
+                            <p>Trace dependencies<br />document decisions<br />and close gaps</p>
+                        </div>
+                        <div class="card risk">
+                            <h3>Legacy</h3>
+                            <p><strong>Recover and validate context</strong></p>
+                            <p>Read behavior<br />data and incidents<br />then test assumptions</p>
+                        </div>
+                    </div>
+                    <p><strong>Focus:</strong> brownfield enterprise systems—working software, fragmented knowledge, and
+                        live dependencies.</p>
+                </section>
             </section>
 
             <section>
                 <h2>Agenda (30 minutes)</h2>
                 <ul>
-                    <li>A green PR can still be wrong · 10 minutes</li>
-                    <li>HITL at the PR: from review to decision · 11 minutes</li>
-                    <li>Governance that changes engineering decisions · 6 minutes</li>
-                    <li>Classify, challenge, and trace · 3 minutes</li>
+                    <li>A green PR can still be wrong · 10 min</li>
+                    <li>HITL at the PR: from review to decision · 11 min</li>
+                    <li>Governance that changes decisions · 6 min</li>
+                    <li>Takeaways · 3 min</li>
                 </ul>
             </section>
 
@@ -88,11 +133,39 @@
                 <section class="section-divider">
                     <p class="act-number">ACT I</p>
                     <h1>A green PR can still be wrong</h1>
-                    <p>Implementation accelerates. Context and review capacity do not.</p>
+                    <p>Implementation accelerates. Context discovery and review capacity do not.</p>
                 </section>
 
                 <section>
-                    <h2>Everything can be green—and production can still break</h2>
+                    <h2>A common brownfield starting point</h2>
+                    <div class="grid-3 compact">
+                        <div class="card risk">
+                            <h3>Knowledge moves</h3>
+                            <p>Turnover and team rotations erode tacit knowledge.</p>
+                        </div>
+                        <div class="card context">
+                            <h3>Ownership shifts</h3>
+                            <p>Reorganizations change responsibility and accountability.</p>
+                        </div>
+                        <div class="card agent">
+                            <h3>Delivery accelerates</h3>
+                            <p>Agents turn backlog items into code at industrial speed.</p>
+                        </div>
+                    </div>
+                    <p class="statement risk">Then an agent picks up a seemingly local story...</p>
+                </section>
+
+                <section>
+                    <h2>The story looks local</h2>
+                    <blockquote><strong>Rename <code>customerId</code> to <code>clientId</code>.</strong></blockquote>
+                    <pre><code class="language-java" data-trim data-noescape>
+record Order(String clientId, BigDecimal total) {}
+						</code></pre>
+                    <p class="lead"><span class="evidence">The agent implements it quickly.</span> Repository checks pass.</p>
+                </section>
+
+                <section>
+                    <h2>Every repository check can be green—and production can still break</h2>
                     <div class="grid-4 compact">
                         <div class="card evidence">✓ Compiles</div>
                         <div class="card evidence">✓ Unit + integration tests</div>
@@ -104,13 +177,10 @@
                 </section>
 
                 <section>
-                    <h2>A locally correct Java rename can break the system</h2>
-                    <blockquote><strong>Rename <code>customerId</code> to <code>clientId</code>.</strong></blockquote>
-                    <pre><code class="language-java" data-trim data-noescape>
-record Order(String clientId, BigDecimal total) {}
-					</code></pre>
-                    <p class="lead"><span class="evidence">Locally correct.</span> What else depends on this contract?
-                    </p>
+                    <h2>
+                        How can a change be <span class="evidence">repository-correct</span> and
+                        still be <span class="risk">system-wrong</span>?
+                    </h2>
                 </section>
 
                 <section class="dependency-slide">
@@ -126,6 +196,52 @@ record Order(String clientId, BigDecimal total) {}
                         <div class="card evidence south-east">BI + documentation</div>
                     </div>
                     <p>The repository cannot always be the unit of correctness.</p>
+                </section>
+
+                <section>
+                    <h2>System architecture mirrors communication structures</h2>
+                    <blockquote>
+                        Organizations design systems that mirror their communication structures.
+                    </blockquote>
+                    <img src="./images/melvin-conway.png" width="15%" />
+                    <p><small>Paraphrased from Melvin Conway, 1968.</small></p>
+                </section>
+
+                <section>
+                    <h2>AI amplifies the cost of weak communication boundaries</h2>
+                    <div class="flow compact">
+                        <div class="card context">Fragmented system context</div>
+                        <div class="arrow">→</div>
+                        <div class="card agent">Agents generate changes faster</div>
+                        <div class="arrow">→</div>
+                        <div class="card risk">Hidden inconsistency spreads faster</div>
+                    </div>
+                    <p>
+                        Faster generation does not repair a weak boundary—it propagates its
+                        gaps faster than people can discover and review them.
+                    </p>
+                </section>
+
+                <section>
+                    <h2>AI accelerates technology—not the whole system</h2>
+                    <div class="grid-3">
+                        <div class="card context">
+                            <h3>People</h3>
+                            <p>Ownership<br />Communication</p>
+                        </div>
+                        <div class="card evidence">
+                            <h3>Process</h3>
+                            <p>Specification<br />Validation</p>
+                        </div>
+                        <div class="card agent">
+                            <h3>Technology</h3>
+                            <p>Agents<br />Tools</p>
+                        </div>
+                    </div>
+                    <p>
+                        AI accelerates <span class="agent">technology</span>.<br />
+                        System correctness still depends on all three.
+                    </p>
                 </section>
 
                 <section>
@@ -188,7 +304,7 @@ record Order(String clientId, BigDecimal total) {}
                 </section>
 
                 <section>
-                    <h2>Agentic speed makes conventional PR review insufficient</h2>
+                    <h2>A green PR is evidence—not a decision</h2>
                     <div class="grid-2 compact">
                         <div class="card evidence">
                             <h3>Usually visible</h3>
@@ -199,7 +315,7 @@ record Order(String clientId, BigDecimal total) {}
                             <p>External consumers<br />Uncertainty<br />Applicable controls<br />Decision authority</p>
                         </div>
                     </div>
-                    <p>Without system context, a merge approval can become <span class="risk">cosmetic oversight</span>.</p>
+                    <p>Without system context and decision authority, human approval becomes <span class="risk">cosmetic oversight</span>.</p>
                 </section>
             </section>
 
@@ -208,20 +324,6 @@ record Order(String clientId, BigDecimal total) {}
                     <p class="act-number">ACT II</p>
                     <h1>HITL at the PR: from review to decision</h1>
                     <p>Classify → Expose evidence → Route → Decide → Observe.</p>
-                </section>
-
-                <section>
-                    <h2>The PR control loop turns review into a decision system</h2>
-                    <small>
-                        <div class="grid-5 compact">
-                            <div class="card context"><strong>1 · CLASSIFY</strong><br />Impact + uncertainty</div>
-                            <div class="card evidence"><strong>2 · EXPOSE</strong><br />Context + evidence</div>
-                            <div class="card agent"><strong>3 · ROUTE</strong><br />Accountable reviewers</div>
-                            <div class="card risk"><strong>4 · DECIDE</strong><br />Approve · modify · escalate · stop</div>
-                            <div class="card local"><strong>5 · OBSERVE</strong><br />Outcome + corrective action</div>
-                        </div>
-                    </small>
-                    <p>Autonomy may propose. Authority must decide. Evidence must connect the two.</p>
                 </section>
 
                 <section>
@@ -322,7 +424,7 @@ record Order(String clientId, BigDecimal total) {}
                         <div class="arrow">→</div>
                         <div class="card evidence">Observe outcome</div>
                     </div>
-                    <p class="statement">Prediction ↔ outcome ↔ corrective action</p>
+                    <p>Prediction ↔ outcome ↔ corrective action</p>
                 </section>
             </section>
 
@@ -411,13 +513,22 @@ record Order(String clientId, BigDecimal total) {}
 
                 <section>
                     <h2>What can a team do next Monday?</h2>
-                    <ol>
+                    <ul>
                         <li>Label agent-created PRs and record generated artifacts.</li>
                         <li>Add risk triggers to the PR template.</li>
                         <li>Route high-impact changes to accountable specialist owners.</li>
                         <li>Require explicit limits, rollback, and monitoring evidence.</li>
                         <li>Review incidents and near misses as control failures—not only code failures.</li>
-                    </ol>
+                    </ul>
+                </section>
+
+                <section>
+                    <h2>What can a team do next Monday?</h2>
+                    <ul>
+                        <li>Review whether your service databases have migration scripts.</li>
+                        <li>Review if team know and use Parallel Change pattern</li>
+                        <li>Review whether service communications use governed contracts (OpenAPI, Avro, etc.).</li>
+                    </ul>
                 </section>
 
                 <section>
