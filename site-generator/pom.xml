@@ -193,6 +193,22 @@
                                     </resources>
                                 </configuration>
                             </execution>
+                            <execution>
+                                <id>copy-dvbe26-workshop-to-docs</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}/../docs/dvbe26-workshop</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/../documentation/conferences/dvbe26-workshop</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
                         </executions>
                     </plugin>
                 </plugins>
