@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="dist/reveal.css">
     <link rel="stylesheet" href="dist/theme/white.css">
     <link rel="stylesheet" href="plugin/highlight/monokai.css">
-    <link rel="stylesheet" href="css/custom.css">
+    <link rel="stylesheet" href="css/custom.css?v=2">
 
     <link rel="icon" href="images/java-icon.png" type="image/png" />
 </head>
@@ -122,9 +122,9 @@
             <section>
                 <h2>Agenda (30 minutes)</h2>
                 <ul>
-                    <li>A green PR can still be wrong · 10 min</li>
-                    <li>HITL at the PR: from review to decision · 11 min</li>
-                    <li>Governance that changes decisions · 6 min</li>
+                    <li>A green PR can still be wrong · 8 min</li>
+                    <li>HITL at the PR: from review to decision · 8 min</li>
+                    <li>Governance that changes decisions · 11 min</li>
                     <li>Takeaways · 3 min</li>
                 </ul>
             </section>
@@ -137,7 +137,7 @@
                 </section>
 
                 <section>
-                    <h2>A common brownfield starting point</h2>
+                    <h2>Common Brownfield environments</h2>
                     <div class="grid-3 compact">
                         <div class="card risk">
                             <h3>Knowledge moves</h3>
@@ -145,14 +145,14 @@
                         </div>
                         <div class="card context">
                             <h3>Ownership shifts</h3>
-                            <p>Reorganizations change responsibility and accountability.</p>
+                            <p>Team rotations, Reorganizations change responsibility and accountability.</p>
                         </div>
                         <div class="card agent">
-                            <h3>Delivery accelerates</h3>
-                            <p>Agents turn backlog items into code at industrial speed.</p>
+                            <h3>Harness Engineering</h3>
+                            <p>AI Agents turn backlog items into code at industrial speed.</p>
                         </div>
                     </div>
-                    <p class="statement risk">Then an agent picks up a seemingly local story...</p>
+                    <p class="risk">Then Software engineer using an AI agent picks up a seemingly local story...</p>
                 </section>
 
                 <section>
@@ -385,7 +385,7 @@ record Order(String clientId, BigDecimal total) {}
                         </div>
                         <div class="card evidence">
                             <strong>Effective review</strong>
-                            <p>Which consumers were checked?<br />What remains unverified?<br />How is compatibility preserved?<br />What triggers rollback?</p>
+                            <p>Which consumers were checked?<br />What remains unverified?<br />How is compatibility preserved?<br /><strong>What triggers rollback?</strong></p>
                         </div>
                     </div>
                 </section>
@@ -415,7 +415,7 @@ record Order(String clientId, BigDecimal total) {}
                 <section>
                     <h2>5 — Observe: merge is not the end of the loop</h2>
                     <p>
-                        Monitor, roll back, preserve evidence, and improve the control that failed.
+                        Monitor, rollback, preserve evidence, and improve the control that failed.
                     </p>
                     <div class="flow compact">
                         <div class="card agent">Agent-created PR</div>
@@ -551,6 +551,49 @@ BigDecimal refundAmount(Order order) {
                 </section>
 
                 <section class="regulation-slide">
+                    <h2>EU AI Act · More Java issues</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>AI Act hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>1 · No human oversight</strong></td>
+                                        <td>Agent-generated or model-driven change to financial logic reaches production on a green pipeline</td>
+                                        <td>Merge blocked until a competent reviewer approves, modifies, rejects, or stops; prompt, model version, diff, and tests exposed</td>
+                                        <td>Art. 14: human oversight</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 · No traceability of AI outputs</strong></td>
+                                        <td>Model output drives a decision, but model version, input, and result are not recorded</td>
+                                        <td>Decision log with model version, input reference, output, confidence, and reviewer, retained under a defined policy</td>
+                                        <td>Art. 12 · 26: logging, deployer log retention</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3 · AI interaction not disclosed</strong></td>
+                                        <td>A chatbot or generated content is presented to users as human or unmarked</td>
+                                        <td>Disclosure flag in the API and UI; generated content labeled and machine-readable where required</td>
+                                        <td>Art. 50: transparency obligations</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>4 · AI feature shipped unclassified</strong></td>
+                                        <td>A scoring or ranking feature reaches users with no intended-purpose or risk classification</td>
+                                        <td>Classification record (role, purpose, Annex III signal) required by a CI gate before release</td>
+                                        <td>Art. 5 · 6: prohibited practices, high-risk classification</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </section>
+
+                <section class="regulation-slide">
                     <h2>GDPR: personal data changes the design boundary</h2>
                     <div class="grid-3 compact">
                         <div class="card risk">
@@ -570,33 +613,78 @@ BigDecimal refundAmount(Order order) {
                     <p><small>Privacy, DPO, legal, security, and data owners decide lawful basis, roles, DPIA, transfers, and risk acceptance. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32016R0679" target="_blank">Regulation (EU) 2016/679</a></small></p>
                 </section>
 
-                <section class="risk-slide">
-                    <h2>GDPR · Java issue: the API exposes the persistence entity</h2>
-                    <div class="grid-2 compact">
-                        <div class="card risk">
-                            <h3>Risk: every stored field becomes API data</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-CustomerProfile find(String customerId) {
-    return repository.findById(customerId)
-        .orElseThrow();
-}
-                            </code></pre>
-                            <p>Email, address, preferences, and internal flags may escape without purpose-specific authorization.</p>
-                        </div>
-                        <div class="card evidence">
-                            <h3>Fix: minimize at the boundary</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-record CustomerSummary(String id, String displayName) {}
+                <section class="regulation-slide">
+                    <h2>GDPR · More Java issues (1/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>GDPR hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>1 · Entity exposed by the API</strong></td>
+                                        <td><code>findById</code> returns the whole <code>CustomerProfile</code>; every stored field becomes API data</td>
+                                        <td>Purpose-specific <code>CustomerSummary</code> DTO with authorization and access audit</td>
+                                        <td>Art. 5(1)(c) · 25: minimisation, data protection by design</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 · PII in logs and traces</strong></td>
+                                        <td><code>log.info("Customer {}", customer)</code> writes email and address to logs, traces, and metrics</td>
+                                        <td>Log ids only; masking layer and field-level redaction policy; no PII in observability</td>
+                                        <td>Art. 5(1)(f) · 32: confidentiality, security of processing</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3 · Erasure not propagated</strong></td>
+                                        <td><code>repository.delete(id)</code> removes the row, but copies stay in caches, search indexes, topics, backups, and analytics</td>
+                                        <td>Erasure workflow that fans out to every store and records completion</td>
+                                        <td>Art. 17: right to erasure</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </section>
 
-CustomerSummary find(String customerId) {
-    CustomerProfile profile = repository.getRequired(customerId);
-    authorization.checkSummaryAccess(profile);
-    return new CustomerSummary(profile.id(), profile.displayName());
-}
-                            </code></pre>
-                            <p>Use purpose-specific DTOs, field policy, access auditing, retention, and executable rights workflows.</p>
-                        </div>
-                    </div>
+                <section class="regulation-slide">
+                    <h2>GDPR · More Java issues (2/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>GDPR hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>4 · Retention never enforced</strong></td>
+                                        <td>Data kept forever; no retention period or purge job</td>
+                                        <td><code>retentionUntil</code> per purpose and a scheduled purge with a recorded outcome</td>
+                                        <td>Art. 5(1)(e): storage limitation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>5 · No access or export path</strong></td>
+                                        <td>Data subject requests are answered with ad hoc SQL</td>
+                                        <td><code>DataSubjectExport</code> gathers data across services into a portable format with an audit trail</td>
+                                        <td>Art. 15 · 20: access, portability</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>6 · Purpose creep</strong></td>
+                                        <td>Data collected for billing is reused for marketing or model training with no check</td>
+                                        <td>Purpose tags on fields and a policy check at the point of use; basis or consent recorded</td>
+                                        <td>Art. 5(1)(b) · 6: purpose limitation, lawful basis</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
                 </section>
 
                 <section class="regulation-slide">
@@ -619,32 +707,78 @@ CustomerSummary find(String customerId) {
                     <p><small>Product, product-security, legal, compliance, support, and market-access owners decide applicability and conformity. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R2847" target="_blank">Regulation (EU) 2024/2847</a></small></p>
                 </section>
 
-                <section class="risk-slide">
-                    <h2>CRA · Java issue: an unsigned update becomes executable</h2>
-                    <div class="grid-2 compact">
-                        <div class="card risk">
-                            <h3>Risk: download and install on trust</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-void install(URI updateUri) {
-    byte[] plugin = httpClient.get(updateUri);
-    installer.activate(plugin);
-}
-                            </code></pre>
-                            <p>A compromised channel can replace the product component; provenance and rollback evidence are absent.</p>
-                        </div>
-                        <div class="card evidence">
-                            <h3>Fix: verify, stage, activate, and preserve rollback</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-void install(Update update) {
-    signatureVerifier.verify(update);
-    digestVerifier.verify(update, sbom.expectedDigest(update.id()));
-    StagedUpdate staged = installer.stage(update);
-    installer.activateWithRollback(staged);
-}
-                            </code></pre>
-                            <p>Link signed artifacts to the SBOM, advisory, vulnerability record, support period, tests, and release approval.</p>
-                        </div>
-                    </div>
+                <section class="regulation-slide">
+                    <h2>CRA · More Java issues (1/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>CRA hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>1 · Vulnerability handling</strong></td>
+                                        <td>A CVE in a dependency ends as <code>log.error(...)</code>; no triage or advisory path</td>
+                                        <td><code>VulnerabilityRecord</code> with component, severity, status, owner, advisory, fix version, SLA</td>
+                                        <td>Art. 13 · 14: handling and reporting</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 · Insecure defaults</strong></td>
+                                        <td>Default password, open admin surface, or <code>trustAllCerts</code> shipped in the product</td>
+                                        <td>Secure-by-default config; <code>SecurityDefaults .validate(config)</code> fails on weak settings</td>
+                                        <td>Annex I: secure by default, minimal attack surface</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3 · SBOM drift</strong></td>
+                                        <td>Fat JAR built with <code>latest</code> or version ranges; no inventory of what shipped</td>
+                                        <td>Pinned dependency lock; CycloneDX SBOM generated in CI and attached to the release</td>
+                                        <td>Annex I: SBOM, component transparency</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </section>
+
+                <section class="regulation-slide">
+                    <h2>CRA · More Java issues (2/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>CRA hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>4 · End-of-support silence</strong></td>
+                                        <td>Old version keeps running with no support-period metadata</td>
+                                        <td>Release manifest with <code>supportedUntil</code>; warn users and expose it in the advisory</td>
+                                        <td>Art. 13: support period, user information</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>5 · Unsafe deserialization</strong></td>
+                                        <td><code>new ObjectInputStream(in) .readObject()</code> on update or plugin metadata</td>
+                                        <td>Typed DTO with schema validation and an <code>ObjectInputFilter</code></td>
+                                        <td>Annex I: limit attack vectors, input validation</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>6 · Secrets in the artifact</strong></td>
+                                        <td>Hardcoded API key or signing key inside the JAR or properties</td>
+                                        <td>Inject secrets at runtime; block secrets in the artifact with a build scan</td>
+                                        <td>Annex I: confidentiality, protection of data</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
                 </section>
 
                 <section class="regulation-slide">
@@ -667,31 +801,78 @@ void install(Update update) {
                     <p><small>Legal, security, risk, resilience, continuity, and executive owners decide entity scope and reporting duties. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022L2555" target="_blank">Directive (EU) 2022/2555</a></small></p>
                 </section>
 
-                <section class="risk-slide">
-                    <h2>NIS2 · Java issue: a security incident only becomes a log line</h2>
-                    <div class="grid-2 compact">
-                        <div class="card risk">
-                            <h3>Risk: no triage, containment, or reporting handoff</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-void handle(Exception failure) {
-    logger.error("Security issue", failure);
-}
-                            </code></pre>
-                            <p>The team cannot reconstruct affected assets, severity, timeline, ownership, or corrective action.</p>
-                        </div>
-                        <div class="card evidence">
-                            <h3>Fix: classify and route evidence</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-void handle(SecurityIncident incident) {
-    Severity severity = severityPolicy.classify(incident);
-    Evidence evidence = evidenceRecorder.capture(incident, severity);
-    incidentWorkflow.notifyOwners(severity, evidence.id());
-    containmentWorkflow.open(incident.id(), evidence.id());
-}
-                            </code></pre>
-                            <p>Preserve evidence safely and connect the workflow to national reporting decisions and time limits.</p>
-                        </div>
-                    </div>
+                <section class="regulation-slide">
+                    <h2>NIS2 · More Java issues (1/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>NIS2 hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>1 · Incident as log line</strong></td>
+                                        <td><code>logger.error("Security issue", e)</code>; no triage, owner, or reporting handoff</td>
+                                        <td><code>SecurityIncident</code> classified by severity, evidence captured, owners notified, containment opened</td>
+                                        <td>Art. 23: significant-incident reporting</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 · Reporting clock ignored</strong></td>
+                                        <td>Detection time and report deadlines are not recorded</td>
+                                        <td><code>ReportingDeadlines.from (incident.detectedAt())</code> computes the 24h, 72h, and 1-month milestones and alerts owners</td>
+                                        <td>Art. 23: early warning 24h · notification 72h · final report 1 month</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3 · Unvetted supplier dependency</strong></td>
+                                        <td>Third-party SDK or SaaS client added with no inventory, owner, or review</td>
+                                        <td><code>SupplierRegister</code> entry (component, provider, criticality, review, exit plan) enforced by a CI check</td>
+                                        <td>Art. 21(2)(d): supply-chain security</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </section>
+
+                <section class="regulation-slide">
+                    <h2>NIS2 · More Java issues (2/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>NIS2 hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>4 · Overprivileged access</strong></td>
+                                        <td>Service account or admin API with a static token, no MFA, no least privilege</td>
+                                        <td>Role-scoped access, short-lived credentials, MFA on admin paths, access logged</td>
+                                        <td>Art. 21(2)(i, j): access control, MFA</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>5 · Untested recovery</strong></td>
+                                        <td>Backup job exists but nobody has restored from it; no continuity runbook</td>
+                                        <td>Scheduled restore test records RTO and RPO and stores the result as evidence</td>
+                                        <td>Art. 21(2)(c): continuity, backup, crisis management</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>6 · Unmanaged vulnerabilities and config</strong></td>
+                                        <td>Unpatched dependencies and drifting configuration; no asset inventory</td>
+                                        <td>Asset inventory, CI scanning, patch SLA by severity, and drift detection</td>
+                                        <td>Art. 21(2)(e, f): vulnerability handling, effectiveness assessment</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
                 </section>
 
                 <section class="regulation-slide">
@@ -714,82 +895,126 @@ void handle(SecurityIncident incident) {
                     <p><small>Legal, compliance, risk, resilience, security, procurement, and business owners decide applicability and risk acceptance. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32022R2554" target="_blank">Regulation (EU) 2022/2554</a></small></p>
                 </section>
 
-                <section class="risk-slide">
-                    <h2>DORA · Java issue: a payment service has no resilience</h2>
-                    <div class="grid-2 compact">
-                        <div class="card risk">
-                            <h3>Risk: one dependency failure stops the service</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-Settlement settle(Batch batch) {
-    return paymentNetwork.settle(batch);
-}
-                            </code></pre>
-                            <p>No timeout, idempotency, bounded retry, circuit breaker, fallback, incident signal, or recovery path.</p>
-                        </div>
-                        <div class="card evidence">
-                            <h3>Fix: bound failure and preserve recovery</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-Settlement settle(Batch batch) {
-    ResiliencePolicy policy = policies
-        .forProvider("payment-network")
-        .timeout(Duration.ofSeconds(2))
-        .retry(2)
-        .circuitBreaker();
-    return policy.execute(
-        () -> paymentNetwork.settle(batch.idempotencyKey(), batch),
-        failure -> deferAndEscalate(batch, failure));
-}
-                            </code></pre>
-                            <p>Defer safely, route the incident, monitor the provider, and make replay idempotent and auditable.</p>
-                        </div>
-                    </div>
-                    <p><small>Prove the design with provider-outage drills, recovery targets, replay tests, dashboards, alerting, rollback, and an exit plan—not code alone.</small></p>
+                <section class="regulation-slide">
+                    <h2>DORA · More Java issues (1/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>DORA hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>1 · No resilience on a critical dependency</strong></td>
+                                        <td><code>paymentNetwork.settle(batch)</code> with no timeout, idempotency, bounded retry, circuit breaker, or fallback</td>
+                                        <td><code>ResiliencePolicy</code> with timeout, bounded retry, and circuit breaker; idempotent replay and <code>deferAndEscalate</code></td>
+                                        <td>Art. 9 · 11: ICT risk management, response and recovery</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>2 · Incidents not classified or reportable</strong></td>
+                                        <td>Failure logged as <code>error</code>; no major-incident criteria, clock, or report handoff</td>
+                                        <td><code>IncidentClassifier</code> applies the criteria (clients affected, duration, data loss, criticality) and routes to the reporting workflow</td>
+                                        <td>Art. 17–19: incident classification and reporting</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>3 · Concentration on one ICT provider</strong></td>
+                                        <td>One cloud or payment provider hardcoded across the code; no abstraction or exit path</td>
+                                        <td>Port/adapter boundary plus a <code>ProviderRegister</code> with criticality, alternative provider, and tested exit plan</td>
+                                        <td>Art. 28 · 30: third-party risk, exit strategies</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
+                </section>
+
+                <section class="regulation-slide">
+                    <h2>DORA · More Java issues (2/2)</h2>
+                    <h3>Examples:</h3>
+                    <small>
+                        <table class="compact issue-table">
+                            <thead>
+                                <tr>
+                                    <th>Issue</th>
+                                    <th>Risk</th>
+                                    <th>Fix</th>
+                                    <th>DORA hook</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                    <tr>
+                                        <td><strong>4 · Recovery never tested</strong></td>
+                                        <td>Failover and restore exist on paper but were never exercised; RTO and RPO unknown</td>
+                                        <td>Scheduled failover and restore drills record RTO and RPO and store the results as evidence</td>
+                                        <td>Art. 11 · 24–25: continuity, resilience testing</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>5 · Uncontrolled ICT change</strong></td>
+                                        <td>Direct production deploy or config change with no approval, rollback, or audit trail</td>
+                                        <td>Gated change pipeline with approval, automated rollback, and a change record linked to the release</td>
+                                        <td>Art. 9: ICT change management</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>6 · No ICT asset or dependency inventory</strong></td>
+                                        <td>Unknown libraries, services, and data flows behind an important function</td>
+                                        <td>Inventory mapping each function to components, dependencies, owner, and criticality, built from the SBOM and service catalog</td>
+                                        <td>Art. 8: identification, ICT asset mapping</td>
+                                    </tr>
+                            </tbody>
+                        </table>
+                    </small>
                 </section>
 
                 <section class="regulation-slide">
                     <h2>EU compliance calendar: when must projects be ready?</h2>
-                    <table class="compact">
-                            <thead>
-                                <tr>
-                                    <th>Regulation</th>
-                                    <th>Project trigger</th>
-                                    <th>Application milestone</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><strong>GDPR</strong></td>
-                                    <td>Processes personal data</td>
-                                    <td><strong>25 May 2018</strong> · applies</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>NIS2</strong></td>
-                                    <td>Supports an in-scope essential or important entity</td>
-                                    <td><strong>17 Oct 2024</strong> · EU transposition deadline; check national law</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>DORA</strong></td>
-                                    <td>Falls within EU financial-sector scope</td>
-                                    <td><strong>17 Jan 2025</strong> · applies</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>EU AI Act</strong></td>
-                                    <td>Provides or deploys an in-scope AI system or GPAI model</td>
-                                    <td>
-                                        <strong>2 Feb 2025</strong> · prohibitions + AI literacy<br />
-                                        <strong>2 Aug 2025</strong> · GPAI + governance<br />
-                                        <strong>2 Aug 2026</strong> · transparency + enforcement<br />
-                                        <strong>2 Dec 2027</strong> · Annex III high-risk AI<br />
-                                        <strong>2 Aug 2028</strong> · Annex I product AI
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>CRA</strong></td>
-                                    <td>Places a product with digital elements on the EU market</td>
-                                    <td><strong>11 Sep 2026</strong> · reporting<br /><strong>11 Dec 2027</strong> · full application</td>
-                                </tr>
-                            </tbody>
-                    </table>
+                    <small>
+                        <table class="compact">
+                                <thead>
+                                    <tr>
+                                        <th>Regulation</th>
+                                        <th>Project trigger</th>
+                                        <th>Application milestone</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>GDPR</strong></td>
+                                        <td>Processes personal data</td>
+                                        <td><strong class="past-date">25 May 2018</strong> · applies</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>NIS2</strong></td>
+                                        <td>Supports an in-scope essential or important entity</td>
+                                        <td><strong class="past-date">17 Oct 2024</strong> · EU transposition deadline; check national law</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>DORA</strong></td>
+                                        <td>Falls within EU financial-sector scope</td>
+                                        <td><strong class="past-date">17 Jan 2025</strong> · applies</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>EU AI Act</strong></td>
+                                        <td>Provides or deploys an in-scope AI system or GPAI model</td>
+                                        <td>
+                                            <strong class="past-date">2 Feb 2025</strong> · prohibitions + AI literacy<br />
+                                            <strong class="past-date">2 Aug 2025</strong> · GPAI + governance<br />
+                                            <strong class="past-date">2 Aug 2026</strong> · transparency + enforcement<br />
+                                            <strong>2 Dec 2027</strong> · Annex III high-risk AI<br />
+                                            <strong>2 Aug 2028</strong> · Annex I product AI
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>CRA</strong></td>
+                                        <td>Places a product with digital elements on the EU market</td>
+                                        <td><strong class="past-date">11 Sep 2026</strong> · reporting<br /><strong>11 Dec 2027</strong> · full application</td>
+                                    </tr>
+                                </tbody>
+                        </table>
+                    </small>
                     <p><small>Dates are legal milestones—readiness starts earlier. Confirm the organization, role, sector, use case, market, and Member State before deciding applicability.</small></p>
                 </section>
 
@@ -807,7 +1032,7 @@ Settlement settle(Batch batch) {
             <section>
                 <section class="section-divider">
                     <p class="act-number">CLOSE</p>
-                    <h1>Classify, challenge, and trace</h1>
+                    <h1>Takeaways</h1>
                     <p>Turn human presence into accountable human judgment.</p>
                 </section>
 
@@ -841,16 +1066,6 @@ Settlement settle(Batch batch) {
                         <li>Optimize for system awareness and system correctness, not just local correctness.</li>
                     </ul>
                 </section>
-
-                <section>
-                    <h2>A green PR is evidence—not permission</h2>
-                    <p class="statement">
-                        Agents may propose.<br />
-                        Accountable humans decide.<br />
-                        The system must remember why.
-                    </p>
-                    <p class="lead">Classify · Challenge · Trace</p>
-                </section>
             </section>
 
             <section>
@@ -872,32 +1087,6 @@ Settlement settle(Batch batch) {
             <section>
                 <h1>Q&amp;A?</h1>
                 <p>🙏 Thank you 🙏</p>
-            </section>
-
-            <section>
-                <section>
-                    <h2>Appendix: standards make governance repeatable</h2>
-                    <div class="grid-2 compact">
-                        <div class="card evidence">
-                            <h3>ISO/IEC 42001</h3>
-                            <p>AI inventory · ownership · generated-code review · provider and data boundaries · risk treatment · monitoring · corrective action</p>
-                        </div>
-                        <div class="card context">
-                            <h3>ISO/IEC 25010:2023</h3>
-                            <p>Functional suitability · performance · compatibility · interaction · reliability · security · maintainability · flexibility · safety</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section>
-                    <h2>Appendix: additional EU routing signals</h2>
-                    <div class="grid-3 compact">
-                        <div class="card context"><strong>Data and platforms</strong><br />Data Act · DSA · DMA</div>
-                        <div class="card agent"><strong>Product and safety</strong><br />Product Liability</div>
-                        <div class="card risk"><strong>Financial markets</strong><br />MiFID II · MAR</div>
-                    </div>
-                    <p>Use these as prompts for accountable legal and compliance owners, not as automatic applicability claims.</p>
-                </section>
             </section>
 
             <section>
