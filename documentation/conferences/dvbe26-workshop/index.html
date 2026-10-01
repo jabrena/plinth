@@ -1,0 +1,896 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Devoxx 2026 - The Importance of HITL to Avoid Chaos and EU Regulations for AI</title>
+
+    <link rel="stylesheet" href="dist/reset.css">
+    <link rel="stylesheet" href="dist/reveal.css">
+    <link rel="stylesheet" href="dist/theme/white.css">
+    <link rel="stylesheet" href="plugin/highlight/monokai.css">
+    <link rel="stylesheet" href="css/custom.css?v=9">
+
+    <link rel="icon" href="images/java-icon.png" type="image/png" />
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section class="title-slide" data-background-image="./images/pillars2.jpg">
+                <h1>
+                    <span style="display: inline-block; color: black; background: #ffffff;">
+                        AI-Native Tooling for Java Development
+                    </span>
+                </h1>
+                <p>
+                    <span style="display: inline-block; color: black; background: #fff;">
+                        <a href="https://twitter.com/juanantoniobm" target="_blank">Juan Antonio Breña Moral</a><br />
+                        <a href="https://nl.linkedin.com/in/lealoureiro" target="_blank">Leandro Loureiro</a>
+                    </span>
+                </p>
+                <img src="images/duke.png" width="10%" alt="Duke, the Java mascot" />
+            </section>
+
+            <section>
+                <section align="left" data-background="#ffd7b5">
+                    <h2 align="center">Who I am</h2>
+                    <table>
+                        <tr>
+                            <td><img src="./images/jabAvatar.jpg" width="70%" alt="Juan Antonio Breña Moral" /></td>
+                            <td style="color: #336699; vertical-align: top">
+                                Juan Antonio Breña Moral<br />
+                                <div style="display:inline-block;">Engineering @ IG Group, EU Division</div>
+                                <br />
+                                <a target="_blank" href="https://twitter.com/juanantoniobm">Twitter</a> |
+                                <a target="_blank" href="https://github.com/jabrena">GitHub</a> |
+                                <a target="_blank" href="https://www.linkedin.com/in/juanantoniobrenamoral">LinkedIn</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="center" style="color: #336699;">
+                                <em>"Make it work, make it right, make it fast." <br />- Kent Beck</em><br />
+                                <em>"Lead me, follow me, or get out of my way.", <br />"Pressure makes diamonds."
+                                    <br />- George S. Patton Jr.</em>
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+                <section align="left" data-background="#ffd7b5">
+                    <h2 align="center">Who I am</h2>
+                    <table>
+                        <tr>
+                            <td><img src="./images/leandroAvatar.jpg" width="70%" alt="Leandro Loureiro" /></td>
+                            <td style="color: #336699; vertical-align: top">
+                                Leandro Loureiro<br />
+                                <div style="display:inline-block; white-space: nowrap;">Engineering Manager @ ING</div>
+                                <br />
+                                <a target="_blank" href="https://github.com/lealoureiro">GitHub</a> |
+                                <a target="_blank" href="https://nl.linkedin.com/in/lealoureiro">LinkedIn</a>
+
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" align="left" style="color: #336699; font-size: 0.7em;">
+                                I'm from Portugal, living in Amsterdam<br />
+                                Spent most of my career as a Software Engineer in Financial Services<br />
+                                Engineering Manager for the last 4 years<br />
+                                Passionate about travel and DIY electronics
+                            </td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+
+            <section>
+                <h2>Agenda · 30 minutes</h2>
+                <ul>
+                    <li>SDLC</li>
+                    <li>What is Plinth?</li>
+                    <li>AI-Native Java development workflow</li>
+                    <li>Refactor Java code with Skills</li>
+                </ul>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Introduction</h2>
+                    <p>
+                        The usage of AI in software engineering
+                        is changing <strong>the way we work</strong>, but that change
+                        brings new challenges to address.
+                    </p>
+                    <img src="./images/SDLC.jpg" width="35%" />
+                </section>
+
+                <section>
+                    <h2>Three project realities</h2>
+                    <div class="grid-3 compact">
+                        <div class="card evidence">
+                            <h3>Greenfield</h3>
+                            <p><strong>Design the context</strong></p>
+                            <p>Define boundaries<br />contracts<br />and owners</p>
+                        </div>
+                        <div class="card context">
+                            <h3>Brownfield <span class="tag focus">FOCUS OF THIS TALK</span></h3>
+                            <p><strong>Discover and connect context</strong></p>
+                            <p>Trace dependencies<br />document decisions<br />and close gaps</p>
+                        </div>
+                        <div class="card risk">
+                            <h3>Legacy</h3>
+                            <p><strong>Recover and validate context</strong></p>
+                            <p>Read behavior<br />data and incidents<br />then test assumptions</p>
+                        </div>
+                    </div>
+                    <p>Focus: brownfield enterprise systems—working software, fragmented knowledge, and
+                        live dependencies.</p>
+                </section>
+            </section>
+ 
+            <section>
+                <section>
+                    <h2>What is Plinth?</h2>
+                    <p>
+                        Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC
+                    </p>
+                </section>
+                <section>
+                    <h2>Problems Plinth addresses</h2>
+                    <div class="problems">
+                        <div class="head">Problem</div>
+                        <div></div>
+                        <div class="head">How Plinth responds</div>
+
+                        <div class="problem">Changes that take several attempts to get right</div>
+                        <div class="arrow">&rarr;</div>
+                        <div>Code only from an approved, traced spec</div>
+
+                        <div class="problem">Features that miss what was actually needed</div>
+                        <div class="arrow">&rarr;</div>
+                        <div>Acceptance criteria agreed before code</div>
+
+                        <div class="problem">Review fatigue from large AI-generated diffs</div>
+                        <div class="arrow">&rarr;</div>
+                        <div>Small, traced tasks with test evidence</div>
+
+                        <div class="problem">The same decisions argued again during review</div>
+                        <div class="arrow">&rarr;</div>
+                        <div>Decisions and trade-offs versioned in the repo</div>
+
+                        <div class="problem">Each run solves the same task a different way</div>
+                        <div class="arrow">&rarr;</div>
+                        <div>Skills that fix the standard way to do things</div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Plinth workflows</h2>
+                    <p style="font-size: .6em; margin-bottom: .6em;">Four ways to use the toolkit</p>
+                    <div class="workflows">
+                        <div class="card agent">
+                            <div class="group-label">1 · Build a feature</div>
+                            <div class="question">AI-Native development workflow</div>
+                            <div>Takes an issue through functional spec, technical spec and build</div>
+                        </div>
+                        <div class="card evidence">
+                            <div class="group-label">2 · Improve existing code</div>
+                            <div class="question">Refactor your Java code with Skills</div>
+                            <div>Applies focused skills to existing code: modern Java, design, testing, Maven</div>
+                        </div>
+                        <div class="card context">
+                            <div class="group-label">3 · Capture knowledge</div>
+                            <div class="question">Knowledge Base &amp; Skill Registry</div>
+                            <div>Builds a wiki that the agent maintains from your sources, next to a registry of skills</div>
+                        </div>
+                        <div class="card build">
+                            <div class="group-label">4 · Reuse knowledge</div>
+                            <div class="question">Knowledge Base MCP Client</div>
+                            <div>Lets your coding agent query the knowledge base through MCP</div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>AI-Native development workflow</h2>
+                    <small>
+                        <div class="card agent compact">
+                            <div><code>/onboarding</code></div>
+                            <div class="arrow">↓</div>
+                            <div><strong>Issue</strong></div>
+                            <div class="arrow">↓</div>
+                            <div class="card context" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Functional Specification</div>
+                                <div><code>/update-issue</code> <span class="arrow-inline">→</span> <code>/explore-problem</code> <span class="arrow-inline">→</span>
+                                    <code>/create-acceptance-criteria</code></div>
+                            </div>
+                            <div class="arrow">↓</div>
+                            <div class="card evidence" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Technical Specification</div>
+                                <div><code>/create-spec</code> <span class="arrow-inline">→</span> <code>/explore-design</code></div>
+                            </div>
+                            <div class="arrow">↓</div>
+                            <div class="card build" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Build</div>
+                                <div><code>/implement-spec</code> <span class="arrow-inline">→</span> <code>/close-spec</code></div>
+                            </div>
+                        </div>
+                    </small>
+                    <p><small><a href="https://github.com/jabrena/plinth"
+                                target="_blank">github.com/jabrena/plinth</a></small></p>
+                </section>  
+                <section>
+                    <h2>Refactor the code with Skills</h2>
+                    <div class="compact" style="display: grid; grid-template-columns: max-content; justify-content: center; gap: .5em;">
+                        <div class="card evidence" style="text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Modern Java</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>141-java-refactoring-with-modern-features</code><br />
+                                <code>142-java-functional-programming</code><br />
+                                <code>143-java-functional-exception-handling</code><br />
+                                <code>144-java-data-oriented-programming</code>
+                            </div>
+                        </div>
+                        <div class="card context" style="text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Design</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>121-java-object-oriented-design</code><br />
+                                <code>122-java-type-design</code><br />
+                                <code>123-java-design-patterns</code>
+                            </div>
+                        </div>
+                        <div class="card agent" style="text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Coding</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>126-java-exception-handling</code><br />
+                                <code>128-java-generics</code><br />
+                                <code>124-java-secure-coding</code>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.4em;"><a href="https://github.com/jabrena/plinth/blob/main/documentation/guides/INVENTORY-SKILLS-JAVA.md"
+                            target="_blank">Skills inventory for Java</a></p>
+                </section>
+                <section>
+                    <h2>Refactor the code with Skills</h2>
+                    <div class="compact" style="display: grid; grid-template-columns: max-content; justify-content: center; gap: .5em;">
+                        <div class="card risk" style="text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Architecture</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>033-architecture-diagrams</code><br />
+                                <code>034-architecture-design-exploration</code><br />
+                                <code>030-architecture-adr-general</code>
+                            </div>
+                        </div>
+                        <div class="card" style="border-color: #ef6c00; color: #ef6c00; text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Build · Maven</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>110-java-maven-best-practices</code><br />
+                                <code>111-java-maven-dependencies</code><br />
+                                <code>112-java-maven-plugins</code>
+                            </div>
+                        </div>
+                        <div class="card" style="border-color: #00838f; color: #00838f; text-align: left; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Testing</h3>
+                            <div style="font-size: 0.6em; line-height: 1.3;">
+                                <code>130-java-testing-strategies</code><br />
+                                <code>131-java-testing-unit-testing</code>
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: 0.4em;"><a href="https://github.com/jabrena/plinth/blob/main/documentation/guides/INVENTORY-SKILLS-JAVA.md"
+                            target="_blank">Skills inventory for Java</a></p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>AI-Native Java development workflow</h2>
+                </section>
+                <section>
+                    <h2>AI-Native development workflow</h2>
+                    <small>
+                        <div class="card agent compact">
+                            <div><code>/onboarding</code></div>
+                            <div class="arrow">↓</div>
+                            <div><strong>Issue</strong></div>
+                            <div class="arrow">↓</div>
+                            <div class="card context" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Functional Specification</div>
+                                <div><code>/update-issue</code> <span class="arrow-inline">→</span> <code>/explore-problem</code> <span class="arrow-inline">→</span>
+                                    <code>/create-acceptance-criteria</code></div>
+                            </div>
+                            <div class="arrow">↓</div>
+                            <div class="card evidence" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Technical Specification</div>
+                                <div><code>/create-spec</code> <span class="arrow-inline">→</span> <code>/explore-design</code></div>
+                            </div>
+                            <div class="arrow">↓</div>
+                            <div class="card build" style="padding: .4em .9em; box-shadow: none;">
+                                <div class="group-label">Build</div>
+                                <div><code>/implement-spec</code> <span class="arrow-inline">→</span> <code>/close-spec</code></div>
+                            </div>
+                        </div>
+                    </small>
+                    <p><small><a href="https://github.com/jabrena/plinth"
+                                target="_blank">github.com/jabrena/plinth</a></small></p>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.6em;">/onboarding</code></h2>
+                    <p style="font-size: .6em;"><br />Makes the repository ready to work with Plinth AI native workflow<br/>
+                        by securing two prerequisites:</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Root <code>AGENTS.md</code></strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                Repository-specific instructions for the coding agent<br />
+                                <span class="muted">Interactive: asks 6 questions, one by one</span>
+                                <ol style="margin: .3em 0 0 1.2em;">
+                                    <li><strong>Role</strong> <span class="muted">· backend, full-stack, DevOps,
+                                            architecture…</span></li>
+                                    <li><strong>Tech stack</strong> <span class="muted">· Java version, build tool,
+                                            frameworks</span></li>
+                                    <li><strong>File structure</strong> <span class="muted">· read-only vs. editable
+                                            folders</span></li>
+                                    <li><strong>Commands</strong> <span class="muted">· build, test, run</span></li>
+                                    <li><strong>Git workflow</strong> <span class="muted">· commit style, PR
+                                            checklist</span></li>
+                                    <li><strong>Boundaries</strong> <span class="muted">· always, ask first, never</span></li>
+                                </ol>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Init OpenSpec project</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                Creates OpenSpec project structure by running openspec init<br />
+                            </div>
+                        </div>
+                    </div>
+                    <p class="footnote" style="font-size: 18px; color: #60656c;"><span class="note-mark">*</span> Only needs to be done once per repository /
+                        project.</p>
+                </section>
+                <section>
+                    <h2>Go 1x on the spec
+                    10x on the code</h2>
+                    <div class="grid-2 compact">
+                        <div class="card context">
+                            <strong>1x · Design</strong>
+                            <br />
+                            Invest quality time gathering and refining the requirements
+                        </div>
+                        <div class="card evidence">
+                            <strong>10x · Implementation</strong>
+                            <br />
+                            Safe to accelerate: intent, constraints and verification path are already defined
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h3>Why the separation and order matters</h3>
+                    <p style="font-size: .6em;">Two artifacts, two questions, two audiences</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Functional Specification</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <em>What</em> the system must do, and <em>why</em><br />
+                                <span class="muted">approved by the business</span>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Technical Specification</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <em>How</em> to build and verify it<br />
+                                <span class="muted">approved by engineering</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card risk" style="font-size: .48em; text-align: left; margin-top: .7em;">
+                        Decide the <em>how</em> first and it silently becomes the <em>what</em> 
+                    </div>
+                </section>
+                <section>
+                    <h2>Functional Specification</h2>
+                    <br/>
+                    <div class="flow compact" style="grid-template-columns: auto max-content auto max-content auto;">
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/update-issue</code>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/explore-problem</code>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/create-acceptance-criteria</code>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/update-issue</code></h2>
+                    <p style="font-size: 0.7em;"><br />Rewrites an existing issue description as structured,
+                        evidence-backed content<br />
+                    </p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>GitHub or Jira issue number, key or URL</li>
+                                    <li>Optional source: notes, discussion, user story, file path</li>
+                                    <li>Current issue body and discussion are read first</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Structured user story in the issue description</li>
+                                    <li>Acceptance criteria or scenarios when applicable</li>
+                                    <li>Updated issue reference and URL</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/explore-problem</code></h2>
+                    <p style="font-size: .6em;"><br />Evaluates the issue through five lenses and produces a Functional Specification</p>
+                    <div class="flow compact" style="text-align: left; align-items: stretch;">
+                        <div class="card context">
+                            <strong style="font-size: .8em;">Problem framing</strong>
+                            <div style="font-size: .5em; margin-top: .3em;">Problem statement, current and desired
+                                state, stakeholders, success criteria</div>
+                        </div>
+                        <div class="card context">
+                            <strong style="font-size: .8em;">Root cause</strong>
+                            <div style="font-size: .5em; margin-top: .3em;">Five Whys, Fishbone, Current Reality Tree,
+                                constraints</div>
+                        </div>
+                        <div class="card context">
+                            <strong style="font-size: .8em;">Assumptions</strong>
+                            <div style="font-size: .5em; margin-top: .3em;">Assumptions, unknowns, validation plan</div>
+                        </div>
+                        <div class="card context">
+                            <strong style="font-size: .8em;">Context mapping</strong>
+                            <div style="font-size: .5em; margin-top: .3em;">Existing systems, integrations, ownership,
+                                external dependencies</div>
+                        </div>
+                        <div class="card context">
+                            <strong style="font-size: .8em;">Quality attributes</strong>
+                            <div style="font-size: .5em; margin-top: .3em;">Discover and prioritise what the solution
+                                must satisfy</div>
+                        </div>
+                    </div>
+                    <div class="card agent" style="font-size: .48em; text-align: left; margin-top: .7em;">
+                        Each lens asks clarifying questions when its content is vague
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: .8em; white-space: nowrap;">/create-acceptance-criteria</code></h2>
+                    <p style="font-size: .7em;"><br />Turns the Functional Specification into observable Gherkin scenarios</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                The Functional Specification resulted from <code>/explore-problem</code>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .55em; margin-top: .3em; font-family: monospace;">
+                                # Acceptance Criteria<br />
+                                Feature: &lt;name&gt;<br />
+                                &nbsp;&nbsp;Scenario: &lt;observable&gt;<br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;Given &lt;context&gt;<br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;When &lt;event&gt;<br />
+                                &nbsp;&nbsp;&nbsp;&nbsp;Then &lt;outcome&gt;
+                            </div>
+                        </div>
+                    </div>
+                    <p style="font-size: .6em;">turns what and why into something checkable and easier to review</p> 
+                </section>
+                <section>
+                    <h2>Technical Specification</h2>
+                    <br/>
+                    <div class="flow compact" style="grid-template-columns: auto max-content auto;">
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/create-spec</code>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/explore-design</code>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>What is OpenSpec?</h2>
+                    <p style="font-style: italic; font-size: 22px;">A lightweight and configurable framework for
+                        creating and managing software specifications.</p>
+                    <div class="card evidence" style="text-align: center; margin-bottom: .7em;">
+                        <p class="statement" style="font-size: 1em; margin: 0 0 .5em;">Build the <b>right
+                                thing</b>, and build it <b>right</b></p>
+                        <p style="font-size: .5em; margin: 0;">Capture what you want to build in a spec, and keep your
+                            team and your coding agents aligned as the work evolves.</p>
+                    </div>
+                    <div class="grid-3 compact">
+                        <div class="card context"><strong>Refine</strong><br />the requirements</div>
+                        <div class="card context"><strong>Validate</strong><br />that they describe the right thing
+                        </div>
+                        <div class="card evidence"><strong>Verify</strong><br />that the implementation matches</div>
+                    </div>
+                    <div class="card agent" style="font-size: .48em; text-align: left; margin-top: .7em;">
+                       Plinth orchestrates spec implementation by reusing OpenSpec primitives
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/create-spec</code></h2>
+                    <p style="font-size: 0.7em;"><br />Turns approved material into a validated OpenSpec change<br />
+                    </p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Issue or user story with its acceptance criteria</li>
+                                    <li>Approved design, ADRs or implementation plan</li>
+                                    <li>An existing OpenSpec change to update</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Proposal, design, specs and task list</li>
+                                    <li>Requirements as Given / When / Then scenarios</li>
+                                    <li>Validation and traceability report</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/explore-design</code></h2>
+                    <p style="font-size: .7em;"><br/>Refine the technical design of an issue or OpenSpec change before implementation.</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>OpenSpec change with an unresolved approach</li>
+                                    <li>Architecture context and constraints</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Alternatives, trade-offs and rejected options</li>
+                                    <li>Recommended direction with rationale</li>
+                                    <li>Components, data flow, failure handling, testing strategy</li>
+                                    <li>ADR candidates and open questions</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card agent" style="font-size: .48em; text-align: left; margin-top: .7em;">
+                    <ul style="margin: 0 0 0 1.1em;">
+                        <li>A recommendation is not a decision: nothing is approved until a human confirms it</li>
+                    </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2>Technical Specification</h2>
+                    <p style="font-size: .6em;">(Optional) whenever a decision or a view is worth keeping</p>
+                    <div class="grid-2 compact">
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/create-adr</code>
+                        </div>
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/create-diagram</code>
+                        </div>
+                    </div>
+                    <br/>
+                    <p class="footnote" style="font-size: 18px; color: #60656c;">ADR &middot;
+                        Architecture Decision Record: a short document capturing one decision, its context and its
+                        consequences.</p>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/create-adr</code></h2>
+                    <p style="font-size: .7em;"><br />Records an architectural decision that has already been taken
+                    </p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Approved design, issue, spec or plan</li>
+                                    <li>Existing constraints and related ADRs</li>
+                                    <li>Optional type: general, functional, non-functional</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>One ADR following the repository convention</li>
+                                    <li>Status, rationale, alternatives, consequences</li>
+                                    <li>Links to the source artifacts</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/create-diagram</code></h2>
+                    <p style="font-size: .7em;"><br />Draws one architecture view from the approved artifacts</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Issue, design, ADR, spec or repository architecture</li>
+                                    <li>Optional type: sequence, class, state machine, ER, C4</li>
+                                    <li>Audience and level of detail</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Diagram source for that single view</li>
+                                    <li>Scope and assumptions made</li>
+                                    <li>Links to the artifacts represented</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Build</h2>
+                    <br/>
+                    <div class="flow compact" style="grid-template-columns: auto max-content auto;">
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/implement-spec</code>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card agent contact" style="white-space: nowrap;">
+                            <code style="font-size: .7em;">/close-spec</code>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2>Build</h2>
+                    <p style="font-size: .7em;">Implement and improve Java applications with guidance on:</p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context" style="padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Practices</h3>
+                            <div style="font-size: .6em; line-height: 1.3;">
+                                design · coding · testing · security · documentation
+                            </div>
+                        </div>
+                        <div class="card build" style="padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Build</h3>
+                            <div style="font-size: .6em; line-height: 1.3;">
+                                Maven
+                            </div>
+                        </div>
+                        <div class="card evidence" style="padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">Frameworks</h3>
+                            <div style="font-size: .6em; line-height: 1.3;">
+                                Spring Boot · Quarkus · Micronaut
+                            </div>
+                        </div>
+                        <div class="card" style="border-color: #00838f; color: #00838f; padding: .4em .8em;">
+                            <h3 style="margin: 0 0 .2em;">API &amp; mocking</h3>
+                            <div style="font-size: .6em; line-height: 1.3;">
+                                OpenAPI · WireMock
+                            </div>
+                        </div>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/implement-spec</code></h2>
+                    <p style="font-size: .7em;"><br />Delivers an approved task list through framework-aware delegation
+                    </p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Validated OpenSpec change or approved plan</li>
+                                    <li>Acceptance criteria and testing strategy</li>
+                                    <li>Repository conventions and build commands</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Code and tests for each completed task</li>
+                                    <li>Build and test run as evidence</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card agent" style="font-size: .48em; text-align: left; margin-top: .7em;">
+                    <ul style="margin: 0 0 0 1.1em;">
+                        <li>Delegation does not transfer accountability: the diff is still reviewed by a human</li>
+                    </ul>
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/implement-spec</code></h2>
+                    <p style="font-size: .55em; margin-bottom: .6em;">The tech lead agent runs the process, but it never writes code itself</p>
+                    <div class="pipeline">
+                        <div class="card risk">
+                            <div class="group-label">1 · Gate</div>
+                            <div class="question">Is the spec ready?</div>
+                            <ul>
+                                <li>Change is current, approved and consistent</li>
+                                <li>Every scenario has a task, and every task a scenario</li>
+                                <li>Workspace is clean</li>
+                            </ul>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card context">
+                            <div class="group-label">2 · Route</div>
+                            <div class="question">Where, and by whom?</div>
+                            <ul>
+                                <li>Feature branch or worktree <span class="muted">(main only with explicit approval)</span></li>
+                                <li>Coder matched to the framework: Spring&nbsp;Boot, Quarkus, Micronaut, Java or non-Java</li>
+                                <li>Relevant skills picked for that coder</li>
+                            </ul>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card agent">
+                            <div class="group-label">3 · Delegate</div>
+                            <div class="question">Who builds what?</div>
+                            <ul>
+                                <li>Tasks split into groups, each owning its files</li>
+                                <li>Dependent groups run in order; independent ones run in parallel</li>
+                                <li>Each handoff: tasks, acceptance criteria, checks to run</li>
+                            </ul>
+                        </div>
+                        <div class="arrow">&rarr;</div>
+                        <div class="card evidence">
+                            <div class="group-label">4 · Verify</div>
+                            <div class="question">Is it really done?</div>
+                            <ul>
+                                <li>Coder returns changed files, test and build results</li>
+                                <li>Task marked done <strong>only</strong> when its acceptance criteria pass</li>
+                                <li>Blockers and risks reported</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card risk pipeline-rule">
+                        ✗ If any check fails, it <strong>stops and reports</strong>. Nothing is guessed, bypassed or invented.
+                    </div>
+                </section>
+                <section>
+                    <h2><code style="font-size: 1.4em;">/close-spec</code></h2>
+                    <p style="font-size: .7em;"><br />Archives a delivered OpenSpec change and folds it into the specs
+                    </p>
+                    <div class="grid-2 compact" style="text-align: left;">
+                        <div class="card context">
+                            <strong>Input</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>OpenSpece change whose tasks are complete</li>
+                                    <li>Evidence that acceptance criteria are met</li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card evidence">
+                            <strong>Output</strong>
+                            <div style="font-size: .6em; margin-top: .3em;">
+                                <ul style="margin: 0 0 0 1.1em;">
+                                    <li>Change archived through the OpenSpec CLI</li>
+                                    <li>Specs updated to reflect the new behaviour</li>
+                                    <li>A clean slate for the next change</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </section>                                
+            </section>
+            <section>
+                <section>
+                    <h2>Refactor the code with Skills</h2>
+                </section>
+                <section>
+                    <h2 class="evidence">Modern Java</h2>
+                    <table style="font-size: 0.5em; width: 130%; margin-left: -15%;">
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>141-java-refactoring-with-modern-features</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Add Modern Java Features</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">Lambdas &amp; method references · Stream API · <code>Optional</code> · <code>java.time</code> · <code>var</code> · <code>List.of()</code> · text blocks · Java 25 features</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>142-java-functional-programming</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Add Functional Programming style</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">Records &amp; immutability · pure functions · function composition · pattern matching · sealed types · Stream Gatherers</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>143-java-functional-exception-handling</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Apply functional programming approaches for error handling</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;"><code>Optional</code> &amp; VAVR <code>Either</code> over exceptions · sealed error hierarchies · <code>map</code>/<code>flatMap</code> error pipelines</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>144-java-data-oriented-programming</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Add Data Oriented Programming</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">Separate data from behavior with records · immutable data &amp; pure transformations · flat data with ID references · pure validation</td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 0.4em;"><a href="https://github.com/jabrena/plinth/blob/main/documentation/guides/INVENTORY-SKILLS-JAVA.md"
+                            target="_blank">Skills inventory for Java</a></p>
+                </section>
+                <section>
+                    <h2 class="context">Design</h2>
+                    <table style="font-size: 0.5em; width: 130%; margin-left: -15%;">
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>121-java-object-oriented-design</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Apply Object Oriented Design principles</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">SOLID · DRY · YAGNI · composition over inheritance · encapsulation · code smells: God Class, Feature Envy, Data Clumps</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>122-java-type-design</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Review Type Design in development</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">Value objects over primitive obsession · type-safe wrappers · generics · fluent interfaces · <code>BigDecimal</code> for money</td>
+                        </tr>
+                        <tr>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;"><code>123-java-design-patterns</code></td>
+                            <td style="border: none; padding: 1.8em .6em .4em; white-space: nowrap;">Select and apply Java, REST, event-driven, persistence, and integration patterns</td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="muted" style="border: none; padding: .15em .6em; font-size: 0.8em; white-space: nowrap;">Creational, structural &amp; behavioral patterns · REST contracts · Kafka outbox &amp; sagas · repositories &amp; transactions · anti-corruption layers</td>
+                        </tr>
+                    </table>
+                    <p style="font-size: 0.4em;"><a href="https://github.com/jabrena/plinth/blob/main/documentation/guides/INVENTORY-SKILLS-JAVA.md"
+                            target="_blank">Skills inventory for Java</a></p>
+                </section> 
+            </section>
+        </div>
+    </div>
+
+    <script src="dist/reveal.js"></script>
+    <script src="plugin/notes/notes.js"></script>
+    <script src="plugin/markdown/markdown.js"></script>
+    <script src="plugin/highlight/highlight.js"></script>
+    <script>
+        Reveal.configure({ slideNumber: true });
+        Reveal.initialize({
+            hash: true,
+            transition: 'fade',
+            slideNumber: true,
+            showSlideNumber: 'all',
+            scrollActivationWidth: null,
+            plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { window.dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-13CV90H4J4');
+    </script>
+</body>
+
+</html>

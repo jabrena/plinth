@@ -303,3 +303,8 @@
 .reveal blockquote {
     width: 88%;
 }
+
+.reveal .past-date {
+    color: #d00000;
+    font-weight: 800;
+}
