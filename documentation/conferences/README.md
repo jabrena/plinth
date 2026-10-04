@@ -7,3 +7,5 @@ jwebserver -p 8005 -d "$(pwd)/documentation/conferences/codemotion-madrid-2026"
 jwebserver -p 8005 -d "$(pwd)/documentation/conferences/jcconf-2026"
 
 jwebserver -p 8005 -d "$(pwd)/documentation/conferences/dvbe26"
+
+jwebserver -p 8005 -d "$(pwd)/documentation/conferences/dvbe26-workshop"
