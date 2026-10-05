@@ -171,12 +171,30 @@
                 <section>
                     <h2>What is Plinth?</h2>
                     <p>
-                        Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC
+                        Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC.
+                    </p>
+                    <p>
+                        It started as <em>Cursor rules for Java</em> and evolved into reusable
+                        agent skills, agents and commands that guide AI assistants through the whole SDLC.
+                    </p>
+                    <p>
+                        <strong>2 years</strong> of work and iteration, and its skills are
+                        <strong>popular on Skills.sh</strong>.
+                    </p>
+                </section>
+                <section>
+                    <img src="./images/warning.png" width="20%" />
+                    <p>
+                        This workshop succeeds if, by the end, you understand the concepts behind
+                        implementing features with <strong>harness engineering</strong>.
+                    </p>
+                    <p>
+                        Whether or not you use <strong>Plinth</strong> later, you leave with a solid starting point.
                     </p>
                 </section>
                 <section>
                     <h2>Plinth workflows</h2>
-                    <p style="font-size: .6em; margin-bottom: .6em;">Four ways to use the toolkit</p>
+                    <p>Project scope:</p>
                     <div class="workflows">
                         <div class="card agent">
                             <div class="group-label">1 · Build a feature (Workshop included)</div>
@@ -185,7 +203,7 @@
                         </div>
                         <div class="card evidence">
                             <div class="group-label">2 · Improve existing code (Workshop included)</div>
-                            <div class="question">Refactor your Java code with Skills</div>
+                            <div class="question">Collection of Agent Skills for Java</div>
                             <div>Applies focused skills to existing code: modern Java, design, testing, Maven</div>
                         </div>
                         <div class="card context">
@@ -379,6 +397,7 @@ install @005-agents-installation codex
                 </section>              
                 <section>
                     <img src="./images/demo.png" width="80%" />
+                    <p><strong>Demo:</strong> Install Plinth in your repository</p>
                 </section>
                 <section>
                     <h2>Installation</h2>
@@ -451,6 +470,7 @@ install @005-agents-installation codex
                 </section>
                 <section>
                     <img src="./images/demo.png" width="80%" />
+                    <p><strong>Demo:</strong> Prepare your repository for use AGENTS.md & OpenSpec</p>
                 </section>
                 <section>
                     <h3>Why the separation and order matters</h3>
@@ -493,6 +513,28 @@ install @005-agents-installation codex
                     </div>
                 </section>
                 <section>
+                    <h2>Good specifications require time</h2>
+                    <p>
+                        AI makes <span class="evidence">implementation 10&times; faster</span>.<br />
+                        Understanding intent, constraints, and consequences still runs at <span class="risk">1&times;</span>.
+                    </p>
+                    <img src="./images/kitchen-timer.png" width="30%" />
+                </section>                
+                <section>
+                    <h2>The Three Amigos!</h2>
+                    <p>
+                        <img src="./images/three-amigos.png" width="30%" /><br />
+                        <small>
+                            <strong>Source: </strong><a href="https://www.imdb.com/es-es/title/tt0092086/"
+                                target="_blank">https://www.imdb.com/es-es/title/tt0092086/</a>
+                        </small>
+                    </p>
+                    <p>
+                        The Three Amigos is an Agile practice where three perspectives review an increment of
+                        work before, during, and after development: <strong>Business</strong>, <strong>Development</strong> & <strong>Testing</strong>.
+                    </p>
+                </section>
+                <section>
                     <h2><code style="font-size: 1.4em;">/update-issue</code></h2>
                     <p style="font-size: 0.7em;"><br />Rewrites an existing issue description as structured,
                         evidence-backed content<br />
@@ -519,9 +561,6 @@ install @005-agents-installation codex
                             </div>
                         </div>
                     </div>
-                </section>
-                <section>
-                    <img src="./images/demo.png" width="80%" />
                 </section>
                 <section>
                     <h2><code style="font-size: 1.4em;">/explore-problem</code></h2>
@@ -555,10 +594,7 @@ install @005-agents-installation codex
                     <div class="card agent" style="font-size: .48em; text-align: left; margin-top: .7em;">
                         Each lens asks clarifying questions when its content is vague
                     </div>
-                </section>
-                <section>
-                    <img src="./images/demo.png" width="80%" />
-                </section>                
+                </section>               
                 <section>
                     <h2><code style="font-size: .8em; white-space: nowrap;">/create-acceptance-criteria</code></h2>
                     <p style="font-size: .7em;"><br />Turns the Functional Specification into observable Gherkin scenarios</p>
@@ -585,12 +621,8 @@ install @005-agents-installation codex
                 </section>
                 <section>
                     <img src="./images/demo.png" width="80%" />
-                </section>
-                <section>
-                    <h2>HITL</h2>
-                    <p>
-                        Verify functional specification before moving to technical specification. 
-                    </p>
+                    <p><strong>Demo:</strong> Define functional specifications</p>
+                    <p><strong>HITL:</strong> Verify functional specification before moving to technical specification</p>
                 </section>
                 <section>
                     <h2>Technical Specification</h2>
@@ -653,9 +685,6 @@ install @005-agents-installation codex
                     </div>
                 </section>
                 <section>
-                    <img src="./images/demo.png" width="80%" />
-                </section>
-                <section>
                     <h2><code style="font-size: 1.4em;">/explore-design</code></h2>
                     <p style="font-size: .7em;"><br/>Refine the technical design of an issue or OpenSpec change before implementation.</p>
                     <div class="grid-2 compact" style="text-align: left;">
@@ -688,17 +717,8 @@ install @005-agents-installation codex
                 </section>
                 <section>
                     <img src="./images/demo.png" width="80%" />
-                </section>
-                <section>
-                    <h2>HITL</h2>
-                    <p>
-                        Verify works before commit
-                    </p>
-                </section>
-                <section>
-                    <p>
-                        After this process, you will have a technical specification ready to be implemented.
-                    </p>
+                    <p><strong>Demo:</strong> Define functional specifications</p>
+                    <p><strong>HITL:</strong> Verify technical specification before moving to implementation</p>
                 </section>
                 <section>
                     <h2>Build</h2>
@@ -824,15 +844,6 @@ install @005-agents-installation codex
                     </div>
                 </section>
                 <section>
-                    <img src="./images/demo.png" width="80%" />
-                </section>
-                <section>
-                    <h2>HITL</h2>
-                    <p>
-                        Verify works before commit
-                    </p>
-                </section>
-                <section>
                     <h2><code style="font-size: 1.4em;">/close-spec</code></h2>
                     <p style="font-size: .7em;"><br />Archives a delivered OpenSpec change and folds it into the specs
                     </p>
@@ -857,7 +868,12 @@ install @005-agents-installation codex
                             </div>
                         </div>
                     </div>
-                </section>                                
+                </section>
+                <section>
+                    <img src="./images/demo.png" width="80%" />
+                    <p><strong>Demo:</strong> Define functional specifications</p>
+                    <p><strong>HITL:</strong> Verify that implementation has any gap or something missing before commiting</p>
+                </section>                             
             </section>
             <section>
                 <section>
