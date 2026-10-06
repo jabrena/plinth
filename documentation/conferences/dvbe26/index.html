@@ -361,7 +361,7 @@ record Order(String clientId, BigDecimal total) {}
                 </section>
 
                 <section>
-                    <h2>2 — Expose the rename as an evidence package</h2>
+                    <h2>2 — Show the evidence, not just the diff</h2>
                     <div class="grid-3 compact">
                         <div class="card context">
                             <strong>Before</strong><br />Requirement and scope<br />Known consumers<br />Risk classification
@@ -512,43 +512,6 @@ record Order(String clientId, BigDecimal total) {}
                         </div>
                     </div>
                     <p><small>High-risk milestones: Annex III · 2 Dec 2027; Annex I product AI · 2 Aug 2028. Classification and legal interpretation require qualified owners. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank">Regulation (EU) 2024/1689</a></small></p>
-                </section>
-
-                <section class="risk-slide">
-                    <h2>EU AI Act Article 14 · AI changes financial logic</h2>
-                    <div class="grid-2 compact">
-                        <div class="card risk">
-                            <h3>Risk: an agent-generated change reaches production</h3>
-                            <pre><code class="language-java" data-trim data-noescape>
-// Agent-generated from: "add a 2% refund fee"
-BigDecimal refundAmount(Order order) {
-    return order.total()
-        .multiply(new BigDecimal("0.98"))
-        .setScale(2, RoundingMode.DOWN);
-}
-                            </code></pre>
-                            <p>A green pipeline does not prove the pricing policy, currency, rounding, ledger impact, or customer outcome.</p>
-                        </div>
-                        <div class="card evidence">
-                            <h3>Fix: force HITL to review the change</h3>
-                            <div class="governance-stack compact">
-                                <div class="card agent"><strong>Agent proposes</strong><br />PR + evidence</div>
-                                <div class="stack-arrow">↓</div>
-                                <div class="card context"><strong>Merge blocked</strong><br />Human review required</div>
-                                <div class="stack-arrow">↓</div>
-                                <div class="card evidence"><strong>Human decides</strong><br />Approve · modify · reject · stop</div>
-                            </div>
-                            <!--
-                            <ul>
-                                <li>Route to a competent reviewer with authority over money.</li>
-                                <li>Expose the prompt, model version, diff, tests, limits, and financial impact.</li>
-                                <li>Warn against automation bias and preserve the reasoned decision.</li>
-                                <li>Keep deployment, intervention, override, and rollback under human control.</li>
-                            </ul>
-                            -->
-                        </div>
-                    </div>
-                    <p><small>Article 14 requires effective human oversight for applicable high-risk AI systems. Apply the same HITL gate to agent-generated financial changes as an engineering control; classify legal applicability separately.</small></p>
                 </section>
 
                 <section class="regulation-slide">
