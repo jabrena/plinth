@@ -137,11 +137,11 @@
                 </section>
 
                 <section>
-                    <h2>Common Brownfield environments</h2>
+                    <h2>Common situations</h2>
                     <div class="grid-3 compact">
                         <div class="card risk">
                             <h3>Knowledge moves</h3>
-                            <p>Turnover and team rotations erode tacit knowledge.</p>
+                            <p>When people move to another company, their tacit knowledge leaves with them.</p>
                         </div>
                         <div class="card context">
                             <h3>Ownership shifts</h3>
@@ -244,6 +244,7 @@ record Order(String clientId, BigDecimal total) {}
                     </p>
                 </section>
 
+                <!--
                 <section>
                     <h2>Brownfield context does not accelerate with the code</h2>
                     <div class="grid-3 compact">
@@ -262,7 +263,7 @@ record Order(String clientId, BigDecimal total) {}
                     </div>
                     <p>AI can produce the rename quickly. Discovering its consequences still requires people, evidence, and time.</p>
                 </section>
-
+                -->
                 <section>
                     <h2>System awareness changes the implementation strategy</h2>
                     <div class="grid-2 compact">
@@ -398,7 +399,7 @@ record Order(String clientId, BigDecimal total) {}
                         <div class="card evidence"><strong>Personal data · retention · logs</strong><br />Privacy + data owners</div>
                         <div class="card risk"><strong>Money · rights · safety · regulation</strong><br />Business + compliance + safety</div>
                     </div>
-                    <p>The right reviewer depends on the risk, not on who is available.</p>
+                    <p class="lead">The right reviewer depends on the risk, not on who is available.</p>
                 </section>
 
                 <section>
@@ -490,7 +491,8 @@ record Order(String clientId, BigDecimal total) {}
                             <strong>Cybersecurity and resilience</strong><br />Cyber Resilience Act (CRA) · NIS2 · DORA<br /><small>Supply chain · vulnerabilities · continuity · incidents</small>
                         </div>
                     </div>
-                    <p>These are routing signals—not final applicability determinations. Put broader product, platform, and market lenses in the appendix.</p>
+                    <p>These are routing signals—not final applicability determinations.
+                        </p>
                 </section>
 
                 <section class="regulation-slide">
@@ -509,7 +511,6 @@ record Order(String clientId, BigDecimal total) {}
                             <p>Human oversight · model and data lineage · logs · accuracy and robustness tests · monitoring · rollback or disablement.</p>
                         </div>
                     </div>
-                    <p class="lead">Applicable now: prohibitions, AI literacy, GPAI governance, transparency, and enforcement.</p>
                     <p><small>High-risk milestones: Annex III · 2 Dec 2027; Annex I product AI · 2 Aug 2028. Classification and legal interpretation require qualified owners. <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/?uri=CELEX:32024R1689" target="_blank">Regulation (EU) 2024/1689</a></small></p>
                 </section>
 
@@ -688,7 +689,7 @@ BigDecimal refundAmount(Order order) {
                 </section>
 
                 <section class="regulation-slide">
-                    <h2>Cyber Resilience Act: secure the product lifecycle</h2>
+                    <h2>Cyber Resilience Act (CRA): secure the product lifecycle</h2>
                     <div class="grid-3 compact">
                         <div class="card risk">
                             <h3>Route when</h3>
@@ -708,7 +709,7 @@ BigDecimal refundAmount(Order order) {
                 </section>
 
                 <section class="regulation-slide">
-                    <h2>CRA · More Java issues (1/2)</h2>
+                    <h2>CRA · More Java issues</h2>
                     <h3>Examples:</h3>
                     <small>
                         <table class="compact issue-table">
@@ -722,10 +723,10 @@ BigDecimal refundAmount(Order order) {
                             </thead>
                             <tbody>
                                     <tr>
-                                        <td><strong>1 · Vulnerability handling</strong></td>
-                                        <td>A CVE in a dependency ends as <code>log.error(...)</code>; no triage or advisory path</td>
-                                        <td><code>VulnerabilityRecord</code> with component, severity, status, owner, advisory, fix version, SLA</td>
-                                        <td>Art. 13 · 14: handling and reporting</td>
+                                        <td><strong>1 · Secrets in the artifact</strong></td>
+                                        <td>Hardcoded API key or signing key inside the JAR or properties</td>
+                                        <td>Inject secrets at runtime; block secrets in the artifact with a build scan</td>
+                                        <td>Annex I: confidentiality, protection of data</td>
                                     </tr>
                                     <tr>
                                         <td><strong>2 · Insecure defaults</strong></td>
@@ -739,42 +740,11 @@ BigDecimal refundAmount(Order order) {
                                         <td>Pinned dependency lock; CycloneDX SBOM generated in CI and attached to the release</td>
                                         <td>Annex I: SBOM, component transparency</td>
                                     </tr>
-                            </tbody>
-                        </table>
-                    </small>
-                </section>
-
-                <section class="regulation-slide">
-                    <h2>CRA · More Java issues (2/2)</h2>
-                    <h3>Examples:</h3>
-                    <small>
-                        <table class="compact issue-table">
-                            <thead>
-                                <tr>
-                                    <th>Issue</th>
-                                    <th>Risk</th>
-                                    <th>Fix</th>
-                                    <th>CRA hook</th>
-                                </tr>
-                            </thead>
-                            <tbody>
                                     <tr>
-                                        <td><strong>4 · End-of-support silence</strong></td>
-                                        <td>Old version keeps running with no support-period metadata</td>
-                                        <td>Release manifest with <code>supportedUntil</code>; warn users and expose it in the advisory</td>
-                                        <td>Art. 13: support period, user information</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>5 · Unsafe deserialization</strong></td>
+                                        <td><strong>4 · Unsafe deserialization</strong></td>
                                         <td><code>new ObjectInputStream(in) .readObject()</code> on update or plugin metadata</td>
                                         <td>Typed DTO with schema validation and an <code>ObjectInputFilter</code></td>
                                         <td>Annex I: limit attack vectors, input validation</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>6 · Secrets in the artifact</strong></td>
-                                        <td>Hardcoded API key or signing key inside the JAR or properties</td>
-                                        <td>Inject secrets at runtime; block secrets in the artifact with a build scan</td>
-                                        <td>Annex I: confidentiality, protection of data</td>
                                     </tr>
                             </tbody>
                         </table>
@@ -1039,16 +1009,16 @@ BigDecimal refundAmount(Order order) {
                     <h2>What can a team do next Monday?</h2>
                     <ul>
                         <li>Label agent-created PRs and record generated artifacts.</li>
-                        <li>Add risk triggers to the PR template.</li>
+                        <li>Add risk triggers to the PR template. (GDPR, CRA, NIS2 & DORA)</li>
                         <li>Route high-impact changes to accountable specialist owners.</li>
                         <li>Require explicit limits, rollback, and monitoring evidence.</li>
-                        <li>Review incidents and near misses as control failures—not only code failures.</li>
                     </ul>
                 </section>
 
                 <section>
                     <h2>What can a team do next Monday?</h2>
                     <ul>
+                        <li>Review incidents and near misses as control failures—not only code failures.</li>
                         <li>Review whether your service databases have migration scripts.</li>
                         <li>Review if team know and use Parallel Change pattern</li>
                         <li>Review whether service communications use governed contracts (OpenAPI, Avro, etc.).</li>
@@ -1061,8 +1031,6 @@ BigDecimal refundAmount(Order order) {
                         <li>Review whether your teams are using monorepos to facilitate the AI-agent harness.</li>
                         <li>Review whether your software engineers use common skills.</li>
                         <li>Review whether your squads use SDD or need specific training.</li>
-                        <li>Engineer the workflow, not just the prompt.</li>
-                        <li>Optimize for system awareness and system correctness, not just local correctness.</li>
                     </ul>
                 </section>
             </section>
