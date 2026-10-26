@@ -62,7 +62,7 @@
         <commonmark.version>0.30.1</commonmark.version>
         <jspecify.version>1.0.1</jspecify.version>
         <error-prone.version>2.50.0</error-prone.version>
-        <nullaway.version>0.14.2</nullaway.version>
+        <nullaway.version>0.14.3</nullaway.version>
         <archunit.version>1.5.1</archunit.version>
 
         <!-- Core build plugin versions -->
