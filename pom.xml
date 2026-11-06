@@ -61,7 +61,7 @@
         <picocli.version>4.7.7</picocli.version>
         <commonmark.version>0.31.0</commonmark.version>
         <jspecify.version>1.0.1</jspecify.version>
-        <error-prone.version>2.51.0</error-prone.version>
+        <error-prone.version>2.52.0</error-prone.version>
         <nullaway.version>0.14.3</nullaway.version>
         <archunit.version>1.5.1</archunit.version>
 
